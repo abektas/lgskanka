@@ -213,6 +213,27 @@ export const examPlan = [
   { week: "5. Hafta", subject: "Genel Deneme", date: "3 Kasım", status: "upcoming" as const },
 ];
 
+/**
+ * Sınav sonuç ekranı için örnek görünüm verisi.
+ * Gerçek öğrenci sonucu değildir; resmi puan/yüzdelik hesaplaması olarak kullanılmamalıdır.
+ */
+export const demoExamResults = [
+  { label: "D1", net: 62.33, score: 366.4, percentile: 15.4 },
+  { label: "D2", net: 65.0, score: 378.8, percentile: 13.2 },
+  { label: "D3", net: 68.33, score: 393.6, percentile: 10.8 },
+  { label: "D4", net: 71.0, score: 405.2, percentile: 8.9 },
+  { label: "D5", net: 74.0, score: 417.01, percentile: 7.01 },
+] as const;
+
+export const demoExamSubjects = [
+  { name: "Türkçe", net: 18, total: 20 },
+  { name: "T.C. İnkılap Tarihi", net: 8, total: 10 },
+  { name: "Din Kültürü", net: 9, total: 10 },
+  { name: "İngilizce", net: 9.67, total: 10 },
+  { name: "Matematik", net: 15.33, total: 20 },
+  { name: "Fen Bilimleri", net: 14, total: 20 },
+] as const;
+
 export type Question = {
   id: string;
   subject: string;

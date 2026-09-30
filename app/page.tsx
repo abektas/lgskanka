@@ -4,6 +4,7 @@ import { Icon } from "../components/icons";
 import { GameRightsCard } from "../components/dashboard-widgets";
 import { Greeting } from "../components/greeting";
 import { HeroArt } from "../components/hero-art";
+import { StudyTimer } from "../components/study-timer";
 import { TaskList } from "../components/task-list";
 import {
   coachInsights,
@@ -190,6 +191,8 @@ export default function HomePage() {
               👤 Karakterimi özelleştir
             </Link>
           </section>
+
+          <StudyTimer />
 
           <section className="card" aria-labelledby="deneme">
             <div className="section-head">

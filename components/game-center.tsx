@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Icon } from "./icons";
 import { MemoryGame } from "./memory-game";
 import { Mini2048 } from "./mini-2048";
+import { LgsRunner } from "./lgs-runner";
 import { useGameRights } from "./use-game-rights";
 import { games, memoryPairs } from "../data/content";
 import { learner } from "../data/nav";
@@ -18,7 +19,7 @@ const rules: Record<string, string> = {
 };
 
 /** Henüz yazılmamış oyunlar. */
-const plannedGames = new Set(["LGS Runner", "Hız Oyunu"]);
+const plannedGames = new Set(["Hız Oyunu"]);
 
 /** Sağlayıcı bilgisi: XP → oyun süresi. */
 const lockedCopy: Record<string, string> = {
@@ -32,7 +33,7 @@ const lockedCopy: Record<string, string> = {
  *
  * Hafıza Kartları (§38.1) ve Mini 2048 (§38.2) gerçek oyunlardır; ikisi de aynı
  * hak/süre ekonomisini kullanır (`useGameRights`) ve XP kazandırmaz.
- * Diğer iki oyun henüz plan aşamasındadır ve dürüstçe kilitli gösterilir.
+ * LGS Runner (§38) da aynı hak/süre ekonomisini kullanır; Hız Oyunu plan aşamasındadır.
  */
 export function GameCenter() {
   const [openGame, setOpenGame] = useState<string | null>(null);
@@ -185,6 +186,14 @@ export function GameCenter() {
                 onRoundStart={startRound}
                 onRoundEnd={recordRound}
                 onExit={() => setOpenGame(null)}
+              />
+            ) : openGame === "LGS Runner" ? (
+              <LgsRunner
+                key={roundKey}
+                rightsLeft={rights}
+                remainingSeconds={remainingSeconds}
+                onRoundStart={startRound}
+                onRoundEnd={recordRound}
               />
             ) : (
               <Mini2048

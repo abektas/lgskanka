@@ -1604,6 +1604,22 @@ a.mini-card:hover {
   box-shadow: var(--golge-3);
 }
 
+.avatar-option .student-avatar {
+  display: block;
+  width: 92px;
+  height: 92px;
+  border-radius: 14px;
+  object-fit: cover;
+}
+
+.student-avatar.topbar-avatar {
+  display: block;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
 .field {
   display: grid;
   gap: 7px;

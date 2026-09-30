@@ -1,0 +1,26 @@
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Dependencies
+node_modules/
+
+# Next.js
+.next/
+.next.bak*/
+out/
+
+# Build artifacts
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+
+# Local tooling / editor
+.freebuff/
+.vercel/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store

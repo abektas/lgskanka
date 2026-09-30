@@ -12,7 +12,7 @@ import { learner } from "../data/nav";
 /** Plan §38: her oyun için kısa açıklama. */
 const rules: Record<string, string> = {
   "Hafıza Kartları": "Terimler ile anlamlarını eşleştir. Yanlış eşleşmede kart geri kapanır, süre işler.",
-  "Matematik 2048": "Aynı sayıları birleştirerek 1024 değerine ulaş. Ok tuşları veya yön düğmeleri.",
+  "Matematik 2048": "Düşen sayıyı sağa-sola yönlendir; aynı komşu taşlar birleşir. Ok tuşları, aşağı ve boşluk.",
   "LGS Runner": "Doğru cevabı seçtikçe karakter zıplar; yanlışta bir kalp gider. 3 kalp, 90 saniye.",
   "Hız Oyunu": "30 saniyede mümkün olduğunca çok doğru cevap ver. Hız kadar doğruluk da puanlanır.",
 };

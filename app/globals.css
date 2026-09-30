@@ -2436,27 +2436,36 @@ a.mini-card:hover {
 
 .g2048-board {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 9px;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-rows: repeat(10, minmax(0, 1fr));
+  gap: 5px;
   background: var(--mor-100);
   border-radius: var(--r-lg);
-  padding: 9px;
-  margin-bottom: 14px;
-  aspect-ratio: 1 / 1;
-  width: 100%;
-  max-width: 340px;
-  margin-inline: auto;
+  padding: 7px;
+  aspect-ratio: 6 / 10;
+  width: min(100%, 300px);
+  flex: 0 0 auto;
+  touch-action: manipulation;
+}
+
+.g2048-stage {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 6px auto 14px;
 }
 
 .g2048-tile {
   display: grid;
   place-items: center;
-  border-radius: 12px;
+  border-radius: 8px;
   background: #fff;
   box-shadow: var(--golge-3);
   font-family: var(--font-display), sans-serif;
   font-weight: 800;
   min-width: 0;
+  min-height: 0;
 }
 
 .g2048-tile.is-empty {
@@ -2465,20 +2474,41 @@ a.mini-card:hover {
 }
 
 .g2048-tile span {
-  font-size: clamp(13px, 3.4vw, 20px);
+  font-size: clamp(11px, 2.8vw, 17px);
   color: var(--mor-700);
 }
 
 .g2048-tile.is-big span {
-  font-size: clamp(11px, 2.8vw, 16px);
+  font-size: clamp(9px, 2.3vw, 13px);
   color: #a9700a;
 }
+
+.g2048-tile.g2048-active {
+  background: #ffd76b;
+  outline: 2px solid #fff;
+  box-shadow: 0 3px 10px rgba(87, 59, 0, 0.28);
+  z-index: 1;
+}
+
+.g2048-next {
+  display: grid;
+  gap: 7px;
+  justify-items: center;
+  padding: 10px 8px;
+  border-radius: 14px;
+  background: var(--mor-50);
+  color: var(--mor-700);
+  min-width: 82px;
+}
+
+.g2048-next small, .g2048-next span { font-size: 11px; text-align: center; }
+.g2048-next b { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 10px; background: #fff; font-size: 18px; }
 
 .g2048-pad {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
-  max-width: 340px;
+  max-width: 300px;
   margin: 0 auto 16px;
   width: 100%;
 }
@@ -2504,21 +2534,31 @@ a.mini-card:hover {
   transform: translateY(0);
 }
 
-.g2048-key.is-up {
-  grid-column: 2;
-  grid-row: 1;
-}
-.g2048-key.is-left {
-  grid-column: 1;
-  grid-row: 2;
-}
+.g2048-key.is-left { grid-column: 1; grid-row: 1; }
 .g2048-key.is-right {
   grid-column: 3;
-  grid-row: 2;
+  grid-row: 1;
 }
 .g2048-key.is-down {
   grid-column: 2;
-  grid-row: 3;
+  grid-row: 1;
+}
+
+.g2048-drop {
+  grid-column: 1 / -1;
+  border: 0;
+  border-radius: 12px;
+  padding: 11px;
+  color: #fff;
+  background: var(--mor-600);
+  font-weight: 800;
+  box-shadow: var(--golge-3);
+}
+
+@media (max-width: 420px) {
+  .g2048-stage { gap: 7px; }
+  .g2048-board { width: min(100%, 255px); gap: 4px; padding: 5px; }
+  .g2048-next { min-width: 68px; padding: 8px 5px; }
 }
 
 /* Oyun merkezi: açık oyun başlığı */

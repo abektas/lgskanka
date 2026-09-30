@@ -2,138 +2,65 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-/**
- * Matematik 2048 — plan §38.2.
- *
- * 4×4 taşa · yukarı/aşağı/sağ/sol · birleşme · skor · reset · game over · kazanma durumu.
- *
- * Varyant: klasik 2048'den farklı olarak 1024 taşında biter (LGS hazırlığı için anlamlı
- * eşik). Sayılar görsel olarak aynı kalır, mantık yine gerçek birleşme oyunudur.
- *
- * Oyun XP kazandırmaz; ilk hamlede 1 oyun hakkı harcanır ve geçen süre günlük
- * oyun süresinden düşülür. Hak/süre sahibi üst bileşendir (`useGameRights`).
- */
-
 type Grid = number[][];
 type Status = "idle" | "playing" | "won" | "over" | "timeup";
-type Direction = "left" | "right" | "up" | "down";
+type ActiveTile = { row: number; col: number; value: number };
+type Control = "left" | "right" | "down" | "drop";
 
-/** Plan §38.2: 4×4 taşa. */
-const SIZE = 4;
-/** Klasik 2048 iki taş ile başlar. */
-const SPAWN_TILES = 2;
-/** LGS hazırlığı için anlamlı eşik. */
-const WIN_TILE = 1024;
+const ROWS = 10;
+const COLS = 6;
+const WIN_TILE = 2048;
+const GRAVITY_MS = 850;
 
-/** 95 → "01:35" */
 export function formatClock(totalSeconds: number): string {
   const safe = Math.max(0, Math.floor(totalSeconds));
-  const minutes = String(Math.floor(safe / 60)).padStart(2, "0");
-  const seconds = String(safe % 60).padStart(2, "0");
-  return `${minutes}:${seconds}`;
+  return `${String(Math.floor(safe / 60)).padStart(2, "0")}:${String(safe % 60).padStart(2, "0")}`;
 }
 
-function createGrid(): Grid {
-  return Array.from({ length: SIZE }, () => Array<number>(SIZE).fill(0));
+function emptyGrid(): Grid {
+  return Array.from({ length: ROWS }, () => Array<number>(COLS).fill(0));
 }
 
-function emptyCells(grid: Grid): Array<[number, number]> {
-  const cells: Array<[number, number]> = [];
-  for (let r = 0; r < SIZE; r += 1) {
-    for (let c = 0; c < SIZE; c += 1) {
-      if (grid[r][c] === 0) cells.push([r, c]);
-    }
+function randomTile(): number {
+  return Math.random() < 0.9 ? 2 : 4;
+}
+
+function settle(grid: Grid): Grid {
+  const next = emptyGrid();
+  for (let col = 0; col < COLS; col += 1) {
+    const values = grid.map((row) => row[col]).filter(Boolean);
+    const offset = ROWS - values.length;
+    values.forEach((value, index) => { next[offset + index][col] = value; });
   }
-  return cells;
-}
-
-/** Boş hücreye rastgele 2 veya 4 koyar. */
-function spawn(grid: Grid): Grid {
-  const cells = emptyCells(grid);
-  if (cells.length === 0) return grid;
-  const [r, c] = cells[Math.floor(Math.random() * cells.length)];
-  const next = grid.map((row) => [...row]);
-  next[r][c] = Math.random() < 0.9 ? 2 : 4;
   return next;
 }
 
-function addRandomTiles(grid: Grid): Grid {
-  let next = grid;
-  for (let i = 0; i < SPAWN_TILES; i += 1) next = spawn(next);
-  return next;
-}
-
-/** Bir satırı sola kaydırıp aynıları birleştirir. */
-function mergeRow(row: number[]): { tiles: number[]; score: number } {
-  const tiles = row.filter((value) => value !== 0);
-  const out: number[] = [];
+/** Merge adjacent equal tiles, letting gravity create further combinations. */
+function mergeCascade(source: Grid): { grid: Grid; score: number; highest: number } {
+  let grid = settle(source);
   let score = 0;
-  for (let i = 0; i < tiles.length; i += 1) {
-    if (i + 1 < tiles.length && tiles[i] === tiles[i + 1]) {
-      const merged = tiles[i] * 2;
-      out.push(merged);
-      score += merged;
-      i += 1;
-    } else {
-      out.push(tiles[i]);
-    }
-  }
-  while (out.length < SIZE) out.push(0);
-  return { tiles: out, score };
-}
-
-/** Yönü uygular; tahta değiştiyse `moved` true döner. */
-function move(grid: Grid, direction: Direction): { grid: Grid; score: number; moved: boolean } {
-  let gained = 0;
-  const next = createGrid();
-
-  for (let i = 0; i < SIZE; i += 1) {
-    let line: number[];
-    if (direction === "left") line = [...grid[i]];
-    else if (direction === "right") line = [...grid[i]].reverse();
-    else if (direction === "up") line = grid.map((row) => row[i]);
-    else line = grid.map((row) => row[i]).reverse();
-
-    const { tiles, score } = mergeRow(line);
-    gained += score;
-
-    if (direction === "left") next[i] = tiles;
-    else if (direction === "right") next[i] = [...tiles].reverse();
-    else if (direction === "up") next[i] = tiles;
-    else next[i] = [...tiles].reverse();
-  }
-
-  let moved = false;
-  outer: for (let r = 0; r < SIZE; r += 1) {
-    for (let c = 0; c < SIZE; c += 1) {
-      if (grid[r][c] !== next[r][c]) {
-        moved = true;
-        break outer;
+  let highest = Math.max(...grid.flat());
+  for (;;) {
+    let pair: [number, number, number, number] | null = null;
+    for (let row = ROWS - 1; row >= 0 && !pair; row -= 1) {
+      for (let col = 0; col < COLS && !pair; col += 1) {
+        const value = grid[row][col];
+        if (!value) continue;
+        if (col + 1 < COLS && grid[row][col + 1] === value) pair = [row, col, row, col + 1];
+        else if (row + 1 < ROWS && grid[row + 1][col] === value) pair = [row, col, row + 1, col];
       }
     }
+    if (!pair) break;
+    const [row, col, otherRow, otherCol] = pair;
+    const merged = grid[row][col] * 2;
+    const next = grid.map((line) => [...line]);
+    next[row][col] = merged;
+    next[otherRow][otherCol] = 0;
+    score += merged;
+    highest = Math.max(highest, merged);
+    grid = settle(next);
   }
-
-  return { grid: next, score: gained, moved };
-}
-
-function canMove(grid: Grid): boolean {
-  for (let r = 0; r < SIZE; r += 1) {
-    for (let c = 0; c < SIZE; c += 1) {
-      if (grid[r][c] === 0) return true;
-      const v = grid[r][c];
-      if (c + 1 < SIZE && grid[r][c + 1] === v) return true;
-      if (r + 1 < SIZE && grid[r + 1][c] === v) return true;
-    }
-  }
-  return false;
-}
-
-function highestTile(grid: Grid): number {
-  return grid.reduce((max, row) => Math.max(max, ...row), 0);
-}
-
-function tileLabel(value: number): string {
-  return String(value);
+  return { grid, score, highest };
 }
 
 export function Mini2048({
@@ -149,7 +76,9 @@ export function Mini2048({
   onRoundEnd: (seconds: number) => void;
   onExit: () => void;
 }) {
-  const [grid, setGrid] = useState<Grid>(() => addRandomTiles(createGrid()));
+  const [grid, setGrid] = useState<Grid>(emptyGrid);
+  const [active, setActive] = useState<ActiveTile>({ row: 0, col: 2, value: randomTile() });
+  const [nextValue, setNextValue] = useState(randomTile);
   const [score, setScore] = useState(0);
   const [best, setBest] = useState(0);
   const [moves, setMoves] = useState(0);
@@ -158,35 +87,24 @@ export function Mini2048({
 
   const elapsedRef = useRef(0);
   const endedRef = useRef(false);
+  const startedRef = useRef(false);
   const gridRef = useRef(grid);
+  const activeRef = useRef(active);
   const statusRef = useRef(status);
   const endRoundRef = useRef(onRoundEnd);
-
   gridRef.current = grid;
+  activeRef.current = active;
   statusRef.current = status;
 
-  useEffect(() => {
-    endRoundRef.current = onRoundEnd;
-  }, [onRoundEnd]);
-
+  useEffect(() => { endRoundRef.current = onRoundEnd; }, [onRoundEnd]);
   const endRound = useCallback(() => {
     if (endedRef.current) return;
     endedRef.current = true;
     endRoundRef.current(elapsedRef.current);
   }, []);
+  useEffect(() => setTimeLeft(Math.max(0, remainingSeconds)), [remainingSeconds]);
+  useEffect(() => () => { if (startedRef.current) endRound(); }, [endRound]);
 
-  useEffect(() => {
-    setTimeLeft(Math.max(0, remainingSeconds));
-  }, [remainingSeconds]);
-
-  // Bileşen kalkarken açık turu kapat: geçen süre boşa gitmesin.
-  useEffect(() => {
-    return () => {
-      endRound();
-    };
-  }, [endRound]);
-
-  // Süre sayacı yalnızca oynanırken işler.
   useEffect(() => {
     if (status !== "playing") return;
     const id = window.setInterval(() => {
@@ -195,213 +113,184 @@ export function Mini2048({
     }, 1000);
     return () => window.clearInterval(id);
   }, [status]);
-
   useEffect(() => {
     if (status === "playing" && timeLeft <= 0) setStatus("timeup");
   }, [status, timeLeft]);
-
   useEffect(() => {
-    if (status === "won" || status === "over" || status === "timeup") endRound();
+    if (status === "over" || status === "timeup") endRound();
   }, [status, endRound]);
 
-  function restart() {
-    endRound();
-    endedRef.current = false;
-    elapsedRef.current = 0;
-    setGrid(addRandomTiles(createGrid()));
-    setScore(0);
-    setBest(0);
-    setMoves(0);
-    setTimeLeft(Math.max(0, remainingSeconds));
-    setStatus("idle");
-  }
-
-  function exit() {
-    endRound();
-    onExit();
-  }
-
-  /** Tek giriş noktası: yön uygular, hak/skor/güncelleme yapar. */
-  const push = useCallback((direction: Direction) => {
-    const current = statusRef.current;
-    if (current !== "idle" && current !== "playing" && current !== "won") return;
-
-    if (current === "idle") {
+  const begin = useCallback(() => {
+    if (statusRef.current === "idle") {
+      startedRef.current = true;
       statusRef.current = "playing";
       setStatus("playing");
       onRoundStart();
     }
+  }, [onRoundStart]);
 
-    const result = move(gridRef.current, direction);
-    if (!result.moved) return;
-
-    const withSpawn = addRandomTiles(result.grid);
-    gridRef.current = withSpawn;
-    setGrid(withSpawn);
-    setScore((value) => {
-      const next = value + result.score;
-      setBest((previous) => (next > previous ? next : previous));
-      return next;
+  const lockTile = useCallback((tile: ActiveTile) => {
+    const board = gridRef.current.map((row) => [...row]);
+    board[tile.row][tile.col] = tile.value;
+    const resolved = mergeCascade(board);
+    gridRef.current = resolved.grid;
+    setGrid(resolved.grid);
+    setScore((current) => {
+      const updated = current + resolved.score;
+      setBest((previous) => Math.max(previous, updated));
+      return updated;
     });
-    setMoves((value) => value + 1);
-
-    if (highestTile(withSpawn) >= WIN_TILE) {
+    setMoves((current) => current + 1);
+    const nextActive = { row: 0, col: 2, value: nextValue };
+    const newNext = randomTile();
+    setNextValue(newNext);
+    if (resolved.highest >= WIN_TILE) {
+      setActive(nextActive);
+      activeRef.current = nextActive;
       statusRef.current = "won";
       setStatus("won");
       return;
     }
-    if (!canMove(withSpawn)) {
+    if (resolved.grid[0][nextActive.col] !== 0) {
       statusRef.current = "over";
       setStatus("over");
+      return;
     }
-  }, [onRoundStart]);
+    setActive(nextActive);
+    activeRef.current = nextActive;
+  }, [nextValue]);
 
-  // Klavye: ok tuşları + WASD.
+  const control = useCallback((action: Control) => {
+    const currentStatus = statusRef.current;
+    if (currentStatus !== "idle" && currentStatus !== "playing") return;
+    if (currentStatus === "idle") begin();
+    const tile = activeRef.current;
+    if (action === "left" || action === "right") {
+      const col = tile.col + (action === "left" ? -1 : 1);
+      if (col >= 0 && col < COLS && gridRef.current[tile.row][col] === 0) {
+        const moved = { ...tile, col };
+        activeRef.current = moved;
+        setActive(moved);
+      }
+      return;
+    }
+    let row = tile.row;
+    while (row + 1 < ROWS && gridRef.current[row + 1][tile.col] === 0) row += 1;
+    if (action === "drop") {
+      lockTile({ ...tile, row });
+      return;
+    }
+    if (row > tile.row) {
+      const moved = { ...tile, row };
+      activeRef.current = moved;
+      setActive(moved);
+    } else {
+      lockTile(tile);
+    }
+  }, [begin, lockTile]);
+
+  useEffect(() => {
+    if (status !== "playing") return;
+    const id = window.setInterval(() => {
+      const tile = activeRef.current;
+      if (tile.row + 1 < ROWS && gridRef.current[tile.row + 1][tile.col] === 0) {
+        const moved = { ...tile, row: tile.row + 1 };
+        activeRef.current = moved;
+        setActive(moved);
+      } else {
+        lockTile(tile);
+      }
+    }, GRAVITY_MS);
+    return () => window.clearInterval(id);
+  }, [status, lockTile]);
+
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
-      const map: Record<string, Direction> = {
-        ArrowLeft: "left",
-        ArrowRight: "right",
-        ArrowUp: "up",
-        ArrowDown: "down",
-        a: "left",
-        d: "right",
-        w: "up",
-        s: "down",
-      };
-      const direction = map[event.key];
-      if (!direction) return;
-      // Sayfa kaymasini engelle (oyun alanindayken).
+      const target = event.target;
+      if (target instanceof HTMLElement && target.closest("button, input, textarea, select")) return;
+      const key = event.key.toLowerCase();
+      const action: Control | undefined =
+        key === "arrowleft" || key === "a" ? "left" :
+        key === "arrowright" || key === "d" ? "right" :
+        key === "arrowdown" || key === "s" ? "down" :
+        key === " " ? "drop" : undefined;
+      if (!action) return;
       event.preventDefault();
-      push(direction);
+      control(action);
     }
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, [push]);
+  }, [control]);
 
-  const finished = status === "won" || status === "over" || status === "timeup";
+  function restart() {
+    endRound();
+    endedRef.current = false;
+    startedRef.current = false;
+    elapsedRef.current = 0;
+    const fresh = emptyGrid();
+    gridRef.current = fresh;
+    setGrid(fresh);
+    const first = randomTile();
+    setActive({ row: 0, col: 2, value: first });
+    activeRef.current = { row: 0, col: 2, value: first };
+    setNextValue(randomTile());
+    setScore(0);
+    setBest(0);
+    setMoves(0);
+    setTimeLeft(Math.max(0, remainingSeconds));
+    statusRef.current = "idle";
+    setStatus("idle");
+  }
+
+  function exit() {
+    if (startedRef.current) endRound();
+    onExit();
+  }
+
   const canRestart = rightsLeft > 0 && timeLeft > 0;
-  const tile = highestTile(grid);
+  const highest = Math.max(...grid.flat(), active.value);
 
   return (
     <div className="g2048">
       <div className="game-hud">
-        <div>
-          <small>Skor</small>
-          <b>{score}</b>
-        </div>
-        <div>
-          <small>En iyi</small>
-          <b>{best}</b>
-        </div>
-        <div>
-          <small>Hamle</small>
-          <b>{moves}</b>
-        </div>
-        <div>
-          <small>Bugün kalan süre</small>
-          <b>{formatClock(timeLeft)}</b>
-        </div>
+        <div><small>Skor</small><b>{score}</b></div>
+        <div><small>En iyi</small><b>{best}</b></div>
+        <div><small>Birleşen</small><b>{moves}</b></div>
+        <div><small>Kalan süre</small><b>{formatClock(timeLeft)}</b></div>
       </div>
 
-      <div className="g2048-board" role="group" aria-label="2048 taşası, 4 çarpı 4">
-        {grid.map((row, r) =>
-          row.map((value, c) => (
-            <div
-              className={`g2048-tile${value === 0 ? " is-empty" : ""}${value >= 512 ? " is-big" : ""}`}
-              key={`${r}-${c}`}
-            >
-              {value > 0 ? <span>{tileLabel(value)}</span> : null}
+      <div className="g2048-stage">
+        <div className="g2048-board" role="grid" aria-label="Matematik 2048, 6 sütun ve 10 satır">
+          {grid.map((row, r) => row.map((value, c) => (
+            <div className={`g2048-tile${value ? "" : " is-empty"}${value >= 512 ? " is-big" : ""}`} role="gridcell" aria-label={value ? String(value) : "Boş"} key={`${r}-${c}`}>
+              {value ? <span>{value}</span> : null}
             </div>
-          )),
-        )}
+          )))}
+          {status !== "over" && <div className={`g2048-tile g2048-active${active.value >= 512 ? " is-big" : ""}`} style={{ gridRow: active.row + 1, gridColumn: active.col + 1 }} aria-label={`Düşen taş ${active.value}`}><span>{active.value}</span></div>}
+        </div>
+        <aside className="g2048-next"><small>Sıradaki</small><b>{nextValue}</b><span>En yüksek taş {highest}</span></aside>
       </div>
 
-      <div className="g2048-pad" role="group" aria-label="Yön tuşları">
-        <button type="button" className="g2048-key is-up" onClick={() => push("up")} aria-label="Yukarı">
-          ↑
-        </button>
-        <button type="button" className="g2048-key is-left" onClick={() => push("left")} aria-label="Sol">
-          ←
-        </button>
-        <button
-          type="button"
-          className="g2048-key is-right"
-          onClick={() => push("right")}
-          aria-label="Sağ"
-        >
-          →
-        </button>
-        <button
-          type="button"
-          className="g2048-key is-down"
-          onClick={() => push("down")}
-          aria-label="Aşağı"
-        >
-          ↓
-        </button>
+      <div className="g2048-pad" role="group" aria-label="Taş kontrolleri">
+        <button type="button" className="g2048-key is-left" onClick={() => control("left")} aria-label="Sola hareket et">←</button>
+        <button type="button" className="g2048-key is-down" onClick={() => control("down")} aria-label="Aşağı indir">↓</button>
+        <button type="button" className="g2048-key is-right" onClick={() => control("right")} aria-label="Sağa hareket et">→</button>
+        <button type="button" className="g2048-drop" onClick={() => control("drop")}>Hızlı bırak</button>
       </div>
 
-      {status === "idle" && (
-        <p className="memory-note">
-          Aynı sayıları birleştirerek <strong>{WIN_TILE}</strong> değerine ulaş. Ok tuşları veya
-          ekrandaki yön tuşları.
-          <strong> İlk hamlede 1 oyun hakkı harcanır.</strong> Bugün {rightsLeft} tur hakkın kaldı.
-        </p>
-      )}
-
-      {status === "playing" && (
-        <p className="memory-note" aria-live="polite">
-          En yüksek taş: <b>{tileLabel(tile)}</b> ·{" "}
-          {rightsLeft > 0
-            ? `${formatClock(timeLeft)} süre kaldı.`
-            : "Bu turdan sonra bugünkü oyun hakkın doluyor."}
-        </p>
-      )}
-
-      {status === "won" && (
-        <div className="result is-ok">
-          <b>Tebrikler! {WIN_TILE} taşına ulaştın.</b>
-          <p>
-            {moves} hamlede ve {formatClock(elapsedRef.current)} sürede bitirdin. Bu tur 1 oyun hakkı
-            harcadı; oyun XP kazandırmaz. En yüksek taş: {tileLabel(tile)}.
-          </p>
-        </div>
-      )}
-
-      {status === "over" && (
-        <div className="result is-bad">
-          <b>Taşa hareket edemiyor.</b>
-          <p>
-            En yüksek taş: <b>{tileLabel(tile)}</b> · Skor: <b>{score}</b>. Boş kare yok ve aynı komşular
-            yan yana değil. Yeni bir taşta ile tekrar dene.
-          </p>
-        </div>
-      )}
-
-      {status === "timeup" && (
-        <div className="result is-bad">
-          <b>Bugünkü oyun süren doldu.</b>
-          <p>
-            Günlük oyun sınırı 10 dakika. Bugünkü ilerlemen kaydedildi; kalan hamle hakkın yarına
-            kalıyor.
-          </p>
-        </div>
-      )}
+      <p className="memory-note" aria-live="polite">
+        {status === "idle" ? <>Taşı sağa-sola yönlendir. Aynı komşu sayılar birleşir; <b>2048</b> hedefine ulaş. İlk tuşta 1 oyun hakkı kullanılır.</> :
+          status === "playing" ? <>← → ile yönlendir, ↓ ile indir, boşlukla hızlı bırak. Aynı sayılar birleşip zincir oluşturur.</> : null}
+      </p>
+      {status === "won" && <div className="result is-ok"><b>Harika! 2048 hedefine ulaştın.</b><p>Skor için devam edebilir veya turun sonunda oyundan çıkabilirsin.</p><button type="button" className="btn btn-primary" onClick={() => { statusRef.current = "playing"; setStatus("playing"); }}>Devam et</button></div>}
+      {status === "over" && <div className="result is-bad"><b>Yeni taş için yer kalmadı.</b><p>Skor: <b>{score}</b>. Sütunları dengeli kullanıp zincir birleşmeler oluşturmaya çalış.</p></div>}
+      {status === "timeup" && <div className="result is-bad"><b>Bugünkü oyun süren doldu.</b><p>Skorun: <b>{score}</b>. Yeni oyun hakkın varsa daha sonra tekrar deneyebilirsin.</p></div>}
 
       <div className="sheet-actions">
-        <button type="button" className="btn btn-primary btn-block" onClick={restart} disabled={!canRestart}>
-          {canRestart ? "Yeniden başlat (yeni taşta, 1 hak)" : "Yeniden başlatılamaz — hak/süre yok"}
-        </button>
-        <button type="button" className="btn btn-ghost btn-block" onClick={exit}>
-          Geri dön
-        </button>
+        <button type="button" className="btn btn-primary btn-block" onClick={restart} disabled={!canRestart}>{canRestart ? "Yeni tur başlat (1 hak)" : "Yeni tur için hak/süre yok"}</button>
+        <button type="button" className="btn btn-ghost btn-block" onClick={exit}>Geri dön</button>
       </div>
-
-      <p className="privacy-notice" role="note">
-        Oyun turları öğrenmenin yerine geçmez: XP kazandırmaz, yalnızca çalışma hedefini
-        tamamladıktan sonra kazandığın hakkı ve süreyi kullanır.
-      </p>
+      <p className="privacy-notice" role="note">Oyun XP kazandırmaz; yalnızca çalışma hedefini tamamladıktan sonra kazandığın hakkı ve süreyi kullanır.</p>
     </div>
   );
 }

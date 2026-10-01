@@ -1,0 +1,20 @@
+{
+  "version": "1.0",
+  "steps": [
+    "discover_official_source",
+    "download_or_reference_pdf",
+    "sha256_integrity",
+    "pdf_to_pages",
+    "question_candidate_segmentation",
+    "option_candidate_extraction",
+    "answer_key_extraction",
+    "booklet_answer_key_matching",
+    "deterministic_validation",
+    "similarity_detection",
+    "curriculum_mapping",
+    "review_queue",
+    "human_verification",
+    "canonical_publish"
+  ],
+  "publish_rule": "Only VERIFIED records enter canonical question bank."
+}

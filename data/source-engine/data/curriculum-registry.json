@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "layers": [
+    {
+      "id": "LGS_REFERENCE_2018_PLUS",
+      "purpose": "Historical LGS source classification; do not force into current curriculum codes."
+    },
+    {
+      "id": "CURRENT_TYMM",
+      "purpose": "Current student curriculum and outcome mapping."
+    }
+  ],
+  "chain": [
+    "subject",
+    "unit",
+    "topic",
+    "learning_outcome",
+    "skill"
+  ],
+  "status": "PARTIAL_VERIFIED",
+  "subjects": [
+    "Türkçe",
+    "Matematik",
+    "Fen Bilimleri",
+    "T.C. İnkılap Tarihi ve Atatürkçülük",
+    "Din Kültürü ve Ahlak Bilgisi",
+    "İngilizce"
+  ],
+  "rule": "Missing outcomes remain unmapped until verified from official MEB curriculum documents."
+}

@@ -1,8 +1,1 @@
-{
-  "name":"lgs-ai-coach-ui-v0",
-  "version":"0.1.0",
-  "private":true,
-  "scripts":{"dev":"next dev","build":"next build","start":"next start","lint":"next lint","test:ai":"node --no-warnings scripts/ai-providers.smoke.mjs"},
-  "dependencies":{"next":"16.3.6","react":"19.1.0","react-dom":"19.1.0"},
-  "devDependencies":{"typescript":"^5.8.3","@types/node":"^22.15.0","@types/react":"^19.1.2","@types/react-dom":"^19.1.2"}
-}
+{"name":"lgs-ai-coach-ui-v0","version":"0.1.0","private":true,"scripts":{"dev":"next dev","build":"next build","start":"next start","lint":"next lint","test:ai":"node --no-warnings scripts/ai-providers.smoke.mjs","test:source":"python3 -m unittest discover -s tests/source-ingestion -v && node --test tests/source-ingestion/api-contract.test.mjs","validate:sources":"python3 scripts/source-ingestion/validate_source_registry.py"},"dependencies":{"next":"16.3.6","react":"19.1.0","react-dom":"19.1.0"},"devDependencies":{"typescript":"^5.8.3","@types/node":"^22.15.0","@types/react":"^19.1.2","@types/react-dom":"^19.1.2"}}

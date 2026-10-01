@@ -1,0 +1,62 @@
+[
+  {
+    "path": "README.md",
+    "bytes": 779,
+    "sha256": "bff01f2ff6eefefa9974898ba857f7e92401e653c138a83849a7105937cb23ee"
+  },
+  {
+    "path": "data/curriculum-registry.json",
+    "bytes": 715,
+    "sha256": "ca1658c939c95267058bef878ee71b2be69bdb861d33847fbf4d29dcc3819131"
+  },
+  {
+    "path": "config/pipeline.json",
+    "bytes": 517,
+    "sha256": "ab9346e0fc231661ed0bcc4964ee06df551896aa9b8fe7b48f0330592211792a"
+  },
+  {
+    "path": "config/review-queue.json",
+    "bytes": 414,
+    "sha256": "db3be9a2fb53c1bc358a6096810b1debaf31343a56096663784d0e5d59a6ee9e"
+  },
+  {
+    "path": "config/source-registry.json",
+    "bytes": 2590,
+    "sha256": "062b599f091101c8df8e5081b5a6d9770623a891bc718b87e8e515be0efa62f3"
+  },
+  {
+    "path": "tests/test_registry.py",
+    "bytes": 336,
+    "sha256": "dd9fe817225e848bd18b25dd34bc82f3972835ad6eb549c5c6a2ae22120727a8"
+  },
+  {
+    "path": "db/001_question_bank.sql",
+    "bytes": 1071,
+    "sha256": "fea134fa86abbe5d81f7efdd2d508d9be53e06c828e6c0b85b6ac04aacec7b4e"
+  },
+  {
+    "path": "scripts/validate_source_registry.py",
+    "bytes": 479,
+    "sha256": "343bdb057494dd236512b34f2d90b64f98b326f3f58b55e0b0bba18c2bd25ca6"
+  },
+  {
+    "path": "scripts/build_review_queue.py",
+    "bytes": 1082,
+    "sha256": "47958f35fca3aa0d3fdedba12cb3302efe509cd8c08fbc77b7537d26d7d0cdc2"
+  },
+  {
+    "path": "docs/FINAL_INTEGRATION.md",
+    "bytes": 867,
+    "sha256": "7e4a0e93808c6d11153a3d011f37bf7e8b3a56d36d3991222d89dafd3af2fa19"
+  },
+  {
+    "path": "docs/QUESTION_ID_STRATEGY.md",
+    "bytes": 330,
+    "sha256": "a58bc86503445396170f5dd2ea0ec702e692644fb2d023c8eb78b9bb65028631"
+  },
+  {
+    "path": "docs/SOURCE_POLICY.md",
+    "bytes": 461,
+    "sha256": "e33b210dfdc740d4e676d344a5caddeb5021d943b41e37b1e5e029b73713ed5f"
+  }
+]

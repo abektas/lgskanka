@@ -147,6 +147,11 @@ export function StudyFlow({ initialIndex = 0 }: { initialIndex?: number }) {
         status: "error",
         message: "Bağlantı kurulamadı. İnternetini kontrol edip yeniden dene.",
       });
+    } finally {
+      // Raw solution photos and derived voice transcripts are temporary analysis inputs.
+      setPhoto(null);
+      setVoiceTranscript("");
+      if (fileRef.current) fileRef.current.value = "";
     }
   }
 

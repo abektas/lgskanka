@@ -299,6 +299,7 @@ export function VoiceRecorder({
     stopRecognition();
     setState("idle");
     setSeconds(0);
+    setTranscript("");
     onUse(finalText);
   }, [discardRecording, onUse, stopRecognition, transcript]);
 

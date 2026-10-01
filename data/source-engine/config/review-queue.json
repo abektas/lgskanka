@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "statuses": [
+    "EXTRACTED",
+    "AUTO_CHECKED",
+    "NEEDS_REVIEW",
+    "VERIFIED",
+    "REJECTED"
+  ],
+  "required_checks": [
+    "source_verified",
+    "year_verified",
+    "booklet_verified",
+    "question_number_verified",
+    "text_verified",
+    "options_verified",
+    "answer_key_verified",
+    "curriculum_verified",
+    "solution_verified",
+    "duplicate_checked"
+  ]
+}

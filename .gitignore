@@ -15,6 +15,10 @@ out/
 *.tsbuildinfo
 tsconfig.tsbuildinfo
 
+# Python artifacts
+__pycache__/
+*.py[cod]
+
 # Local tooling / editor
 .freebuff/
 .vercel/

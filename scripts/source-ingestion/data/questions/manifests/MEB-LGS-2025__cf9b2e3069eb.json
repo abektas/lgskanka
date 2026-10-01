@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "source_id": "MEB-LGS-2025",
+  "source_type": "REAL_LGS",
+  "year": 2025,
+  "official_index_url": "https://odsgm.meb.gov.tr/www/lgs-kapsamindaki-merkezi-sinav-tamamlandi-soru-kitapciklari-yayimlandi/icerik/1446",
+  "original_filename": "24220837_alte_fullmembershipcertificate.pdf",
+  "bytes": 92588,
+  "sha256": "cf9b2e3069ebde02ff2354a080c8ef9b84ca35d8204ee6eff40d0574bd5e875a",
+  "retrieved_at": "2026-09-30T11:11:08.179346+00:00",
+  "parser_version": "source-ingestion-pipeline-v1",
+  "resulting_record_ids": [],
+  "resulting_record_count": 0,
+  "status": "NEEDS_REVIEW",
+  "published": false,
+  "source_file_url": "https://odsgm.meb.gov.tr/meb_iys_dosyalar/2024_04/24220837_alte_fullmembershipcertificate.pdf",
+  "archive_path": "data/questions/archive/MEB-LGS-2025/24220837_alte_fullmembershipcertificate.pdf"
+}

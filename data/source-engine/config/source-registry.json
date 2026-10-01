@@ -1,0 +1,93 @@
+{
+  "schema_version": "1.0",
+  "canonical_policy": {
+    "real_lgs_min_year": 2018,
+    "excluded": [
+      "TEOG",
+      "PRE_2018_CENTRAL_EXAM"
+    ],
+    "source_priority": [
+      "MEB_OFFICIAL",
+      "VERIFIED_EXTERNAL",
+      "AI_GENERATED"
+    ]
+  },
+  "sources": [
+    {
+      "id": "MEB-LGS-2026",
+      "type": "REAL_LGS",
+      "year": 2026,
+      "official_index_url": "https://odsgm.meb.gov.tr/www/lgs-kapsamindaki-merkezi-sinavin-soru-kitapciklari-ve-cevap-anahtarlari-yayimlandi/icerik/1678/tr",
+      "booklets": [
+        "SAYISAL_A",
+        "SOZEL_A",
+        "SAYISAL_B",
+        "SOZEL_B",
+        "SAYISAL_C",
+        "SOZEL_C",
+        "SAYISAL_D",
+        "SOZEL_D"
+      ]
+    },
+    {
+      "id": "MEB-LGS-2025",
+      "type": "REAL_LGS",
+      "year": 2025,
+      "official_index_url": "https://odsgm.meb.gov.tr/www/lgs-kapsamindaki-merkezi-sinav-tamamlandi-soru-kitapciklari-yayimlandi/icerik/1446",
+      "booklets": [
+        "SAYISAL_A",
+        "SOZEL_A",
+        "SAYISAL_B",
+        "SOZEL_B",
+        "SAYISAL_C",
+        "SOZEL_C",
+        "SAYISAL_D",
+        "SOZEL_D"
+      ]
+    },
+    {
+      "id": "MEB-LGS-2024",
+      "type": "REAL_LGS",
+      "year": 2024,
+      "official_index_url": "https://odsgm.meb.gov.tr/www/02-haziran-2024-tarihinde-uygulanan-sinavla-ogrenci-alacak-ortaogretim-kurumlarina-iliskin-merkezi-sinavin-soru-kitapciklari-sayisal-ve-sozel-ve-cevap-anahtarlari/icerik/1245",
+      "booklets": [
+        "SAYISAL",
+        "SOZEL"
+      ]
+    },
+    {
+      "id": "MEB-LGS-2023",
+      "type": "REAL_LGS",
+      "year": 2023,
+      "official_index_url": "https://odsgm.meb.gov.tr/www/04-haziran-2023-tarihinde-uygulanan-sinavla-ogrenci-alacak-ortaogretim-kurumlarina-iliskin-merkezi-sinav-soru-kitapciklari-sayisal-ve-sozel-ve-cevap-anahtarlari/icerik/983",
+      "booklets": [
+        "SAYISAL",
+        "SOZEL"
+      ]
+    },
+    {
+      "id": "MEB-LGS-2022",
+      "type": "REAL_LGS",
+      "year": 2022,
+      "official_index_url": "https://odsgm.meb.gov.tr/www/5-haziran-2022-tarihinde-yapilan-sinavla-ogrenci-alacak-ortaogretim-kurumlarina-iliskin-merkezi-sinav-soru-kitapciklari-ve-cevap-anahtarlari/icerik/822",
+      "booklets": [
+        "SAYISAL",
+        "SOZEL"
+      ]
+    },
+    {
+      "id": "MEB-SAMPLE-ARCHIVE",
+      "type": "MEB_SAMPLE",
+      "official_index_url": "https://odsgm.meb.gov.tr/www/ornek-sorular/icerik/1011",
+      "periods": [
+        "2018-2019",
+        "2019-2020",
+        "2020-2021",
+        "2021-2022",
+        "2022-2023",
+        "2023-2024",
+        "2024-2025"
+      ]
+    }
+  ]
+}

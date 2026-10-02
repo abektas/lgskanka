@@ -1,0 +1,32 @@
+{
+  "_comment": "TASK-AUTOMATION-001 örnek config. Kopyalayıp --config ile verin. Token/API key BURAYA YAZILMAZ.",
+
+  "repo": "abektas/lgs-ai-coach",
+  "repoPath": "/home/selam/roller/web/lgs-ai-coach",
+
+  "trustedAuthors": ["abektas"],
+
+  "readyStatus": "READY_FOR_CLINE",
+  "requiredAgent": "Cline",
+  "requiredMarkers": [
+    "**Task ID:**",
+    "**Agent:**",
+    "**Status:**",
+    "## Objective",
+    "## Scope"
+  ],
+
+  "_labelComment": "null = gövde içindeki Status/Agent işaretleri kullanılır. Etiket bazlı yetkilendirme istenirse önce repoda etiket oluşturulmalıdır.",
+  "requiredLabel": null,
+
+  "timeoutSec": 1800,
+  "timeoutGraceSec": 90,
+
+  "allowExecution": false,
+
+  "_binComment": "PATH'te yoksa aranacak konumlar (kurulum yolunu tahmin etmemek için).",
+  "binCandidates": {
+    "cline": ["cline", "/usr/local/bin/cline"],
+    "gh": ["gh", "/home/selam/.local/gh-cli/gh_2.102.0_linux_amd64/bin/gh"]
+  }
+}

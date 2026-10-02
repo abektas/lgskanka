@@ -6,8 +6,10 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-# Not: --install-systemd komutu bu satırları gerçek yollar/izinlerle yeniden yazar.
-ExecStart=/usr/bin/env node %h/roller/web/lgs-ai-coach/tools/cline-watcher/watcher.mjs --interval 300 --execute
+# Not: `node tools/cline-watcher/watcher.mjs --install-systemd` bu satırları
+# gerçek yollarla yeniden yazar. unattended çalıştırma --execute ister ve
+# config.json içindeki autoApprove:true + allowExecution:true gerekir.
+ExecStart=/usr/bin/env node %h/roller/web/lgs-ai-coach/tools/cline-watcher/watcher.mjs --interval 300 --execute --config %h/roller/web/lgs-ai-coach/tools/cline-watcher/config.json
 WorkingDirectory=%h/roller/web/lgs-ai-coach
 Restart=on-failure
 RestartSec=30

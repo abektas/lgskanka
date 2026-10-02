@@ -108,6 +108,27 @@ test("9d. varsayılan autoApprove=true (PO onayı) ve allowExecution=true", () =
   assert.equal(cfg.allowExecution, true, "unattended çalışma config kapısı açık olmalı");
 });
 
+
+test("12. ikinci instance canlı görevin durumunu bozmaz", () => {
+  // Canlı bir görev "running" iken ikinci instance reconcile çalıştırırsa
+  // state "interrupted" olurdu. Kilit alınmadan reconcile edilmemeli.
+  const stateDir = makeConfig().stateDir;
+  const store = createStore(stateDir);
+  store.upsert("TASK-AUTOMATION-001", 1, { status: "running" });
+
+  const lock = acquireLock(stateDir);
+  assert.equal(lock.acquired, true);
+
+  // Kilit varken ikinci süreç kilidi alamaz → çıkar, reconcile yapmaz.
+  const second = acquireLock(stateDir);
+  assert.equal(second.acquired, false, "ikinci instance kilitlenmeli");
+  assert.equal(
+    createStore(stateDir).get("TASK-AUTOMATION-001", 1).status,
+    "running",
+    "canlı görev durumu bozulmamalı",
+  );
+});
+
 test("8. başarılı Cline çalışması doğru state yazar", async () => {
   const cfg = makeConfig();
   const recordFile = path.join(cfg.logDir, "record.json");

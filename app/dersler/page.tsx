@@ -2,6 +2,16 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Icon } from "../../components/icons";
 import { errorTypes, subjects } from "../../data/content";
+import type { ErrorType } from "../../data/content";
+
+/**
+ * Dizi sırasına değil, koda (`"H1"`) göre eşleşir; böylece `errorTypes` sırası
+ * değişse de öğrenciye gösterilen kod/ad eşleşmesi bozulmaz.
+ */
+function errorTypeLabel(code: ErrorType["code"]): string {
+  const found = errorTypes.find((item) => item.code === code);
+  return found ? `${found.code} · ${found.name.toLowerCase()}` : code;
+}
 
 export const metadata: Metadata = {
   title: "Dersler ve konu haritası",
@@ -107,9 +117,8 @@ export default function DerslerPage() {
           <h2>Konularda nerede takıldığını biliyor musun?</h2>
           <p>
             Koçun ortak dili H1–H7 kodlarıdır: her hata türü farklı bir çalışma yöntemi gerektirir.
-            Örneğin {errorTypes[0].code} · {errorTypes[0].name.toLowerCase()} için önce konu özeti,
-            {errorTypes[3].code} · {errorTypes[3].name.toLowerCase()} için daha çok kontrol alışkanlığı
-            gerekir.
+            Örneğin {errorTypeLabel("H1")} için önce konu özeti,
+            {errorTypeLabel("H4")} için daha çok kontrol alışkanlığı gerekir.
           </p>
         </div>
         <Link className="btn" href="/ilerleme">

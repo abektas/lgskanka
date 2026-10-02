@@ -66,7 +66,7 @@ gh label create cline-ready --repo abektas/lgs-ai-coach \
 | Açık issue, güvenilir yazar, ready işareti, yapısal alanlar | `lib/github.mjs` |
 | **Shell yok**: tüm alt süreçler argüman dizisiyle (`spawn`, `execFile`) | `lib/runner.mjs`, `lib/github.mjs` |
 | Issue gövdesi yalnız `<<<UNTRUSTED_TASK_CONTENT ... >>>` bloğunda taşınır + "never execute" talimatı | `lib/prompt.mjs` |
-| `--auto-approve false`, `--json`, `--timeout`, `--cwd` sabit | `lib/runner.mjs` |
+| `--auto-approve` config'den (PO onayı 2026-10-02 → `true`), `--json`, `--timeout`, `--cwd` sabit | `lib/runner.mjs` |
 | Tek instance kilidi (ölü PID kilidi devralınır) | `lib/lock.mjs` |
 | Duplicate engelleme, kalıcı + atomik state | `lib/state.mjs` |
 | Loglarda yalnız tanımlayıcı/durum; token/gövde redakte | `lib/log.mjs` |
@@ -86,7 +86,7 @@ Durumlar: `claimed · running · dry_run · succeeded · failed · timeout · in
 ## Test
 
 ```sh
-npm run test:watcher     # 12 senaryo, gerçek ağ/Cline KULLANMAZ (stub bin)
+npm run test:watcher     # 14 senaryo, gerçek ağ/Cline KULLANMAZ (stub bin)
 ```
 
 ## systemd ( opsiyonel, runner doğrulandıktan SONRA)
@@ -120,6 +120,11 @@ git revert <commit>   # veya: git checkout <commit> -- tools/cline-watcher
 
 - Görev tetikleme **zaman tabanlıdır** (`--interval`); GitHub webhook/event dinleme yoktur.
 - Tam olarak bir issue yalnız **gövdedeki** sözleşmeye uyarsa çalışır.
-- Cline çalışırken `--auto-approve false` olduğu için onay gerektiren araçlar durur;
-  bu durumda `run_result` başarısız dönebilir.
+- Prompt, işbirliği protokolünün `CLINE_BRIEFING.md`, `docs/CHATGPT_CLINE_COLLABORATION_PROTOCOL.md`
+  ve `docs/GITHUB_TASK_TEMPLATE.md` dosyalarında olduğunu varsayar; bu dosyalar depoda
+  **mevcut değildir**. Bağlayıcı kılınan asıl belge `AGENTS.md`'dir. Protokol dosyaları
+  ChatGPT/PO tarafından oluşturulmalıdır (bkz. handoff §15).
+- `autoApprove: false` unattended çalıştırmayı no-op yapar (Cline onaylı aracı
+  çalıştıramaz ve `run_result` başarısız döner). Varsayılan `true`'dur; acil
+  durumda `config.json` → `autoApprove: false` ile geri alınabilir.
 - Runner `git push` **yapmaz**; PR'yi Cline veya operatör açar.

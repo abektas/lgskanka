@@ -204,7 +204,11 @@ export async function runOnce({ cfg, log, store, clineBin, ghBin, execute }) {
 
 function systemdUnitText(cfg) {
   const parts = ["node", path.join(TOOL_ROOT, "watcher.mjs"), "--interval", "300", "--execute"];
-  if (cfg.config) parts.push("--config", cfg.config);
+  // Config dosyası varsa systemd unattended çalışmasında da kullanılır
+  // (autoApprove / allowExecution burada tanımlıdır).
+  const configPath = path.join(TOOL_ROOT, "config.json");
+  if (existsSync(configPath)) parts.push("--config", configPath);
+  else if (cfg.config) parts.push("--config", cfg.config);
   return `[Unit]
 Description=LGS AI Coach GitHub -> Cline task watcher (TASK-AUTOMATION-001)
 After=network-online.target
@@ -259,7 +263,6 @@ async function main() {
   const cfg = loadConfig(args.config);
   const log = createLogger({ logDir: cfg.logDir, dryRun: args.dryRun });
   const store = createStore(cfg.stateDir);
-  store.reconcileInterrupted();
 
   if (args.installSystemd) return installSystemd(cfg, log);
   if (args.uninstallSystemd) return uninstallSystemd(log);
@@ -271,6 +274,12 @@ async function main() {
     process.exit(3);
   }
   log.info("lock_acquired", { pid: process.pid, stale: Boolean(lock.released) });
+
+  // Yalnız kilidi doğruladıktan SONRA: ölü sahibin yarım kalan görevlerini
+  // "interrupted" işaretle. (Kilit öncesi çağrılırsa ikinci bir instance
+  // canlı görevin durumunu bozuyordu.)
+  const reconciled = store.reconcileInterrupted();
+  if (reconciled > 0) log.warn("interrupted_tasks_reconciled", { count: reconciled });
 
   let stopping = false;
   const graceful = (signal) => {

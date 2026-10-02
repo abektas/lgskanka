@@ -295,7 +295,11 @@ async function main() {
       return;
     }
 
-    const execute = Boolean(args.execute);
+    // İki kapı: CLI bayrağı VE config anahtarı. İkisi de true olmalı.
+    const execute = Boolean(args.execute) && cfg.allowExecution !== false;
+    if (args.execute && !execute) {
+      log.warn("execution_blocked_by_config", { allowExecution: false });
+    }
     do {
       const outcome = await runOnce({ cfg, log, store, clineBin, ghBin, execute });
       process.stdout.write(`${JSON.stringify(outcome, null, 2)}\n`);

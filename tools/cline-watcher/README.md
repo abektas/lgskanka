@@ -42,8 +42,9 @@ node tools/cline-watcher/watcher.mjs --preflight-only
 | `requiredAgent` | `Cline` | Gövdede `**Agent:**` değeri |
 | `requiredMarkers` | Task ID/Agent/Status/Objective/Scope | Yapısal zorunluluklar |
 | `requiredLabel` | `null` | Etiket bazlı yetkilendirme (aşağıya bakın) |
+| `autoApprove` | `true` | Cline `--auto-approve`. PO onayı 2026-10-02. `false` unattended çalıştırmayı no-op yapar |
+| `allowExecution` | `true` | İkinci kapı: çalıştırma için `--execute` **ve** bu değer gerekir |
 | `timeoutSec` / `timeoutGraceSec` | 1800 / 90 | Cline `--timeout` + izleyici watchdog'u |
-| `allowExecution` | `false` | `--execute` olmadan hiçbir çalıştırma yapılmaz |
 
 ### Etiket tabanlı yetkilendirme (Issue #1 notu)
 

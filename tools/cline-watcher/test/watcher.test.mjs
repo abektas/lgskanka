@@ -94,6 +94,19 @@ test("7. issue gövdesindeki sahte shell komutu çalıştırılmaz", async () =>
   assert.equal(existsSync(canary), false, "issue gövdesi shell olarak çalıştırılmamalı");
 });
 
+test("9c. allowExecution=false ikinci kapı olarak çalıştırmayı engeller", async () => {
+  // systemd unattended çalışmasını durduran acil durum freni.
+  const cfg = makeConfig({ allowExecution: false });
+  const result = await runRound({ cfg, stubBin: stub([makeIssue()]), execute: false });
+  assert.equal(result.status, "dry_run", "kapı kapalıyken yalnız dry-run yapılmalı");
+  assert.equal(createStore(cfg.stateDir).get("TASK-AUTOMATION-001", 1).status, "dry_run");
+});
+
+test("9d. varsayılan autoApprove=true (PO onayı) ve allowExecution=true", () => {
+  const cfg = cfgFor();
+  assert.equal(cfg.autoApprove, true, "PO onayı: autoApprove true olmalı");
+  assert.equal(cfg.allowExecution, true, "unattended çalışma config kapısı açık olmalı");
+});
 
 test("8. başarılı Cline çalışması doğru state yazar", async () => {
   const cfg = makeConfig();
@@ -112,7 +125,8 @@ test("8. başarılı Cline çalışması doğru state yazar", async () => {
   const args = JSON.parse(readFileSync(recordFile, "utf8")).args;
   assert.ok(args.includes("--json"));
   assert.ok(args.includes("--auto-approve"));
-  assert.equal(args[args.indexOf("--auto-approve") + 1], "false");
+  // Product Owner onayı (2026-10-02): unattended çalışmada auto-approve true.
+  assert.equal(args[args.indexOf("--auto-approve") + 1], "true");
   assert.ok(args.includes("--timeout"));
   assert.ok(args.includes("--cwd"));
   assert.ok(args[args.length - 1].includes("UNTRUSTED_TASK_CONTENT"));

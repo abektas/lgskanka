@@ -1,7 +1,9 @@
 # Environment variables
+# `.env.example` istisnadır: yalnızca değişken adları ve yer tutucu içerir.
 .env
 .env.local
-.env.*.local
+.env.*
+!.env.example
 
 # Dependencies
 node_modules/
@@ -22,6 +24,19 @@ __pycache__/
 # Local tooling / editor
 .freebuff/
 .vercel/
+
+# Agent scratch / backup artifacts
+*.backup
+*.backup-*
+*.save
+*.before-openai
+*.before-*
+app/api/ai/providers.ts'
+cline*report*.md
+clinecapability-audit-poc-*.md
+
+# Downloaded official source artifacts (MIME/binary; provenance lives in manifests)
+scripts/source-ingestion/data/questions/archive/
 
 # Logs
 *.log

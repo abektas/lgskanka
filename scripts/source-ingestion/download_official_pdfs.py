@@ -119,6 +119,41 @@ def resolve_pdfs(source, opener=None):
     return found, skipped
 
 
+# Kitapçık kodu -> resmî sayfa bağlantı metnindeki ders anahtarı.
+BOOKLET_SUBJECTS = {"SAYISAL": "sayisal", "SOZEL": "sozel"}
+# Türkçe karakterleri ASCII'ye indirger; eşleşme aksan/harf duyarsız olur.
+_DIACRITIC_MAP = str.maketrans("ıİöÖüÜşŞçÇğĞâÂîÎûÛ", "iIoOuUsScCgGaAiIuU")
+
+
+def normalize_anchor_text(text):
+    """Bağlantı metnini karşılaştırma için sadeleştirir (küçük harf + ASCII)."""
+    return str(text or "").translate(_DIACRITIC_MAP).lower()
+
+
+def select_discoveries(discoveries, booklet):
+    """Keşfedilen PDF'leri resmî sayfa bağlantı metnine göre seçer (ör. SAYISAL_A).
+
+    Kanıt yalnızca resmî sayfadan okunan bağlantı metnidir; eşleşme yoksa boş
+    liste döner ve tahmin yapılmaz. `booklet` verilmezse tüm keşifler korunur.
+    """
+    if not booklet:
+        return list(discoveries)
+    parts = [part for part in normalize_anchor_text(booklet).replace("-", "_").split("_") if part]
+    if not parts:
+        return list(discoveries)
+    subject = BOOKLET_SUBJECTS.get(parts[0].upper(), parts[0])
+    letters = {part for part in parts[1:] if len(part) == 1}
+    selected = []
+    for discovery in discoveries:
+        haystack = normalize_anchor_text(discovery.anchor_text)
+        if subject not in haystack:
+            continue
+        if letters and not (letters & set(re.findall(r"[a-z0-9]+", haystack))):
+            continue
+        selected.append(discovery)
+    return selected
+
+
 def response_content_type(response):
     headers = getattr(response, "headers", {})
     value = headers.get("Content-Type", "") if hasattr(headers, "get") else ""
@@ -194,15 +229,21 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--source-id", required=True)
     parser.add_argument("--max-pdfs", type=int, default=1)
+    parser.add_argument("--booklet", default=None, help="Resmî bağlantı metnine göre kitapçık seçimi, ör. SAYISAL_A")
     parser.add_argument("--archive-dir", type=Path, default=Path("data/questions/archive"))
     parser.add_argument("--manifest-dir", type=Path, default=Path("data/questions/manifests"))
     args = parser.parse_args()
     if not 1 <= args.max_pdfs <= 3:
         parser.error("pilot is limited to 1–3 PDFs per run")
     source = registered_source(args.source_id)
+    registered_booklets = {str(code).upper() for code in source.get("booklets", [])}
+    if args.booklet and registered_booklets and args.booklet.upper() not in registered_booklets:
+        parser.error(f"booklet {args.booklet} is not registered for {args.source_id}")
     try:
         discoveries, skipped = resolve_pdfs(source)
-        selected = discoveries[:args.max_pdfs]
+        selected = select_discoveries(discoveries, args.booklet)[:args.max_pdfs]
+        if args.booklet and not selected:
+            raise ValueError(f"no discovered PDF matched the registered booklet {args.booklet}")
         downloaded = []
         for index, discovery in enumerate(selected, 1):
             path = args.archive_dir / source["id"] / f"{index:02d}-{Path(urlparse(discovery.pdf_url).path).name}"
@@ -214,7 +255,7 @@ def main():
             manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
             metadata.update({"path": str(path), "manifest_path": str(manifest_path), "source_id": source["id"], "official_index_url": source["official_index_url"]})
             downloaded.append(metadata)
-        print(json.dumps({"source_id": source["id"], "resolved_pdf_count": len(discoveries), "downloaded": downloaded, "skipped": skipped, "status": "NEEDS_REVIEW"}, ensure_ascii=False, indent=2))
+        print(json.dumps({"source_id": source["id"], "booklet": args.booklet, "resolved_pdf_count": len(discoveries), "selected_pdf_count": len(selected), "downloaded": downloaded, "skipped": skipped, "status": "NEEDS_REVIEW"}, ensure_ascii=False, indent=2))
     except (ValueError, HTTPError, URLError, OSError) as exc:
         parser.error(str(exc))
 

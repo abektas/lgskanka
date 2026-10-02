@@ -35,13 +35,12 @@ export const DEFAULTS = {
   /**
    * Cline `--auto-approve` değeri.
    *
-   * Varsayılan `false` (fail-safe). ÖNEMLİ: Cline 3.0.62 headless oturumda
-   * onay gerektiren araçları reddeder ("Tool approval requires an interactive
-   * session"), yani `false` ile görev hiçbir iş yapmadan no-op biter.
-   * Gerçek unattended çalıştırma için `true` gerekir; bu bir güvenlik
-   * kararıdır ve Product Owner onayı gerektirir.
+   * true: Product Owner tarafından 2026-10-02'de açıkça onaylandı.
+   *   Cline 3.0.62 headless oturumda onay gerektiren araçları
+   *   "tool approval requires an interactive session" ile reddettiği için
+   *   unattended (insansız) çalışmada bu değer true olmalıdır.
    */
-  autoApprove: false,
+  autoApprove: true,
   /** Cline süreç zaman aşımı (saniye) + izleyici için ek tolerans. */
   timeoutSec: 1800,
   timeoutGraceSec: 90,
@@ -50,8 +49,14 @@ export const DEFAULTS = {
   logDir: path.join(TOOL_ROOT, "logs"),
   /** Varsayılan: yalnızca tespit + doğrula, Cline çalıştırma. */
   dryRun: true,
-  /** Cline çalıştırmaya izin ver (güvenlik kapısı; --execute ile de açılabilir). */
-  allowExecution: false,
+  /**
+   * Yapılandırma düzeyinde ana çalıştırma anahtarı.
+   *
+   * Çalıştırma için İKİ koşul gerekir: `--execute` bayrağı VE `allowExecution: true`.
+   * Bu değer `false` yapılırsa systemd unattended çalışması da durur
+   * (ikinci güvenlik kapısı / acil durum freni).
+   */
+  allowExecution: true,
   /** Cline ve gh için aranacak konumlar (PATH dışı kurulumlar için). */
   binCandidates: {
     cline: ["cline", "/usr/local/bin/cline"],

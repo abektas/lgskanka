@@ -22,7 +22,11 @@
   "timeoutSec": 1800,
   "timeoutGraceSec": 90,
 
-  "allowExecution": false,
+  "_autoApproveComment": "Cline --auto-approve. true = Product Owner onayı (2026-10-02). false unattended çalıştırmayı no-op yapar.",
+  "autoApprove": true,
+
+  "_allowExecutionComment": "İkinci güvenlik kapısı: çalıştırma için --execute bayrağı VE bu değer true olmalı. false = acil durum freni (sistemd de durur).",
+  "allowExecution": true,
 
   "_binComment": "PATH'te yoksa aranacak konumlar (kurulum yolunu tahmin etmemek için).",
   "binCandidates": {

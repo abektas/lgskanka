@@ -1,0 +1,25 @@
+[Unit]
+Description=LGS AI Coach GitHub -> Cline task watcher (TASK-AUTOMATION-001)
+Documentation=file://%h/roller/web/lgs-ai-coach/tools/cline-watcher/README.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Not: --install-systemd komutu bu satırları gerçek yollar/izinlerle yeniden yazar.
+ExecStart=/usr/bin/env node %h/roller/web/lgs-ai-coach/tools/cline-watcher/watcher.mjs --interval 300 --execute
+WorkingDirectory=%h/roller/web/lgs-ai-coach
+Restart=on-failure
+RestartSec=30
+
+# Graceful shutdown: SIGTERM gönderilir, watcher kilidi bırakır ve çıkar.
+KillSignal=SIGTERM
+TimeoutStopSec=60
+
+# Güvenlik sertleştirmesi
+NoNewPrivileges=true
+PrivateTmp=true
+# Secret/token yoktur; GitHub kimliği kullanıcı keyring'inden (gh auth) gelir.
+
+[Install]
+WantedBy=default.target

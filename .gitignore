@@ -38,6 +38,12 @@ clinecapability-audit-poc-*.md
 # Downloaded official source artifacts (MIME/binary; provenance lives in manifests)
 scripts/source-ingestion/data/questions/archive/
 
+# Cline task watcher runtime state (local only; never commit)
+tools/cline-watcher/state/
+tools/cline-watcher/logs/
+tools/cline-watcher/config.json
+tools/cline-watcher/systemd/.rendered
+
 # Logs
 *.log
 

@@ -211,6 +211,19 @@ def unavailable(summary: str, kind: str, truncated: bool = False) -> dict:
     }
 
 
+def emit(review: dict, args) -> None:
+    """Sonucu stdout'a ve istenirse dosyaya yazar.
+
+    Hata yollari da buradan gecer; boylece `--json-out` her zaman uretilir.
+    (Daha once hata donuslerinde dosya yazilmadigi icin sonraki step
+    FileNotFoundError ile coktu.)
+    """
+    rendered = json.dumps(review, ensure_ascii=False, indent=2)
+    if args.json_out:
+        Path(args.json_out).write_text(rendered + "\n", encoding="utf-8")
+    print(rendered)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--pr", required=True, type=int)
@@ -222,15 +235,13 @@ def main() -> int:
 
     api_key = os.environ.get("GEMINI_API_KEY")
     if not api_key:
-        print(json.dumps(unavailable(
-            "GEMINI_API_KEY tanimli degil.", "missing_credentials"
-        ), ensure_ascii=False))
+        emit(unavailable("GEMINI_API_KEY tanimli degil.", "missing_credentials"), args)
         return 0
 
     try:
         context, truncated = collect_context(args.pr, args.files, args.max_chars)
     except RuntimeError as exc:
-        print(json.dumps(unavailable(str(exc), "github_fetch_failed"), ensure_ascii=False))
+        emit(unavailable(str(exc), "github_fetch_failed"), args)
         return 0
 
     prompt = (
@@ -244,9 +255,9 @@ def main() -> int:
         review = call_gemini(prompt, api_key, args.timeout)
     except RuntimeError as exc:
         # KRITIK: API hatasi FIX_REQUIRED DEGILDIR.
-        print(json.dumps(unavailable(
+        emit(unavailable(
             f"Gemini API cagrisi basarisiz: {exc}", "provider_error", truncated
-        ), ensure_ascii=False))
+        ), args)
         return 0
 
     review.setdefault("context_truncated", truncated)
@@ -255,10 +266,7 @@ def main() -> int:
         review["status"] = "REVIEW_UNAVAILABLE"
         review["error_kind"] = "schema_violation"
 
-    rendered = json.dumps(review, ensure_ascii=False, indent=2)
-    if args.json_out:
-        Path(args.json_out).write_text(rendered + "\n", encoding="utf-8")
-    print(rendered)
+    emit(review, args)
     return 0
 
 

@@ -7,11 +7,13 @@ Tasarim kararlari (fizibilite raporundan):
 1. **Tek dogrulanabilir durum kumesi.** Cikan JSON semaya uymazsa sonucu
    UYGULAMAM: `FIX_REQUIRED` uretmek teknik hatayi gercek bulgu gibi
    gosterirdi. Bu yuzden `REVIEW_UNAVAILABLE` AYRI bir durumdur.
-2. **Context budeme zorunlu.** Canli olcum: PR #4'un gercek diff'i
-   (726.568 karakter) 40.000 karakter butceyle gonderildiginde TUM modeller
-   HTTP 503 (UNAVAILABLE) verdi; 20.000 karakter butceyle ayni PR
-   basarili incelendi. Varsayilan butce bu nedenle 20.000'dir.
-   Asilma durumunda kirpilir ve `context_truncated` rapora islenir.
+2. **Context budeme zorunlu.** Iki ayri olcum:
+   - Buyuklik: PR #4'un gercek diff'i (726.568 karakter) 40.000 karakter
+     butceyle gonderildiginde TUM modeller HTTP 503 (UNAVAILABLE) verdi.
+   - Kota: ayni diff 20.000 karakterde 429 RESOURCE_EXHAUSTED verdi;
+     8.000 karakterde ayni PR basarili incelendi.
+   Varsayilan butce 12.000'dir. Asilma durumunda kirpilir ve
+   `context_truncated` rapora islenir; PR yorumunda da uyari yazilir.
 3. **Diff-only mod.** `--files` verilmezse yalnizca diff gonderilir.
 4. **Sifre/PII sizmaz.** Cikti disinda hicbir yere yazilmaz; hata mesajlari
    govdeyi yazmaz.
@@ -36,12 +38,23 @@ from pathlib import Path
 REPO = "abektas/lgs-ai-coach"
 API_BASE = "https://generativelanguage.googleapis.com/v1beta/models"
 
-# Model sirasi: ilki calismazsa siradaki denenir. 2.5-* modelleri yeni
-# kullanicilara kapali (canli denemede HTTP 404 "no longer available").
-# Bu, dokuman ile gercek API davranisi arasindaki bosluktur.
-MODEL_CANDIDATES = ["gemini-3.8-flash", "gemini-flash-latest", "gemini-3.7-flash"]
+# Model sirasi: ilki calismazsa siradaki denenir.
+#
+# Canli kota olcumu (2026-10-03, ayni anahtarla ardisik denemeler):
+#   gemini-3.7-flash     -> OK   (500 krk ve 15.000 krk)
+#   gemini-3.8-flash     -> HTTP 429 RESOURCE_EXHAUSTED
+#   gemini-flash-latest  -> HTTP 429 RESOURCE_EXHAUSTED
+# Yani kotasi yeterli olan TEK model 3.7-flash; ilk sira o yapildi.
+# `flash-latest` bir ALIAS'tir ve su an 3.8'e isaret ediyor, bu yuzden
+# kotasi 3.8 ile ayni sekilde tuki. En SONA atildi: review tutarliligi
+# icin asla birincil hedef olmamali, sadece digerleri de dustugunde
+# son care olarak denenmeli.
+#
+# 2.5-* modelleri listede yok: API'ye soruldugunda HTTP 404
+# "no longer available to new users" donuyor.
+MODEL_CANDIDATES = ["gemini-3.7-flash", "gemini-3.8-flash", "gemini-flash-latest"]
 
-DEFAULT_MAX_CHARS = 20_000
+DEFAULT_MAX_CHARS = 12_000
 MAX_FILE_CHARS = 8_000
 MAX_DESC_CHARS = 6_000
 

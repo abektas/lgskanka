@@ -84,7 +84,7 @@ jobs:
         run: |
           python3 scripts/pr_review/gemini_review.py \
             --pr "$PR_NUMBER" \
-            --max-chars 20000 \
+            --max-chars 12000 \
             --timeout 240 \
             --json-out review.json
           echo "status=$(python3 -c "import json;print(json.load(open('review.json'))['status'])")" >> "$GITHUB_OUTPUT"

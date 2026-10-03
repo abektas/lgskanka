@@ -9,6 +9,12 @@
 **Durum kaydı:** `tools/cline-watcher/state/tasks.json` → `TASK-AUTOMATION-002#3`
 
 > Bu belge bir **handoff**'tur. Merge, deploy veya yeni görev tetikleme YAPILMAMIŞTIR.
+>
+> **Güncelleme:** Bu doküman Issue #10 (blocker 1–4) ve Issue #11 (PR kapsam
+> daraltma) düzeltmelerinden sonra yeniden yazılmıştır. Doğrulama tablosu
+> güncel HEAD durumunu yansıtır; PR kapsamı `tools/cline-watcher/**` +
+> watcher handoff'ları + `package.json` (`test:watcher`) + `.gitignore`
+> (runtime state kuralları) ile sınırlıdır.
 
 ---
 
@@ -23,7 +29,13 @@
 | `tools/cline-watcher/lib/runner.mjs` | `onSpawn`/`onAbort` kancası → çalışan sürecin güvenli sonlandırılması |
 | `tools/cline-watcher/lib/config.mjs` | `eventWebhook` + `fallbackIntervalSec: 240` + `minPollIntervalSec: 60` |
 | `tools/cline-watcher/lib/github.mjs` | Yalnız hız-sınırı yorumu (davranış değişikliği yok) |
-| `tools/cline-watcher/systemd/cline-task-watcher.service` | `--interval 240`, `Restart=always`, `TimeoutStopSec=90` |
+| `tools/cline-watcher/systemd/cline-task-watcher.service` | `--interval 240`, `Restart=always`, `TimeoutStopSec=35` |
+
+> `TimeoutStopSec` sonradan **90 → 35** düzeltildi (Issue #10 blocker 4).
+> 35 sn, watcher'ın lock bırakma eşiğinden (`SHUTDOWN_HARD_LIMIT_MS` = 30 sn)
+> uzundur; böylece systemd lock hâlâ tutuluyken süreci öldürmez.
+> Generator (`systemdUnitText`) kanonik kaynak, committed unit ona uyacak şekilde
+> yazılmıştır ve test iki kaynağın aynı olduğunu doğrular.
 | `package.json` | `test:watcher` betiğine `automation.test.mjs` eklendi |
 
 ## 2. Mimari
@@ -72,15 +84,60 @@ karşılığı yok.
 
 ## 5. Doğrulama (hepsi fiilen koşturuldu)
 
+Bu tablo **Issue #10 ve #11 düzeltmelerinden sonraki güncel durumu** yansıtır.
+Aşağıdaki sonuçlar `task/TASK-AUTOMATION-002-continuous-automation` dalında
+HEAD üzerinde koşturulmuştur.
+
 | Komut | Sonuç |
 |---|---|
-| `npm run test:watcher` | **29/29 geçti** (15 eski + 14 yeni) |
-| `npm run test:source` | 3/3 geçti |
-| `npm run test:taxonomy` | 5/5 geçti |
-| `npm run test:ai` | 19/19 geçti (contract testi; canlı sağlayıcı sağlığını ölçmez) |
+| `npm run test:watcher` | **34/34 geçti** |
+| `npm run test:source` | ❌ `FAILED (errors=1)` — **main baseline kırıklığı** (aşağıda) |
+| `npm run test:taxonomy` | ⚠️ **NOT VERIFIED** — script artık `package.json`'da yok |
+| `npm run test:ai` | 14/14 geçti |
 | `npm run validate:sources` | OK — 6 resmi kayıt |
-| `npx tsc --noEmit` | Temiz, çıktı yok |
-| `npm run build` | Başarılı (BUILD_ID `bQ1gTFbQhJas10jPxgVoQ`), tüm rotalar static |
+| `npx tsc --noEmit` | Başarılı, exit 0 |
+| `npm run build` | Başarılı, exit 0 |
+| `git diff --check` | Temiz |
+
+### `test:source` kırıklığı main'den geliyor
+
+`tests/source-ingestion/test_pipeline.py`, `download_official_pdfs.py`'den
+`select_discoveries` import ediyor; bu fonksiyon `main`'in kopyasında **yok**.
+
+**Fiilen doğrulandı:** `main`'in taze klonu (`git clone --depth 1 --branch main`)
+alınıp aynı komut çalıştırıldı — aynı `ImportError`, `Ran 13 tests`,
+`FAILED (errors=1)`. Kırılık daraltma çalışmasından kaynaklanmıyor; PR'daki
+ingestion değişiklikleri onu düzeltiyordu ve kapsam dışı oldukları için geri
+alındı.
+
+### `test:taxonomy` neden NOT VERIFIED
+
+`test:taxonomy` betiği `package.json`'a bu dalda eklenmişti, ancak test dosyası
+(`tests/canonical-taxonomy/`) TASK-AUTOMATION-002 kapsamı dışı olarak PR'dan
+çıkarıldı. `package.json` `main`'e döndürülüp yalnız `test:watcher` eklendiği için
+betik artık yok. **Sonuç uydurulmadı — komut çalıştırılamadığı için NOT VERIFIED.**
+
+### Blockers 1–4 (Issue #10) doğrulaması
+
+`test:watcher` 34/34 geçtiği için dördü de ayakta:
+shell'siz binary discovery · child kapanmadan lock bırakılmıyor ·
+failed/timeout/interrupted retry · `Restart=always` + `TimeoutStopSec=35`.
+
+## 5a. Issue #10 blocker düzeltmeleri (sonradan eklendi)
+
+PR incelemesinde dört doğrulanmış engel giderildi:
+
+| # | Engel | Düzeltme |
+|---|---|---|
+| 1 | `whichSync()` `sh -c "command -v ..."` çağırıyordu | PATH girdileri doğrudan taranıyor (`path.join` + `statSync`); hiçbir yorumlayıcı çağrılmıyor |
+| 2 | `graceful()` sabit 2 sn bekleyip lock'u bırakıyordu; `runner.mjs` SIGKILL'e 15 sn'de geçiyor | `abort()` artık child `close` verene kadar bekleyen Promise döndürüyor; lock yalnız child kapandıktan sonra bırakılıyor (`SHUTDOWN_HARD_LIMIT_MS` = 30 sn ile sınırlı) |
+| 3 | `isDuplicate()` herhangi bir kayıt varsa `true` dönüyordu — tek hata görevi kalıcı kilitliyordu | Duplicate yalnız `SUCCESS_STATUSES` (`succeeded`). `failed`/`timeout`/`interrupted`/`rejected`/`dry_run` yeniden çalıştırılabilir |
+| 4 | `systemdUnitText()` ile committed unit çelişiyordu (`on-failure`/60 ↔ `always`/90) | Generator kanonik: `Restart=always`, `TimeoutStopSec=35`; test iki kaynağın aynı olduğunu doğrular |
+
+İki mevcut test de davranış değiştirdi: duplicate testleri `dry_run` turu
+kullanıyordu ve görevin duplicate sayılmasını bekliyordu. Kuru çalıştırma hiçbir
+şey yürütmediği için bunu tamamlanmış iş saymak aynı hataydı; artık gerçek
+`execute` turu kullanıyorlar.
 
 ## 6. Canlı pilot kanıtı
 

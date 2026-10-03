@@ -14,6 +14,7 @@ import { buildPrompt, assertPromptIsDataOnly } from "../lib/prompt.mjs";
 import { acquireLock } from "../lib/lock.mjs";
 import { createLogger } from "../lib/log.mjs";
 import { DEFAULTS } from "../lib/config.mjs";
+import { whichSync } from "../watcher.mjs";
 
 const cfgFor = (overrides = {}) => ({ ...DEFAULTS, ...overrides });
 const stub = (issues, mode = "success", extra = {}) => makeStubBin({ issues, clineMode: mode, ...extra });
@@ -70,10 +71,12 @@ test("5. bozuk / eksik yapılı görev reddedilir", () => {
 test("6. aynı görev ikinci kez çalıştırılmaz (duplicate)", async () => {
   const cfg = makeConfig();
   const stubBin = stub([makeIssue()]);
-  const first = await runRound({ cfg, stubBin });
-  assert.equal(first.status, "dry_run");
+  // Gerçek execute: dry_run görevi çalıştırmadığı için duplicate sayılmaz
+  // (bkz. Issue #10 düzeltmesi: yalnız `succeeded` duplicate'tir).
+  const first = await runRound({ cfg, stubBin, execute: true });
+  assert.equal(first.status, "succeeded");
   assert.equal(createStore(cfg.stateDir).isDuplicate("TASK-AUTOMATION-001", 1), true);
-  const second = await runRound({ cfg, stubBin });
+  const second = await runRound({ cfg, stubBin, execute: true });
   assert.equal(second.status, "idle");
 });
 
@@ -176,11 +179,11 @@ test("9b. run_result yoksa başarı sayılmaz", async () => {
 test("10. restart sonrası state korunur", async () => {
   const cfg = makeConfig();
   const stubBin = stub([makeIssue()]);
-  await runRound({ cfg, stubBin });
+  await runRound({ cfg, stubBin, execute: true });
   const reopened = createStore(cfg.stateDir);
   assert.equal(reopened.list().length, 1);
   assert.equal(reopened.reconcileInterrupted(), 0);
-  const again = await runRound({ cfg, stubBin });
+  const again = await runRound({ cfg, stubBin, execute: true });
   assert.equal(again.status, "idle", "restart sonrası aynı görev yeniden çalışmamalı");
 });
 
@@ -195,5 +198,85 @@ test("11. ikinci watcher kilitlenir (tek instance)", () => {
   const third = acquireLock(stateDir);
   assert.equal(third.acquired, true);
   assert.equal(third.staleHolder?.pid, 999999999);
+});
+// ===========================================================================
+// Issue #10 — PR #4 blocker düzeltmeleri için regresyon testleri
+// ===========================================================================
+
+test("B1. binary discovery shell KULLANMAZ", () => {
+  // whichSync eskiden `sh -c "command -v ..."` kullanıyordu; bu, gövdenin
+  // hiçbir yerde shell'e girmediği iddiasıyla çelişiyordu. Yorum satırları
+  // bu kaydı yapısal olarak geçmemelidir, bu yüzden önce temizlenir.
+  const src = readFileSync(new URL("../watcher.mjs", import.meta.url), "utf8");
+  const code = src.split("\n").filter((l) => !l.trimStart().startsWith("*")
+    && !l.trimStart().startsWith("//") && !l.trimStart().startsWith("/*")).join("\n");
+  assert.ok(
+    !/spawnSync\(\s*["'`](sh|bash|zsh)/.test(code),
+    "watcher.mjs sh/bash/zsh çağırmamalı",
+  );
+  assert.ok(!/["'`]command -v/.test(code), "command -v kullanılmamalı");
+  // Gerçek davranış: PATH'te bulur, PATH'te yoksa null döner.
+  assert.equal(typeof whichSync("node"), "string");
+  assert.equal(whichSync("bu-boyle-bir-binary-yok"), null);
+});
+
+test("B1b. gövde içeriği binary adına enjekte edilemez", () => {
+  // Shell yoksa burada hiçbir şey çalıştırılamaz; test yalnızca
+  // fonksiyonun güvenli biçimde null döndürdüğünü gösterir.
+  assert.equal(whichSync("node; rm -rf /"), null);
+  assert.equal(whichSync(""), null);
+});
+
+test("B2. abort(), Cline child kapanana kadar bekler", async () => {
+  const { runCline } = await import("../lib/runner.mjs");
+  const cfg = makeConfig();
+  const stubBin = makeStubBin({ issues: [], clineMode: "success", clineSleepMs: 300 });
+  let abort;
+  const done = runCline({
+    clineBin: path.join(stubBin.bin, "cline"),
+    repoPath: cfg.repoPath,
+    prompt: "x",
+    timeoutSec: 5,
+    autoApprove: true,
+    onSpawn: (a) => { abort = a; },
+  });
+  for (let i = 0; i < 60 && !abort; i += 1) await new Promise((r) => setTimeout(r, 10));
+  assert.ok(abort, "onSpawn abort vermeli");
+  const waited = abort("test");
+  assert.ok(waited instanceof Promise, "abort() child kapanana kadar bekleyen Promise dönmeli");
+  await done;
+  // Çocuk kapandıktan SONRA promise çözülmüş olmalı.
+  await Promise.race([
+    waited,
+    new Promise((_, rej) => setTimeout(() => rej(new Error("child kapanmadı")), 5000)),
+  ]);
+});
+
+test("B3. failed/timeout/interrupted görevler yeniden çalıştırılabilir", () => {
+  const cfg = makeConfig();
+  const store = createStore(cfg.stateDir);
+  for (const status of ["failed", "timeout", "interrupted", "rejected", "dry_run"]) {
+    store.upsert("TASK-X", 1, { status });
+    assert.equal(
+      store.isDuplicate("TASK-X", 1), false,
+      `${status} duplicate olmamalı — yeniden denenebilmeli`,
+    );
+  }
+  store.upsert("TASK-X", 1, { status: "succeeded" });
+  assert.equal(store.isDuplicate("TASK-X", 1), true, "succeeded duplicate olmalı");
+});
+
+test("B4. generator ile committed unit aynı davranışı üretir", () => {
+  const src = readFileSync(new URL("../watcher.mjs", import.meta.url), "utf8");
+  const unit = readFileSync(new URL("../systemd/cline-task-watcher.service", import.meta.url), "utf8");
+  const generated = /Restart=([a-z-]+)/.exec(src)?.[1];
+  const committed = /Restart=([a-z-]+)/.exec(unit)?.[1];
+  assert.equal(generated, committed, `Restart çelişkisi: generator=${generated} unit=${committed}`);
+  assert.equal(committed, "always");
+  const genStop = Number(/TimeoutStopSec=([\d.]+)/.exec(src)?.[1]);
+  const unitStop = Number(/TimeoutStopSec=([\d.]+)/.exec(unit)?.[1]);
+  assert.equal(genStop, unitStop, `TimeoutStopSec çelişkisi: ${genStop} vs ${unitStop}`);
+  // systemd, watcher'ın lock bırakma eşiğinden (30 sn) uzun beklemeli.
+  assert.ok(unitStop > 30, "TimeoutStopSec > SHUTDOWN_HARD_LIMIT_MS (30) olmalı");
 });
 

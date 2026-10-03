@@ -19,10 +19,13 @@ Restart=always
 RestartSec=30
 
 # Graceful shutdown: SIGTERM gönderilir; watcher çalışan Cline sürecini
-# sonlandırır, görev durumunu "interrupted" yazar, kilidi en son bırakır.
+# sonlandırır, görev durumunu "interrupted" yazar, kilidi EN SON bırakır.
 KillSignal=SIGTERM
-# Cline sürecinin kapanması için yeterli süre (sabit + izleyici beklemesi).
-TimeoutStopSec=90
+# TimeoutStopSec, watcher'ın SHUTDOWN_HARD_LIMIT_MS (30 sn) değerinden büyük
+# olmalı; aksi halde systemd lock bırakılmadan süreci öldürür ve Cline child
+# yetim kalır. Bu dosya `watcher.mjs --install-systemd` ile ÜRETİLMELİR —
+# değerleri elle güncellemek iki kaynak çelişkisi yaratır.
+TimeoutStopSec=35
 
 # Güvenlik sertleştirmesi
 NoNewPrivileges=true

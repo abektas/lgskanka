@@ -19,6 +19,16 @@ export const CLINE_ARGS = (repoPath, timeoutSec, autoApprove = false) => [
   "--cwd", repoPath,
 ];
 
+/**
+ * SIGTERM sonrası SIGKILL'e geçmeden önce beklenecek süre.
+ *
+ * Bu değer systemd `TimeoutStopSec` ile EŞLEŞMELİDİR: watcher, child bu
+ * sürede kapanmadıysa lock'u bırakmaz. İki değer ayrışırsa lock çok erken
+ * bırakılabilir. Birim dosyası tek kaynak olarak `--install-systemd`
+ * tarafından üretilir (bkz. watcher.mjs `systemdUnitText`).
+ */
+export const SIGKILL_GRACE_MS = 20_000;
+
 function parseNdjson(text) {
   const messages = [];
   const errors = [];
@@ -53,6 +63,12 @@ export function runCline({ clineBin, repoPath, prompt, timeoutSec, timeoutGraceS
     let timedOut = false;
     let aborted = false;
     let settled = false;
+    let childExited = false;
+
+    // Child süreci gerçekten kapandığında çözülür. Graceful shutdown
+    // lock'u yalnız bu sinyalden sonra bırakır (duplicate ihlali koruması).
+    let markChildClosed;
+    const childClosed = { promise: new Promise((r) => { markChildClosed = r; }) };
 
     const watchdog = setTimeout(() => {
       timedOut = true;
@@ -66,19 +82,28 @@ export function runCline({ clineBin, repoPath, prompt, timeoutSec, timeoutGraceS
 
     /**
      * Dışarıdan (graceful shutdown) güvenli sonlandırma isteği.
-     * Önce SIGTERM, süreç hâlâ kapanmazsa SIGKILL. State kilidi bu sırada
-     * bozulmaz: görev "interrupted" olarak kapanır, duplicate koruması durur.
+     * Önce SIGTERM, süreç hâlâ kapanmazsa SIGKILL.
+     *
+     * DÖNÜŞ DEĞERİ: child sürecinin gerçekten kapandığını bildiren Promise.
+     * İzleyici lock'u YALNIZCA bu Promise çözüldükten sonra bırakmalıdır;
+     * aksi halde ölmeyen bir Cline process'i devam ederken ikinci bir
+     * watcher aynı görevi çalıştırabilir (duplicate ihlali).
      */
     const abortChild = (reason = "shutdown") => {
-      if (settled) return;
+      if (settled) return childClosed.promise;
       aborted = true;
       try {
         onAbort?.(reason);
         child.kill("SIGTERM");
-        setTimeout(() => child.kill("SIGKILL"), 15_000).unref?.();
+        setTimeout(() => {
+          if (!childExited) {
+            try { child.kill("SIGKILL"); } catch { /* yok say */ }
+          }
+        }, SIGKILL_GRACE_MS).unref?.();
       } catch {
         /* yok say */
       }
+      return childClosed.promise;
     };
 
     // İzleyiciye güvenli sonlandırma kancası verilir (graceful shutdown).
@@ -96,6 +121,10 @@ export function runCline({ clineBin, repoPath, prompt, timeoutSec, timeoutGraceS
     });
 
     const finish = (exitCode, signal) => {
+      childExited = true;
+      // Shutdown bekleyenleri hemen serbest bırak: bu sinyal, child'ın
+      // gerçekten kapandığının tek güvenilir kanıtıdır.
+      markChildClosed?.();
       if (settled) return;
       settled = true;
       clearTimeout(watchdog);

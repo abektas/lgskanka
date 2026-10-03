@@ -26,7 +26,7 @@
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { execFileSync, spawnSync } from "node:child_process";
-import { existsSync, mkdirSync, writeFileSync, copyFileSync } from "node:fs";
+import { existsSync, mkdirSync, writeFileSync, copyFileSync, statSync } from "node:fs";
 
 import { loadConfig, resolveBin, TOOL_ROOT } from "./lib/config.mjs";
 import { createLogger } from "./lib/log.mjs";
@@ -40,6 +40,14 @@ import { createTriggerServer } from "./lib/webhook.mjs";
 
 const SERVICE_NAME = "cline-task-watcher.service";
 const SERVICE_UNIT_DIR = path.join(TOOL_ROOT, "systemd");
+
+/**
+ * Shutdown'da child kapanmazsa lock'u bırakmadan çıkma eşiği.
+ * runner.mjs'in SIGKILL eşiğinden (`SIGKILL_GRACE_MS`) ve systemd'in
+ * `TimeoutStopSec` değerinden büyük olmalı; aksi halde süreç zorla öldürülür
+ * ve child yine de çalışıyor olabilir.
+ */
+const SHUTDOWN_HARD_LIMIT_MS = 30_000;
 
 function parseArgs(argv) {
   const args = {
@@ -114,10 +122,41 @@ function isAlive(pid) {
   }
 }
 
-function whichSync(bin) {
-  const r = spawnSync("sh", ["-c", `command -v ${JSON.stringify(bin)}`], { encoding: "utf8" });
-  const out = (r.stdout || "").trim();
-  return out && existsSync(out) ? out : null;
+/**
+ * PATH üzerinde çalıştırılabilir dosyayı bulur — SHELL KULLANMAZ.
+ *
+ * Önceki sürüm kabuk üzerinden `command -v` çalıştırıyordu
+ * (`sh -c` biçiminde). Bu, gövde içeriğinin hiçbir yerde shell'e girmediği
+ * iddiasıyla çelişiyordu ve config'ten gelen bir yol dizeyinde kabuk
+ * genişletmesi yüzeyi açıyordu. PATH girdileri doğrudan taranır.
+ */
+export function whichSync(bin) {
+  if (typeof bin !== "string" || bin === "" || bin.includes("\0")) return null;
+  // Mutlak yol doğrudan denenir (PATH'te aranmaz).
+  if (bin.includes("/")) {
+    return isExecutableFile(bin) ? bin : null;
+  }
+  const pathEnv = process.env.PATH || "";
+  for (const dir of pathEnv.split(path.delimiter)) {
+    if (!dir) continue;
+    const candidate = path.join(dir, bin);
+    if (isExecutableFile(candidate)) return candidate;
+  }
+  return null;
+}
+
+/** Dosya var mı, düzenli dosya mı ve çalıştırılabilir mi? */
+function isExecutableFile(file) {
+  try {
+    const st = statSync(file);
+    if (!st.isFile()) return false;
+    // Windows'ta dosya biti incelemesi gerekir; bu kurulumda çalıştırılabilirlik
+    // bitlerinden okunur. Root hariç herkes için "x" gerekir.
+    if (process.getuid && process.getuid() === 0) return true;
+    return (st.mode & 0o111) !== 0;
+  } catch {
+    return false;
+  }
 }
 
 function versionOf(bin, args) {
@@ -279,10 +318,10 @@ Wants=network-online.target
 Type=simple
 ExecStart=${parts.join(" ")}
 WorkingDirectory=${cfg.repoPath}
-Restart=on-failure
+Restart=always
 RestartSec=30
 KillSignal=SIGTERM
-TimeoutStopSec=60
+TimeoutStopSec=35
 NoNewPrivileges=true
 PrivateTmp=true
 StandardOutput=append:${cfg.logDir}/systemd-stdout.log
@@ -380,8 +419,15 @@ async function main() {
     notifier.value?.("shutdown");
     if (activeClineAbort) {
       try {
-        activeClineAbort("shutdown");
-        await sleep(2000);
+        // Lock, Cline child GERÇEKTEN kapanmadan bırakılmaz. Önceki sürüm
+        // sabit 2 saniye bekleyip bırakıyordu; child 15 saniyelik SIGKILL
+        // eşiğine kadar çalışmaya devam edebiliyor ve ikinci bir watcher
+        // aynı görevi çalıştırabiliyordu (duplicate ihlali).
+        await Promise.race([
+          activeClineAbort("shutdown"),
+          // Son çare: child kapanmazsa yine de kilidi bırakmadan çıkma.
+          sleep(SHUTDOWN_HARD_LIMIT_MS),
+        ]);
       } catch { /* yok say */ }
     }
     health?.shutdown();

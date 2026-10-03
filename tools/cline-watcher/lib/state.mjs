@@ -8,8 +8,16 @@
 import { mkdirSync, readFileSync, writeFileSync, renameSync, existsSync } from "node:fs";
 import path from "node:path";
 
-export const TERMINAL_STATUSES = ["succeeded", "failed", "timeout", "rejected"];
+/** Terminal (görev bitti) durumlar. */
+export const TERMINAL_STATUSES = ["succeeded", "failed", "timeout", "rejected", "interrupted"];
+/** Hâlâ süren durumlar. */
 export const ACTIVE_STATUSES = ["claimed", "running"];
+/**
+ * Yalnız bunlar duplicate sayılır — yani görev tamamlandı, tekrar çalıştırılırsa
+ * aynı iş iki kez yapılır. `failed` / `timeout` / `interrupted` burada YOKTUR:
+ * bu görevler başarısız bitmiştir ve yeniden denenmelidir.
+ */
+export const SUCCESS_STATUSES = ["succeeded"];
 
 export function createStore(stateDir) {
   mkdirSync(stateDir, { recursive: true, mode: 0o700 });
@@ -44,9 +52,18 @@ export function createStore(stateDir) {
     get(taskId, issueNumber) {
       return read().tasks[this.key(taskId, issueNumber)] ?? null;
     },
-    /** Duplicate kontrolü: daha önce kayıt varsa true. */
-    isDuplicate(taskId, issueNumber) {
-      return this.get(taskId, issueNumber) !== null;
+    /**
+ * Duplicate kontrolü.
+ *
+ * Yalnız görevin BAŞARILI bitmiş olduğu durumda duplicate sayılır.
+ * `failed` / `timeout` / `interrupted` görevler yeniden çalıştırılabilir:
+ * aksi halde izleyici tek bir hatalı koşumdan sonra o görevi kalıcı olarak
+ * kilitler ve hiç tamamlanamaz. `rejected` de tekrar denemeye açıktır
+ * (gövde düzeltilip yeniden etiketlenebilir).
+ */
+isDuplicate(taskId, issueNumber) {
+      const entry = this.get(taskId, issueNumber);
+      return entry !== null && SUCCESS_STATUSES.includes(entry.status);
     },
     upsert(taskId, issueNumber, patch) {
       const state = read();

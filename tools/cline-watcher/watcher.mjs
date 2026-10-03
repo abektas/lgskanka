@@ -1,18 +1,26 @@
 #!/usr/bin/env node
 /**
- * TASK-AUTOMATION-001 — GitHub → Cline CLI task watcher/runner.
+ * TASK-AUTOMATION-001/002 — GitHub → Cline CLI task watcher/runner.
  *
  * Akış: GitHub Issue → keşif → yetkilendirme → duplicate → güvenli prompt →
  *       Cline CLI headless → NDJSON/run_result → kalıcı state/log.
  *
- * Güvenlik varsayılanları: dry-run AÇIK, Cline `--auto-approve false`, tek instance,
- * gövde asla komut olarak çalıştırılmaz, doğrulama başarısızsa FAIL CLOSED.
+ * Tetikleme (TASK-AUTOMATION-002):
+ *   - tercih edilen: event-driven (yerel webhook alıcısı, HMAC doğrulamalı)
+ *   - fallback: `--interval` / `fallbackIntervalSec` (240 sn = 4 dk)
+ *
+ * Güvenlik varsayılanları: dry-run AÇIK, Cline `--auto-approve true` (PO onayı),
+ * tek instance, gövde asla komut olarak çalıştırılmaz, doğrulama başarısızsa
+ * FAIL CLOSED. Event yolu yalnız "şimdi tara" sinyali verir; yetkilendirme
+ * yine `lib/github.mjs` içinde aynı kapılardan geçer.
  *
  * Kullanım:
  *   node tools/cline-watcher/watcher.mjs --dry-run
  *   node tools/cline-watcher/watcher.mjs --execute
- *   node tools/cline-watcher/watcher.mjs --interval 300
+ *   node tools/cline-watcher/watcher.mjs --interval 240
+ *   node tools/cline-watcher/watcher.mjs --interval 240 --event-webhook
  *   node tools/cline-watcher/watcher.mjs --preflight-only
+ *   node tools/cline-watcher/watcher.mjs --status
  *   node tools/cline-watcher/watcher.mjs --install-systemd | --uninstall-systemd
  */
 import path from "node:path";
@@ -27,14 +35,17 @@ import { createStore } from "./lib/state.mjs";
 import { checkGhAuth, listOpenIssues, validateIssue } from "./lib/github.mjs";
 import { buildPrompt, assertPromptIsDataOnly } from "./lib/prompt.mjs";
 import { runCline } from "./lib/runner.mjs";
+import { createHealthReporter, readHealthFile } from "./lib/health.mjs";
+import { createTriggerServer } from "./lib/webhook.mjs";
 
 const SERVICE_NAME = "cline-task-watcher.service";
 const SERVICE_UNIT_DIR = path.join(TOOL_ROOT, "systemd");
 
 function parseArgs(argv) {
   const args = {
-    config: null, dryRun: true, execute: false, once: true,
+    config: null, dryRun: true, execute: false, once: false,
     intervalSec: 0, preflightOnly: false, installSystemd: false, uninstallSystemd: false,
+    status: false, eventWebhook: false,
   };
   for (let i = 0; i < argv.length; i += 1) {
     const a = argv[i];
@@ -42,7 +53,10 @@ function parseArgs(argv) {
     else if (a === "--dry-run") { args.dryRun = true; args.execute = false; }
     else if (a === "--execute") { args.execute = true; args.dryRun = false; }
     else if (a === "--interval") { args.intervalSec = Number(argv[++i]) || 0; args.once = false; }
+    else if (a === "--once") args.once = true;
     else if (a === "--preflight-only") args.preflightOnly = true;
+    else if (a === "--status") args.status = true;
+    else if (a === "--event-webhook") args.eventWebhook = true;
     else if (a === "--install-systemd") args.installSystemd = true;
     else if (a === "--uninstall-systemd") args.uninstallSystemd = true;
     else if (a === "--help" || a === "-h") args.help = true;
@@ -51,16 +65,53 @@ function parseArgs(argv) {
 }
 
 function printHelp() {
-  process.stdout.write(`TASK-AUTOMATION-001 Cline task watcher
+  process.stdout.write(`TASK-AUTOMATION-001/002 Cline task watcher
 
   --dry-run            (varsayılan) görevleri bul ve doğrula, Cline çalıştırma
   --execute            doğrulanmış görev için gerçek Cline CLI çalıştır
-  --interval <sn>      sürekli tekrar (sistemd altında)
+  --interval <sn>      fallback yoklama aralığı (görev hedefi 3–5 dk; 240 önerilir)
+  --once               yalnız bir tur çalışıp çık (varsayılan: sürekli döngü)
+  --event-webhook      yerel event alıcısını açar (secretEnv ortam değişkeninden)
   --preflight-only     yalnız ön kontroller (gh/cline/sürüm/dizin)
+  --status             health/durum çıktısı (secret veya gövde içermez)
   --config <yol>       config.json yolu
   --install-systemd    systemd --user servisini kurar ve etkinleştirir
   --uninstall-systemd  servisi durdurur ve kaldırır
 `);
+}
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+/**
+ * Bir sonraki turu bekle: event gelirse anında, gelmezse `intervalSec` sonunda.
+ *
+ * Event modunda fallback bir ZAMAN AŞIMI olarak çalışır — yani event kaçırılırsa
+ * (webhook kapalı, ağ hatası, relay yok) görev yine 3–5 dk içinde bulunur.
+ *
+ * `notifier` tek yazmalı bir kancadır: webhook ve graceful shutdown aynı kancayı
+ * çağırır; ilk çağıran kazanır, tur bir kez tetiklenir.
+ */
+function waitForTrigger(intervalSec, notifier) {
+  return new Promise((resolve) => {
+    const finish = (sourceKind, eventType = null) => {
+      clearTimeout(timer);
+      if (notifier.value) notifier.value = null;
+      resolve({ source: sourceKind, eventType });
+    };
+    const timer = setTimeout(() => finish("poll"), intervalSec * 1000);
+    notifier.value = (eventType) => finish("event", eventType ?? null);
+  });
+}
+
+/** PID hâlâ yaşıyor mu? (`--status` gözlemciliği için) */
+function isAlive(pid) {
+  if (!Number.isInteger(pid) || pid <= 0) return false;
+  try {
+    process.kill(pid, 0);
+    return true;
+  } catch (err) {
+    return err?.code === "EPERM";
+  }
 }
 
 function whichSync(bin) {
@@ -116,7 +167,7 @@ async function preflight(cfg, log) {
 
 
 /** Tek tur: keşif → doğrulama → duplicate → (opsiyonel) çalıştırma. */
-export async function runOnce({ cfg, log, store, clineBin, ghBin, execute }) {
+export async function runOnce({ cfg, log, store, clineBin, ghBin, execute, health = null, onActiveCline = null }) {
   const issues = await listOpenIssues(ghBin, cfg.repo);
   log.info("issues_fetched", { count: issues.length });
 
@@ -162,13 +213,18 @@ export async function runOnce({ cfg, log, store, clineBin, ghBin, execute }) {
   }
 
   const streamPath = path.join(cfg.logDir, `cline-${taskId}-${issue.number}.ndjson`);
-  store.upsert(taskId, issue.number, { status: "running", startedAt: new Date().toISOString() });
+  const startedAt = new Date().toISOString();
+  store.upsert(taskId, issue.number, { status: "running", startedAt });
+  health?.taskStarted({ taskId, issueNumber: issue.number, startedAt });
 
   const result = await runCline({
     clineBin, repoPath: cfg.repoPath, prompt,
     timeoutSec: cfg.timeoutSec, timeoutGraceSec: cfg.timeoutGraceSec,
     autoApprove: cfg.autoApprove === true,
     onStream: (kind, text) => log.clineStream(streamPath, `${kind === "stderr" ? "[stderr] " : ""}${text}`),
+    // Graceful shutdown çalışan süreci güvenle sonlandırabilsin (req. 17).
+    onSpawn: (abort) => onActiveCline?.(abort),
+    onAbort: () => log.warn("cline_abort_requested", { number: issue.number, taskId }),
   });
 
   const runResult = result.runResult;
@@ -184,7 +240,10 @@ export async function runOnce({ cfg, log, store, clineBin, ghBin, execute }) {
     streamLog: streamPath,
     messageCount: result.messageCount,
     timedOut: result.timedOut,
+    aborted: result.aborted,
   });
+  health?.taskFinished({ taskId, issueNumber: issue.number });
+  onActiveCline?.(null);
 
   log.info("cline_finished", {
     taskId, number: issue.number, outcome: result.outcome,
@@ -203,7 +262,9 @@ export async function runOnce({ cfg, log, store, clineBin, ghBin, execute }) {
 
 
 function systemdUnitText(cfg) {
-  const parts = ["node", path.join(TOOL_ROOT, "watcher.mjs"), "--interval", "300", "--execute"];
+  // Fallback yoklama aralığı: config değeri (varsayılan 240 sn = 4 dk hedefi).
+  const parts = ["node", path.join(TOOL_ROOT, "watcher.mjs"),
+    "--interval", String(cfg.fallbackIntervalSec), "--execute"];
   // Config dosyası varsa systemd unattended çalışmasında da kullanılır
   // (autoApprove / allowExecution burada tanımlıdır).
   const configPath = path.join(TOOL_ROOT, "config.json");
@@ -267,6 +328,22 @@ async function main() {
   if (args.installSystemd) return installSystemd(cfg, log);
   if (args.uninstallSystemd) return uninstallSystemd(log);
 
+  // --status kilide bakmadan çalışır: gözlemcilik izleyicinin sağlığını
+  // görmek için kullanılır, izleyicinin kendisi kilitliyken de çalışmalıdır.
+  if (args.status) {
+    const health = readHealthFile(cfg.stateDir);
+    process.stdout.write(`${JSON.stringify({
+      watcherRunning: health !== null && Boolean(health.pid) && isAlive(health.pid),
+      lockPresent: existsSync(path.join(cfg.stateDir, "watcher.lock")),
+      health,
+      tasks: store.list().map((t) => ({
+        taskId: t.taskId, issueNumber: t.issueNumber, status: t.status,
+        startedAt: t.startedAt ?? null, finishedAt: t.finishedAt ?? null,
+      })),
+    }, null, 2)}\n`);
+    return;
+  }
+
   const lock = acquireLock(cfg.stateDir);
   if (!lock.acquired) {
     log.warn("another_watcher_running", { holderPid: lock.holder?.pid ?? null });
@@ -282,15 +359,43 @@ async function main() {
   if (reconciled > 0) log.warn("interrupted_tasks_reconciled", { count: reconciled });
 
   let stopping = false;
-  const graceful = (signal) => {
+  let activeClineAbort = null;
+  let triggerServer = null;
+  let health = null;
+  /** Tek yazmalı uyandırma kancası: webhook ve graceful shutdown burayı çağırır. */
+  const notifier = { value: null };
+
+  /**
+   * Graceful shutdown (TASK-AUTOMATION-002 gereksinimi 17).
+   *
+   * ÖNEMLİ: Kilit, çalışan Cline süreci gerçekten kapandıktan SONRA bırakılır.
+   * Aksi halde ölmeyen bir Cline process'i devam ederken ikinci bir watcher
+   * aynı görevi çalıştırabilir (duplicate ihlali).
+   */
+  const graceful = async (signal) => {
     if (stopping) return;
     stopping = true;
-    log.warn("shutdown_signal", { signal });
+    log.warn("shutdown_signal", { signal, clineRunning: Boolean(activeClineAbort) });
+    // Bekleyen turu hemen uyandır; döngü `stopping` görüp çıkar.
+    notifier.value?.("shutdown");
+    if (activeClineAbort) {
+      try {
+        activeClineAbort("shutdown");
+        await sleep(2000);
+      } catch { /* yok say */ }
+    }
+    health?.shutdown();
     releaseLock(lock);
     process.exit(0);
   };
-  process.on("SIGTERM", () => graceful("SIGTERM"));
-  process.on("SIGINT", () => graceful("SIGINT"));
+  process.on("SIGTERM", () => void graceful("SIGTERM"));
+  process.on("SIGINT", () => void graceful("SIGINT"));
+
+  // Çalışan Cline sürecini izleyiciye bağla; görev bitince temizlenir.
+  const onActiveCline = (abort) => { activeClineAbort = abort; };
+
+  let triggerMode = "fallback";
+  let round = 0;
 
   try {
     const { results, clineBin, ghBin } = await preflight(cfg, log);
@@ -309,17 +414,85 @@ async function main() {
     if (args.execute && !execute) {
       log.warn("execution_blocked_by_config", { allowExecution: false });
     }
-    do {
-      const outcome = await runOnce({ cfg, log, store, clineBin, ghBin, execute });
-      process.stdout.write(`${JSON.stringify(outcome, null, 2)}\n`);
-      if (!args.intervalSec) break;
-      await new Promise((r) => setTimeout(r, args.intervalSec * 1000));
-    } while (!stopping);
+
+    // Fallback yoklama aralığı: CLI > config > 240 sn (3–5 dk hedefi).
+    const intervalSec = args.intervalSec > 0 ? args.intervalSec : cfg.fallbackIntervalSec;
+    if (args.intervalSec > 0 && args.intervalSec < cfg.minPollIntervalSec) {
+      log.warn("interval_clamped", { requested: args.intervalSec, applied: cfg.minPollIntervalSec });
+    }
+
+    // Event-driven alıcı (tercih edilen tetikleme).
+    const wantEvents = args.eventWebhook || cfg.eventWebhook?.enabled === true;
+    if (wantEvents) {
+      const secretEnv = cfg.eventWebhook?.secretEnv ?? "CLINE_WATCHER_WEBHOOK_SECRET";
+      const secret = process.env[secretEnv];
+      if (!secret) {
+        // Fail-closed: secret yoksa event yolu devreye girmez, fallback çalışır.
+        log.error("event_secret_missing", { secretEnv });
+      } else {
+        triggerServer = createTriggerServer({
+          secret,
+          host: cfg.eventWebhook.host,
+          port: cfg.eventWebhook.port,
+          path: cfg.eventWebhook.path,
+          maxBodyBytes: cfg.eventWebhook.maxBodyBytes,
+          onTrigger: ({ event }) => notifier.value?.(event),
+          onLog: (event, data) => log.warn(`event_${event}`, data),
+        });
+        try {
+          const { port } = await triggerServer.start();
+          triggerMode = "event+fallback";
+          log.info("event_listener_started", {
+            host: cfg.eventWebhook.host, port, path: cfg.eventWebhook.path,
+          });
+        } catch (err) {
+          // Event açılamazsa servis ölmez; fallback polling geçerli olur.
+          log.error("event_listener_failed", { detail: String(err?.message ?? err).slice(0, 200) });
+          triggerServer = null;
+        }
+      }
+    }
+
+    health = createHealthReporter({ stateDir: cfg.stateDir, intervalSec, triggerMode });
+    health.flush();
+    log.info("watcher_started", {
+      pid: process.pid, execute, intervalSec, triggerMode, repo: cfg.repo,
+    });
+
+    /**
+     * Sürekli döngü (TASK-AUTOMATION-002):
+     *  - event gelirse anında, gelmezse `intervalSec` (240 sn) sonunda tarama;
+     *  - tur hatası servisi düşürmez, backoff ile sonraki turda devam eder (req. 9);
+     *  - görev yoksa/atlanırsa çıkılmaz, bekleme durumuna dönülür (req. 8);
+     *  - tur tur seri çalışır: aynı anda tek Cline süreci (req. 15).
+     */
+    for (;;) {
+      if (stopping) break;
+      // İlk tur beklemeden yapılır; sonrakiler event/fallback ile bekler.
+      const trigger = round === 0 ? { source: "poll", eventType: null } : await waitForTrigger(intervalSec, notifier);
+      if (stopping) break;
+      round += 1;
+      health.roundStart({ source: trigger.source, eventType: trigger.eventType });
+      try {
+        const outcome = await runOnce({ cfg, log, store, clineBin, ghBin, execute, health, onActiveCline });
+        process.stdout.write(`${JSON.stringify(outcome, null, 2)}\n`);
+        health.roundFinished({ status: "ok" });
+      } catch (err) {
+        const detail = String(err?.message ?? err).slice(0, 300);
+        log.error("round_failed", { detail });
+        health.roundFinished({ status: "error", error: detail });
+        // Servisi düşürmeden, API'yi yormadan sonraki turda devam et.
+        await sleep(Math.min(intervalSec, 30) * 1000);
+      }
+      // Yalnız `--once` ile TEK tur çalış; aksi halde sürekli döngü (sistemd).
+      if (args.once && !args.intervalSec && !wantEvents) break;
+    }
   } catch (err) {
     log.error("watcher_error", { detail: String(err?.message ?? err).slice(0, 300) });
     process.stderr.write(`HATA: ${String(err?.message ?? err)}\n`);
     process.exit(5);
   } finally {
+    if (triggerServer) await triggerServer.close();
     releaseLock(lock);
   }
 }

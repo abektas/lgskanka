@@ -1,5 +1,5 @@
 [Unit]
-Description=LGS AI Coach GitHub -> Cline task watcher (TASK-AUTOMATION-001)
+Description=LGS AI Coach GitHub -> Cline task watcher (TASK-AUTOMATION-002)
 Documentation=file://%h/roller/web/lgs-ai-coach/tools/cline-watcher/README.md
 After=network-online.target
 Wants=network-online.target
@@ -9,14 +9,20 @@ Type=simple
 # Not: `node tools/cline-watcher/watcher.mjs --install-systemd` bu satırları
 # gerçek yollarla yeniden yazar. unattended çalıştırma --execute ister ve
 # config.json içindeki autoApprove:true + allowExecution:true gerekir.
-ExecStart=/usr/bin/env node %h/roller/web/lgs-ai-coach/tools/cline-watcher/watcher.mjs --interval 300 --execute --config %h/roller/web/lgs-ai-coach/tools/cline-watcher/config.json
+#
+# Fallback yoklama aralığı 240 sn (4 dk): görev hedefi 3–5 dk. Event-driven
+# tetikleme etkinse bu değer yalnız event kaçırıldığında devreye girer.
+ExecStart=/usr/bin/env node %h/roller/web/lgs-ai-coach/tools/cline-watcher/watcher.mjs --interval 240 --execute --config %h/roller/web/lgs-ai-coach/tools/cline-watcher/config.json
 WorkingDirectory=%h/roller/web/lgs-ai-coach
-Restart=on-failure
+# Watcher hiçbir koşulda kendi kendine çıkmasın; hata durumunda da kalsın.
+Restart=always
 RestartSec=30
 
-# Graceful shutdown: SIGTERM gönderilir, watcher kilidi bırakır ve çıkar.
+# Graceful shutdown: SIGTERM gönderilir; watcher çalışan Cline sürecini
+# sonlandırır, görev durumunu "interrupted" yazar, kilidi en son bırakır.
 KillSignal=SIGTERM
-TimeoutStopSec=60
+# Cline sürecinin kapanması için yeterli süre (sabit + izleyici beklemesi).
+TimeoutStopSec=90
 
 # Güvenlik sertleştirmesi
 NoNewPrivileges=true

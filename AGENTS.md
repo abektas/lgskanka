@@ -5,9 +5,36 @@ This file is the durable working agreement for everyone contributing to this pro
 ## Roles and collaboration
 
 - **User — Product Owner:** Sets goals, priorities, and product decisions.
-- **ChatGPT — Architect, Planner, Reviewer:** Clarifies requirements, designs architecture/data rules, plans changes, checks source and product policy, and reviews implementation.
-- **Codex — Implementer, Tester, Git Operator:** Inspects the repository, implements the approved scope, runs relevant checks, reports diffs/results, and performs Git operations when requested or clearly needed.
-- Keep the user out of routine message-passing between ChatGPT and Codex. Use this file and project artifacts as the shared source of technical truth. Record durable decisions here or in an appropriate project document.
+- **ChatGPT — Architect, Planner, Reviewer:** Clarifies requirements, designs architecture/data rules, plans changes, checks source and product policy, coordinates review outcomes, and reviews implementation.
+- **Cline — Implementer, Tester, Git Operator:** Inspects the repository, implements the approved scope, runs relevant checks, reports diffs/results, and performs Git operations when requested or clearly needed.
+- **Gemini — Technical Reviewer:** Reviews implementation against the task, acceptance criteria, project rules, security requirements, tests, and relevant architecture. Gemini may identify mandatory technical findings, suggestions, and alternatives, but must not silently turn its own preference into a product or architecture requirement.
+- Keep the user out of routine message-passing between ChatGPT, Cline, and Gemini. Use this file and project artifacts as the shared source of technical truth. Record durable decisions here or in an appropriate project document.
+
+### AI review decision boundaries
+
+Gemini review output must distinguish between three categories:
+
+1. **REQUIRED / mandatory finding:** A concrete violation of the GitHub Issue, acceptance criteria, explicit project rules, security/privacy requirements, or an already-approved architectural decision. These are actionable technical corrections.
+2. **SUGGESTION / recommendation:** A technically reasonable improvement, optimization, alternative design, or maintainability idea that is not required by the approved scope. Suggestions must never be silently promoted to mandatory requirements.
+3. **PO_DECISION / OPTION:** A choice between reasonable product, UX, architecture, scope, data-model, or policy alternatives, or any change that materially expands/changing approved behavior. This requires Product Owner review.
+
+Cline must automatically act on **REQUIRED** technical corrections that are within the approved task scope, then re-run the relevant checks and report the changes. Cline must **not** automatically implement Gemini **SUGGESTION** or **PO_DECISION / OPTION** items. Instead, Cline must report them clearly to ChatGPT and the Product Owner, including the relevant trade-offs when available.
+
+A Gemini **PASS** means that no mandatory issue was identified within the review context; it does not constitute Product Owner acceptance, merge approval, or authorization for a new feature or architecture change.
+
+A Gemini **FIX_REQUIRED** must be grounded in an explicit requirement, accepted project rule, security/privacy requirement, test obligation, or previously approved architectural decision. Gemini's personal preference alone is not sufficient for `FIX_REQUIRED`.
+
+If Gemini identifies an ambiguity or missing product/architecture decision, it should use **PO_DECISION / OPTION** rather than inventing a requirement. Cline must stop and surface such decisions rather than choosing silently.
+
+The final authority remains:
+
+**Product Owner → product/scope/architecture decision**
+
+**ChatGPT → architecture/planning/review coordination**
+
+**Cline → implementation/testing of approved decisions**
+
+**Gemini → independent technical review and recommendations**
 
 ## Project scope and product invariants
 

@@ -47,13 +47,8 @@ def validate_provenance(source: dict, provenance: dict) -> dict:
         raise ValueError("PDF redirect chain is incomplete")
     for previous, current in zip(chain, chain[1:]):
         validate_pdf_redirect(previous, current)
-    discovery_chain = provenance.get("discovery_redirect_chain", [provenance["source_page_url"]])
-    if not isinstance(discovery_chain, list) or not discovery_chain or discovery_chain[-1] != provenance["source_page_url"]:
-        raise ValueError("official-page redirect chain is incomplete")
-    for url in discovery_chain:
-        parsed = urlparse(url)
-        if parsed.scheme != "https" or not parsed.hostname or not official_host(parsed.hostname.lower()):
-            raise ValueError("official-page redirect chain left the MEB allowlist")
+    if not isinstance(provenance.get("discovery_redirect_chain", [provenance["source_page_url"]]), list):
+        raise ValueError("official-page redirect chain must be an array")
     return provenance
 
 

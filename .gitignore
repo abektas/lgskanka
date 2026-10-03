@@ -1,9 +1,7 @@
 # Environment variables
-# `.env.example` istisnadır: yalnızca değişken adları ve yer tutucu içerir.
 .env
 .env.local
-.env.*
-!.env.example
+.env.*.local
 
 # Dependencies
 node_modules/
@@ -25,27 +23,14 @@ __pycache__/
 .freebuff/
 .vercel/
 
-# Agent scratch / backup artifacts
-*.backup
-*.backup-*
-*.save
-*.before-openai
-*.before-*
-app/api/ai/providers.ts'
-cline*report*.md
-clinecapability-audit-poc-*.md
+# Logs
+*.log
 
-# Downloaded official source artifacts (MIME/binary; provenance lives in manifests)
-scripts/source-ingestion/data/questions/archive/
+# OS files
+.DS_Store
 
 # Cline task watcher runtime state (local only; never commit)
 tools/cline-watcher/state/
 tools/cline-watcher/logs/
 tools/cline-watcher/config.json
 tools/cline-watcher/systemd/.rendered
-
-# Logs
-*.log
-
-# OS files
-.DS_Store

@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { errorCodePromptLine } from "../../../data/content";
 import { AllProvidersFailed, ProviderError, runAI } from "./providers";
 
 const MAX_PROMPT_CHARS = Number(process.env.AI_MAX_PROMPT_CHARS) || 4000;
@@ -23,7 +22,7 @@ SESLE ANLATIM: ${body.voiceTranscript}
 
 ${body.prompt}
 
-Yanıtı Türkçe ve kısa bölümler halinde ver: 1) Teşhis 2) Neden 3) Mini konu tekrarı 4) Öğrencinin şimdi yapacağı 3 adım 5) Benzer 2 alıştırma. ${errorCodePromptLine} Eğer kanıt yetersizse bunu belirt.`;
+Yanıtı Türkçe ve kısa bölümler halinde ver: 1) Teşhis 2) Neden 3) Mini konu tekrarı 4) Öğrencinin şimdi yapacağı 3 adım 5) Benzer 2 alıştırma. Hata kodlarından uygun olanı seç: H1 kavram, H2 yöntem/strateji, H3 okuduğunu anlama/modelleme, H4 işlem, H5 gereksiz bilgiyi ayıklama, H6 bilgileri ilişkilendirme, H7 dikkat. Eğer kanıt yetersizse bunu belirt.`;
 }
 
 export async function POST(req: NextRequest) {

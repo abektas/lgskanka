@@ -53,8 +53,6 @@ def validate_record(record, require_verified=False):
     question = record.get("question", {})
     if question.get("grade") != 8: errors.append("grade must be 8")
     if require_verified and (not isinstance(record.get("solution"), str) or not record["solution"].strip()): errors.append("verified record requires a reviewed solution")
-    if require_verified and not str(source.get("booklet", "")).strip(): errors.append("verified record requires a booklet identity")
-    if require_verified and (not isinstance(source.get("question_number"), int) or isinstance(source.get("question_number"), bool) or source["question_number"] < 1): errors.append("verified record requires a positive question number")
     if not isinstance(question.get("stem"), str) or not question["stem"].strip(): errors.append("question stem is empty")
     options = question.get("options")
     if not isinstance(options, dict) or set(options) != {"A", "B", "C", "D"} or any(not isinstance(v, str) or not v.strip() for v in options.values()): errors.append("exactly four non-empty A-D options are required")

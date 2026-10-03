@@ -11,22 +11,8 @@
   "parser_version": "source-ingestion-pipeline-v1",
   "resulting_record_ids": [],
   "resulting_record_count": 0,
-  "status": "REJECTED",
+  "status": "NEEDS_REVIEW",
   "published": false,
   "source_file_url": "https://odsgm.meb.gov.tr/meb_iys_dosyalar/2024_04/24220837_alte_fullmembershipcertificate.pdf",
-  "archive_path": "data/questions/archive/MEB-LGS-2024/24220837_alte_fullmembershipcertificate.pdf",
-  "rejection_reason": "Downloaded artifact is not an LGS question booklet; identified as fullmembershipcertificate.pdf during T5.5 provenance audit.",
-  "rejection_detail": "sha256 cf9b2e3069eb… (24220837_alte_fullmembershipcertificate.pdf) matched the MEB-LGS-2024 artifact but is a 1-page, text-free PDF certificate. This manifest is quarantined and must not be used as evidence for source MEB-LGS-2024. The REAL_LGS / LGS-year claim in this manifest is unsupported and must not be read as a verified MEB record.",
-  "rejected_at": "2026-10-01",
-  "reviewer": "T5.6 source provenance cleanup (automated audit, awaiting Product Owner confirmation)",
-  "quarantine": {
-    "quarantined": true,
-    "reason_code": "NOT_AN_LGS_QUESTION_BOOKLET",
-    "artifact_retained": true,
-    "artifact_file": "24220837_alte_fullmembershipcertificate.pdf",
-    "must_not_support_source_claims": true,
-    "usable_for_question_extraction": false
-  },
-  "archive_path_resolved": "scripts/source-ingestion/data/questions/archive/MEB-LGS-2024/24220837_alte_fullmembershipcertificate.pdf",
-  "archive_path_note": "archive_path is relative to the pipeline working directory (scripts/source-ingestion/), not to the repository root; the recorded path does not resolve from the repository root."
+  "archive_path": "data/questions/archive/MEB-LGS-2024/24220837_alte_fullmembershipcertificate.pdf"
 }

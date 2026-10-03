@@ -106,11 +106,6 @@ export const tasks: Task[] = [
 export type ErrorType = {
   code: "H1" | "H2" | "H3" | "H4" | "H5" | "H6" | "H7";
   name: string;
-  /**
-   * AI teşhis isteminde kullanılan kısa etiket (tek teknik H kaynağı).
-   * Öğrenciye gösterilmez; yetkili sözlük Master Plan §6'dır.
-   */
-  promptHint: string;
   color: string;
   share: number;
   definition: string;
@@ -122,7 +117,6 @@ export const errorTypes: ErrorType[] = [
   {
     code: "H1",
     name: "Kavram eksikliği",
-    promptHint: "kavram",
     color: "#FF7BAC",
     share: 18,
     definition: "Konu bilgisi eksik ya da yanlış öğrenilmiş.",
@@ -131,7 +125,6 @@ export const errorTypes: ErrorType[] = [
   {
     code: "H2",
     name: "Yöntem / strateji",
-    promptHint: "yöntem/strateji",
     color: "#FF9A5A",
     share: 22,
     definition: "Konuyu biliyorsun ama çözüm yolunu seçemiyorsun.",
@@ -140,7 +133,6 @@ export const errorTypes: ErrorType[] = [
   {
     code: "H3",
     name: "Okuma / modelleme",
-    promptHint: "okuduğunu anlama/modelleme",
     color: "#3D8BFF",
     share: 28,
     definition: "Metni veya görseli yanlış yorumlayıp model kuramama.",
@@ -149,7 +141,6 @@ export const errorTypes: ErrorType[] = [
   {
     code: "H4",
     name: "İşlem hatası",
-    promptHint: "işlem",
     color: "#16B98A",
     share: 32,
     definition: "Yol doğru, hesaplama kayıyor.",
@@ -158,7 +149,6 @@ export const errorTypes: ErrorType[] = [
   {
     code: "H5",
     name: "Gereksiz bilgi",
-    promptHint: "gereksiz bilgiyi ayıklama",
     color: "#9A65F5",
     share: 12,
     definition: "Sorudaki fazladan bilgiye takılmak.",
@@ -167,7 +157,6 @@ export const errorTypes: ErrorType[] = [
   {
     code: "H6",
     name: "İlişkilendirme",
-    promptHint: "bilgileri ilişkilendirme",
     color: "#F5B93E",
     share: 24,
     definition: "Bilgileri birbiriyle bağlayamama.",
@@ -176,24 +165,12 @@ export const errorTypes: ErrorType[] = [
   {
     code: "H7",
     name: "Dikkat",
-    promptHint: "dikkat",
     color: "#FF6B6B",
     share: 15,
     definition: "Hızlı okuma veya acele kaynaklı hata.",
     advice: "25 dakikada 5 soru; son 2 dakikada sadece kontrol.",
   },
 ];
-
-/**
- * AI teşhis istemindeki H1–H7 sözlüğü — `errorTypes`'ten **türetilir**.
- *
- * Teknik olarak tek kaynak `errorTypes` dizisidir; istemde ikinci bir kod sözlüğü
- * elle yazılmaz. Sıra ve anlam Master Plan §6 ile `AGENTS.md` canonical
- * sözlüğüne göre kilitlidir (`tests/canonical-taxonomy/canonical-taxonomy.test.mjs`).
- */
-export const errorCodePromptLine = `Hata kodlarından uygun olanı seç: ${errorTypes.map(
-  (item) => `${item.code} ${item.promptHint}`,
-).join(", ")}.`;
 
 export type Badge = {
   icon: string;

@@ -20,13 +20,45 @@ export const DEFAULTS = {
   trustedAuthors: ["abektas"],
   /** Gövdede bulunması gereken hazır durum işareti. */
   readyStatus: "READY_FOR_CLINE",
-  /** Gövdede bulunması zorunlu yapısal alanlar (Issue #1 sözleşmesi). */
+  /** Gövdede her zaman bulunması gereken minimum yapısal alanlar.
+   *  Bunlar Issue #1 sözleşmesinin çekirdeğidir; hiçbir koşulda gevşetilmez.
+   */
   requiredMarkers: [
     "**Task ID:**",
     "**Agent:**",
     "**Status:**",
     "## Objective",
     "## Scope",
+  ],
+  /** Resmi `docs/GITHUB_TASK_TEMPLATE.md` şablonunun EK alanları.
+   *
+   *  Kural (kademeli zorunluluk): gövde `templateTriggers` içindeki bir
+   *  başlıktan **en az birini** içeriyorsa gövde "yeni biçim" sayılır ve
+   *  `templateMarkers`ın **hepsi** zorunlu olur. Hiçbiri yoksa gövde
+   *  eski biçimdir ve yalnız `requiredMarkers` aranır.
+   *
+   *  Neden kademeli: düz bir AND kuralı denendi ve mevcut görevleri sessizce
+   *  reddetti (regresyon testleri düştü).
+   *
+   *  Neden tetikleyici ayrı bir liste: `**Phase:**` / `**Priority:**` gibi
+   *  meta alanlar eski görevlerde de geçiyordu; onları tetikleyici yapmak
+   *  mevcut görevleri yanlışlıkla "yeni biçim"e iterdi. Tetikleyici
+   *  yalnızca gerçekten şablona özgü bölüm başlıklarıdır.
+   */
+  templateTriggers: [
+    "## Acceptance criteria",
+    "## Verification required",
+    "## Handoff requirement",
+    "### Out of scope",
+  ],
+  /** Şablon biçiminde bir görev için hepsi zorunlu olan alanlar. */
+  templateMarkers: [
+    "**Phase:**",
+    "**Priority:**",
+    "### Out of scope",
+    "## Acceptance criteria",
+    "## Verification required",
+    "## Handoff requirement",
   ],
   /** Issue #1: "Agent: Cline" zorunlu. */
   requiredAgent: "Cline",

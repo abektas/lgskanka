@@ -23,6 +23,52 @@ export const VALID_BODY = [
   "- in scope",
 ].join("\n");
 
+// docs/GITHUB_TASK_TEMPLATE.md ile uyumlu tam görev gövdesi.
+// Bu gövde main'e eklenen resmi şablondan türetildi; watcher'in yeni
+// marker listesini doğrulayan regresyon testleri bunu kullanır.
+export const TEMPLATE_BODY = [
+  "## TASK",
+  "",
+  "**Task ID:** `TASK-AUTOMATION-003`",
+  "**Agent:** Cline",
+  "**Status:** READY_FOR_CLINE",
+  "**Phase:** F1",
+  "**Priority:** P0",
+  "",
+  "## Objective",
+  "Bir şeyi düzelt.",
+  "",
+  "## Why this task exists",
+  "Master plan F1.",
+  "",
+  "## Scope",
+  "",
+  "### In scope",
+  "",
+  "- düzeltilecek şey",
+  "",
+  "### Out of scope",
+  "",
+  "- dokunulmayacak şey",
+  "",
+  "## Acceptance criteria",
+  "",
+  "- [ ] test geçiyor",
+  "",
+  "## Relevant project sources",
+  "",
+  "- `AGENTS.md`",
+  "- `CLINE_BRIEFING.md`",
+  "",
+  "## Verification required",
+  "",
+  "- `npm run build`",
+  "",
+  "## Handoff requirement",
+  "",
+  "`docs/handoffs/TASK-AUTOMATION-003-ornek.md`",
+].join("\n");
+
 export function makeIssue(overrides = {}) {
   return {
     number: 1,

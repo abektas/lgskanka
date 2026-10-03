@@ -7,7 +7,7 @@ import assert from "node:assert/strict";
 import path from "node:path";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 
-import { makeIssue, makeStubBin, makeConfig, VALID_BODY } from "./helpers.mjs";
+import { makeIssue, makeStubBin, makeConfig, VALID_BODY, TEMPLATE_BODY } from "./helpers.mjs";
 import { createStore } from "../lib/state.mjs";
 import { validateIssue } from "../lib/github.mjs";
 import { buildPrompt, assertPromptIsDataOnly } from "../lib/prompt.mjs";
@@ -65,6 +65,46 @@ test("5. bozuk / eksik yapılı görev reddedilir", () => {
   assert.equal(result.eligible, false);
   assert.ok(result.reasons.some((r) => r.startsWith("missing_marker")));
   assert.ok(result.reasons.includes("invalid_task_id"));
+});
+
+// --- docs/GITHUB_TASK_TEMPLATE.md uyumu -------------------------------
+// main'e eklenen resmi gorev sablonu daha fazla alan getirdi. Watcher'in
+// marker listesi bu sablonu takip eden gorevleri de kabul etmeli.
+
+test("13. resmi gorev sablonu (GITHUB_TASK_TEMPLATE.md) kabul edilir", () => {
+  const cfg = cfgFor();
+  const result = validateIssue(makeIssue({ body: TEMPLATE_BODY }), cfg);
+  assert.deepEqual(result.reasons, []);
+  assert.equal(result.eligible, true);
+  assert.equal(result.taskId, "TASK-AUTOMATION-003");
+});
+
+test("14. sablonun kabul edilmesi icin gereken marker'lar config'te tanimli", () => {
+  // Marker listesi sablonun basliklariyla eslesismeli; aksi halde
+  // yukaridaki test sessizce gecer ve gercek gorevler reddedilir.
+  const required = ["**Phase:**", "**Priority:**", "## Acceptance criteria",
+    "## Verification required", "## Handoff requirement", "### Out of scope"];
+  for (const marker of required) {
+    assert.ok(
+      DEFAULTS.templateMarkers.includes(marker),
+      `config.mjs templateMarkers icinde olmali: ${marker}`,
+    );
+  }
+});
+
+test("15. eski (kisa) gorev govdesi yine kabul edilir - geriye donuk uyum", () => {
+  const cfg = cfgFor();
+  const result = validateIssue(makeIssue({ body: VALID_BODY }), cfg);
+  assert.equal(result.eligible, true, `geriye donuk uyum bozuldu: ${result.reasons}`);
+});
+
+test("16. yarim sablon reddedilir (kademeli zorunluluk)", () => {
+  // Sablonun alanlarindan yalniz biri olsa bile "yeni bicim" sayilir ve
+  // eksikleri reddedilir. Bu, kademeli kuralin asil guvenligi.
+  const partial = TEMPLATE_BODY.replace("## Verification required", "Diger");
+  const result = validateIssue(makeIssue({ body: partial }), cfgFor());
+  assert.equal(result.eligible, false);
+  assert.ok(result.reasons.includes("missing_marker:## Verification required"));
 });
 
 test("6. aynı görev ikinci kez çalıştırılmaz (duplicate)", async () => {

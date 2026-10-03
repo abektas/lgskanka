@@ -80,9 +80,21 @@ export function validateIssue(issue, cfg) {
   if (cfg.requiredLabel && !labelNames(issue).includes(cfg.requiredLabel)) {
     reasons.push("missing_required_label");
   }
-  // 5) Yapısal zorunluluklar
+  // 5) Yapısal zorunluluklar.
   for (const marker of cfg.requiredMarkers) {
     if (!body.includes(marker)) reasons.push(`missing_marker:${marker}`);
+  }
+
+  // 5b) Kademeli şablon kontrolü: gövde şablona ozgu bir bolum basligi
+  // iceriyorsa "yeni bicim" sayilir ve tum ek alanlar zorunlu olur.
+  // Boylece yeni sablonu takip eden gorevler dogrulanir, eski bicimli
+  // gorevler reddedilmez.
+  const templateMarkers = cfg.templateMarkers ?? [];
+  const templateTriggers = cfg.templateTriggers ?? templateMarkers;
+  if (templateMarkers.length > 0 && templateTriggers.some((m) => body.includes(m))) {
+    for (const marker of templateMarkers) {
+      if (!body.includes(marker)) reasons.push(`missing_marker:${marker}`);
+    }
   }
   const taskId = parseTaskId(body);
   if (!taskId || !TASK_ID_RE.test(taskId)) reasons.push("invalid_task_id");

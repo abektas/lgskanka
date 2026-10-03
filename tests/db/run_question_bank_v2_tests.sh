@@ -160,6 +160,49 @@ expect_error "reviewed_by var, reviewed_at yok" \
 expect_ok "tutarlı review" \
   "insert into question_quality (question_id,quality_status,reviewed_by,reviewed_at) values ('Q2','APPROVED','ali',now());"
 
+# ===========================================================================
+# 14. ROLLBACK — gerçek down migration
+# ===========================================================================
+# Issue #8: rollback daha önce yalnızca "17 tablo görünüyor / 2 tablo
+# kaldı" diye SAYILARAK doğrulanıyordu; committed down migration hiç
+# çalıştırılmıyordu. Burada dosya fiilen uygulanır ve sonuç GÖZLEMLENİR.
+
+echo "==> 14. Rollback: gerçek down migration çalıştırılıyor"
+before=$(db_psql -tAc "select count(*) from pg_tables where schemaname='public'")
+[[ "$before" == "17" ]] && { PASS=$((PASS+1)); echo "  ok   rollback öncesi 17 tablo"; } \
+  || { FAIL=$((FAIL+1)); echo "  FAIL rollback öncesi tablo sayısı: $before"; }
+
+rollback_out=$(db_file -v ON_ERROR_STOP=1 < "$ROOT/db/002_question_bank_v2.down.sql" 2>&1)
+if printf '%s' "$rollback_out" | grep -qi 'ERROR'; then
+  FAIL=$((FAIL+1)); echo "  FAIL down migration hata verdi:"
+  printf '%s\n' "$rollback_out" | grep -i error | head -3
+else
+  PASS=$((PASS+1)); echo "  ok   down migration hatasız çalıştı"
+fi
+
+after=$(db_psql -tAc "select count(*) from pg_tables where schemaname='public'")
+[[ "$after" == "2" ]] && { PASS=$((PASS+1)); echo "  ok   rollback sonrası 2 tablo"; } \
+  || { FAIL=$((FAIL+1)); echo "  FAIL rollback sonrası tablo sayısı: $after (2 bekleniyordu)"; }
+
+# Baseline tabloları hayatta kalmalı.
+b=$(db_psql -tAc "select count(*) from pg_tables where schemaname='public' and tablename in ('questions','question_sources')")
+[[ "$b" == "2" ]] && { PASS=$((PASS+1)); echo "  ok   migration 001 tabloları korundu"; } \
+  || { FAIL=$((FAIL+1)); echo "  FAIL 001 tabloları: $b"; }
+
+# Trigger fonksiyonları da gerçekten silinmeli (kalmışsa rollback eksiktir).
+f=$(db_psql -tAc "select count(*) from pg_proc p join pg_namespace n on n.oid=p.pronamespace where p.proname in ('reject_secondary_equal_primary','reject_primary_conflicting_secondary')")
+[[ "$f" == "0" ]] && { PASS=$((PASS+1)); echo "  ok   trigger fonksiyonları kaldırıldı"; } \
+  || { FAIL=$((FAIL+1)); echo "  FAIL kalan trigger fonksiyonu: $f"; }
+
+# 14b. Rollback sonrası ileri migration tekrar uygulanabilmeli (repeatable).
+echo "==> 15. Rollback sonrası forward migration tekrar"
+db_file -v ON_ERROR_STOP=1 -q < "$ROOT/db/002_question_bank_v2.sql" 2>/dev/null \
+  && { PASS=$((PASS+1)); echo "  ok   forward migration tekrar uygulandı"; } \
+  || { FAIL=$((FAIL+1)); echo "  FAIL forward migration tekrar uygulanamadı"; }
+n=$(db_psql -tAc "select count(*) from pg_tables where schemaname='public'")
+[[ "$n" == "17" ]] && { PASS=$((PASS+1)); echo "  ok   tekrar 17 tablo"; } \
+  || { FAIL=$((FAIL+1)); echo "  FAIL tekrar tablo sayısı: $n"; }
+
 echo
 echo "=============================="
 echo " geçen: $PASS   kalan: $FAIL"

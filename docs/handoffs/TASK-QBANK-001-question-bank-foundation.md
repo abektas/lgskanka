@@ -52,14 +52,15 @@ kalite durumu, zorluk sıralaması
 
 ```
 bash tests/db/run_question_bank_v2_tests.sh --local-test-container
-→ geçen: 24   kalan: 0   (EXIT=0)
+→ geçen: 31   kalan: 0   (EXIT=0)
 ```
 
 Kapsanan: migration uygulanabilirliği · idempotency · 17 tablo · 001 verisi
 etkilenmemiş · H9 reddi · difficulty aralık · confidence aralık · self relation ·
 geçersiz relation type · geçerli kayıtlar · ikinci birincil reddi · duplicate
 relation · ikincil=birincil reddi (her iki yön) · FK bütünlüğü · curriculum
-katman ayrımı · quality review tutarlılığı.
+katman ayrımı · quality review tutarlılığı · **gerçek rollback (17→2)** ·
+**rollback sonrası forward migration tekrar (2→17)**.
 
 | Komut | Sonuç |
 |---|---|
@@ -72,9 +73,32 @@ katman ayrımı · quality review tutarlılığı.
 
 ## 6. Rollback
 
-`db/002_question_bank_v2.down.sql` doğrulandı: 17 tablo → 2 tablo
-(`questions`, `question_sources` korunur). Yalnız 002'den sonra yeni kayıt
-girilmemişse güvenlidir.
+`db/002_question_bank_v2.down.sql` **committed test script tarafından fiilen
+çalıştırılır** (Issue #8 düzeltmesi). Gözlenen sonuç:
+
+| Aşama | Gözlenen |
+|---|---|
+| Rollback öncesi | 17 tablo |
+| `down.sql` çalıştırıldı | hatasız (`ON_ERROR_STOP=1`) |
+| Rollback sonrası | **2 tablo** (`questions`, `question_sources`) |
+| Trigger fonksiyonları | 0 kaldı |
+| Forward migration tekrar | uygulandı, 17 tabloya döndü |
+
+### Sıralama hatası düzeltildi
+
+İlk sürümde `drop table question_pedagogy` **trigger'dan önce** çalışıyordu:
+
+```sql
+drop table if exists question_pedagogy;                    -- trigger da düşer
+drop trigger if exists trg_... on question_pedagogy;        -- "does not exist" NOTICE
+```
+
+Rollback yanlış sıralamayla da çalışıyordu — `drop table` trigger'ı zaten
+kaldırdığı için hata çıkmıyordu, yalnız `NOTICE` üretiyordu. Yani test "geçti"
+diyordu ama yanlış gerekçeyle. Doğru sıra: **trigger → fonksiyon → tablo.**
+
+> Bu, bir sonraki migration'da tekrar edebilecek bir tuzak; down.sql başlığına
+> gerekçe olarak yazıldı.
 
 ## 7. PENDING — karar bekleyen konular
 

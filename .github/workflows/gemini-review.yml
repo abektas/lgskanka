@@ -1,0 +1,83 @@
+name: gemini-review
+
+# Faz 1 kapsami: YALNIZCA PR teknik incelemesi.
+# Cline tarafi bu fazda DEGISTIRILMEZ — mevcut yerel watcher (systemd)
+# kanitlanmis haliyle calismaya devam eder.
+#
+# Neden `pull_request` ve `pull_request_target` degil?
+#   `pull_request_target` repo secret'larini fork PR'larina da acar ve
+#   dokumani uyariyor; o yuzden kullanilmaz. Fork PR'larinda secret
+#   verilmedigi icin bu workflow fork'larda sessizce bos kaliyor — bu
+#   KASTEN bir guvenlik tercihidir, acikca yorum birakilir.
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+# Ayni PR icin iki inceleme paralel calismasin. `github.workflow` eklenerek
+# baska workflow'larla grup cakismasi onlenir.
+concurrency:
+  group: gemini-review-${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+# Minimum yetki: repo disina yazma yok, PR'a yorum yazma var.
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  review:
+    # Fork PR: secret yok -> sessiz hata yerine acikca dur.
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # PR head'i: diff ve dosya icerikleri incelenen kod.
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Secret maskesi
+        # GitHub maskesi best-effort; acikca bir kez daha maskeliyoruz.
+        # NOT: bu ek bir garanti degil, katmanli savunma.
+        run: echo "::add-mask::${GEMINI_API_KEY}"
+
+      - name: Gemini PR incelemesi
+        id: review
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          python3 scripts/pr_review/gemini_review.py \
+            --pr "$PR_NUMBER" \
+            --max-chars 20000 \
+            --timeout 240 \
+            --json-out review.json
+          echo "status=$(python3 -c "import json;print(json.load(open('review.json'))['status'])")" >> "$GITHUB_OUTPUT"
+          echo "model=$(python3 -c "import json;print(json.load(open('review.json')).get('_model',''))")" >> "$GITHUB_OUTPUT"
+
+      - name: Sonucu PR'a yaz
+        # Review JSON'u PR gorunur olmayan bir step'a basilir (PR'da sadece
+        # ozet gorunur). Ham JSON, uzunlugu ve ogrenici verisi riski
+        # nedeniyle loga yazilmaz.
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          python3 scripts/pr_review/post_review.py \
+            --json review.json \
+            --pr "$PR_NUMBER" \
+            --head-sha "$HEAD_SHA"
+
+      - name: Ozet
+        run: |
+          echo "durum: ${{ steps.review.outputs.status }}"
+          echo "model: ${{ steps.review.outputs.model }}"

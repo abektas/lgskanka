@@ -7,6 +7,8 @@
  * - spawn argüman DİZİSİ ile çağrılır → shell yok, shell enjeksiyonu imkânsız.
  * - NDJSON satırları ayrıştırılır; final `run_result` saklanır.
  * - İki zaman aşımı: Cline'ın kendi `--timeout` değeri + izleyicinin sert watchdog'u.
+ * - `onSpawn(abort)`: graceful shutdown sırasında çalışan süreci sonlandırmak
+ *   için izleyiciye `abort()` kancası verilir (TASK-AUTOMATION-002 gereksinimi 17).
  */
 import { spawn } from "node:child_process";
 
@@ -36,7 +38,7 @@ function parseNdjson(text) {
  * @returns {Promise<{outcome:string, exitCode:number|null, runResult:object|null,
  *                    messageCount:number, stdout:string, stderr:string, timedOut:boolean}>}
  */
-export function runCline({ clineBin, repoPath, prompt, timeoutSec, timeoutGraceSec = 90, autoApprove = false, onStream }) {
+export function runCline({ clineBin, repoPath, prompt, timeoutSec, timeoutGraceSec = 90, autoApprove = false, onStream, onSpawn, onAbort }) {
   const args = [...CLINE_ARGS(repoPath, timeoutSec, autoApprove), prompt];
   const startedAt = Date.now();
   return new Promise((resolve) => {
@@ -49,6 +51,7 @@ export function runCline({ clineBin, repoPath, prompt, timeoutSec, timeoutGraceS
     let stdout = "";
     let stderr = "";
     let timedOut = false;
+    let aborted = false;
     let settled = false;
 
     const watchdog = setTimeout(() => {
@@ -60,6 +63,26 @@ export function runCline({ clineBin, repoPath, prompt, timeoutSec, timeoutGraceS
         /* yok say */
       }
     }, (timeoutSec + timeoutGraceSec) * 1000);
+
+    /**
+     * Dışarıdan (graceful shutdown) güvenli sonlandırma isteği.
+     * Önce SIGTERM, süreç hâlâ kapanmazsa SIGKILL. State kilidi bu sırada
+     * bozulmaz: görev "interrupted" olarak kapanır, duplicate koruması durur.
+     */
+    const abortChild = (reason = "shutdown") => {
+      if (settled) return;
+      aborted = true;
+      try {
+        onAbort?.(reason);
+        child.kill("SIGTERM");
+        setTimeout(() => child.kill("SIGKILL"), 15_000).unref?.();
+      } catch {
+        /* yok say */
+      }
+    };
+
+    // İzleyiciye güvenli sonlandırma kancası verilir (graceful shutdown).
+    try { onSpawn?.(abortChild); } catch { /* gözlemci hatası çalıştırmayı bozmasın */ }
 
     child.stdout.on("data", (chunk) => {
       const text = chunk.toString();
@@ -82,7 +105,9 @@ export function runCline({ clineBin, repoPath, prompt, timeoutSec, timeoutGraceS
       const done = [...messages].reverse().find((m) => m?.event?.type === "done") ?? null;
 
       let outcome;
-      if (timedOut) {
+      if (aborted) {
+        outcome = "interrupted"; // graceful shutdown: başarı DEĞİLDİR
+      } else if (timedOut) {
         outcome = "timeout";
       } else if (exitCode === 0 && runResult?.finishReason === "completed") {
         outcome = "succeeded";
@@ -105,8 +130,11 @@ export function runCline({ clineBin, repoPath, prompt, timeoutSec, timeoutGraceS
         stdout,
         stderr,
         timedOut,
+        aborted,
+        /** Dışarıdan sonlandırma kancası (graceful shutdown). */
+        abort: abortChild,
         durationMs: Date.now() - startedAt,
-        command: `${clineBin} --json --auto-approve false --timeout ${timeoutSec} --cwd ${repoPath} "<prompt>"`,
+        command: `${clineBin} --json --auto-approve ${String(autoApprove)} --timeout ${timeoutSec} --cwd ${repoPath} "<prompt>"`,
       });
     };
 

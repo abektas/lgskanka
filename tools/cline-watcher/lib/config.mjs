@@ -62,6 +62,38 @@ export const DEFAULTS = {
     cline: ["cline", "/usr/local/bin/cline"],
     gh: ["gh", "/home/selam/.local/gh-cli/gh_2.102.0_linux_amd64/bin/gh"],
   },
+  /**
+   * Event-driven tetikleme (tercih edilen yol).
+   *
+   * GitHub webhook'i genel bir URL'ye teslim edilir; yerel alıcı yalnız 127.0.0.1
+   * dinler ve isteği HMAC-SHA256 imzasıyla doğrular. `secretEnv` bir DEĞİŞKEN
+   * ADIDIR — değeri repo'ya, state'e veya loga asla yazılmaz.
+   *
+   * Kapı NOTU: webhook'un ulaşabilmesi için genel erişilebilir bir relay/tunnel
+   * gerekir; bu bir altyapı/ürün kararıdır (bkz. handoff PENDING).
+   * Devre dışı bırakılırsa `fallbackIntervalSec` polling'i geçerli olur.
+   */
+  eventWebhook: {
+    enabled: false,
+    host: "127.0.0.1",
+    port: 8787,
+    path: "/cline-trigger",
+    /** İmza doğrulaması için ortam değişkeni ADI (değer burada tutulmaz). */
+    secretEnv: "CLINE_WATCHER_WEBHOOK_SECRET",
+    /** İstek gövdesi üst sınırı (bayt) — bellek/DoS koruması. */
+    maxBodyBytes: 64 * 1024,
+  },
+  /**
+   * Fallback yoklama aralığı (saniye).
+   *
+   * Görev hedefi 3–5 dakikadır. Seçilen değer **240 sn (4 dk)**: 5 dk sınırının
+   * altında kalır, 3 dk'nın üstünde olup GitHub API yükünü ikiye katlamaz.
+   * Event-driven etkinse bu değer yalnız event kaçırıldığında/üretilemediğinde
+   * devreye girer.
+   */
+  fallbackIntervalSec: 240,
+  /** Fallback aralığının alt sınırı (yanlışlıkla API'ye yüklenmeyi önler). */
+  minPollIntervalSec: 60,
 };
 
 /** Yapılandırmayı yükler; JSON dosyası verilmezse güvenli varsayılanlar. */
@@ -83,6 +115,14 @@ export function loadConfig(configPath) {
   }
   if (!cfg.repo || !cfg.repo.includes("/")) {
     throw new Error("repo 'owner/name' biçiminde olmalı");
+  }
+  // eventWebhook yarı yapılandırılmışsa fail-closed (sessizce devre dışı kalmasın).
+  if (cfg.eventWebhook && typeof cfg.eventWebhook !== "object") {
+    throw new Error("eventWebhook bir nesne olmalı");
+  }
+  // Aşırı sık yoklama (rate-limit) kendini korur: alt sınır uygulanır.
+  if (cfg.fallbackIntervalSec < cfg.minPollIntervalSec) {
+    cfg.fallbackIntervalSec = cfg.minPollIntervalSec;
   }
   return cfg;
 }

@@ -22,7 +22,14 @@ export async function checkGhAuth(ghBin, repo) {
   }
 }
 
-/** Depodaki açık issue'ları çeker (yalnız config deposu). */
+/**
+ * Depodaki açık issue'ları çeker (yalnız config deposu).
+ *
+ * Hız sınırı notu: `fallbackIntervalSec` (240 sn) tek bir `gh issue list`
+ * çağrısı demektir ≈ 15 istek/saat; GitHub'ın saatlik limitinin çok altında.
+ * Uydurma bir ETag/koşullu istek mekanizması KULLANILMAZ — `gh` CLI'da
+ * doğrulanmış karşılığı yoktur.
+ */
 export async function listOpenIssues(ghBin, repo) {
   const { stdout } = await exec(
     ghBin,

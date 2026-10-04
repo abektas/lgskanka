@@ -62,9 +62,33 @@ jobs:
 
       - uses: actions/checkout@v4
         with:
-          # PR head'i: diff ve dosya icerikleri incelenen kod.
+          # İncelenecek kod PR head'idir (diff ve dosya içerikleri buradan).
           ref: ${{ steps.pr.outputs.sha }}
           fetch-depth: 0
+
+      # REVIEWER KODU GÜVENİLİR REF'TEN GELİR — PR'ın kodundan DEĞİL.
+      #
+      # Neden ayrı: `workflow_dispatch` ile PR #4 incelenmek istendiğinde
+      # checkout PR #4'ün kodunu getiriyordu; `scripts/pr_review/*.py` ise
+      # PR #6'da olduğu için dosya bulunamadı ve job "No such file" ile
+      # düşüyordu. Reviewer'ın kendisi ile incelenen kod iki farklı ref'tir.
+      #
+      # `github.workflow_ref` = `<owner>/<repo>/.github/workflows/<file>@<ref>`.
+      # Script dosyaları bu ref'ten çekilir; çalışma ağacı PR head'de kalır.
+      - name: Reviewer betiklerini güvenilir ref'ten al
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          reviewer_ref="${GITHUB_WORKFLOW_REF##*@}"
+          echo "Reviewer kaynagi: $reviewer_ref"
+          for f in gemini_review.py post_review.py; do
+            mkdir -p scripts/pr_review
+            gh api "repos/${GITHUB_REPOSITORY}/contents/scripts/pr_review/${f}?ref=${reviewer_ref}" \
+              --jq .content | base64 -d > "scripts/pr_review/${f}"
+            test -s "scripts/pr_review/${f}" || { echo "${f} alinamadi"; exit 1; }
+            echo "  alindi: scripts/pr_review/${f}"
+          done
 
       - uses: actions/setup-python@v5
         with:

@@ -95,6 +95,12 @@ def _build_block(lines, question_number):
         warnings.append("short_or_incomplete_stem")
     if set(options) != set(OPTION_LETTERS):
         warnings.append("four_options_not_confidently_extracted")
+    # Anahtar mevcut ama değer boşsa A-D kümesi tam görünse de bu **eksik**
+    # seçenektir; sessizce "dört seçenekli" sayılmaz (2022 FEN Q15 gerçek
+    # örneği: ``D: ""``). Bu kayıt görsel-kanıt adayıdır, tahmini seçenek
+    # üretilmez.
+    if any(not str(value).strip() for value in options.values()):
+        warnings.append("option_value_empty")
     if len(body) < 45:
         warnings.append("low_text_density_or_scanned_content")
     # Seçenek metni içinde başka bir seçenek işareti varsa sınırlar kaymış demektir

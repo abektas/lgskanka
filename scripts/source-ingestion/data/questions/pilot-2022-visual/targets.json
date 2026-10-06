@@ -1,0 +1,81 @@
+{
+  "schema_version": "1.0",
+  "pilot": "TASK-QBANK-003-2022-visual-representation",
+  "source": {
+    "source_id": "MEB-LGS-2022",
+    "source_type": "REAL_LGS",
+    "year": 2022,
+    "expected_sha256": "8a1c6526b50b4b695dd6f48bfce42c7fbed53d26f0057e554f666cb4682c4142",
+    "source_page_url": "https://odsgm.meb.gov.tr/www/5-haziran-2022-tarihinde-yapilan-sinavla-ogrenci-alacak-ortaogretim-kurumlarina-iliskin-merkezi-sinavin-soru-kitapciklari-ve-cevap-anahtarlari/icerik/822",
+    "pdf_url": "https://cdn.eba.gov.tr/icerik/lgs/2022_sayisal_bolum_a_kitapcigi_ve_cevap_anahtari.pdf",
+    "archive_path": "scripts/source-ingestion/data/questions/archive/MEB-LGS-2022/01-2022_sayisal_bolum_a_kitapcigi_ve_cevap_anahtari.pdf"
+  },
+  "targets": [
+    {
+      "question_number": 4,
+      "subject": "MATEMATİK",
+      "subject_code": "MAT",
+      "page": 3,
+      "reason": "figure_and_equation: eşit kollu terazi çizimi (Şekil I/II) ve kefe konumlarını gösteren şekil; pypdf metni 'Sol kefe/Sağ kefe/Zemin' gibi dağınık parçalara düşüyor ve şekil hiçbir şekilde temsil edilemiyor.",
+      "debug_excerpt": "4.   \nSol kefe\nSağ kefe\nZemin\nŞekil I\nŞekil II\nDenge durumundaki eşit kollu terazinin kefelerinin konumu Şekil I’deki gibidir."
+    },
+    {
+      "question_number": 10,
+      "subject": "MATEMATİK",
+      "subject_code": "MAT",
+      "page": 7,
+      "reason": "coordinate_graph_and_options: noktalı kâğıt üzerinde k doğrusu boyunca öteleme/yansıma ve dört seçenek grafiği; pypdf yalnızca '1 birim' etiketlerini ve 'A) B) C) D)' boşluklarını veriyor.",
+      "debug_excerpt": "10.    \nk\nSol Sağ\n1 birim\n1 birim\nA) B)\nC) D)\nk\n1 birim"
+    },
+    {
+      "question_number": 11,
+      "subject": "MATEMATİK",
+      "subject_code": "MAT",
+      "page": 8,
+      "reason": "geometric_shape_grid: kareli zemin üzerinde sarı/mavi üçgen ve dört numaralı şekil; pypdf yalnızca 'Sarı Mavi IVIII I II' gibi etiket dizisi üretiyor.",
+      "debug_excerpt": "11.          \nSarı\nMavi IVIII\nI II\nYukarıdaki kareli zemin üzerinde geometrik şekiller verilmiştir."
+    },
+    {
+      "question_number": 12,
+      "subject": "MATEMATİK",
+      "subject_code": "MAT",
+      "page": 9,
+      "reason": "diagram_plus_pythagorean_equation: sarı/mavi kâğıtların çakıştırılması (Şekil I/II) ve a²+c²=b² denklemi; pypdf 'c b a CB' gibi okunamayan bir denklem satırı veriyor.",
+      "debug_excerpt": "12.   \nc b\na CB\na2 + c2 = b2\nKare şeklindeki sarı ve mavi kâğıtlar ... Şekil I\nŞekil II\n17 cm A"
+    },
+    {
+      "question_number": 14,
+      "subject": "MATEMATİK",
+      "subject_code": "MAT",
+      "page": 11,
+      "reason": "calendar_table: iki farklı ölçekte (Nisan/Mayıs 2013) takvim tablosu; pypdf hücre satırlarını 'P S Ç P C C' başlıklarıyla dağıtıyor, tablo ilişkisi kayboluyor.",
+      "debug_excerpt": "14.     \nP S Ç P C C P C C P\n1 2 3 4 5 6 7\n8 9 10 11 12 13 14\n... NİSAN MAYIS\n2013"
+    },
+    {
+      "question_number": 19,
+      "subject": "MATEMATİK",
+      "subject_code": "MAT",
+      "page": 15,
+      "reason": "solid_geometry_with_labels: dik dairesel silindir ve açınımı (7 cm / 3 cm / Konserve etiketleri) ile hacim formülü pr²h; pypdf ölçü etiketlerini gövde metninden kopuk veriyor.",
+      "debug_excerpt": "19.   \nr\nh\nYarıçapının uzunluğu r, yüksekliği h olan dik dairesel silindirin hacmi pr 2h dir.\n7 cm 7 cm\n3 cm\n3 cm\nKonserve"
+    },
+    {
+      "question_number": 6,
+      "mode": "control",
+      "subject": "MATEMATİK",
+      "subject_code": "MAT",
+      "page": 4,
+      "reason": "control_simple_table: sadece 3 satırlı tablo; pypdf tabloyu satır satır okunabilir metin olarak verdiği ve şekil/vektör içermediği için yapılandırılmış metin tercih edilir.",
+      "debug_excerpt": "6. Bir fabrikanın üç farklı ürün bandında paketlenen ürün sayıları ve bu ürünlerin paketlenme süreleri aşağıdaki tabloda verilmiştir. Tablo: Paketlenen Ürün Sayıları ve Paketlenme Süreleri / Ürün Bandı Ürün Sayısı Toplam Süre (dk.) / K 15 3 / L 16 4 / M x 6"
+    },
+    {
+      "question_number": 13,
+      "mode": "control",
+      "subject": "MATEMATİK",
+      "subject_code": "MAT",
+      "page": 10,
+      "reason": "control_simple_with_small_label: gövde metni pypdf tarafından eksiksiz çıkarıldı; yalnızca tek bir ölçü etiketi ((x + 2) cm) metne dâhil oldu, kutu/çizim okunabilirliği bozulmadı.",
+      "debug_excerpt": "13. Kısa kenarlarının uzunlukları x cm olan dikdörtgen şeklindeki 12 adet kâğıt ... (x + 2) cm ... A) 24x2 + 312x B) 24x 2 + 156 C) 12x 2 + 312 D) 12x 2 + 156x"
+    }
+  ]
+}

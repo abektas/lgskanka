@@ -16,6 +16,10 @@ except ImportError:
     PdfReader = None
 
 QUESTION_START = re.compile(r"^\s{0,4}(\d{1,2})\.\s+(\S.*)$")
+# pypdf, şekil/tablo/grafik içeren sorularda soru numarasını satırda tek başına
+# bırakır ve metni sonraki satırlara dağıtır. ``QUESTION_START`` eşleşmediği için
+# o soru hiçbir zaman aday olmaz; bu desen sessiz kaybı raporlanabilir kılar.
+ORPHAN_NUMBER = re.compile(r"^\s{0,4}(\d{1,2})\.\s*$")
 OPTION_MARK = re.compile(r"(?<![A-Za-z0-9ÇĞİÖŞÜçğıöşü])([A-D])\s*\)\s*")
 OPTION_LETTERS = "ABCD"
 ANSWER_PAIR = re.compile(r"(?<!\w)(\d{1,2})\s*[).:-]\s*([A-D])(?=\s|[,;|]|$)", re.I)
@@ -91,6 +95,12 @@ def _build_block(lines, question_number):
         warnings.append("short_or_incomplete_stem")
     if set(options) != set(OPTION_LETTERS):
         warnings.append("four_options_not_confidently_extracted")
+    # Anahtar mevcut ama değer boşsa A-D kümesi tam görünse de bu **eksik**
+    # seçenektir; sessizce "dört seçenekli" sayılmaz (2022 FEN Q15 gerçek
+    # örneği: ``D: ""``). Bu kayıt görsel-kanıt adayıdır, tahmini seçenek
+    # üretilmez.
+    if any(not str(value).strip() for value in options.values()):
+        warnings.append("option_value_empty")
     if len(body) < 45:
         warnings.append("low_text_density_or_scanned_content")
     # Seçenek metni içinde başka bir seçenek işareti varsa sınırlar kaymış demektir
@@ -302,6 +312,15 @@ def extract(pdf_path, source, source_file_url, booklet, manifest=None):
                 subject = SUBJECT_HEADERS[stripped]
             stream.append((page["page"], subject, line))
     blocks = segment_lines(stream)
+    # Şekil/tablo içeren sorularda numara satırı tek başına kalır; bu satırlar
+    # aday üretmez. Kayıp sessiz bırakılmaz: numara, konu ve sayfa raporlanır.
+    parsed_numbers = {(block["subject"], block["question_number"]) for block in blocks}
+    unparsed_numbers = sorted(
+        {(subject, int(match.group(1)), page)
+         for page, subject, line in stream
+         if subject and (match := ORPHAN_NUMBER.match(line))
+         and (subject, int(match.group(1))) not in parsed_numbers}
+    )
     all_text = "\n".join(page["text"] for page in pages)
     answer_pairs = [{"question_number": int(number), "candidate": letter.upper()} for number, letter in ANSWER_PAIR.findall(all_text)]
     pdf_hash = hashlib.sha256(pdf_path.read_bytes()).hexdigest()
@@ -349,6 +368,8 @@ def extract(pdf_path, source, source_file_url, booklet, manifest=None):
         review_reasons.append("question_or_option_extraction_ambiguous")
     if not answer_pairs:
         review_reasons.append("no_answer_key_candidate_detected")
+    if unparsed_numbers:
+        review_reasons.append("question_numbers_without_text_block")
     unmapped = sum(1 for r in records if not r["extraction"]["answer_key_map"])
     conflicts = 0
     for subject in subject_answers:
@@ -371,6 +392,9 @@ def extract(pdf_path, source, source_file_url, booklet, manifest=None):
         "pages": [{"page": row["page"], "text_characters": len(row["text"]), "extraction_error": row.get("error")} for row in pages],
         "candidate_count": len(records), "answer_key_candidate_count": len(answer_pairs), "records": records,
         "answer_key_summary": answer_key_summary,
+        "unparsed_question_numbers": [
+            {"subject": subject, "question_number": number, "page": page} for subject, number, page in unparsed_numbers
+        ],
         "review_reasons": review_reasons, "status": "NEEDS_REVIEW", "published": False,
     }
 
@@ -417,6 +441,8 @@ def main():
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"candidates={result['candidate_count']} answer_key_candidates={result['answer_key_candidate_count']} review_reasons={','.join(result['review_reasons']) or 'none'} status=NEEDS_REVIEW published=false")
+    for row in result["unparsed_question_numbers"]:
+        print(f"unparsed_question subject={row['subject']} number={row['question_number']} page={row['page']}")
 
 if __name__ == "__main__":
     main()

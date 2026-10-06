@@ -1695,6 +1695,29 @@ a.mini-card:hover {
   color: var(--mor-700);
 }
 
+/* ============================================================== pilot 2022 visual */
+
+.pv-lead { max-width: 74ch; }
+.pv-list { margin: 8px 0 0; padding-left: 18px; display: grid; gap: 4px; }
+.pv-item { border-top: 1px solid var(--cizgi); padding: 18px 0; }
+.pv-item:first-child { border-top: 0; }
+.pv-item-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 8px; }
+.pv-item-head strong { font-size: 16px; }
+.pv-figure { margin: 0 0 12px; }
+.pv-figure img { width: 100%; max-width: 900px; height: auto; border: 1px solid var(--cizgi); border-radius: var(--r-lg); background: #fff; }
+.pv-figure figcaption { margin-top: 6px; font-size: 11.5px; color: var(--metin-soluk); }
+.pv-reason { font-size: 13px; line-height: 1.55; }
+.pv-cols { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
+.pv-block { background: var(--mor-50); border: 1px solid var(--cizgi); border-radius: var(--r-lg); padding: 12px; }
+.pv-block h4 { margin: 0 0 6px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--mor-700); }
+.pv-block p, .pv-block li { font-size: 12.5px; line-height: 1.55; }
+.pv-block ul { margin: 0; padding-left: 18px; }
+.pv-block code { word-break: break-all; }
+.pv-debug { background: #fffdf5; border-color: #e6dcae; }
+.pv-debug h4 { color: #8d6a12; }
+.pv-debug pre { margin: 0; white-space: pre-wrap; font-size: 11.5px; line-height: 1.5; font-family: var(--mono, monospace); }
+.pv-conclusion li { font-size: 13px; line-height: 1.6; margin-bottom: 6px; }
+
 /* ============================================================== profil */
 
 .profile-grid {

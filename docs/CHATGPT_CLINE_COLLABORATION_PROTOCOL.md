@@ -356,7 +356,21 @@ This protocol does not grant automatic merge authority. The Product Owner remain
 
 Do not claim that a PR is merged unless GitHub confirms it.
 
-## 18. Failure and interruption
+## 18. Git push authorization from GitHub tasks
+
+A GitHub Issue assigned to Cline with `Status: READY_FOR_CLINE` and an explicit in-scope normal (non-force) push authorization in the task text constitutes valid authorization for that exact push. This aligns with the AGENTS.md guardrail and the principle that GitHub is the source of truth for task authorization (Section 3).
+
+Before executing the push, Cline must verify:
+1. Task status is `READY_FOR_CLINE`
+2. Task agent is `Cline`
+3. The push is normal (non-force) and matches the branch, remote, commit range, and scope stated in the task
+4. Working-tree safety: no unrelated changes, secrets, or student data in the push scope
+
+Force push remains prohibited unless separately and explicitly authorized by the established protocol. Merge, deploy, rebase, reset, clean, destructive Git operations, and unrelated pushes remain independently gated and require separate authorization.
+
+This rule resolves the TASK-QBANK-013/TASK-QBANK-014 conflict where a GitHub task explicitly authorized a normal push but the guardrail required a separately quoted user instruction.
+
+## 19. Failure and interruption
 
 If Cline cannot complete a task:
 

@@ -278,7 +278,7 @@ After implementation and verification:
 2. Confirm no secrets/PII/local artifacts are included.
 3. Confirm acceptance criteria.
 4. Commit focused changes.
-5. Push the focused branch when the task/workflow authorizes it.
+5. Push the focused branch when authorized. **Authorization rule:** A GitHub Issue with `Status: READY_FOR_CLINE`, `Agent: Cline`, and an explicit in-scope normal (non-force) push authorization in the task text constitutes explicit authorization for that exact push. Cline must verify before pushing: (1) task status is `READY_FOR_CLINE`, (2) task agent is `Cline`, (3) push is normal (non-force) and matches the branch/remote/commit-range/scope in the task, (4) working-tree safety (no unrelated changes, secrets, or student data). Force push remains prohibited unless separately authorized. Merge, deploy, rebase, reset, clean, destructive Git operations, and unrelated pushes remain independently gated.
 6. Open a focused PR against the intended base branch.
 7. Link the GitHub Issue.
 8. Link the handoff report.

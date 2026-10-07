@@ -135,6 +135,8 @@ Classify the earliest causal error (“first error”), not merely the final wro
 
 - Inspect `git status`, the current branch, and the relevant diff before editing. Preserve unrelated user changes; never reset, clean, or overwrite them.
 - Use a focused branch and descriptive commits when a branch/commit is requested or established by the task. Do not push, merge, publish, or rewrite shared history unless explicitly authorized.
+
+  **Git push authorization rule:** A GitHub Issue with `Status: READY_FOR_CLINE`, `Agent: Cline`, and an explicit in-scope normal (non-force) push authorization in the task text constitutes explicit authorization for that exact push. Cline must still verify before pushing: (1) the task status is `READY_FOR_CLINE`, (2) the task agent is `Cline`, (3) the push is normal (non-force) and matches the branch/remote/commit-range/scope stated in the task, (4) working-tree safety (no unrelated changes, secrets, or student data). Force push remains prohibited unless separately and explicitly authorized by the established protocol. Merge, deploy, rebase, reset, clean, destructive Git operations, and unrelated pushes remain independently gated and require separate authorization.
 - Make small, reviewable, reversible changes. Before risky edits, create an appropriate backup or use Git to preserve the current state; do not use backups as a substitute for understanding the change.
 - Never blindly replace whole files. Read the existing file, make the smallest coherent edit, and inspect the resulting diff.
 - Keep generated build output, local databases, secrets, and personal/student data out of commits.

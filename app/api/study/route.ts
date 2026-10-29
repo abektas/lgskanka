@@ -51,7 +51,11 @@ async function loadAllQuestions(imageMap: Map<string, string>): Promise<StudyQue
   const questions: StudyQuestion[] = [];
 
   for (const manifestKey of index.manifests) {
+    if (manifestKey === "study_manifests/image_map.json") continue;
     const manifest = await fetchJson(`${R2_PUBLIC_URL}/${manifestKey}`);
+    // Derive subject from manifest key path: study_manifests/lgs_calisma_sorulari/{subject}/manifest_*.json
+    const pathParts = manifestKey.split("/");
+    const subjectFromPath = pathParts[pathParts.length - 2] || "UNKNOWN";
     for (const q of manifest.questions || []) {
       const qnum = q.q || q.questionNumber;
       if (!qnum) continue;
@@ -69,10 +73,10 @@ async function loadAllQuestions(imageMap: Map<string, string>): Promise<StudyQue
       questions.push({
         id:
           q.id ||
-          `STUDY-${(q.subject || "UNKNOWN").toUpperCase()}-${originalFile
+          `STUDY-${subjectFromPath.toUpperCase()}-${originalFile
             .replace(/\.png$/i, "")
             .toUpperCase()}`,
-        subject: q.subject || "UNKNOWN",
+        subject: subjectFromPath,
         sourceBook,
         questionNumber: qnum,
         page: q.page || 0,

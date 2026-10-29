@@ -31,10 +31,7 @@ async function fetchJson(url: string): Promise<any> {
   return res.json();
 }
 
-let imageMapCache: Map<string, string> | null = null;
-
-async function getImageMap(): Promise<Map<string, string>> {
-  if (imageMapCache) return imageMapCache;
+async function loadImageMap(): Promise<Map<string, string>> {
   const raw = await fetchJson(`${R2_PUBLIC_URL}/study_manifests/image_map.json`);
   const result = new Map<string, string>();
   for (const [localPath, info] of Object.entries(raw as Record<string, any>)) {
@@ -45,12 +42,11 @@ async function getImageMap(): Promise<Map<string, string>> {
       result.set(name, r2Key);
     }
   }
-  imageMapCache = result;
   return result;
 }
 
 async function loadAllQuestions(): Promise<StudyQuestion[]> {
-  const imageMap = await getImageMap();
+  const imageMap = await loadImageMap();
   const data = await fetchJson(`${R2_PUBLIC_URL}/study_manifests/all_questions.json`);
   const questions: StudyQuestion[] = [];
 

@@ -3,24 +3,6 @@ import { createHash, timingSafeEqual } from "node:crypto";
 
 const R2_PUBLIC_URL = "https://pub-782be99090dc4f8586da5bf5d073c4a5.r2.dev";
 
-let imageMapCache: Map<string, string> | null = null;
-
-async function getImageMap(): Promise<Map<string, string>> {
-  if (imageMapCache) return imageMapCache;
-  const raw = await fetchJson(`${R2_PUBLIC_URL}/study_manifests/image_map.json`);
-  const result = new Map<string, string>();
-  for (const [localPath, info] of Object.entries(raw as Record<string, any>)) {
-    const name = localPath.split("/").pop();
-    const webpPath = info?.webp_path;
-    if (name && webpPath) {
-      const r2Key = webpPath.split("/webp/")[1] || "";
-      result.set(name, r2Key);
-    }
-  }
-  imageMapCache = result;
-  return result;
-}
-
 interface StudyQuestion {
   id: string;
   subject: string;
@@ -49,7 +31,26 @@ async function fetchJson(url: string): Promise<any> {
   return res.json();
 }
 
+let imageMapCache: Map<string, string> | null = null;
+
+async function getImageMap(): Promise<Map<string, string>> {
+  if (imageMapCache) return imageMapCache;
+  const raw = await fetchJson(`${R2_PUBLIC_URL}/study_manifests/image_map.json`);
+  const result = new Map<string, string>();
+  for (const [localPath, info] of Object.entries(raw as Record<string, any>)) {
+    const name = localPath.split("/").pop();
+    const webpPath = info?.webp_path;
+    if (name && webpPath) {
+      const r2Key = webpPath.split("/webp/")[1] || "";
+      result.set(name, r2Key);
+    }
+  }
+  imageMapCache = result;
+  return result;
+}
+
 async function loadAllQuestions(): Promise<StudyQuestion[]> {
+  const imageMap = await getImageMap();
   const data = await fetchJson(`${R2_PUBLIC_URL}/study_manifests/all_questions.json`);
   const questions: StudyQuestion[] = [];
 
@@ -64,10 +65,10 @@ async function loadAllQuestions(): Promise<StudyQuestion[]> {
       qnum = numMatch ? parseInt(numMatch[1], 10) : 1;
     }
     // Try exact match first, then basename match
-    let webpPath = imageMapCache?.get(originalFile);
+    let webpPath = imageMap.get(originalFile);
     if (!webpPath) {
       const basename = originalFile.split("/").pop();
-      webpPath = imageMapCache?.get(basename);
+      webpPath = imageMap.get(basename);
     }
     const imagePath = webpPath ? `${R2_PUBLIC_URL}/${webpPath}` : null;
 
@@ -108,7 +109,6 @@ let questionsCache: StudyQuestion[] | null = null;
 
 async function getQuestions(): Promise<StudyQuestion[]> {
   if (questionsCache) return questionsCache;
-  await getImageMap();
   questionsCache = await loadAllQuestions();
   return questionsCache;
 }

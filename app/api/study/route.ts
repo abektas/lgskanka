@@ -53,12 +53,16 @@ async function loadAllQuestions(imageMap: Map<string, string>): Promise<StudyQue
   const questions: StudyQuestion[] = [];
 
   for (const q of data.questions || []) {
-    const qnum = q.q || q.questionNumber;
-    if (!qnum) continue;
     if (q.published === false) continue;
     if (q.cancelledInSource) continue;
 
-    const originalFile = q.file || `q-${String(qnum).padStart(2, "0")}.png`;
+    const originalFile = q.file || `q-${q.q || 0}.png`;
+    // Derive question number from filename if missing (e.g. "q-01.png" -> 1)
+    let qnum = q.q || q.questionNumber;
+    if (!qnum) {
+      const numMatch = originalFile.match(/(\d+)\.png$/i);
+      qnum = numMatch ? parseInt(numMatch[1], 10) : 1;
+    }
     const webpPath = imageMap.get(originalFile);
     const imagePath = webpPath ? `${R2_PUBLIC_URL}/${webpPath}` : null;
 

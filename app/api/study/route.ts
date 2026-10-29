@@ -51,7 +51,7 @@ async function loadAllQuestions(imageMap: Map<string, string>): Promise<StudyQue
   const questions: StudyQuestion[] = [];
 
   for (const manifestKey of index.manifests) {
-    const manifest = await fetchJson(`${R2_PUBLIC_URL}/${encodeURIComponent(manifestKey)}`);
+    const manifest = await fetchJson(`${R2_PUBLIC_URL}/${manifestKey}`);
     for (const q of manifest.questions || []) {
       const qnum = q.q || q.questionNumber;
       if (!qnum) continue;

@@ -32,7 +32,8 @@ Use this source hierarchy for curriculum, exam, and official policy claims:
 1. Official MEB sources: current curriculum documents, official guides, announcements, and publications.
 2. ÖDSGM / official Ministry assessment and evaluation materials, including official LGS questions and answer keys.
 3. Other official public institutions when directly relevant.
-4. Secondary sources only as discovery/context; they cannot establish an official curriculum or answer-key fact when an authoritative source is available.
+4. **Product Owner–approved curated official-corpus source:** For the Nüli QBANK corpus, the KerimHoca `LGS Çıkmış Sorular 2018–2026` page is accepted as the trusted distribution/index source for the official exam PDFs it groups by year, exam section, and subject. Routine per-question re-verification against MEB is not required before extraction. Preserve the KerimHoca page URL, linked Drive/file URL or ID, file hash, year, section, subject, and retrieval metadata. This acceptance does not authorize invented provenance, answers, curriculum mappings, or `VERIFIED` status; structural QA, canonical validation, and human review gates still apply.
+5. Secondary sources only as discovery/context when the approved curated source is not available; they cannot establish an official curriculum or answer-key fact.
 
 Record provenance for every imported or verified record: source title/type, issuing organization, canonical URL or repository locator, publication/exam year, retrieval date, applicable curriculum layer/version, and verification status. Preserve source attribution and any usage/licensing restrictions. Do not invent sources or claim a source was verified when it was not.
 

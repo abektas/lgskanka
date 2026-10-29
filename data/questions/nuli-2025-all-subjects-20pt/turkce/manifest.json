@@ -1,0 +1,495 @@
+{
+  "manifestVersion": "1.0",
+  "status": "NEEDS_REVIEW",
+  "published": false,
+  "source": {
+    "sourceId": "MEB-LGS-2025-TURKCE",
+    "sourceType": "REAL_LGS",
+    "fileName": "2025 LGS – Türkçe.pdf",
+    "sha256": "b99e574c7547bbf4b57347141556e567cd6af441cbf136864973b754179cb48f",
+    "examYear": 2025,
+    "educationalPeriod": "2024-2025",
+    "subject": "Türkçe",
+    "grade": 8,
+    "questionCount": 20,
+    "answerKeyPage": 13
+  },
+  "render": {
+    "dpi": 300,
+    "margin_pt_all_sides": 20.0,
+    "footer_exclusion_pt": 70.0,
+    "content_aware_bbox_margin_pt": 20.0,
+    "reconstructed_from_ocr": false
+  },
+  "questions": [
+    {
+      "id": "MEB-LGS-2025-TURKCE-Q01",
+      "questionNumber": 1,
+      "page": 1,
+      "column": "left",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-turkce/q-01.png",
+        "clipRectPt": {
+          "x0": 29.994,
+          "y0": 156.0,
+          "x1": 270.965,
+          "y1": 475.943
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "3ab09a38131fff13b3544a1eb033c69ac62c559ce69fff8f9cc9a88f58d29f78"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-TURKCE-Q02",
+      "questionNumber": 2,
+      "page": 1,
+      "column": "right",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-turkce/q-02.png",
+        "clipRectPt": {
+          "x0": 280.965,
+          "y0": 156.0,
+          "x1": 527.936,
+          "y1": 461.945
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "5d78355c835dacbfc6ff561595efd429d862610e73c2ae7882239ec387e7ed08"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-TURKCE-Q03",
+      "questionNumber": 3,
+      "page": 2,
+      "column": "left",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-turkce/q-03.png",
+        "clipRectPt": {
+          "x0": 44.992,
+          "y0": 90.0,
+          "x1": 284.964,
+          "y1": 289.966
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "93e37802b9c0af1b0e750d56b8d9f1e655a10adf8814e771d6be9f002b946812"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-TURKCE-Q04",
+      "questionNumber": 4,
+      "page": 2,
+      "column": "right",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-turkce/q-04.png",
+        "clipRectPt": {
+          "x0": 294.964,
+          "y0": 90.0,
+          "x1": 543.934,
+          "y1": 350.959
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "73344da4962327567b699425a320d68f2373b3491c47fab719ae404ef497d654"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-TURKCE-Q05",
+      "questionNumber": 5,
+      "page": 3,
+      "column": "left",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-turkce/q-05.png",
+        "clipRectPt": {
+          "x0": 29.994,
+          "y0": 90.0,
+          "x1": 270.965,
+          "y1": 274.968
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "0b3eb09aa44bfa58fa29fcb820efa3a864ec440a0825bcf875df58a14b1a47ad"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-TURKCE-Q06",
+      "questionNumber": 6,
+      "page": 3,
+      "column": "right",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-turkce/q-06.png",
+        "clipRectPt": {
+          "x0": 280.965,
+          "y0": 90.0,
+          "x1": 528.936,
+          "y1": 578.93
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "faa3e876a1e9f642561b4fca3d156fc493de59ba58c04f8a730eb557befc825b"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-TURKCE-Q07",
+      "questionNumber": 7,
+      "page": 4,
+      "column": "left",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-turkce/q-07.png",
+        "clipRectPt": {
+          "x0": 45.992,
+          "y0": 90.0,
+          "x1": 284.964,
+          "y1": 394.953
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "b437d10538654f13583b31a431bfacd2cb85299c7c8e3c021369cf5d68dc6732"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-TURKCE-Q08",
+      "questionNumber": 8,
+      "page": 4,
+      "column": "right",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-turkce/q-08.png",
+        "clipRectPt": {
+          "x0": 294.964,
+          "y0": 90.0,
+          "x1": 542.935,
+          "y1": 496.94
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "cd434e9b056bdff2bf0c6861c93a34e7fb677e879b2f005874e6d55524e8619c"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-TURKCE-Q09",
+      "questionNumber": 9,
+      "page": 5,
+      "column": "left",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-turkce/q-09.png",
+        "clipRectPt": {
+          "x0": 28.994,
+          "y0": 90.0,
+          "x1": 270.965,
+          "y1": 558.933
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "aa03c2c41a71bba8f8e5100bbbfb6a77b27f706ed24c9e38655977356c55638a"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-TURKCE-Q10",
+      "questionNumber": 10,
+      "page": 5,
+      "column": "right",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-turkce/q-10.png",
+        "clipRectPt": {
+          "x0": 280.965,
+          "y0": 90.0,
+          "x1": 527.936,
+          "y1": 313.963
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "0a9bf6ffac60c7a9c505b2d8f7aa35989f64bbf9aa84c182cee658f4f27f7424"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-TURKCE-Q11",
+      "questionNumber": 11,
+      "page": 6,
+      "column": "left",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-turkce/q-11.png",
+        "clipRectPt": {
+          "x0": 38.993,
+          "y0": 90.0,
+          "x1": 284.964,
+          "y1": 495.94
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "645a6261fd200a333abb3a2b1d2e9fdf1bca521dff963010ba50d8f9d5477113"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-TURKCE-Q12",
+      "questionNumber": 12,
+      "page": 6,
+      "column": "right",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-turkce/q-12.png",
+        "clipRectPt": {
+          "x0": 294.964,
+          "y0": 90.0,
+          "x1": 541.935,
+          "y1": 428.949
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "b9cc09eac6bcb941a50b01785ef70c706bdaa74b3cd39a1a31abc9d698936f7b"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-TURKCE-Q13",
+      "questionNumber": 13,
+      "page": 7,
+      "column": "single",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-turkce/q-13.png",
+        "clipRectPt": {
+          "x0": 23.994,
+          "y0": 90.0,
+          "x1": 528.936,
+          "y1": 386.954
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "6bea38161516612ff397f7e2429900dad7f277aea540be81118e3c06812b3f8d"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-TURKCE-Q14",
+      "questionNumber": 14,
+      "page": 8,
+      "column": "single",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-turkce/q-14.png",
+        "clipRectPt": {
+          "x0": 37.993,
+          "y0": 90.0,
+          "x1": 541.935,
+          "y1": 627.924
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "5cab4a3e9b64891be8b29b343a7da44649dd0312e12113bb88b8ca3030d983ee"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-TURKCE-Q15",
+      "questionNumber": 15,
+      "page": 9,
+      "column": "single",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-turkce/q-15.png",
+        "clipRectPt": {
+          "x0": 23.994,
+          "y0": 90.0,
+          "x1": 522.937,
+          "y1": 591.928
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "751190172d5bb900016e264bf0672f480300036bb81b29e51cd2aed04b9f809d"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-TURKCE-Q16",
+      "questionNumber": 16,
+      "page": 10,
+      "column": "single",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-turkce/q-16.png",
+        "clipRectPt": {
+          "x0": 37.993,
+          "y0": 90.0,
+          "x1": 542.935,
+          "y1": 684.917
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "8ec3e4082f53b4a5783ba35b418d470bda37c4414efbfcd433c9ecaab57e4bb2"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-TURKCE-Q17",
+      "questionNumber": 17,
+      "page": 11,
+      "column": "left",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-turkce/q-17.png",
+        "clipRectPt": {
+          "x0": 23.994,
+          "y0": 90.0,
+          "x1": 270.965,
+          "y1": 298.965
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "734b6de2a4390d1e763261ea0947fd1e62af39c529ba68d48a26f8267d5e20c0"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-TURKCE-Q18",
+      "questionNumber": 18,
+      "page": 11,
+      "column": "right",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-turkce/q-18.png",
+        "clipRectPt": {
+          "x0": 280.965,
+          "y0": 90.0,
+          "x1": 529.936,
+          "y1": 246.972
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "9594d8154d2e31f435c48194d2e32716c904a73c1d5b148527063e6e5521700f"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-TURKCE-Q19",
+      "questionNumber": 19,
+      "page": 12,
+      "column": "left",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-turkce/q-19.png",
+        "clipRectPt": {
+          "x0": 37.993,
+          "y0": 90.0,
+          "x1": 284.964,
+          "y1": 391.953
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "a49f36cad90cecca6bad1d7ed7996eb7330cf5d47064cb2aced69c0cde50f947"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-TURKCE-Q20",
+      "questionNumber": 20,
+      "page": 12,
+      "column": "right",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-turkce/q-20.png",
+        "clipRectPt": {
+          "x0": 294.964,
+          "y0": 90.0,
+          "x1": 541.935,
+          "y1": 325.962
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "1d99b345f86298491b7a77c9fee142cdcc55ce835c7c69be8ebe31810514b7bb"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    }
+  ],
+  "warnings": [],
+  "answerKeyCandidates": {
+    "1": "B",
+    "2": "A",
+    "3": "C",
+    "4": "D",
+    "5": "C",
+    "6": "D",
+    "7": "B",
+    "8": "D",
+    "9": "C",
+    "10": "A",
+    "11": "D",
+    "12": "C",
+    "13": "D",
+    "14": "A",
+    "15": "B",
+    "16": "C",
+    "17": "C",
+    "18": "B",
+    "19": "A",
+    "20": "B"
+  },
+  "summary": {
+    "pagesProcessed": 12,
+    "questionsExtracted": 20,
+    "expectedQuestions": 20,
+    "ambiguousPages": 0
+  }
+}

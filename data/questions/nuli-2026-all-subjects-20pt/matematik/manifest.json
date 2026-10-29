@@ -1,0 +1,628 @@
+{
+  "subject": "matematik",
+  "count": 20,
+  "answer_key": [
+    "B",
+    "B",
+    "D",
+    "C",
+    "B",
+    "C",
+    "A",
+    "D",
+    "D",
+    "A",
+    "B",
+    "D",
+    "A",
+    "C",
+    "A",
+    "C",
+    "D",
+    "B",
+    "B",
+    "C"
+  ],
+  "items": [
+    {
+      "subject": "matematik",
+      "question": 1,
+      "page": 3,
+      "file": "matematik/Q01.png",
+      "size": "1059x1139",
+      "anchor": {
+        "x0": 42.5,
+        "top": 155.7,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.5,
+        "y0": 155.7,
+        "x1": 274.3,
+        "y1": 388.9
+      },
+      "crop": {
+        "left": 22.5,
+        "top": 135.7,
+        "right": 276.4,
+        "bottom": 408.9
+      },
+      "margins": {
+        "left": 22.5,
+        "right": 0.0
+      },
+      "type": "LEFT",
+      "answer_key": "B"
+    },
+    {
+      "subject": "matematik",
+      "question": 2,
+      "page": 3,
+      "file": "matematik/Q02.png",
+      "size": "1059x984",
+      "anchor": {
+        "x0": 42.5,
+        "top": 389.9,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.5,
+        "y0": 389.9,
+        "x1": 274.3,
+        "y1": 585.8
+      },
+      "crop": {
+        "left": 22.5,
+        "top": 369.9,
+        "right": 276.4,
+        "bottom": 605.8
+      },
+      "margins": {
+        "left": 22.5,
+        "right": 0.0
+      },
+      "type": "LEFT",
+      "answer_key": "B"
+    },
+    {
+      "subject": "matematik",
+      "question": 3,
+      "page": 3,
+      "file": "matematik/Q03.png",
+      "size": "1012x429",
+      "anchor": {
+        "x0": 283.5,
+        "top": 161.9,
+        "col": 1
+      },
+      "bbox": {
+        "x0": 283.5,
+        "y0": 156.1,
+        "x1": 499.3,
+        "y1": 219.0
+      },
+      "crop": {
+        "left": 276.4,
+        "top": 136.1,
+        "right": 519.3,
+        "bottom": 239.0
+      },
+      "margins": {
+        "left": 0.0,
+        "right": 33.5
+      },
+      "type": "RIGHT",
+      "answer_key": "D"
+    },
+    {
+      "subject": "matematik",
+      "question": 4,
+      "page": 3,
+      "file": "matematik/Q04.png",
+      "size": "1033x1251",
+      "anchor": {
+        "x0": 283.5,
+        "top": 390.3,
+        "col": 1
+      },
+      "bbox": {
+        "x0": 283.5,
+        "y0": 390.3,
+        "x1": 504.3,
+        "y1": 650.6
+      },
+      "crop": {
+        "left": 276.4,
+        "top": 370.3,
+        "right": 524.3,
+        "bottom": 670.6
+      },
+      "margins": {
+        "left": 0.0,
+        "right": 28.5
+      },
+      "type": "RIGHT",
+      "answer_key": "C"
+    },
+    {
+      "subject": "matematik",
+      "question": 5,
+      "page": 4,
+      "file": "matematik/Q05.png",
+      "size": "2070x1321",
+      "anchor": {
+        "x0": 42.5,
+        "top": 84.8,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.5,
+        "y0": 84.8,
+        "x1": 498.9,
+        "y1": 361.8
+      },
+      "crop": {
+        "left": 22.5,
+        "top": 64.8,
+        "right": 518.9,
+        "bottom": 381.8
+      },
+      "margins": {
+        "left": 22.5,
+        "right": 33.8
+      },
+      "type": "CROSS",
+      "answer_key": "B"
+    },
+    {
+      "subject": "matematik",
+      "question": 6,
+      "page": 5,
+      "file": "matematik/Q06.png",
+      "size": "2086x1171",
+      "anchor": {
+        "x0": 42.5,
+        "top": 88.0,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.5,
+        "y0": 88.0,
+        "x1": 502.9,
+        "y1": 328.9
+      },
+      "crop": {
+        "left": 22.5,
+        "top": 68.0,
+        "right": 522.9,
+        "bottom": 348.9
+      },
+      "margins": {
+        "left": 22.5,
+        "right": 29.8
+      },
+      "type": "CROSS",
+      "answer_key": "C"
+    },
+    {
+      "subject": "matematik",
+      "question": 7,
+      "page": 6,
+      "file": "matematik/Q07.png",
+      "size": "2102x1309",
+      "anchor": {
+        "x0": 42.5,
+        "top": 84.8,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.5,
+        "y0": 84.8,
+        "x1": 506.7,
+        "y1": 358.9
+      },
+      "crop": {
+        "left": 22.5,
+        "top": 64.8,
+        "right": 526.7,
+        "bottom": 378.9
+      },
+      "margins": {
+        "left": 22.5,
+        "right": 26.1
+      },
+      "type": "CROSS",
+      "answer_key": "A"
+    },
+    {
+      "subject": "matematik",
+      "question": 8,
+      "page": 7,
+      "file": "matematik/Q08.png",
+      "size": "2102x2146",
+      "anchor": {
+        "x0": 42.5,
+        "top": 86.1,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.5,
+        "y0": 85.5,
+        "x1": 506.8,
+        "y1": 560.3
+      },
+      "crop": {
+        "left": 22.5,
+        "top": 65.5,
+        "right": 526.8,
+        "bottom": 580.3
+      },
+      "margins": {
+        "left": 22.5,
+        "right": 25.9
+      },
+      "type": "CROSS",
+      "answer_key": "D"
+    },
+    {
+      "subject": "matematik",
+      "question": 9,
+      "page": 7,
+      "file": "matematik/Q09.png",
+      "size": "2083x613",
+      "anchor": {
+        "x0": 42.5,
+        "top": 549.6,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.5,
+        "y0": 546.0,
+        "x1": 502.1,
+        "y1": 653.0
+      },
+      "crop": {
+        "left": 22.5,
+        "top": 526.0,
+        "right": 522.1,
+        "bottom": 673.0
+      },
+      "margins": {
+        "left": 22.5,
+        "right": 30.7
+      },
+      "type": "CROSS",
+      "answer_key": "D"
+    },
+    {
+      "subject": "matematik",
+      "question": 10,
+      "page": 8,
+      "file": "matematik/Q10.png",
+      "size": "2085x1101",
+      "anchor": {
+        "x0": 42.5,
+        "top": 84.8,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.5,
+        "y0": 84.8,
+        "x1": 502.6,
+        "y1": 309.1
+      },
+      "crop": {
+        "left": 22.5,
+        "top": 64.8,
+        "right": 522.6,
+        "bottom": 329.1
+      },
+      "margins": {
+        "left": 22.5,
+        "right": 30.1
+      },
+      "type": "CROSS",
+      "answer_key": "A"
+    },
+    {
+      "subject": "matematik",
+      "question": 11,
+      "page": 9,
+      "file": "matematik/Q11.png",
+      "size": "2092x597",
+      "anchor": {
+        "x0": 42.5,
+        "top": 84.8,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.5,
+        "y0": 84.8,
+        "x1": 504.4,
+        "y1": 188.2
+      },
+      "crop": {
+        "left": 22.5,
+        "top": 64.8,
+        "right": 524.4,
+        "bottom": 208.2
+      },
+      "margins": {
+        "left": 22.5,
+        "right": 28.4
+      },
+      "type": "CROSS",
+      "answer_key": "B"
+    },
+    {
+      "subject": "matematik",
+      "question": 12,
+      "page": 9,
+      "file": "matematik/Q12.png",
+      "size": "2054x1243",
+      "anchor": {
+        "x0": 42.5,
+        "top": 388.5,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.5,
+        "y0": 388.5,
+        "x1": 495.1,
+        "y1": 646.8
+      },
+      "crop": {
+        "left": 22.5,
+        "top": 368.5,
+        "right": 515.1,
+        "bottom": 666.8
+      },
+      "margins": {
+        "left": 22.5,
+        "right": 37.7
+      },
+      "type": "CROSS",
+      "answer_key": "D"
+    },
+    {
+      "subject": "matematik",
+      "question": 13,
+      "page": 10,
+      "file": "matematik/Q13.png",
+      "size": "2079x996",
+      "anchor": {
+        "x0": 42.5,
+        "top": 84.8,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.5,
+        "y0": 84.8,
+        "x1": 501.1,
+        "y1": 284.0
+      },
+      "crop": {
+        "left": 22.5,
+        "top": 64.8,
+        "right": 521.1,
+        "bottom": 304.0
+      },
+      "margins": {
+        "left": 22.5,
+        "right": 31.6
+      },
+      "type": "CROSS",
+      "answer_key": "A"
+    },
+    {
+      "subject": "matematik",
+      "question": 14,
+      "page": 11,
+      "file": "matematik/Q14.png",
+      "size": "2095x1499",
+      "anchor": {
+        "x0": 42.5,
+        "top": 84.8,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.5,
+        "y0": 84.8,
+        "x1": 505.0,
+        "y1": 404.4
+      },
+      "crop": {
+        "left": 22.5,
+        "top": 64.8,
+        "right": 525.0,
+        "bottom": 424.4
+      },
+      "margins": {
+        "left": 22.5,
+        "right": 27.8
+      },
+      "type": "CROSS",
+      "answer_key": "C"
+    },
+    {
+      "subject": "matematik",
+      "question": 15,
+      "page": 12,
+      "file": "matematik/Q15.png",
+      "size": "2095x1767",
+      "anchor": {
+        "x0": 42.5,
+        "top": 84.8,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.5,
+        "y0": 84.8,
+        "x1": 505.1,
+        "y1": 468.8
+      },
+      "crop": {
+        "left": 22.5,
+        "top": 64.8,
+        "right": 525.1,
+        "bottom": 488.8
+      },
+      "margins": {
+        "left": 22.5,
+        "right": 27.7
+      },
+      "type": "CROSS",
+      "answer_key": "A"
+    },
+    {
+      "subject": "matematik",
+      "question": 16,
+      "page": 13,
+      "file": "matematik/Q16.png",
+      "size": "2087x1112",
+      "anchor": {
+        "x0": 42.5,
+        "top": 84.8,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.5,
+        "y0": 84.8,
+        "x1": 503.0,
+        "y1": 311.6
+      },
+      "crop": {
+        "left": 22.5,
+        "top": 64.8,
+        "right": 523.0,
+        "bottom": 331.6
+      },
+      "margins": {
+        "left": 22.5,
+        "right": 29.7
+      },
+      "type": "CROSS",
+      "answer_key": "C"
+    },
+    {
+      "subject": "matematik",
+      "question": 17,
+      "page": 14,
+      "file": "matematik/Q17.png",
+      "size": "2100x1696",
+      "anchor": {
+        "x0": 42.5,
+        "top": 84.8,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.5,
+        "y0": 84.8,
+        "x1": 506.2,
+        "y1": 451.9
+      },
+      "crop": {
+        "left": 22.5,
+        "top": 64.8,
+        "right": 526.2,
+        "bottom": 471.9
+      },
+      "margins": {
+        "left": 22.5,
+        "right": 26.5
+      },
+      "type": "CROSS",
+      "answer_key": "D"
+    },
+    {
+      "subject": "matematik",
+      "question": 18,
+      "page": 15,
+      "file": "matematik/Q18.png",
+      "size": "2079x1229",
+      "anchor": {
+        "x0": 42.5,
+        "top": 84.8,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.5,
+        "y0": 84.8,
+        "x1": 501.2,
+        "y1": 339.8
+      },
+      "crop": {
+        "left": 22.5,
+        "top": 64.8,
+        "right": 521.2,
+        "bottom": 359.8
+      },
+      "margins": {
+        "left": 22.5,
+        "right": 31.6
+      },
+      "type": "CROSS",
+      "answer_key": "B"
+    },
+    {
+      "subject": "matematik",
+      "question": 19,
+      "page": 16,
+      "file": "matematik/Q19.png",
+      "size": "2103x1954",
+      "anchor": {
+        "x0": 42.5,
+        "top": 84.8,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.5,
+        "y0": 84.8,
+        "x1": 506.9,
+        "y1": 513.6
+      },
+      "crop": {
+        "left": 22.5,
+        "top": 64.8,
+        "right": 526.9,
+        "bottom": 533.6
+      },
+      "margins": {
+        "left": 22.5,
+        "right": 25.8
+      },
+      "type": "CROSS",
+      "answer_key": "B"
+    },
+    {
+      "subject": "matematik",
+      "question": 20,
+      "page": 17,
+      "file": "matematik/Q20.png",
+      "size": "2114x2687",
+      "anchor": {
+        "x0": 42.1,
+        "top": 84.8,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.1,
+        "y0": 84.8,
+        "x1": 509.4,
+        "y1": 708.4
+      },
+      "crop": {
+        "left": 22.1,
+        "top": 64.8,
+        "right": 529.4,
+        "bottom": 709.5
+      },
+      "margins": {
+        "left": 22.1,
+        "right": 23.3
+      },
+      "type": "CROSS",
+      "answer_key": "C"
+    }
+  ]
+}

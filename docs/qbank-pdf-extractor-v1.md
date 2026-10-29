@@ -21,6 +21,11 @@ V1 therefore uses:
 7. PNG SHA-256 hashes;
 8. a manifest containing warnings and detection confidence.
 
+For workbook-style PDFs whose question numbers are in the left margin, use the
+left-margin anchor filter. If the PDF has a decorative footer/page number, use
+`--footer-pt` to stop the final question crop before that footer. These options
+change only boundary detection; they do not rewrite question content.
+
 ## Data boundary
 
 ```text
@@ -96,6 +101,20 @@ python scripts/source-ingestion/nuli_qbank_pdf_extractor.py \
   --page-start 3 \
   --page-end 5 \
   --dpi 300
+```
+
+Workbook-style pilot:
+
+```bash
+python scripts/source-ingestion/nuli_qbank_pdf_extractor.py \
+  scripts/source-ingestion/data/questions/archive/local-matematik-study/8-sinif-lgs-calisma-kitabi-matematik.pdf \
+  /tmp/nuli-matematik-pilot \
+  --page-start 8 \
+  --page-end 20 \
+  --dpi 300 \
+  --anchor-max-x0-pt 40 \
+  --margin-pt 18 \
+  --footer-pt 70
 ```
 
 The extractor does not copy the source PDF. Keep large authoritative PDFs in the project's source-corpus storage strategy and record their SHA-256 in manifests/canonical records.

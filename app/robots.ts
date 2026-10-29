@@ -11,7 +11,7 @@ export default function robots(): MetadataRoute.Robots {
         // Kişisel çalışma ekranları indekslenmesin; herkese açık içerik sayfaları açık kalsın.
         // TASK-QBANK-007 (C5): pilot inceleme yüzeyleri meta noindex taşır; robots
         // disallow crawl bütçesi + doğrudan URL keşfine karşı savunma derinliğidir.
-        disallow: ["/api/", "/profil", "/pilot-2022", "/pilot-2022-visual"],
+        disallow: ["/api/", "/profil"],
       },
     ],
     sitemap: `${siteUrl}/sitemap.xml`,

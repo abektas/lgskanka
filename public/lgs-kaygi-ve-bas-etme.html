@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f7f1">
+  <meta name="description" content="LGS sürecinde sınav kaygısını tanımak ve küçük adımlarla baş etmek için gençlere özel mini rehber.">
+  <title>LGS Kaygı Kahramanı | Sınav kaygısı ve baş etme yolları</title>
+  <style>
+    :root{--ink:#182a42;--muted:#52647a;--paper:#f7f7f1;--teal:#087f83;--blue:#315bdb;--coral:#f2745b;--yellow:#ffd45b;--mint:#d7f1e9;--line:#d8e1df;--white:#fff;--radius:26px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,ui-rounded,"Avenir Next",system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.55}a{color:inherit}button{font:inherit}.skip{position:absolute;left:-9999px}.skip:focus{left:1rem;top:1rem;background:#fff;padding:.7rem;z-index:9}
+    .wrap{width:min(1120px,calc(100% - 40px));margin:auto}.nav{height:76px;display:flex;align-items:center;justify-content:space-between}.brand{display:flex;gap:10px;align-items:center;font-weight:900;letter-spacing:-.03em}.brand-mark{width:34px;height:34px;display:grid;place-items:center;background:var(--yellow);border-radius:12px;transform:rotate(-7deg);font-size:20px}.nav a{text-decoration:none;font-size:.92rem;font-weight:750;color:var(--muted);margin-left:22px}.nav a:hover{color:var(--blue)}
+    .hero{min-height:590px;display:grid;grid-template-columns:1.03fr .97fr;align-items:center;gap:26px;padding:32px 0 70px;position:relative}.hero-copy{position:relative;z-index:1}.pill{display:inline-flex;align-items:center;gap:8px;background:#e7f4ef;border:1px solid #c4e4d8;color:#176b63;border-radius:99px;padding:8px 14px;font-size:.85rem;font-weight:800}.spark{color:var(--coral);font-size:1.2rem}h1{font-size:clamp(3.1rem,6.6vw,5.8rem);line-height:.96;letter-spacing:-.075em;margin:22px 0 20px;max-width:610px}h1 span{color:var(--blue)}.lead{font-size:1.15rem;color:var(--muted);max-width:510px}.actions{display:flex;align-items:center;gap:15px;margin-top:28px;flex-wrap:wrap}.btn{appearance:none;border:0;background:var(--blue);color:white;padding:14px 20px;border-radius:15px;text-decoration:none;font-weight:850;box-shadow:0 6px 0 #203fa6;transition:transform .18s,box-shadow .18s;cursor:pointer}.btn:hover{transform:translateY(2px);box-shadow:0 4px 0 #203fa6}.soft-link{font-weight:800;text-decoration:none;color:var(--teal)}.hero-art{position:relative}.hero-art img{display:block;width:100%;height:auto;border-radius:48% 45% 34% 38% / 40% 38% 42% 44%;mix-blend-mode:multiply;animation:float 5s ease-in-out infinite}.orbit{position:absolute;width:76px;height:76px;background:var(--yellow);border-radius:50%;display:grid;place-items:center;right:2%;top:7%;font-size:2rem;box-shadow:0 6px 0 #e2b943;animation:pop 3s ease-in-out infinite}.scribble{position:absolute;left:-1%;bottom:4%;font-size:2.4rem;color:var(--coral);transform:rotate(-18deg)}
+    @keyframes float{50%{transform:translateY(-8px) rotate(1deg)}}@keyframes pop{50%{transform:translateY(-7px) rotate(9deg)}}
+    section{padding:68px 0;scroll-margin-top:22px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:28px}.eyebrow{font-size:.82rem;font-weight:900;color:var(--teal);margin:0 0 8px}h2{font-size:clamp(2rem,4vw,3.25rem);line-height:1.04;letter-spacing:-.055em;margin:0} .section-note{max-width:340px;color:var(--muted);margin:0}.signals{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.signal{border-radius:var(--radius);padding:22px;min-height:180px;position:relative;overflow:hidden}.signal:nth-child(1){background:#dce8ff}.signal:nth-child(2){background:#ffe6db}.signal:nth-child(3){background:#ddf2e7}.emoji{font-size:1.8rem}.signal h3{font-size:1.25rem;margin:12px 0 5px}.signal p{margin:0;color:#3e5268}.notice{margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:15px 18px;color:var(--muted)}
+    .toolbox{background:#183553;color:#fff;border-radius:34px;padding:38px;position:relative;overflow:hidden}.toolbox:after{content:"✦";position:absolute;right:35px;top:8px;color:#f4c948;font-size:6rem;opacity:.9;transform:rotate(14deg)}.toolbox .eyebrow{color:#95dfcf}.toolbox h2{max-width:630px}.toolbox .section-note{color:#d7e1ea}.tools{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:30px;position:relative;z-index:1}.tool{background:#fff;color:var(--ink);border-radius:21px;padding:20px;min-height:185px}.tool .num{width:34px;height:34px;display:grid;place-items:center;background:var(--yellow);border-radius:12px;font-weight:900}.tool h3{font-size:1.15rem;margin:14px 0 6px}.tool p{margin:0;color:var(--muted);font-size:.95rem}.thought{display:flex;gap:18px;align-items:center;background:#fff;border-radius:22px;padding:18px 22px;margin-top:18px;color:var(--ink);position:relative;z-index:1}.thought b{color:#8b4f39;white-space:nowrap}.thought span{color:var(--muted)}
+    .breath-layout{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center}.breath-panel{background:#e2f3ed;border-radius:32px;padding:30px;min-height:330px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative}.breath-circle{width:170px;height:170px;border-radius:50%;background:var(--teal);color:white;display:grid;place-items:center;font-weight:900;font-size:1.1rem;box-shadow:inset 0 0 0 9px #3da49b,0 12px 0 #9bcfc2;transition:transform 4s ease-in-out,background .4s}.breath-circle.inhale{transform:scale(1.25);background:var(--blue)}.breath-circle.exhale{transform:scale(.88)}.breath-caption{margin:24px 0 15px;color:#315b56;font-weight:800}.breath-btn{border:0;border-radius:13px;background:#fff;color:var(--teal);font-weight:850;padding:11px 18px;cursor:pointer}.breath-btn:focus-visible,.btn:focus-visible,a:focus-visible{outline:3px solid #f3b429;outline-offset:4px}.breath-help{font-size:.82rem;color:#536e6c;margin:12px 0 0}.breath-copy p{color:var(--muted);max-width:490px}.breath-copy ul{padding-left:1.15rem;color:var(--muted)}.breath-copy li{margin:.55rem 0}
+    .exam{background:#fff;border-radius:30px;padding:30px;display:grid;grid-template-columns:.72fr 1.28fr;gap:24px;align-items:start}.exam h2{max-width:330px}.checklist{display:grid;gap:10px}.check{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border-radius:14px;background:#f1f5f5;color:var(--muted)}.check input{accent-color:var(--teal);width:18px;height:18px;margin:2px 0 0;flex:none}.check:has(input:checked){background:#e0f2e9;color:#275650}.last-note{margin-top:16px;background:#ffe9d9;padding:18px;border-radius:18px;color:#754b38;font-weight:750}
+    .closing{padding:76px 0 44px;text-align:center}.closing h2{max-width:780px;margin:auto}.closing p{color:var(--muted);font-size:1.08rem}.closing strong{color:var(--blue)}.footer{border-top:1px solid var(--line);padding:20px 0 35px;color:#66758a;font-size:.82rem;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}.sources a{color:#315bdb}.sources{max-width:750px}
+    @media(max-width:760px){.wrap{width:min(100% - 28px,560px)}.nav{height:64px}.nav-links{display:none}.hero{grid-template-columns:1fr;min-height:auto;padding:34px 0 42px;gap:16px}.hero-art{max-width:520px;margin:auto}.hero-art img{border-radius:34px}.hero-copy{text-align:left}.lead{font-size:1.05rem}.section-head{display:block}.section-note{margin-top:12px}.signals,.tools{grid-template-columns:1fr}.signal{min-height:0}.toolbox{padding:26px 18px;border-radius:26px}.toolbox:after{right:10px;font-size:4rem}.tool{min-height:0}.thought{display:block}.thought span{display:block;margin-top:6px}.breath-layout{grid-template-columns:1fr}.breath-panel{min-height:310px}.exam{grid-template-columns:1fr;padding:22px}.exam h2{max-width:unset}section{padding:48px 0}.closing{padding:56px 0 36px}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+  </style>
+</head>
+<body>
+  <a class="skip" href="#icerik">İçeriğe geç</a>
+  <header class="wrap nav">
+    <a class="brand" href="#basla" aria-label="Kaygı Kahramanı ana sayfa"><span class="brand-mark">✦</span><span>Kaygı Kahramanı</span></a>
+    <nav class="nav-links" aria-label="Sayfa bölümleri"><a href="#tanı">Kaygıyı tanı</a><a href="#ipuclari">Mini taktikler</a><a href="#sinav">Sınav günü</a></nav>
+  </header>
+  <main id="icerik">
+    <div class="wrap hero" id="basla">
+      <div class="hero-copy">
+        <div class="pill"><span class="spark">✦</span> LGS yolculuğunda yalnız değilsin</div>
+        <h1>Kaygı geldi diye <span>oyun bitmez.</span></h1>
+        <p class="lead">Sınav heyecanı bazen beyninin “Bu benim için önemli!” deme şeklidir. Onu fark et, küçük adımlarla sakinleş ve bildiklerine yer aç.</p>
+        <div class="actions"><a class="btn" href="#ipuclari">Güç çantamı aç</a><a class="soft-link" href="#tanı">Önce kaygıyı tanı ↓</a></div>
+      </div>
+      <div class="hero-art"><img src="kaygi-kahramani.png" alt="Masasında nefes alarak sakinleşen bir öğrenci ve kaygı bulutunun yıldızlara dönüşmesi"><span class="orbit" aria-hidden="true">☀</span><span class="scribble" aria-hidden="true">〰</span></div>
+    </div>
+
+    <section class="wrap" id="tanı">
+      <div class="section-head"><div><p class="eyebrow">Önce kendini dinle</p><h2>Kaygı bazen nasıl görünür?</h2></div><p class="section-note">Herkeste aynı olmayabilir. Birkaç işaret fark etmek, kendine kızmak yerine destek bulmana yardım eder.</p></div>
+      <div class="signals">
+        <article class="signal"><span class="emoji" aria-hidden="true">💓</span><h3>Vücutta</h3><p>Kalp hızlı atabilir, eller terleyebilir ya da karnında kelebekler uçuşabilir.</p></article>
+        <article class="signal"><span class="emoji" aria-hidden="true">🌪️</span><h3>Düşüncelerde</h3><p>“Ya yapamazsam?” düşüncesi dönüp durabilir; bildiklerin bir anlığına aklına gelmeyebilir.</p></article>
+        <article class="signal"><span class="emoji" aria-hidden="true">🌀</span><h3>Davranışlarda</h3><p>Dersin başına oturmak zorlaşabilir, ertelemek ya da sürekli kontrol etmek isteyebilirsin.</p></article>
+      </div>
+      <div class="notice"><strong>Hatırla:</strong> Bir miktar heyecan normaldir. Kaygı çok yoğunlaşıyor, uzun sürüyor ya da günlük hayatını etkiliyorsa güvendiğin bir yetişkine, öğretmenine veya okul psikolojik danışmanına anlat.</div>
+    </section>
+
+    <section class="wrap" id="ipuclari">
+      <div class="toolbox">
+        <div class="section-head"><div><p class="eyebrow">Küçük adım, büyük destek</p><h2>Güç çantana üç şey atalım</h2></div><p class="section-note">Hepsini aynı anda yapmak zorunda değilsin. Sana uyan bir tanesini seçip dene.</p></div>
+        <div class="tools">
+          <article class="tool"><span class="num">1</span><h3>Planı küçült</h3><p>“Matematik çalışacağım” yerine “10 soru çözüp kontrol edeceğim” de. Sonra kısa bir mola ver.</p></article>
+          <article class="tool"><span class="num">2</span><h3>Düşünceyi güncelle</h3><p>“Kesin yapamayacağım” yerine: “Şu an zorlanıyorum; bir sorudan başlayabilirim.”</p></article>
+          <article class="tool"><span class="num">3</span><h3>Bedenine iyi bak</h3><p>Uyku, su, düzenli yemek, hareket ve keyif aldığın molalar beyninin takım arkadaşıdır.</p></article>
+        </div>
+        <div class="thought"><b>İç sesini takım arkadaşın yap ⚡</b><span>“Her şeyi bilmek zorunda değilim. Hazırlandığım kadarını göstereceğim.”</span></div>
+      </div>
+    </section>
+
+    <section class="wrap" id="nefes">
+      <div class="breath-layout">
+        <div class="breath-copy"><p class="eyebrow">Birlikte deneyelim</p><h2>60 saniyelik nefes molası</h2><p>Ayaklarını yere koy. Omuzlarını serbest bırak. Nefesini zorlamadan, rahatça alıp ver. Daire büyürken al, küçülürken ver. İstersen istediğin an durabilirsin.</p><ul><li>Burnundan yumuşakça nefes al.</li><li>Ağzından daha uzun ve rahatça ver.</li><li>Başın döner veya rahatsız olursan normal nefesine dön.</li></ul></div>
+        <div class="breath-panel" aria-live="polite"><div class="breath-circle" id="breathCircle">Hazır mısın?</div><div class="breath-caption" id="breathCaption">Kısa bir mola da ilerlemedir.</div><button class="breath-btn" id="breathButton" type="button">Başlat · 1 dakika</button><p class="breath-help">Başlamak için düğmeye bas; nefesi tutmak gerekmiyor.</p></div>
+      </div>
+    </section>
+
+    <section class="wrap" id="sinav">
+      <div class="exam">
+        <div><p class="eyebrow">Sınav sabahı planı</p><h2>Bugünkü görev: bildiğini göstermek</h2><p class="section-note">Bir soruda takılırsan, bu bütün sınavın kötü gideceği anlamına gelmez.</p></div>
+        <div><div class="checklist">
+          <label class="check"><input type="checkbox"> <span>Gerekli eşyalarımı önceden hazırladım.</span></label>
+          <label class="check"><input type="checkbox"> <span>Yeterli zaman bırakıp sakin bir başlangıç planladım.</span></label>
+          <label class="check"><input type="checkbox"> <span>Soruyu dikkatle okuyup takıldığımı sonra dönmek üzere işaretleyebilirim.</span></label>
+          <label class="check"><input type="checkbox"> <span>Kendime “Bir sonraki soruya geçebilirim” diye hatırlatacağım.</span></label>
+        </div><div class="last-note">Sen bir sınav sonucundan çok daha fazlasısın. Bir sonraki adımını bugün atıyorsun. 🌱</div></div>
+      </div>
+    </section>
+    <section class="closing wrap"><h2>Kaygı yolcu olabilir.<br><strong>Direksiyonda sen varsın.</strong></h2><p>Şimdi bir yudum su, bir nefes ve sana iyi gelen minicik bir adım.</p></section>
+  </main>
+  <footer class="wrap footer"><span>Kaygı Kahramanı · LGS öğrencileri için mini rehber</span><span class="sources">İçerik dayanağı: <a href="https://orgm.meb.gov.tr/meb_iys_dosyalar/2020_05/22142205_kaygYkitapcYk.pdf" target="_blank" rel="noreferrer">MEB Özel Eğitim ve Rehberlik Hizmetleri Genel Müdürlüğü</a> · <a href="https://www.nhs.uk/mental-health/self-help/guides-tools-and-activities/breathing-exercises-for-stress/" target="_blank" rel="noreferrer">NHS nefes egzersizi rehberi</a></span></footer>
+  <script>
+    const circle=document.getElementById('breathCircle'), caption=document.getElementById('breathCaption'), button=document.getElementById('breathButton');
+    let timer=null, endAt=0, phaseTimer=null, running=false;
+    function stopBreathing(done=false){clearTimeout(timer);clearTimeout(phaseTimer);running=false;circle.className='breath-circle';circle.textContent=done?'Harika!':'Hazır mısın?';caption.textContent=done?'Bu molayı kendine verdin. İstersen bir tur daha yap.':'Kısa bir mola da ilerlemedir.';button.textContent='Yeniden başlat · 1 dakika';}
+    function breathePhase(){if(!running)return;const inhale=circle.dataset.phase!=='in';circle.dataset.phase=inhale?'in':'out';circle.className='breath-circle '+(inhale?'inhale':'exhale');circle.textContent=inhale?'Yumuşakça al':'Rahatça ver';caption.textContent=inhale?'Omuzlarını gevşek bırak.':'Nefesini zorlamadan bırak.';phaseTimer=setTimeout(breathePhase,inhale?4000:6000);}
+    button.addEventListener('click',()=>{if(running){stopBreathing();return}running=true;endAt=Date.now()+60000;button.textContent='Durdur';breathePhase();timer=setTimeout(()=>stopBreathing(true),60000)});
+  </script>
+</body>
+</html>

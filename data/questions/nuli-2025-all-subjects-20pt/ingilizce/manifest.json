@@ -1,0 +1,265 @@
+{
+  "manifestVersion": "1.0",
+  "status": "NEEDS_REVIEW",
+  "published": false,
+  "source": {
+    "sourceId": "MEB-LGS-2025-INGILIZCE",
+    "sourceType": "REAL_LGS",
+    "fileName": "2025 LGS – İngilizce.pdf",
+    "sha256": "85419eecd85df8aa6d99f3fa91525de59e25113732313b558d74aa6c76f61ba5",
+    "examYear": 2025,
+    "educationalPeriod": "2024-2025",
+    "subject": "Yabancı Dil (İngilizce)",
+    "grade": 8,
+    "questionCount": 10,
+    "answerKeyPage": 7
+  },
+  "render": {
+    "dpi": 300,
+    "margin_pt_all_sides": 20.0,
+    "footer_exclusion_pt": 70.0,
+    "content_aware_bbox_margin_pt": 20.0,
+    "reconstructed_from_ocr": false
+  },
+  "questions": [
+    {
+      "id": "MEB-LGS-2025-INGILIZCE-Q01",
+      "questionNumber": 1,
+      "page": 1,
+      "column": "left",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-ingilizce/q-01.png",
+        "clipRectPt": {
+          "x0": 29.994,
+          "y0": 156.0,
+          "x1": 270.965,
+          "y1": 543.934
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "ebca9b827b88d5209bd353230dd43a2a3739528a6f7da3bde43d1e192e4ee1eb"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-INGILIZCE-Q02",
+      "questionNumber": 2,
+      "page": 1,
+      "column": "right",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-ingilizce/q-02.png",
+        "clipRectPt": {
+          "x0": 280.965,
+          "y0": 156.0,
+          "x1": 528.936,
+          "y1": 581.93
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "01d64a399cb77ce6b0a40dbb6d5e06b7550aed7a5621fbe074cbda181c0818f9"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-INGILIZCE-Q03",
+      "questionNumber": 3,
+      "page": 2,
+      "column": "single",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-ingilizce/q-03.png",
+        "clipRectPt": {
+          "x0": 48.991,
+          "y0": 90.0,
+          "x1": 370.956,
+          "y1": 336.96
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "84e02c7ce9b62e8cb889ea8c32856f5c40543decf2275c3b6e7d214c6d16de99"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-INGILIZCE-Q04",
+      "questionNumber": 4,
+      "page": 2,
+      "column": "single",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-ingilizce/q-04.png",
+        "clipRectPt": {
+          "x0": 43.992,
+          "y0": 444.947,
+          "x1": 524.937,
+          "y1": 671.918
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "36117915f6137632484ac95c68df26053830f3cd9916f174f94b52a701e526f1"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-INGILIZCE-Q05",
+      "questionNumber": 5,
+      "page": 3,
+      "column": "single",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-ingilizce/q-05.png",
+        "clipRectPt": {
+          "x0": 29.994,
+          "y0": 90.0,
+          "x1": 522.937,
+          "y1": 400.952
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "cab8ceeb98b5e81949c43577b871bc4b1a28e8f7272458b1a5061b039f8807bf"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-INGILIZCE-Q06",
+      "questionNumber": 6,
+      "page": 4,
+      "column": "single",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-ingilizce/q-06.png",
+        "clipRectPt": {
+          "x0": 44.992,
+          "y0": 99.988,
+          "x1": 546.929,
+          "y1": 367.956
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "5ff510ec2f98b897a49e411b931fb9160b1cb6b65f4d5cfa93921d5521df3130"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-INGILIZCE-Q07",
+      "questionNumber": 7,
+      "page": 4,
+      "column": "single",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-ingilizce/q-07.png",
+        "clipRectPt": {
+          "x0": 45.992,
+          "y0": 447.816,
+          "x1": 522.937,
+          "y1": 703.914
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "74224ab1b69fe2ac0939d0fecc6b12182dd7fb730c3ef2bcf6012de566db4635"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-INGILIZCE-Q08",
+      "questionNumber": 8,
+      "page": 5,
+      "column": "single",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-ingilizce/q-08.png",
+        "clipRectPt": {
+          "x0": 29.994,
+          "y0": 90.0,
+          "x1": 521.937,
+          "y1": 312.963
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "fda87e6d3e261711d80fdc78f512b608e8a1f0cf2760b232589831d89991abea"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-INGILIZCE-Q09",
+      "questionNumber": 9,
+      "page": 5,
+      "column": "single",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-ingilizce/q-09.png",
+        "clipRectPt": {
+          "x0": 28.994,
+          "y0": 415.1,
+          "x1": 491.941,
+          "y1": 685.917
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "0595681742144813855d6942ee61334783822ae4f8c9215a8307fa058f6d0e82"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-INGILIZCE-Q10",
+      "questionNumber": 10,
+      "page": 6,
+      "column": "single",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-ingilizce/q-10.png",
+        "clipRectPt": {
+          "x0": 37.993,
+          "y0": 90.0,
+          "x1": 441.947,
+          "y1": 484.942
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "0c50bfeca3d842c4e1722153689623a8ba34d70c08644d538877f29b1e32b1f4"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    }
+  ],
+  "warnings": [],
+  "answerKeyCandidates": {
+    "1": "A",
+    "2": "C",
+    "3": "D",
+    "4": "B",
+    "5": "C",
+    "6": "A",
+    "7": "C",
+    "8": "D",
+    "9": "D",
+    "10": "B"
+  },
+  "summary": {
+    "pagesProcessed": 6,
+    "questionsExtracted": 10,
+    "expectedQuestions": 10,
+    "ambiguousPages": 0
+  }
+}

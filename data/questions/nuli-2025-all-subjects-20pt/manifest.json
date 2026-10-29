@@ -1,0 +1,1532 @@
+{
+  "manifestVersion": "1.0",
+  "status": "NEEDS_REVIEW",
+  "published": false,
+  "subjects": [
+    {
+      "manifestVersion": "1.0",
+      "status": "NEEDS_REVIEW",
+      "published": false,
+      "source": {
+        "sourceId": "MEB-LGS-2025-TURKCE",
+        "sourceType": "REAL_LGS",
+        "fileName": "2025 LGS – Türkçe.pdf",
+        "sha256": "b99e574c7547bbf4b57347141556e567cd6af441cbf136864973b754179cb48f",
+        "examYear": 2025,
+        "educationalPeriod": "2024-2025",
+        "subject": "Türkçe",
+        "grade": 8,
+        "questionCount": 20,
+        "answerKeyPage": 13
+      },
+      "render": {
+        "dpi": 300,
+        "margin_pt_all_sides": 20.0,
+        "footer_exclusion_pt": 70.0,
+        "content_aware_bbox_margin_pt": 20.0,
+        "reconstructed_from_ocr": false
+      },
+      "questions": [
+        {
+          "id": "MEB-LGS-2025-TURKCE-Q01",
+          "questionNumber": 1,
+          "page": 1,
+          "column": "left",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-turkce/q-01.png",
+            "clipRectPt": {
+              "x0": 29.994,
+              "y0": 156.0,
+              "x1": 270.965,
+              "y1": 475.943
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "3ab09a38131fff13b3544a1eb033c69ac62c559ce69fff8f9cc9a88f58d29f78"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-TURKCE-Q02",
+          "questionNumber": 2,
+          "page": 1,
+          "column": "right",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-turkce/q-02.png",
+            "clipRectPt": {
+              "x0": 280.965,
+              "y0": 156.0,
+              "x1": 527.936,
+              "y1": 461.945
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "5d78355c835dacbfc6ff561595efd429d862610e73c2ae7882239ec387e7ed08"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-TURKCE-Q03",
+          "questionNumber": 3,
+          "page": 2,
+          "column": "left",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-turkce/q-03.png",
+            "clipRectPt": {
+              "x0": 44.992,
+              "y0": 90.0,
+              "x1": 284.964,
+              "y1": 289.966
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "93e37802b9c0af1b0e750d56b8d9f1e655a10adf8814e771d6be9f002b946812"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-TURKCE-Q04",
+          "questionNumber": 4,
+          "page": 2,
+          "column": "right",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-turkce/q-04.png",
+            "clipRectPt": {
+              "x0": 294.964,
+              "y0": 90.0,
+              "x1": 543.934,
+              "y1": 350.959
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "73344da4962327567b699425a320d68f2373b3491c47fab719ae404ef497d654"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-TURKCE-Q05",
+          "questionNumber": 5,
+          "page": 3,
+          "column": "left",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-turkce/q-05.png",
+            "clipRectPt": {
+              "x0": 29.994,
+              "y0": 90.0,
+              "x1": 270.965,
+              "y1": 274.968
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "0b3eb09aa44bfa58fa29fcb820efa3a864ec440a0825bcf875df58a14b1a47ad"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-TURKCE-Q06",
+          "questionNumber": 6,
+          "page": 3,
+          "column": "right",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-turkce/q-06.png",
+            "clipRectPt": {
+              "x0": 280.965,
+              "y0": 90.0,
+              "x1": 528.936,
+              "y1": 578.93
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "faa3e876a1e9f642561b4fca3d156fc493de59ba58c04f8a730eb557befc825b"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-TURKCE-Q07",
+          "questionNumber": 7,
+          "page": 4,
+          "column": "left",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-turkce/q-07.png",
+            "clipRectPt": {
+              "x0": 45.992,
+              "y0": 90.0,
+              "x1": 284.964,
+              "y1": 394.953
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "b437d10538654f13583b31a431bfacd2cb85299c7c8e3c021369cf5d68dc6732"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-TURKCE-Q08",
+          "questionNumber": 8,
+          "page": 4,
+          "column": "right",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-turkce/q-08.png",
+            "clipRectPt": {
+              "x0": 294.964,
+              "y0": 90.0,
+              "x1": 542.935,
+              "y1": 496.94
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "cd434e9b056bdff2bf0c6861c93a34e7fb677e879b2f005874e6d55524e8619c"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-TURKCE-Q09",
+          "questionNumber": 9,
+          "page": 5,
+          "column": "left",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-turkce/q-09.png",
+            "clipRectPt": {
+              "x0": 28.994,
+              "y0": 90.0,
+              "x1": 270.965,
+              "y1": 558.933
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "aa03c2c41a71bba8f8e5100bbbfb6a77b27f706ed24c9e38655977356c55638a"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-TURKCE-Q10",
+          "questionNumber": 10,
+          "page": 5,
+          "column": "right",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-turkce/q-10.png",
+            "clipRectPt": {
+              "x0": 280.965,
+              "y0": 90.0,
+              "x1": 527.936,
+              "y1": 313.963
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "0a9bf6ffac60c7a9c505b2d8f7aa35989f64bbf9aa84c182cee658f4f27f7424"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-TURKCE-Q11",
+          "questionNumber": 11,
+          "page": 6,
+          "column": "left",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-turkce/q-11.png",
+            "clipRectPt": {
+              "x0": 38.993,
+              "y0": 90.0,
+              "x1": 284.964,
+              "y1": 495.94
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "645a6261fd200a333abb3a2b1d2e9fdf1bca521dff963010ba50d8f9d5477113"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-TURKCE-Q12",
+          "questionNumber": 12,
+          "page": 6,
+          "column": "right",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-turkce/q-12.png",
+            "clipRectPt": {
+              "x0": 294.964,
+              "y0": 90.0,
+              "x1": 541.935,
+              "y1": 428.949
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "b9cc09eac6bcb941a50b01785ef70c706bdaa74b3cd39a1a31abc9d698936f7b"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-TURKCE-Q13",
+          "questionNumber": 13,
+          "page": 7,
+          "column": "single",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-turkce/q-13.png",
+            "clipRectPt": {
+              "x0": 23.994,
+              "y0": 90.0,
+              "x1": 528.936,
+              "y1": 386.954
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "6bea38161516612ff397f7e2429900dad7f277aea540be81118e3c06812b3f8d"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-TURKCE-Q14",
+          "questionNumber": 14,
+          "page": 8,
+          "column": "single",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-turkce/q-14.png",
+            "clipRectPt": {
+              "x0": 37.993,
+              "y0": 90.0,
+              "x1": 541.935,
+              "y1": 627.924
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "5cab4a3e9b64891be8b29b343a7da44649dd0312e12113bb88b8ca3030d983ee"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-TURKCE-Q15",
+          "questionNumber": 15,
+          "page": 9,
+          "column": "single",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-turkce/q-15.png",
+            "clipRectPt": {
+              "x0": 23.994,
+              "y0": 90.0,
+              "x1": 522.937,
+              "y1": 591.928
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "751190172d5bb900016e264bf0672f480300036bb81b29e51cd2aed04b9f809d"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-TURKCE-Q16",
+          "questionNumber": 16,
+          "page": 10,
+          "column": "single",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-turkce/q-16.png",
+            "clipRectPt": {
+              "x0": 37.993,
+              "y0": 90.0,
+              "x1": 542.935,
+              "y1": 684.917
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "8ec3e4082f53b4a5783ba35b418d470bda37c4414efbfcd433c9ecaab57e4bb2"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-TURKCE-Q17",
+          "questionNumber": 17,
+          "page": 11,
+          "column": "left",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-turkce/q-17.png",
+            "clipRectPt": {
+              "x0": 23.994,
+              "y0": 90.0,
+              "x1": 270.965,
+              "y1": 298.965
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "734b6de2a4390d1e763261ea0947fd1e62af39c529ba68d48a26f8267d5e20c0"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-TURKCE-Q18",
+          "questionNumber": 18,
+          "page": 11,
+          "column": "right",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-turkce/q-18.png",
+            "clipRectPt": {
+              "x0": 280.965,
+              "y0": 90.0,
+              "x1": 529.936,
+              "y1": 246.972
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "9594d8154d2e31f435c48194d2e32716c904a73c1d5b148527063e6e5521700f"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-TURKCE-Q19",
+          "questionNumber": 19,
+          "page": 12,
+          "column": "left",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-turkce/q-19.png",
+            "clipRectPt": {
+              "x0": 37.993,
+              "y0": 90.0,
+              "x1": 284.964,
+              "y1": 391.953
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "a49f36cad90cecca6bad1d7ed7996eb7330cf5d47064cb2aced69c0cde50f947"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-TURKCE-Q20",
+          "questionNumber": 20,
+          "page": 12,
+          "column": "right",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-turkce/q-20.png",
+            "clipRectPt": {
+              "x0": 294.964,
+              "y0": 90.0,
+              "x1": 541.935,
+              "y1": 325.962
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "1d99b345f86298491b7a77c9fee142cdcc55ce835c7c69be8ebe31810514b7bb"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        }
+      ],
+      "warnings": [],
+      "answerKeyCandidates": {
+        "1": "B",
+        "2": "A",
+        "3": "C",
+        "4": "D",
+        "5": "C",
+        "6": "D",
+        "7": "B",
+        "8": "D",
+        "9": "C",
+        "10": "A",
+        "11": "D",
+        "12": "C",
+        "13": "D",
+        "14": "A",
+        "15": "B",
+        "16": "C",
+        "17": "C",
+        "18": "B",
+        "19": "A",
+        "20": "B"
+      },
+      "summary": {
+        "pagesProcessed": 12,
+        "questionsExtracted": 20,
+        "expectedQuestions": 20,
+        "ambiguousPages": 0
+      }
+    },
+    {
+      "manifestVersion": "1.0",
+      "status": "NEEDS_REVIEW",
+      "published": false,
+      "source": {
+        "sourceId": "MEB-LGS-2025-FEN-BILIMLERI",
+        "sourceType": "REAL_LGS",
+        "fileName": "2025 LGS – Fen Bilimleri.pdf",
+        "sha256": "fb65496204e73ba000e2fb7689aaedd0e6888eaa0a52c9396c7a6a1f4bb25fc4",
+        "examYear": 2025,
+        "educationalPeriod": "2024-2025",
+        "subject": "Fen Bilimleri",
+        "grade": 8,
+        "questionCount": 20,
+        "answerKeyPage": 15
+      },
+      "render": {
+        "dpi": 300,
+        "margin_pt_all_sides": 20.0,
+        "footer_exclusion_pt": 70.0,
+        "content_aware_bbox_margin_pt": 20.0,
+        "reconstructed_from_ocr": false
+      },
+      "questions": [
+        {
+          "id": "MEB-LGS-2025-FEN-BILIMLERI-Q01",
+          "questionNumber": 1,
+          "page": 1,
+          "column": "single",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-fen-bilimleri/q-01.png",
+            "clipRectPt": {
+              "x0": 29.994,
+              "y0": 156.0,
+              "x1": 528.936,
+              "y1": 577.93
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "0f09f6042bf0418f208307b2f1660531081ac7d45ce904b7ef519be67e0e97b2"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-FEN-BILIMLERI-Q02",
+          "questionNumber": 2,
+          "page": 2,
+          "column": "left",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-fen-bilimleri/q-02.png",
+            "clipRectPt": {
+              "x0": 44.992,
+              "y0": 90.0,
+              "x1": 284.964,
+              "y1": 481.942
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "91b85c41d88a4f2c27342d8ab74c577c0dbe78e282a7a779ab186a1ad859ee5d"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-FEN-BILIMLERI-Q03",
+          "questionNumber": 3,
+          "page": 2,
+          "column": "right",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-fen-bilimleri/q-03.png",
+            "clipRectPt": {
+              "x0": 294.964,
+              "y0": 90.0,
+              "x1": 543.934,
+              "y1": 469.944
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "69265ce887e8f40634583c804637af12339b34aea97a66241a136362b528a998"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-FEN-BILIMLERI-Q04",
+          "questionNumber": 4,
+          "page": 3,
+          "column": "left",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-fen-bilimleri/q-04.png",
+            "clipRectPt": {
+              "x0": 28.994,
+              "y0": 90.0,
+              "x1": 270.965,
+              "y1": 587.929
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "7650b30d86b9832ee80e4992ab725f82f51b46fac32cdfd73e5d518d897df6c5"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-FEN-BILIMLERI-Q05",
+          "questionNumber": 5,
+          "page": 3,
+          "column": "right",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-fen-bilimleri/q-05.png",
+            "clipRectPt": {
+              "x0": 280.965,
+              "y0": 90.0,
+              "x1": 529.936,
+              "y1": 606.926
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "23a06b5fc83328ea9f19f78fa8aa227f450eb88501e13d9f466878031f5e2fb3"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-FEN-BILIMLERI-Q06",
+          "questionNumber": 6,
+          "page": 4,
+          "column": "single",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-fen-bilimleri/q-06.png",
+            "clipRectPt": {
+              "x0": 44.992,
+              "y0": 90.0,
+              "x1": 539.935,
+              "y1": 493.941
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "0d62961c13e6468d9c504fed79d943faa24eddb432620f29739546ccbfac91fd"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-FEN-BILIMLERI-Q07",
+          "questionNumber": 7,
+          "page": 5,
+          "column": "left",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-fen-bilimleri/q-07.png",
+            "clipRectPt": {
+              "x0": 30.994,
+              "y0": 90.0,
+              "x1": 270.965,
+              "y1": 494.941
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "f2cb1fac67659dee82c80e6491b96e922663df00cb4112774144449bd0d07dca"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-FEN-BILIMLERI-Q08",
+          "questionNumber": 8,
+          "page": 5,
+          "column": "right",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-fen-bilimleri/q-08.png",
+            "clipRectPt": {
+              "x0": 280.965,
+              "y0": 90.0,
+              "x1": 529.936,
+              "y1": 551.933
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "3b2af769627b6882a515e0ea991d2d50b99a217af0fdcf0f835fd81219c0c633"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-FEN-BILIMLERI-Q09",
+          "questionNumber": 9,
+          "page": 6,
+          "column": "single",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-fen-bilimleri/q-09.png",
+            "clipRectPt": {
+              "x0": 43.992,
+              "y0": 90.0,
+              "x1": 543.934,
+              "y1": 596.928
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "772cc804002011c7261e7784ed92bd32d0ffb1972e75ebc8d01473923cb975ab"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-FEN-BILIMLERI-Q10",
+          "questionNumber": 10,
+          "page": 7,
+          "column": "single",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-fen-bilimleri/q-10.png",
+            "clipRectPt": {
+              "x0": 23.994,
+              "y0": 90.0,
+              "x1": 529.936,
+              "y1": 433.948
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "3e66546aae3c929f5a5ded0d0b8e8c3de5ea2d02bd676534b180f5de79a07602"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-FEN-BILIMLERI-Q11",
+          "questionNumber": 11,
+          "page": 8,
+          "column": "single",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-fen-bilimleri/q-11.png",
+            "clipRectPt": {
+              "x0": 38.993,
+              "y0": 90.0,
+              "x1": 537.935,
+              "y1": 529.936
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "c9e6172a5ea85e80c2314f126a8373d5bada9baea28aca6bc70a346251fc27f3"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-FEN-BILIMLERI-Q12",
+          "questionNumber": 12,
+          "page": 9,
+          "column": "single",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-fen-bilimleri/q-12.png",
+            "clipRectPt": {
+              "x0": 23.994,
+              "y0": 90.0,
+              "x1": 527.936,
+              "y1": 515.938
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "caaa47b53c65548687bb78134f3d608d7fa5dc57628cec29077d0918fc37ed48"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-FEN-BILIMLERI-Q13",
+          "questionNumber": 13,
+          "page": 10,
+          "column": "single",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-fen-bilimleri/q-13.png",
+            "clipRectPt": {
+              "x0": 37.993,
+              "y0": 90.0,
+              "x1": 538.935,
+              "y1": 586.929
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "a09c0d5acd4f8357492b4eab21bb62e4fe8d0f58b721546f48aeb691c07bc9e4"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-FEN-BILIMLERI-Q14",
+          "questionNumber": 14,
+          "page": 11,
+          "column": "single",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-fen-bilimleri/q-14.png",
+            "clipRectPt": {
+              "x0": 23.994,
+              "y0": 90.0,
+              "x1": 527.936,
+              "y1": 648.921
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "83d97917cab14d7b3cf7df680831c4a5f3313202ee6831aec0b63d4feb8a0a99"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-FEN-BILIMLERI-Q15",
+          "questionNumber": 15,
+          "page": 12,
+          "column": "left",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-fen-bilimleri/q-15.png",
+            "clipRectPt": {
+              "x0": 38.993,
+              "y0": 90.0,
+              "x1": 284.964,
+              "y1": 718.912
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "fbe90cb73f1668b4d7e617cf473a8fea3243f6ad75be350efca13cf293642a36"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-FEN-BILIMLERI-Q16",
+          "questionNumber": 16,
+          "page": 12,
+          "column": "right",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-fen-bilimleri/q-16.png",
+            "clipRectPt": {
+              "x0": 294.964,
+              "y0": 90.0,
+              "x1": 544.934,
+              "y1": 388.954
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "f1bc5c9af3a735e8d840f4471104909a480b65838283a67c57249e5efd60dd0b"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-FEN-BILIMLERI-Q17",
+          "questionNumber": 17,
+          "page": 13,
+          "column": "left",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-fen-bilimleri/q-17.png",
+            "clipRectPt": {
+              "x0": 23.994,
+              "y0": 90.0,
+              "x1": 270.965,
+              "y1": 496.94
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "35912705235b9b07e24ce0dc75a4a0a404bdbda44848d496e7c4b1b5ea292797"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-FEN-BILIMLERI-Q18",
+          "questionNumber": 18,
+          "page": 13,
+          "column": "right",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-fen-bilimleri/q-18.png",
+            "clipRectPt": {
+              "x0": 280.965,
+              "y0": 90.0,
+              "x1": 530.936,
+              "y1": 516.938
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "f895e88c85bf363e613c5ceffe7d55a479844814143b2b219348d8863e84b26e"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-FEN-BILIMLERI-Q19",
+          "questionNumber": 19,
+          "page": 14,
+          "column": "left",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-fen-bilimleri/q-19.png",
+            "clipRectPt": {
+              "x0": 38.993,
+              "y0": 90.0,
+              "x1": 284.964,
+              "y1": 440.947
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "44c7af43741b83b6e46657cab824c374b24f944c189c2828601616088ad33142"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-FEN-BILIMLERI-Q20",
+          "questionNumber": 20,
+          "page": 14,
+          "column": "right",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-fen-bilimleri/q-20.png",
+            "clipRectPt": {
+              "x0": 294.964,
+              "y0": 90.0,
+              "x1": 543.934,
+              "y1": 400.952
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "42783594e85a56613b18e8173042d075473bfd3c037c5a4c7e530aaaef0eb801"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        }
+      ],
+      "warnings": [],
+      "answerKeyCandidates": {
+        "1": "A",
+        "2": "C",
+        "3": "D",
+        "4": "C",
+        "5": "B",
+        "6": "D",
+        "7": "A",
+        "8": "D",
+        "9": "B",
+        "10": "C",
+        "11": "C",
+        "12": "B",
+        "13": "A",
+        "14": "D",
+        "15": "A",
+        "16": "C",
+        "17": "B",
+        "18": "C",
+        "19": "A",
+        "20": "D"
+      },
+      "summary": {
+        "pagesProcessed": 14,
+        "questionsExtracted": 20,
+        "expectedQuestions": 20,
+        "ambiguousPages": 0
+      }
+    },
+    {
+      "manifestVersion": "1.0",
+      "status": "NEEDS_REVIEW",
+      "published": false,
+      "source": {
+        "sourceId": "MEB-LGS-2025-INGILIZCE",
+        "sourceType": "REAL_LGS",
+        "fileName": "2025 LGS – İngilizce.pdf",
+        "sha256": "85419eecd85df8aa6d99f3fa91525de59e25113732313b558d74aa6c76f61ba5",
+        "examYear": 2025,
+        "educationalPeriod": "2024-2025",
+        "subject": "Yabancı Dil (İngilizce)",
+        "grade": 8,
+        "questionCount": 10,
+        "answerKeyPage": 7
+      },
+      "render": {
+        "dpi": 300,
+        "margin_pt_all_sides": 20.0,
+        "footer_exclusion_pt": 70.0,
+        "content_aware_bbox_margin_pt": 20.0,
+        "reconstructed_from_ocr": false
+      },
+      "questions": [
+        {
+          "id": "MEB-LGS-2025-INGILIZCE-Q01",
+          "questionNumber": 1,
+          "page": 1,
+          "column": "left",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-ingilizce/q-01.png",
+            "clipRectPt": {
+              "x0": 29.994,
+              "y0": 156.0,
+              "x1": 270.965,
+              "y1": 543.934
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "ebca9b827b88d5209bd353230dd43a2a3739528a6f7da3bde43d1e192e4ee1eb"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-INGILIZCE-Q02",
+          "questionNumber": 2,
+          "page": 1,
+          "column": "right",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-ingilizce/q-02.png",
+            "clipRectPt": {
+              "x0": 280.965,
+              "y0": 156.0,
+              "x1": 528.936,
+              "y1": 581.93
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "01d64a399cb77ce6b0a40dbb6d5e06b7550aed7a5621fbe074cbda181c0818f9"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-INGILIZCE-Q03",
+          "questionNumber": 3,
+          "page": 2,
+          "column": "single",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-ingilizce/q-03.png",
+            "clipRectPt": {
+              "x0": 48.991,
+              "y0": 90.0,
+              "x1": 370.956,
+              "y1": 336.96
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "84e02c7ce9b62e8cb889ea8c32856f5c40543decf2275c3b6e7d214c6d16de99"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-INGILIZCE-Q04",
+          "questionNumber": 4,
+          "page": 2,
+          "column": "single",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-ingilizce/q-04.png",
+            "clipRectPt": {
+              "x0": 43.992,
+              "y0": 444.947,
+              "x1": 524.937,
+              "y1": 671.918
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "36117915f6137632484ac95c68df26053830f3cd9916f174f94b52a701e526f1"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-INGILIZCE-Q05",
+          "questionNumber": 5,
+          "page": 3,
+          "column": "single",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-ingilizce/q-05.png",
+            "clipRectPt": {
+              "x0": 29.994,
+              "y0": 90.0,
+              "x1": 522.937,
+              "y1": 400.952
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "cab8ceeb98b5e81949c43577b871bc4b1a28e8f7272458b1a5061b039f8807bf"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-INGILIZCE-Q06",
+          "questionNumber": 6,
+          "page": 4,
+          "column": "single",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-ingilizce/q-06.png",
+            "clipRectPt": {
+              "x0": 44.992,
+              "y0": 99.988,
+              "x1": 546.929,
+              "y1": 367.956
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "5ff510ec2f98b897a49e411b931fb9160b1cb6b65f4d5cfa93921d5521df3130"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-INGILIZCE-Q07",
+          "questionNumber": 7,
+          "page": 4,
+          "column": "single",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-ingilizce/q-07.png",
+            "clipRectPt": {
+              "x0": 45.992,
+              "y0": 447.816,
+              "x1": 522.937,
+              "y1": 703.914
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "74224ab1b69fe2ac0939d0fecc6b12182dd7fb730c3ef2bcf6012de566db4635"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-INGILIZCE-Q08",
+          "questionNumber": 8,
+          "page": 5,
+          "column": "single",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-ingilizce/q-08.png",
+            "clipRectPt": {
+              "x0": 29.994,
+              "y0": 90.0,
+              "x1": 521.937,
+              "y1": 312.963
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "fda87e6d3e261711d80fdc78f512b608e8a1f0cf2760b232589831d89991abea"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-INGILIZCE-Q09",
+          "questionNumber": 9,
+          "page": 5,
+          "column": "single",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-ingilizce/q-09.png",
+            "clipRectPt": {
+              "x0": 28.994,
+              "y0": 415.1,
+              "x1": 491.941,
+              "y1": 685.917
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "0595681742144813855d6942ee61334783822ae4f8c9215a8307fa058f6d0e82"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-INGILIZCE-Q10",
+          "questionNumber": 10,
+          "page": 6,
+          "column": "single",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-ingilizce/q-10.png",
+            "clipRectPt": {
+              "x0": 37.993,
+              "y0": 90.0,
+              "x1": 441.947,
+              "y1": 484.942
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "0c50bfeca3d842c4e1722153689623a8ba34d70c08644d538877f29b1e32b1f4"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        }
+      ],
+      "warnings": [],
+      "answerKeyCandidates": {
+        "1": "A",
+        "2": "C",
+        "3": "D",
+        "4": "B",
+        "5": "C",
+        "6": "A",
+        "7": "C",
+        "8": "D",
+        "9": "D",
+        "10": "B"
+      },
+      "summary": {
+        "pagesProcessed": 6,
+        "questionsExtracted": 10,
+        "expectedQuestions": 10,
+        "ambiguousPages": 0
+      }
+    },
+    {
+      "manifestVersion": "1.0",
+      "status": "NEEDS_REVIEW",
+      "published": false,
+      "source": {
+        "sourceId": "MEB-LGS-2025-INKILAP-TARIHI",
+        "sourceType": "REAL_LGS",
+        "fileName": "2025 LGS – İnkılap Tarihi.pdf",
+        "sha256": "e266c68618e8c952662d4c7dfc3989e70025783c922c1a2e542583c14169d7f2",
+        "examYear": 2025,
+        "educationalPeriod": "2024-2025",
+        "subject": "T.C. İnkılap Tarihi ve Atatürkçülük",
+        "grade": 8,
+        "questionCount": 10,
+        "answerKeyPage": 6
+      },
+      "render": {
+        "dpi": 300,
+        "margin_pt_all_sides": 20.0,
+        "footer_exclusion_pt": 70.0,
+        "content_aware_bbox_margin_pt": 20.0,
+        "reconstructed_from_ocr": false
+      },
+      "questions": [
+        {
+          "id": "MEB-LGS-2025-INKILAP-TARIHI-Q01",
+          "questionNumber": 1,
+          "page": 1,
+          "column": "left",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-inkilap-tarihi/q-01.png",
+            "clipRectPt": {
+              "x0": 30.994,
+              "y0": 156.0,
+              "x1": 270.965,
+              "y1": 302.965
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "418f46a3b8b37cf3cdabdec97922cc30e38580d51d4c426a8486c8982011e46e"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-INKILAP-TARIHI-Q02",
+          "questionNumber": 2,
+          "page": 1,
+          "column": "left",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-inkilap-tarihi/q-02.png",
+            "clipRectPt": {
+              "x0": 30.994,
+              "y0": 405.147,
+              "x1": 270.965,
+              "y1": 689.916
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "33750d75a3738bd1b20ab616c0a1f6bf700666c904ce079b9a315a559691974c"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-INKILAP-TARIHI-Q03",
+          "questionNumber": 3,
+          "page": 1,
+          "column": "right",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-inkilap-tarihi/q-03.png",
+            "clipRectPt": {
+              "x0": 280.965,
+              "y0": 156.0,
+              "x1": 526.937,
+              "y1": 526.937
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "ae08f5072b5feb3cfe412e5aa4fbbd7a58c2fe044800fb30ac97dfb91cd5932d"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-INKILAP-TARIHI-Q04",
+          "questionNumber": 4,
+          "page": 2,
+          "column": "single",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-inkilap-tarihi/q-04.png",
+            "clipRectPt": {
+              "x0": 43.992,
+              "y0": 90.0,
+              "x1": 531.936,
+              "y1": 628.924
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "8098664b2de6151181980cace47c982aa08819bd6939d4600b27cae91abced4a"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-INKILAP-TARIHI-Q05",
+          "questionNumber": 5,
+          "page": 3,
+          "column": "left",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-inkilap-tarihi/q-05.png",
+            "clipRectPt": {
+              "x0": 29.994,
+              "y0": 90.0,
+              "x1": 270.965,
+              "y1": 380.955
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "99c98af257faa656dea85c21e72c52b90fe538c43e6c5a5cfab95ee32d922c63"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-INKILAP-TARIHI-Q06",
+          "questionNumber": 6,
+          "page": 3,
+          "column": "right",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-inkilap-tarihi/q-06.png",
+            "clipRectPt": {
+              "x0": 280.965,
+              "y0": 90.0,
+              "x1": 528.936,
+              "y1": 383.954
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "055bd902a2930828be50ccdf9e8c4542dd8305a5c8853e4d2cc7e53fbc1efbc2"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-INKILAP-TARIHI-Q07",
+          "questionNumber": 7,
+          "page": 4,
+          "column": "left",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-inkilap-tarihi/q-07.png",
+            "clipRectPt": {
+              "x0": 45.992,
+              "y0": 90.0,
+              "x1": 284.964,
+              "y1": 429.949
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "faf96ef2e55e0321b075a277e8d95af64baa8771e00938e924b834608e3746bc"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-INKILAP-TARIHI-Q08",
+          "questionNumber": 8,
+          "page": 4,
+          "column": "right",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-inkilap-tarihi/q-08.png",
+            "clipRectPt": {
+              "x0": 294.964,
+              "y0": 90.0,
+              "x1": 541.935,
+              "y1": 310.964
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "1eec6fccd283248ccb9068669ab940f12eff18c033afe3e0f660233f132bf642"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-INKILAP-TARIHI-Q09",
+          "questionNumber": 9,
+          "page": 5,
+          "column": "single",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-inkilap-tarihi/q-09.png",
+            "clipRectPt": {
+              "x0": 29.994,
+              "y0": 99.988,
+              "x1": 529.936,
+              "y1": 404.952
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "595fd77345e450a6e213109e825abe9dda4bfc382ad58feceb4719254b0667cf"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        },
+        {
+          "id": "MEB-LGS-2025-INKILAP-TARIHI-Q10",
+          "questionNumber": 10,
+          "page": 5,
+          "column": "single",
+          "representation": "IMAGE_BACKED",
+          "visual": {
+            "publicPath": "/pilot-2025-inkilap-tarihi/q-10.png",
+            "clipRectPt": {
+              "x0": 23.994,
+              "y0": 455.969,
+              "x1": 527.936,
+              "y1": 649.921
+            },
+            "renderDpi": 300,
+            "authority": "ORIGINAL_MEB_PDF",
+            "reconstructedFromOcr": false,
+            "assetSha256": "50348111dc2fa99e5e1c7e1768a1959a69b3e71515bc6df4d3468ca7fabf48d4"
+          },
+          "status": "NEEDS_REVIEW",
+          "published": false
+        }
+      ],
+      "warnings": [],
+      "answerKeyCandidates": {
+        "1": "C",
+        "2": "A",
+        "3": "D",
+        "4": "B",
+        "5": "A",
+        "6": "D",
+        "7": "C",
+        "8": "B",
+        "9": "B",
+        "10": "D"
+      },
+      "summary": {
+        "pagesProcessed": 5,
+        "questionsExtracted": 10,
+        "expectedQuestions": 10,
+        "ambiguousPages": 0
+      }
+    }
+  ],
+  "summary": {
+    "subjects": 4,
+    "questionsExtracted": 60,
+    "expectedQuestions": 60
+  }
+}

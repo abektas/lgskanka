@@ -1,8 +1,7 @@
 name: gemini-review
 
 # Faz 1 kapsami: YALNIZCA PR teknik incelemesi.
-# Cline tarafi bu fazda DEGISTIRILMEZ — mevcut yerel watcher (systemd)
-# kanitlanmis haliyle calismaya devam eder.
+# Uygulama tarafi bu fazda DEGISTIRILMEZ.
 #
 # Neden `pull_request` ve `pull_request_target` degil?
 #   `pull_request_target` repo secret'larini fork PR'larina da acar ve

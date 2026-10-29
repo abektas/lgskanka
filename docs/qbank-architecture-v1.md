@@ -219,9 +219,11 @@ The conceptual relational model is:
 
 Canonical source content and student-performance data remain logically separated.
 
-## 12. 2022 pilot rule
+## 12. 2018–2026 corpus rule
 
-The 2022 Sayısal pilot remains the first controlled corpus. Do not expand to the full 2018-2026 corpus until the pilot passes source-fidelity, provenance, validation, human-review, and local student-flow checks.
+The target QBANK covers all official LGS questions from 2018 through 2026, including the relevant official booklets and answer keys. The 2022 Sayısal pilot is the first controlled quality gate for the extractor, representation model, AI-assisted analysis, and human-review workflow; it is not the final corpus boundary.
+
+After the pilot gate passes, scale year-by-year and booklet-by-booklet. Every source retains its own registry entry, SHA-256, extraction manifest, review queue, validation state, and publication decision. Missing source years are reported as source gaps and are never filled with invented content.
 
 Known 2022 blockers from the previous audit include incomplete source fidelity, missing answer verification, and visual/structured representation decisions. The repair/review process must preserve those gates rather than bypass them.
 

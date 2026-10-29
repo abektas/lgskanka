@@ -8,7 +8,7 @@ Kurallar:
 - Idempotent: ayni sonuc (head sha + status) zaten yorumlandiysa tekrar
   yorum yazilmaz. Bu, `synchronize` event'inin tekrarinda spam'i onler.
 - Otomatik merge/deploy YOK; yalnizca yorum ve etiket.
-- FIX_REQUIRED icin otomatik yeni Cline kosusu YOK (Faz 1 kapsami disi).
+- FIX_REQUIRED icin otomatik yeni kosu YOK (Faz 1 kapsami disi).
   Otomasyon burada durur, insan devreye girer.
 - Tum alt islemler arguman dizisiyle (shell yok).
 """

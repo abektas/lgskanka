@@ -6,11 +6,11 @@ import { Icon } from "./icons";
 import { MemoryGame } from "./memory-game";
 import { Mini2048 } from "./mini-2048";
 import { LgsRunner } from "./lgs-runner";
+import { SpeedGame } from "./speed-game";
 import { useGameRights } from "./use-game-rights";
 import { games, memoryPairs } from "../data/content";
 import { learner } from "../data/nav";
 
-/** Plan §38: her oyun için kısa açıklama. */
 const rules: Record<string, string> = {
   "Hafıza Kartları": "Terimler ile anlamlarını eşleştir. Yanlış eşleşmede kart geri kapanır, süre işler.",
   "Matematik 2048": "Düşen taşları sağa-sola kaydır; ↓ bir kare indirir, boşluk hızlı bırakır, C tutar. Eşit gruplar ×2/×4/×8 birleşip zincir oluşturur.",
@@ -18,23 +18,70 @@ const rules: Record<string, string> = {
   "Hız Oyunu": "30 saniyede mümkün olduğunca çok doğru cevap ver. Hız kadar doğruluk da puanlanır.",
 };
 
-/** Henüz yazılmamış oyunlar. */
-const plannedGames = new Set(["Hız Oyunu"]);
+const plannedGames = new Set<string>();
 
-/** Sağlayıcı bilgisi: XP → oyun süresi. */
 const lockedCopy: Record<string, string> = {
   xp: "XP eşiğinin altındasın. Soru çözerek XP kazandıkça oyun süresi açılır.",
   rights: "Bugünkü oyun hakkın doldu. Yarın tekrar oynayabilirsin.",
   time: "Bugünkü oyun süren doldu. Yarın tekrar oynayabilirsin.",
 };
 
-/**
- * Oyun merkezi — plan §38.
- *
- * Hafıza Kartları (§38.1) ve Mini 2048 (§38.2) gerçek oyunlardır; ikisi de aynı
- * hak/süre ekonomisini kullanır (`useGameRights`) ve XP kazandırmaz.
- * LGS Runner (§38) da aynı hak/süre ekonomisini kullanır; Hız Oyunu plan aşamasındadır.
- */
+function renderGameComponent(
+  openGame: string,
+  roundKey: number,
+  rights: number,
+  remainingSeconds: number,
+  startRound: () => void,
+  recordRound: (seconds: number) => void,
+  setOpenGame: (name: string | null) => void
+) {
+  switch (openGame) {
+    case "Hafıza Kartları":
+      return (
+        <MemoryGame
+          key={roundKey}
+          pairs={memoryPairs}
+          rightsLeft={rights}
+          remainingSeconds={remainingSeconds}
+          onRoundStart={startRound}
+          onRoundEnd={recordRound}
+          onExit={() => setOpenGame(null)}
+        />
+      );
+    case "LGS Runner":
+      return (
+        <LgsRunner
+          key={roundKey}
+          rightsLeft={rights}
+          remainingSeconds={remainingSeconds}
+          onRoundStart={startRound}
+          onRoundEnd={recordRound}
+        />
+      );
+    case "Hız Oyunu":
+      return (
+        <SpeedGame
+          key={roundKey}
+          rightsLeft={rights}
+          remainingSeconds={remainingSeconds}
+          onRoundStart={startRound}
+          onRoundEnd={recordRound}
+        />
+      );
+    default:
+      return (
+        <Mini2048
+          key={roundKey}
+          rightsLeft={rights}
+          remainingSeconds={remainingSeconds}
+          onRoundStart={startRound}
+          onRoundEnd={recordRound}
+          onExit={() => setOpenGame(null)}
+        />
+      );
+  }
+}
+
 export function GameCenter() {
   const [openGame, setOpenGame] = useState<string | null>(null);
   const [roundKey, setRoundKey] = useState(0);
@@ -50,7 +97,6 @@ export function GameCenter() {
     return () => document.removeEventListener("keydown", onKeyDown);
   }, []);
 
-  // Oyun açıldığında sıfırdan başlatma desteği (yeniden başlat da yeniden mount eder).
   function reopen(name: string) {
     setRoundKey((value) => value + 1);
     setOpenGame(name);
@@ -139,72 +185,53 @@ export function GameCenter() {
               {rules[openGame] ?? ""}
             </p>
 
-            {plannedGames.has(openGame) ? (
-              <>
-                <div className="game-lock">
-                  <span aria-hidden="true">🚧</span>
-                  <span>Bu oyun plan §38’de tanımlı ama henüz uygulanmadı.</span>
-                </div>
-                <div className="sheet-actions">
-                  <Link className="btn btn-primary btn-block" href="/calis">
-                    3 soruyla ısın
-                  </Link>
-                  <button
-                    type="button"
-                    className="btn btn-ghost btn-block"
-                    onClick={() => setOpenGame(null)}
-                  >
-                    Tamam
-                  </button>
-                </div>
-              </>
-            ) : blockedReason ? (
-              <>
-                <div className="game-lock">
-                  <span aria-hidden="true">🔒</span>
-                  <span>{lockedCopy[blockedReason]}</span>
-                </div>
-                <div className="sheet-actions">
-                  <Link className="btn btn-primary btn-block" href="/calis">
-                    Soru çöz, XP kazan
-                  </Link>
-                  <button
-                    type="button"
-                    className="btn btn-ghost btn-block"
-                    onClick={() => setOpenGame(null)}
-                  >
-                    Tamam
-                  </button>
-                </div>
-              </>
-            ) : openGame === "Hafıza Kartları" ? (
-              <MemoryGame
-                key={roundKey}
-                pairs={memoryPairs}
-                rightsLeft={rights}
-                remainingSeconds={remainingSeconds}
-                onRoundStart={startRound}
-                onRoundEnd={recordRound}
-                onExit={() => setOpenGame(null)}
-              />
-            ) : openGame === "LGS Runner" ? (
-              <LgsRunner
-                key={roundKey}
-                rightsLeft={rights}
-                remainingSeconds={remainingSeconds}
-                onRoundStart={startRound}
-                onRoundEnd={recordRound}
-              />
-            ) : (
-              <Mini2048
-                key={roundKey}
-                rightsLeft={rights}
-                remainingSeconds={remainingSeconds}
-                onRoundStart={startRound}
-                onRoundEnd={recordRound}
-                onExit={() => setOpenGame(null)}
-              />
-            )}
+            {(() => {
+              switch (openGame) {
+                case "Hafıza Kartları":
+                  return (
+                    <MemoryGame
+                      key={roundKey}
+                      pairs={memoryPairs}
+                      rightsLeft={rights}
+                      remainingSeconds={remainingSeconds}
+                      onRoundStart={startRound}
+                      onRoundEnd={recordRound}
+                      onExit={() => setOpenGame(null)}
+                    />
+                  );
+                case "LGS Runner":
+                  return (
+                    <LgsRunner
+                      key={roundKey}
+                      rightsLeft={rights}
+                      remainingSeconds={remainingSeconds}
+                      onRoundStart={startRound}
+                      onRoundEnd={recordRound}
+                    />
+                  );
+                case "Hız Oyunu":
+                  return (
+                    <SpeedGame
+                      key={roundKey}
+                      rightsLeft={rights}
+                      remainingSeconds={remainingSeconds}
+                      onRoundStart={startRound}
+                      onRoundEnd={recordRound}
+                    />
+                  );
+                default:
+                  return (
+                    <Mini2048
+                      key={roundKey}
+                      rightsLeft={rights}
+                      remainingSeconds={remainingSeconds}
+                      onRoundStart={startRound}
+                      onRoundEnd={recordRound}
+                      onExit={() => setOpenGame(null)}
+                    />
+                  );
+              }
+            })()}
           </div>
         </div>
       )}

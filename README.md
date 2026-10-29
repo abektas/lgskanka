@@ -1,58 +1,70 @@
-# LGS AI Coach UI v2
+# LGS AI Coach
 
-Premium AI Tutor + gamified student experience.
+8. sınıf öğrencileri için yapay zekâ destekli LGS sınav hazırlık uygulaması.
 
-## Included
-- Premium dashboard
-- Gender/avatar selection with localStorage profile
-- Daily tasks and XP
-- Working question flow
-- Answer evaluation demo
-- H1-H7-oriented first-error analysis UI
-- Student reason selection
-- Voice explanation / solution photo entry points
-- Privacy messaging for temporary analysis files
-- AI Coach screen
-- Progress and error taxonomy screen
-- Rewards / game center
-- Responsive mobile layout
+## Özellikler
 
-## Run
+- 6 ders: Matematik, Fen Bilimleri, Türkçe, İnkılap Tarihi, Din Kültürü, İngilizce
+- 2018–2026 resmî LGS soru bankası (provenance-preserved)
+- AI destekli soru analizi (pedagojik kazanım, zorluk, beceri)
+- Gamifikasi: XP, rozetler, günlük görevler
+- Premium dashboard ve ilerleme takibi
+- Sesli açıklama ve çözüm fotoğrafı giriş noktaları
+
+## Teknoloji
+
+- **Framework:** Next.js 16 + React 19
+- **Deployment:** Cloudflare Pages
+- **AI:** OpenAI / Gemini / OpenRouter / Ollama (yerel)
+- **Build:** Standalone output
+
+## Kurulum
 
 ```bash
 npm install
 npm run dev
 ```
 
-Then open `http://localhost:3000`.
+## Ortam Değişkenleri
 
-## AI sağlayıcısı (`/api/ai`)
-
-Tek bir env değişkeniyle sağlayıcı seçilir; sıradaki sağlayıcı otomatik denenir.
+`.env.example` dosyasını `.env.local` olarak kopyalayın:
 
 ```bash
-AI_PROVIDER=auto              # auto | gemini | openrouter | local
-# Varsayılan yedek sırası: gemini -> openrouter -> local
-# AI_FALLBACK_ORDER=gemini,openrouter,local   (sırayı tamamen değiştirir)
-
-GEMINI_API_KEY=               # https://aistudio.google.com/apikey
-OPENROUTER_API_KEY=           # https://openrouter.ai/keys
-LOCAL_AI_BASE_URL=            # LM Studio/Ollama: http://localhost:1234/v1
+cp .env.example .env.local
 ```
 
-- Ayarı (anahtar/URL) olmayan sağlayıcı zincire hiç girmez.
-- Hepsi düşerse `502` + her denemenin sebebini listeleyen Türkçe hata döner.
-- Yanıt sözleşmesi: `{ answer, provider, model }`.
+| Değişken | Açıklama |
+|----------|----------|
+| `AI_PROVIDER` | `auto`, `gemini`, `openrouter`, `openai`, `local` |
+| `GEMINI_API_KEY` | Google AI Studio anahtarı |
+| `OPENROUTER_API_KEY` | OpenRouter anahtarı |
+| `OPENAI_API_KEY` | OpenAI anahtarı |
+| `LOCAL_AI_BASE_URL` | Yerel AI sunucusu URL (örn. `http://localhost:11434/v1`) |
 
-Sağlayıcı katmanı testi (ağa çıkmaz, taklit sunucular kullanır):
+## Testler
 
 ```bash
-npm run test:ai
+npm run test:ai          # AI sağlayıcı testi
+npm run test:source      # Kaynak ingestion testi
+npm run test:taxonomy    # Taksonomi testi
 ```
 
-## Next integration
-1. Replace demo question state with `/api/questions`.
-2. Connect answer submission to the AI analysis endpoint.
-3. Persist only derived learning data; do not persist raw voice/photo inputs after analysis.
-4. Add verified question-bank records and server-side answer keys.
-5. Connect Supabase/PostgreSQL.
+## Dağıtım
+
+### Cloudflare Pages
+
+```bash
+npm run build
+wrangler pages deploy
+```
+
+### GitHub
+
+```bash
+git remote add origin <repo-url>
+git push -u origin main
+```
+
+## Lisans
+
+[MIT](LICENSE)

@@ -282,10 +282,13 @@ class UnpublishedDataCannotReachProductionTest(unittest.TestCase):
 
     def test_api_route_strips_the_answer_for_visual_rows(self):
         """Görsel temsil eklenmesi cevap anahtarı sızıntısı yaratmamalı."""
-        route = (ROOT / "app/api/questions/route.ts").read_text(encoding="utf-8")
-        self.assertIn("answer: _answer, verification: _verification, sourceHash: _hash", route)
+        route = (ROOT / "app/api/study/route.ts").read_text(encoding="utf-8")
+        # Cevap anahtarı client'a gönderilmemeli
+        self.assertIn("const { answer, ...rest } = q;", route)
+        # timingSafeEqual ile güvenli karşılaştırma
         self.assertIn("timingSafeEqual(submitted, expected)", route)
-        self.assertNotIn("asset_path", route.split("function toPublicQuestion")[1].split("export")[0])
+        # asset_path client'a sızmamalı
+        self.assertNotIn("asset_path", route.split("NextResponse.json")[0])
 
 
 if __name__ == "__main__":

@@ -8,17 +8,11 @@ import { useProfile, type Profile } from "./profile-provider";
 const SETTINGS_KEY = "lgs-ai-coach-settings";
 
 type Settings = {
-  voice: boolean;
-  photo: boolean;
-  notifications: boolean;
-  weeklyReport: boolean;
+  dataRetention: boolean;
 };
 
 const defaultSettings: Settings = {
-  voice: true,
-  photo: true,
-  notifications: true,
-  weeklyReport: false,
+  dataRetention: true,
 };
 
 const variants = [0, 1, 2];
@@ -30,24 +24,9 @@ const variantLabels: Record<AvatarGender, string[]> = {
 
 const settingRows: { key: keyof Settings; title: string; detail: string }[] = [
   {
-    key: "voice",
-    title: "Sesli açıklama kullanabilirim",
-    detail: "Yanlış cevaptan sonra sesle anlatmak istediğimde mikrofon izni istenir.",
-  },
-  {
-    key: "photo",
-    title: "Çözüm fotoğrafı yükleyebilirim",
-    detail: "Fotoğraf yalnızca tek bir analiz isteğinde kullanılır, analiz biter bitmez silinir.",
-  },
-  {
-    key: "notifications",
-    title: "Günlük çalışma hatırlatması",
-    detail: "Seriyi korumak için günde en fazla bir hatırlatma gönderilir.",
-  },
-  {
-    key: "weeklyReport",
-    title: "Haftalık rapor",
-    detail: "Hafta sonunda hata dağılımı ve mastery değişimini özetleyen kısa rapor.",
+    key: "dataRetention",
+    title: "Öğrenme verisi saklansın",
+    detail: "Hata türü, konu ve mastery gibi türetilmiş sonuçlar tarayıcıda kalır. Kapatırsan tüm yerel kayıtlar silinir.",
   },
 ];
 
@@ -109,7 +88,7 @@ export function ProfileForm() {
           placeholder="Örn. Elif"
           onChange={(event) => setDraft({ ...draft, name: event.target.value })}
         />
-        <small>Koçun sana hitap ederken kullanacağı ad. Boş bırakırsan &ldquo;Öğrenci&rdquo; yazar.</small>
+        <small>Kankan sana hitap ederken kullanacağı ad. Boş bırakırsan &ldquo;Öğrenci&rdquo; yazar.</small>
       </div>
 
       <fieldset className="fieldset">

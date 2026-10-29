@@ -45,7 +45,7 @@ QUESTION_RE = re.compile(r"^(?P<number>\d{1,2})(?:[.)]|:)?$")
 QUESTION_MIN = 1
 QUESTION_MAX = 90
 DEFAULT_DPI = 300
-DEFAULT_MARGIN_PT = 4.0
+DEFAULT_MARGIN_PT = 18.0
 DEFAULT_FOOTER_PT = 24.0
 DEFAULT_HEADER_PT = 32.0
 
@@ -141,6 +141,7 @@ def detect_question_anchors(
     *,
     header_pt: float = DEFAULT_HEADER_PT,
     footer_pt: float = DEFAULT_FOOTER_PT,
+    max_x0_pt: float | None = None,
 ) -> tuple[list[QuestionAnchor], list[str]]:
     """Find likely numbered question starts conservatively.
 
@@ -163,6 +164,8 @@ def detect_question_anchors(
         x1 = float(word.get("x1", x0))
 
         if top < header_pt or bottom > float(page.height) - footer_pt:
+            continue
+        if max_x0_pt is not None and x0 > max_x0_pt:
             continue
 
         column = assign_column(x0, boundaries)
@@ -237,17 +240,28 @@ def group_anchors_by_column(anchors: Iterable[QuestionAnchor]) -> dict[int, list
     return grouped
 
 
-def make_crop_records(page, page_number: int, anchors: list[QuestionAnchor], boundaries, margin_pt: float) -> list[dict]:
+def make_crop_records(
+    page,
+    page_number: int,
+    anchors: list[QuestionAnchor],
+    boundaries,
+    margin_pt: float,
+    footer_pt: float = DEFAULT_FOOTER_PT,
+) -> list[dict]:
     grouped = group_anchors_by_column(anchors)
     records: list[dict] = []
 
     for column, column_anchors in grouped.items():
         left, right = boundaries[column]
+        crop_left = left + margin_pt
+        crop_right = right - margin_pt
+        if crop_right <= crop_left:
+            crop_left, crop_right = left, right
         for index, anchor in enumerate(column_anchors):
             next_top = (
                 column_anchors[index + 1].top - margin_pt
                 if index + 1 < len(column_anchors)
-                else float(page.height) - DEFAULT_FOOTER_PT
+                else float(page.height) - footer_pt
             )
             top = max(0.0, anchor.top - margin_pt)
             bottom = min(float(page.height), max(anchor.bottom + margin_pt, next_top))
@@ -259,9 +273,9 @@ def make_crop_records(page, page_number: int, anchors: list[QuestionAnchor], bou
                     "question_number": anchor.number,
                     "column": column,
                     "crop_rect_pt": {
-                        "x0": round(left, 3),
+                        "x0": round(crop_left, 3),
                         "y0": round(top, 3),
-                        "x1": round(right, 3),
+                        "x1": round(crop_right, 3),
                         "y1": round(bottom, 3),
                     },
                     "detection_confidence": anchor.confidence,
@@ -313,6 +327,8 @@ def extract_pdf(
     page_start: int | None = None,
     page_end: int | None = None,
     margin_pt: float = DEFAULT_MARGIN_PT,
+    anchor_max_x0_pt: float | None = None,
+    footer_pt: float = DEFAULT_FOOTER_PT,
     overwrite: bool = False,
 ) -> dict:
     if not pdf_path.exists():
@@ -333,10 +349,20 @@ def extract_pdf(
 
         for page_number in range(first, last + 1):
             page = pdf.pages[page_number - 1]
-            anchors, detection_warnings = detect_question_anchors(page)
+            anchors, detection_warnings = detect_question_anchors(
+                page,
+                max_x0_pt=anchor_max_x0_pt,
+            )
             words = page.extract_words(use_text_flow=False, keep_blank_chars=False) or []
             boundaries = page_column_boundaries(float(page.width), words)
-            crop_specs = make_crop_records(page, page_number, anchors, boundaries, margin_pt)
+            crop_specs = make_crop_records(
+                page,
+                page_number,
+                anchors,
+                boundaries,
+                margin_pt,
+                footer_pt=footer_pt,
+            )
 
             page_record = {
                 "page": page_number,
@@ -393,6 +419,8 @@ def extract_pdf(
             "dpi": dpi,
             "coordinate_system": "PDF points",
             "crop_strategy": "question-number anchors + inferred columns",
+            "anchor_max_x0_pt": anchor_max_x0_pt,
+            "footer_pt": footer_pt,
         },
         "policy": {
             "writes_canonical_answer": False,
@@ -421,6 +449,18 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--page-start", type=int, default=None, help="1-based first page to process")
     parser.add_argument("--page-end", type=int, default=None, help="1-based last page to process")
     parser.add_argument("--margin-pt", type=float, default=DEFAULT_MARGIN_PT, help="Crop margin in PDF points")
+    parser.add_argument(
+        "--anchor-max-x0-pt",
+        type=float,
+        default=None,
+        help="Only treat numeric anchors at or left of this PDF x coordinate as question starts",
+    )
+    parser.add_argument(
+        "--footer-pt",
+        type=float,
+        default=DEFAULT_FOOTER_PT,
+        help="Exclude this many PDF points from the bottom of the final question crop",
+    )
     parser.add_argument("--overwrite", action="store_true", help="Replace existing PNG assets")
     return parser
 
@@ -435,6 +475,8 @@ def main(argv: list[str] | None = None) -> int:
             page_start=args.page_start,
             page_end=args.page_end,
             margin_pt=args.margin_pt,
+            anchor_max_x0_pt=args.anchor_max_x0_pt,
+            footer_pt=args.footer_pt,
             overwrite=args.overwrite,
         )
     except Exception as exc:

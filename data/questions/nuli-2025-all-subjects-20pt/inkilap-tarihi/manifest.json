@@ -1,0 +1,265 @@
+{
+  "manifestVersion": "1.0",
+  "status": "NEEDS_REVIEW",
+  "published": false,
+  "source": {
+    "sourceId": "MEB-LGS-2025-INKILAP-TARIHI",
+    "sourceType": "REAL_LGS",
+    "fileName": "2025 LGS – İnkılap Tarihi.pdf",
+    "sha256": "e266c68618e8c952662d4c7dfc3989e70025783c922c1a2e542583c14169d7f2",
+    "examYear": 2025,
+    "educationalPeriod": "2024-2025",
+    "subject": "T.C. İnkılap Tarihi ve Atatürkçülük",
+    "grade": 8,
+    "questionCount": 10,
+    "answerKeyPage": 6
+  },
+  "render": {
+    "dpi": 300,
+    "margin_pt_all_sides": 20.0,
+    "footer_exclusion_pt": 70.0,
+    "content_aware_bbox_margin_pt": 20.0,
+    "reconstructed_from_ocr": false
+  },
+  "questions": [
+    {
+      "id": "MEB-LGS-2025-INKILAP-TARIHI-Q01",
+      "questionNumber": 1,
+      "page": 1,
+      "column": "left",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-inkilap-tarihi/q-01.png",
+        "clipRectPt": {
+          "x0": 30.994,
+          "y0": 156.0,
+          "x1": 270.965,
+          "y1": 302.965
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "418f46a3b8b37cf3cdabdec97922cc30e38580d51d4c426a8486c8982011e46e"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-INKILAP-TARIHI-Q02",
+      "questionNumber": 2,
+      "page": 1,
+      "column": "left",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-inkilap-tarihi/q-02.png",
+        "clipRectPt": {
+          "x0": 30.994,
+          "y0": 405.147,
+          "x1": 270.965,
+          "y1": 689.916
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "33750d75a3738bd1b20ab616c0a1f6bf700666c904ce079b9a315a559691974c"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-INKILAP-TARIHI-Q03",
+      "questionNumber": 3,
+      "page": 1,
+      "column": "right",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-inkilap-tarihi/q-03.png",
+        "clipRectPt": {
+          "x0": 280.965,
+          "y0": 156.0,
+          "x1": 526.937,
+          "y1": 526.937
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "ae08f5072b5feb3cfe412e5aa4fbbd7a58c2fe044800fb30ac97dfb91cd5932d"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-INKILAP-TARIHI-Q04",
+      "questionNumber": 4,
+      "page": 2,
+      "column": "single",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-inkilap-tarihi/q-04.png",
+        "clipRectPt": {
+          "x0": 43.992,
+          "y0": 90.0,
+          "x1": 531.936,
+          "y1": 628.924
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "8098664b2de6151181980cace47c982aa08819bd6939d4600b27cae91abced4a"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-INKILAP-TARIHI-Q05",
+      "questionNumber": 5,
+      "page": 3,
+      "column": "left",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-inkilap-tarihi/q-05.png",
+        "clipRectPt": {
+          "x0": 29.994,
+          "y0": 90.0,
+          "x1": 270.965,
+          "y1": 380.955
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "99c98af257faa656dea85c21e72c52b90fe538c43e6c5a5cfab95ee32d922c63"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-INKILAP-TARIHI-Q06",
+      "questionNumber": 6,
+      "page": 3,
+      "column": "right",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-inkilap-tarihi/q-06.png",
+        "clipRectPt": {
+          "x0": 280.965,
+          "y0": 90.0,
+          "x1": 528.936,
+          "y1": 383.954
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "055bd902a2930828be50ccdf9e8c4542dd8305a5c8853e4d2cc7e53fbc1efbc2"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-INKILAP-TARIHI-Q07",
+      "questionNumber": 7,
+      "page": 4,
+      "column": "left",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-inkilap-tarihi/q-07.png",
+        "clipRectPt": {
+          "x0": 45.992,
+          "y0": 90.0,
+          "x1": 284.964,
+          "y1": 429.949
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "faf96ef2e55e0321b075a277e8d95af64baa8771e00938e924b834608e3746bc"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-INKILAP-TARIHI-Q08",
+      "questionNumber": 8,
+      "page": 4,
+      "column": "right",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-inkilap-tarihi/q-08.png",
+        "clipRectPt": {
+          "x0": 294.964,
+          "y0": 90.0,
+          "x1": 541.935,
+          "y1": 310.964
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "1eec6fccd283248ccb9068669ab940f12eff18c033afe3e0f660233f132bf642"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-INKILAP-TARIHI-Q09",
+      "questionNumber": 9,
+      "page": 5,
+      "column": "single",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-inkilap-tarihi/q-09.png",
+        "clipRectPt": {
+          "x0": 29.994,
+          "y0": 99.988,
+          "x1": 529.936,
+          "y1": 404.952
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "595fd77345e450a6e213109e825abe9dda4bfc382ad58feceb4719254b0667cf"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2025-INKILAP-TARIHI-Q10",
+      "questionNumber": 10,
+      "page": 5,
+      "column": "single",
+      "representation": "IMAGE_BACKED",
+      "visual": {
+        "publicPath": "/pilot-2025-inkilap-tarihi/q-10.png",
+        "clipRectPt": {
+          "x0": 23.994,
+          "y0": 455.969,
+          "x1": 527.936,
+          "y1": 649.921
+        },
+        "renderDpi": 300,
+        "authority": "ORIGINAL_MEB_PDF",
+        "reconstructedFromOcr": false,
+        "assetSha256": "50348111dc2fa99e5e1c7e1768a1959a69b3e71515bc6df4d3468ca7fabf48d4"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    }
+  ],
+  "warnings": [],
+  "answerKeyCandidates": {
+    "1": "C",
+    "2": "A",
+    "3": "D",
+    "4": "B",
+    "5": "A",
+    "6": "D",
+    "7": "C",
+    "8": "B",
+    "9": "B",
+    "10": "D"
+  },
+  "summary": {
+    "pagesProcessed": 5,
+    "questionsExtracted": 10,
+    "expectedQuestions": 10,
+    "ambiguousPages": 0
+  }
+}

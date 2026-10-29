@@ -1,0 +1,488 @@
+{
+  "questions": [
+    {
+      "schema_version": "1.0",
+      "id": "MEB-LGS-2022:SAYISAL:MATEMATİK:Q05",
+      "source": {
+        "source_id": "MEB-LGS-2022",
+        "source_type": "OFFICIAL_MEB_PDF",
+        "year": 2022,
+        "booklet": "SAYISAL",
+        "question_number": 5,
+        "page_number": 2
+      },
+      "question": {
+        "grade": 8,
+        "subject": "MATEMATİK",
+        "stem": "Aşağıda bütün yüzleri eş birimkarelerden oluşan bir küpün açınımı verilmiştir. Bu açınımda mavi renkli şeklin KN doğru parçasına ve NM doğru parçasına göre yansıması sonucu görüntüleri oluşturulduktan sonra yüzler birleştirilerek bir küp elde edilmiştir. Elde edilen bu küpün görünümü aşağıdakilerden hangisi olabilir?",
+        "options": {
+          "A": "",
+          "B": "",
+          "C": "",
+          "D": ""
+        },
+        "representation": "IMAGE_BACKED"
+      },
+      "answer_key": {
+        "candidate": "B",
+        "answer": null,
+        "source_verified": false
+      },
+      "curriculum": {
+        "framework": "MEB",
+        "subject": "MATEMATİK",
+        "unit": "Geometrik Cisimler",
+        "topic": "Küp ve Prizmalar",
+        "learning_outcome": "Küpün açınımını ve yüzey özelliklerini kavrar.",
+        "status": "MAPPED_NEEDS_REVIEW"
+      },
+      "difficulty": {
+        "pedagogical": 4,
+        "confidence": 0.95
+      },
+      "question_type": "Multiple Choice",
+      "status": "NEEDS_REVIEW",
+      "warnings": []
+    },
+    {
+      "schema_version": "1.0",
+      "id": "MEB-LGS-2022:SAYISAL:MATEMATİK:Q06",
+      "source": {
+        "source_id": "MEB-LGS-2022",
+        "source_type": "OFFICIAL_MEB_PDF",
+        "year": 2022,
+        "booklet": "SAYISAL",
+        "question_number": 6,
+        "page_number": 3
+      },
+      "question": {
+        "grade": 8,
+        "subject": "MATEMATİK",
+        "stem": "Aşağıda dikdörtgen şeklindeki mavi levhalar ile kare şeklindeki sarı levhalardan yeterli sayıda verilmiştir. Mavi levhanın uzun kenarının uzunluğu, sarı levhanın bir kenarının uzunluğuna eşittir. Bu levhaların birer kenarları çakıştırılarak Şekil I, Şekil II ve Şekil III'teki dikdörtgenler oluşturulmuştur. Şekil I'in çevresinin uzunluğu $(13x - 5)$ cm ve Şekil II'nin çevresinin uzunluğu $(14x + 2)$ cm'dir. Buna göre, Şekil III'ün çevresinin uzunluğunu santimetre cinsinden veren cebirsel ifade aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "x + 7",
+          "B": "11x - 9",
+          "C": "6(x + 1)",
+          "D": "6(x - 1)"
+        },
+        "representation": "HYBRID"
+      },
+      "answer_key": {
+        "candidate": "C",
+        "answer": null,
+        "source_verified": false
+      },
+      "curriculum": {
+        "framework": "MEB",
+        "subject": "MATEMATİK",
+        "unit": "Cebirsel İfadeler ve Özdeşlikler",
+        "topic": "Cebirsel İfadeler",
+        "learning_outcome": "Cebirsel ifadelerle toplama ve çıkarma işlemleri yapar.",
+        "status": "MAPPED_NEEDS_REVIEW"
+      },
+      "difficulty": {
+        "pedagogical": 3,
+        "confidence": 0.95
+      },
+      "question_type": "Multiple Choice",
+      "status": "NEEDS_REVIEW",
+      "warnings": []
+    },
+    {
+      "schema_version": "1.0",
+      "id": "MEB-LGS-2022:SAYISAL:MATEMATİK:Q07",
+      "source": {
+        "source_id": "MEB-LGS-2022",
+        "source_type": "OFFICIAL_MEB_PDF",
+        "year": 2022,
+        "booklet": "SAYISAL",
+        "question_number": 7,
+        "page_number": 4
+      },
+      "question": {
+        "grade": 8,
+        "subject": "MATEMATİK",
+        "stem": "Millî uçaklarımızdan Hürkuş, Hürjet ve Anka bir teknoloji fuarında gösteri uçuşu yapacaklardır. Bu uçuşta uçaklar yere dik olan bir d doğrusu üzerindeki A, B ve C noktalarından yere paralel olarak geçeceklerdir. Hürkuş yerden 160 m yükseklikteki B noktasından, Hürjet yerden 65 m yükseklikteki A noktasından, Anka ise A ile B noktası arasında bulunan bir C noktasından aynı anda geçeceklerdir. C noktasının A ve B noktalarının her birine uzaklığı en az 35 m olabilecektir. C noktasının yerden yüksekliği x metre olduğuna göre, x'in alabileceği değerleri gösteren eşitsizlik aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "100 \\le x \\le 125",
+          "B": "100 \\le x \\le 135",
+          "C": "65 \\le x \\le 160",
+          "D": "65 \\le x \\le 125"
+        },
+        "representation": "HYBRID"
+      },
+      "answer_key": {
+        "candidate": "A",
+        "answer": null,
+        "source_verified": false
+      },
+      "curriculum": {
+        "framework": "MEB",
+        "subject": "MATEMATİK",
+        "unit": "Eşitsizlikler",
+        "topic": "Birinci Dereceden Bir Bilinmeyenli Eşitsizlikler",
+        "learning_outcome": "Birinci dereceden bir bilinmeyenli eşitsizlikleri çözer.",
+        "status": "MAPPED_NEEDS_REVIEW"
+      },
+      "difficulty": {
+        "pedagogical": 3,
+        "confidence": 0.95
+      },
+      "question_type": "Multiple Choice",
+      "status": "NEEDS_REVIEW",
+      "warnings": []
+    },
+    {
+      "schema_version": "1.0",
+      "id": "MEB-LGS-2022:SAYISAL:MATEMATİK:Q08",
+      "source": {
+        "source_id": "MEB-LGS-2022",
+        "source_type": "OFFICIAL_MEB_PDF",
+        "year": 2022,
+        "booklet": "SAYISAL",
+        "question_number": 8,
+        "page_number": 5
+      },
+      "question": {
+        "grade": 8,
+        "subject": "MATEMATİK",
+        "stem": "Bir turşucuda eşit ölçekli iki özdeş bardakta; turşu suyu, havuç suyu ve acı sos aşağıda verilen oranlarda karıştırılarak az acılı ve çok acılı içecekler hazırlanmaktadır. Az acılı içecekten 4 bardak ve çok acılı içecekten 1 bardak hazırlamak için kullanılan toplam turşu suyu miktarı, kullanılan toplam acı sos miktarından 400 mL fazladır. Buna göre, şekildeki bardaklardan birinin hacmi kaç mililitredir?",
+        "options": {
+          "A": "150",
+          "B": "250",
+          "C": "500",
+          "D": "750"
+        },
+        "representation": "HYBRID"
+      },
+      "answer_key": {
+        "candidate": "B",
+        "answer": null,
+        "source_verified": false
+      },
+      "curriculum": {
+        "framework": "MEB",
+        "subject": "MATEMATİK",
+        "unit": "Cebir",
+        "topic": "Doğrusal Denklemler",
+        "learning_outcome": "Birinci dereceden bir bilinmeyenli denklemleri kurar ve çözer.",
+        "status": "MAPPED_NEEDS_REVIEW"
+      },
+      "difficulty": {
+        "pedagogical": 3,
+        "confidence": 0.95
+      },
+      "question_type": "Multiple Choice",
+      "status": "NEEDS_REVIEW",
+      "warnings": []
+    },
+    {
+      "schema_version": "1.0",
+      "id": "MEB-LGS-2022:SAYISAL:MATEMATİK:Q09",
+      "source": {
+        "source_id": "MEB-LGS-2022",
+        "source_type": "OFFICIAL_MEB_PDF",
+        "year": 2022,
+        "booklet": "SAYISAL",
+        "question_number": 9,
+        "page_number": 5
+      },
+      "question": {
+        "grade": 8,
+        "subject": "MATEMATİK",
+        "stem": "Aşağıdaki koordin düzleminde, x ekseni üzerine yerleştirilen iki adet eş kareden oluşturulmuş bir dikdörtgen verilmiştir. Kuzey, verilen bu karelerle eş olan 6 adet kare daha kullanarak yukarıda verilen dikdörtgeni, 8 eş kareden oluşan yeni bir dikdörtgene tamamlamıştır. Buna göre, aşağıdakilerin hangisi Kuzey'in oluşturduğu yeni dikdörtgenin köşegenlerinden birinin eğimi olamaz?",
+        "options": {
+          "A": "-\\frac{1}{2}",
+          "B": "-\\frac{1}{8}",
+          "C": "2",
+          "D": "4"
+        },
+        "representation": "HYBRID"
+      },
+      "answer_key": {
+        "candidate": "B",
+        "answer": null,
+        "source_verified": false
+      },
+      "curriculum": {
+        "framework": "MEB",
+        "subject": "MATEMATİK",
+        "unit": "Doğrusal Denklemler",
+        "topic": "Doğrunun Eğimi",
+        "learning_outcome": "Doğrunun eğimini modellerle açıklar, doğrusal denklemleri ve grafiklerini eğimle ilişkilendirir.",
+        "status": "MAPPED_NEEDS_REVIEW"
+      },
+      "difficulty": {
+        "pedagogical": 4,
+        "confidence": 0.95
+      },
+      "question_type": "Multiple Choice",
+      "status": "NEEDS_REVIEW",
+      "warnings": []
+    },
+    {
+      "schema_version": "1.0",
+      "id": "MEB-LGS-2022:SAYISAL:MATEMATİK:Q10",
+      "source": {
+        "source_id": "MEB-LGS-2022",
+        "source_type": "OFFICIAL_MEB_PDF",
+        "year": 2022,
+        "booklet": "SAYISAL",
+        "question_number": 10,
+        "page_number": 6
+      },
+      "question": {
+        "grade": 8,
+        "subject": "MATEMATİK",
+        "stem": "Bir mağazadaki beyaz eşyalardan bazılarının birer adedinin satış fiyatlarını ve satış adetlerini veren cebirsel ifadeler aşağıdaki tabloda gösterilmiştir. Tablo: Beyaz Eşyaların Birer Adedinin Satış Fiyatları ve Satış Adetleri. Buzdolabı: 1 Adedinin Satış Fiyatı (TL) = y, Satış Adedi = 2x. Çamaşır Makinesi: 1 Adedinin Satış Fiyatı (TL) = x + 4y, Satış Adedi = y. Bulaşık Makinesi: 1 Adedinin Satış Fiyatı (TL) = ?, Satış Adedi = x + y. Bu ürünlerin satışından toplam (2y + 3x)^2 TL gelir elde edildiğine göre, 1 adet bulaşık makinesinin Türk lirası cinsinden satış fiyatını veren cebirsel ifade aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "3x",
+          "B": "2y",
+          "C": "6y",
+          "D": "9x"
+        },
+        "representation": "STRUCTURED_TEXT"
+      },
+      "answer_key": {
+        "candidate": "A",
+        "answer": null,
+        "source_verified": false
+      },
+      "curriculum": {
+        "framework": "MEB",
+        "subject": "MATEMATİK",
+        "unit": "Cebirsel İfadeler ve Özdeşlikler",
+        "topic": "Cebirsel İfadeler",
+        "learning_outcome": "Cebirsel ifadeleri çarpanlarına ayırır.",
+        "status": "MAPPED_NEEDS_REVIEW"
+      },
+      "difficulty": {
+        "pedagogical": 3,
+        "confidence": 0.95
+      },
+      "question_type": "Multiple Choice",
+      "status": "NEEDS_REVIEW",
+      "warnings": []
+    },
+    {
+      "schema_version": "1.0",
+      "id": "MEB-LGS-2022:SAYISAL:MATEMATİK:Q11",
+      "source": {
+        "source_id": "MEB-LGS-2022",
+        "source_type": "OFFICIAL_MEB_PDF",
+        "year": 2022,
+        "booklet": "SAYISAL",
+        "question_number": 11,
+        "page_number": 6
+      },
+      "question": {
+        "grade": 8,
+        "subject": "MATEMATİK",
+        "stem": "Her birinin kütlesi gram cinsinden doğal sayı olan 5 adet özdeş A cisminin toplam kütlesi, her birinin kütlesi gram cinsinden doğal sayı olan 6 adet özdeş B cisminin toplam kütlesine eşittir. Bu cisimlerin tamamı, bir terazide şekildeki gibi tartıldığında toplam kütle gram cinsinden üç basamaklı bir doğal sayıya eşit olup terazinin ekranında sadece yüzler basamağındaki 2 rakamı görünmektedir. Buna göre, 1 adet A cisminin kütlesi kaç gramdır?",
+        "options": {
+          "A": "30",
+          "B": "24",
+          "C": "21",
+          "D": "18"
+        },
+        "representation": "HYBRID"
+      },
+      "answer_key": {
+        "candidate": "B",
+        "answer": null,
+        "source_verified": false
+      },
+      "curriculum": {
+        "framework": "MEB",
+        "subject": "MATEMATİK",
+        "unit": "Çarpanlar ve Katlar",
+        "topic": "EBOB-EKOK",
+        "learning_outcome": "İki doğal sayının en büyük ortak bölenini (EBOB) ve en küçük ortak katını (EKOK) hesaplar, ilgili problemleri çözer.",
+        "status": "MAPPED_NEEDS_REVIEW"
+      },
+      "difficulty": {
+        "pedagogical": 4,
+        "confidence": 0.95
+      },
+      "question_type": "Multiple Choice",
+      "status": "NEEDS_REVIEW",
+      "warnings": []
+    },
+    {
+      "schema_version": "1.0",
+      "id": "MEB-LGS-2022:SAYISAL:MATEMATİK:Q12",
+      "source": {
+        "source_id": "MEB-LGS-2022",
+        "source_type": "OFFICIAL_MEB_PDF",
+        "year": 2022,
+        "booklet": "SAYISAL",
+        "question_number": 12,
+        "page_number": 7
+      },
+      "question": {
+        "grade": 8,
+        "subject": "MATEMATİK",
+        "stem": "Aşağıdaki doğrusal grafikte I. ve II. araçların aldıkları yolların zamana göre değişimi verilmiştir. Grafik: Araçların Aldıkları Yolların Zamana Göre Değişimi. Verilenlere göre II. araç, I. araçtan kaç saat sonra harekete başlamıştır?",
+        "options": {
+          "A": "1",
+          "B": "1,8",
+          "C": "2",
+          "D": "2,3"
+        },
+        "representation": "HYBRID"
+      },
+      "answer_key": {
+        "candidate": "C",
+        "answer": null,
+        "source_verified": false
+      },
+      "curriculum": {
+        "framework": "MEB",
+        "subject": "MATEMATİK",
+        "unit": "Doğrusal Denklemler",
+        "topic": "Doğrusal İlişkiler",
+        "learning_outcome": "Doğrusal ilişki içeren gerçek hayat durumlarına ait denklem, tablo ve grafiği oluşturur ve yorumlar.",
+        "status": "MAPPED_NEEDS_REVIEW"
+      },
+      "difficulty": {
+        "pedagogical": 3,
+        "confidence": 0.95
+      },
+      "question_type": "Multiple Choice",
+      "status": "NEEDS_REVIEW",
+      "warnings": []
+    },
+    {
+      "schema_version": "1.0",
+      "id": "MEB-LGS-2022:SAYISAL:MATEMATİK:Q13",
+      "source": {
+        "source_id": "MEB-LGS-2022",
+        "source_type": "OFFICIAL_MEB_PDF",
+        "year": 2022,
+        "booklet": "SAYISAL",
+        "question_number": 13,
+        "page_number": 7
+      },
+      "question": {
+        "grade": 8,
+        "subject": "MATEMATİK",
+        "stem": "Aşağıdaki kareli zeminde verilen [AD] ile [CF], B noktasında kesişmiştir. Buna göre, [AB]'nın uzunluğu kaç santimetredir?",
+        "options": {
+          "A": "6",
+          "B": "\\frac{19}{3}",
+          "C": "\\frac{20}{3}",
+          "D": "7"
+        },
+        "representation": "HYBRID"
+      },
+      "answer_key": {
+        "candidate": "C",
+        "answer": null,
+        "source_verified": false
+      },
+      "curriculum": {
+        "framework": "MEB",
+        "subject": "MATEMATİK",
+        "unit": "Doğrusal Denklemler",
+        "topic": "Doğrunun Eğimi",
+        "learning_outcome": "Doğrunun eğimini modellerle açıklar, doğrusal denklemleri ve grafiklerini eğimle ilişkilendirir.",
+        "status": "MAPPED_NEEDS_REVIEW"
+      },
+      "difficulty": {
+        "pedagogical": 4,
+        "confidence": 0.95
+      },
+      "question_type": "Multiple Choice",
+      "status": "NEEDS_REVIEW",
+      "warnings": []
+    },
+    {
+      "schema_version": "1.0",
+      "id": "MEB-LGS-2022:SAYISAL:MATEMATİK:Q14",
+      "source": {
+        "source_id": "MEB-LGS-2022",
+        "source_type": "OFFICIAL_MEB_PDF",
+        "year": 2022,
+        "booklet": "SAYISAL",
+        "question_number": 14,
+        "page_number": 8
+      },
+      "question": {
+        "grade": 8,
+        "subject": "MATEMATİK",
+        "stem": "Deposunda 1024 litre sıvı gübre bulunan ve bir traktör yardımıyla çekilen bir makine aşağıda verilmiştir. Bu makinenin kollarında bulunan 24 adet musluğun her birinden 1 dakikada 2^2 litre sıvı gübre, toprak yüzeyine püskürtülerek gübreleme yapılmaktadır. Bu makine 8 dakika boyunca sabit hızla ilerlediğinde 48 dekarlık bir tarla gübrelenmiştir. Buna göre, depoda kalan gübreyle aynı şekilde gübrelemeye devam edildiğinde kaç dekar tarla daha gübrelenebilir?",
+        "options": {
+          "A": "3 \\cdot 2^3",
+          "B": "2^4",
+          "C": "3 \\cdot 2^2",
+          "D": "2^3"
+        },
+        "representation": "HYBRID"
+      },
+      "answer_key": {
+        "candidate": "B",
+        "answer": null,
+        "source_verified": false
+      },
+      "curriculum": {
+        "framework": "MEB",
+        "subject": "MATEMATİK",
+        "unit": "Üslü İfadeler",
+        "topic": "Üslü İfadelerle İşlemler",
+        "learning_outcome": "Üslü ifadelerle ilgili temel kuralları anlar, birbirine denk ifadeler oluşturur.",
+        "status": "MAPPED_NEEDS_REVIEW"
+      },
+      "difficulty": {
+        "pedagogical": 3,
+        "confidence": 0.95
+      },
+      "question_type": "Multiple Choice",
+      "status": "NEEDS_REVIEW",
+      "warnings": []
+    },
+    {
+      "schema_version": "1.0",
+      "id": "MEB-LGS-2022:SAYISAL:MATEMATİK:Q17",
+      "source": {
+        "source_id": "MEB-LGS-2022",
+        "source_type": "OFFICIAL_MEB_PDF",
+        "year": 2022,
+        "booklet": "SAYISAL",
+        "question_number": 17,
+        "page_number": 11
+      },
+      "question": {
+        "grade": 8,
+        "subject": "MATEMATİK",
+        "stem": "Sadece elma, erik ve ayva ağaçlarının bulunduğu bir bahçedeki toplam 60 adet ağacın sayılarının türlerine göre dağılımı aşağıdaki kareli zeminde verilen sütun grafiğinde gösterilmiştir. Bahçeye bu meyve ağaçlarından 24 adet daha dikildiğinde bahçedeki elma, erik ve ayva ağaçlarının sayıları birbirine eşit olmuştur. Buna göre, sonradan dikilen ağaçlar arasından rastgele seçilen bir ağacın erik ağacı olma olasılığı kaçtır?",
+        "options": {
+          "A": "\\frac{13}{24}",
+          "B": "\\frac{1}{2}",
+          "C": "\\frac{5}{12}",
+          "D": "\\frac{5}{24}"
+        },
+        "representation": "HYBRID"
+      },
+      "answer_key": {
+        "candidate": "D",
+        "answer": null,
+        "source_verified": false
+      },
+      "curriculum": {
+        "framework": "MEB",
+        "subject": "MATEMATİK",
+        "unit": "Veri Analizi ve Olasılık",
+        "topic": "Basit Olayların Olma Olasılığı",
+        "learning_outcome": "Basit bir olayın olma olasılığını hesaplar.",
+        "status": "MAPPED_NEEDS_REVIEW"
+      },
+      "difficulty": {
+        "pedagogical": 3,
+        "confidence": 0.95
+      },
+      "question_type": "Multiple Choice",
+      "status": "NEEDS_REVIEW",
+      "warnings": []
+    }
+  ]
+}

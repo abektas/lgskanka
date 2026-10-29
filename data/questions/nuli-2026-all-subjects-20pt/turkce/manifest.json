@@ -1,0 +1,628 @@
+{
+  "subject": "turkce",
+  "count": 20,
+  "answer_key": [
+    "A",
+    "B",
+    "D",
+    "A",
+    "D",
+    "C",
+    "A",
+    "D",
+    "A",
+    "B",
+    "D",
+    "C",
+    "A",
+    "C",
+    "D",
+    "C",
+    "B",
+    "D",
+    "C",
+    "B"
+  ],
+  "items": [
+    {
+      "subject": "turkce",
+      "question": 1,
+      "page": 3,
+      "file": "turkce/Q01.png",
+      "size": "1059x1795",
+      "anchor": {
+        "x0": 42.5,
+        "top": 155.7,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.5,
+        "y0": 155.7,
+        "x1": 274.3,
+        "y1": 546.5
+      },
+      "crop": {
+        "left": 22.5,
+        "top": 135.7,
+        "right": 276.4,
+        "bottom": 566.5
+      },
+      "margins": {
+        "left": 22.5,
+        "right": 0.0
+      },
+      "type": "LEFT",
+      "answer_key": "A"
+    },
+    {
+      "subject": "turkce",
+      "question": 2,
+      "page": 3,
+      "file": "turkce/Q02.png",
+      "size": "1056x948",
+      "anchor": {
+        "x0": 283.5,
+        "top": 155.7,
+        "col": 1
+      },
+      "bbox": {
+        "x0": 283.5,
+        "y0": 155.7,
+        "x1": 509.8,
+        "y1": 343.1
+      },
+      "crop": {
+        "left": 276.4,
+        "top": 135.7,
+        "right": 529.8,
+        "bottom": 363.1
+      },
+      "margins": {
+        "left": 0.0,
+        "right": 22.9
+      },
+      "type": "RIGHT",
+      "answer_key": "B"
+    },
+    {
+      "subject": "turkce",
+      "question": 3,
+      "page": 4,
+      "file": "turkce/Q03.png",
+      "size": "1059x1943",
+      "anchor": {
+        "x0": 42.5,
+        "top": 84.8,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.5,
+        "y0": 84.8,
+        "x1": 274.3,
+        "y1": 511.0
+      },
+      "crop": {
+        "left": 22.5,
+        "top": 64.8,
+        "right": 276.4,
+        "bottom": 531.0
+      },
+      "margins": {
+        "left": 22.5,
+        "right": 0.0
+      },
+      "type": "LEFT",
+      "answer_key": "D"
+    },
+    {
+      "subject": "turkce",
+      "question": 4,
+      "page": 4,
+      "file": "turkce/Q04.png",
+      "size": "1032x1064",
+      "anchor": {
+        "x0": 283.5,
+        "top": 84.8,
+        "col": 1
+      },
+      "bbox": {
+        "x0": 283.5,
+        "y0": 84.8,
+        "x1": 504.0,
+        "y1": 300.2
+      },
+      "crop": {
+        "left": 276.4,
+        "top": 64.8,
+        "right": 524.0,
+        "bottom": 320.2
+      },
+      "margins": {
+        "left": 0.0,
+        "right": 28.8
+      },
+      "type": "RIGHT",
+      "answer_key": "A"
+    },
+    {
+      "subject": "turkce",
+      "question": 5,
+      "page": 5,
+      "file": "turkce/Q05.png",
+      "size": "1059x1998",
+      "anchor": {
+        "x0": 42.5,
+        "top": 84.8,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.5,
+        "y0": 84.8,
+        "x1": 273.2,
+        "y1": 524.2
+      },
+      "crop": {
+        "left": 22.5,
+        "top": 64.8,
+        "right": 276.4,
+        "bottom": 544.2
+      },
+      "margins": {
+        "left": 22.5,
+        "right": 0.0
+      },
+      "type": "LEFT",
+      "answer_key": "D"
+    },
+    {
+      "subject": "turkce",
+      "question": 6,
+      "page": 5,
+      "file": "turkce/Q06.png",
+      "size": "1051x2581",
+      "anchor": {
+        "x0": 283.5,
+        "top": 84.8,
+        "col": 1
+      },
+      "bbox": {
+        "x0": 283.5,
+        "y0": 84.8,
+        "x1": 508.7,
+        "y1": 664.2
+      },
+      "crop": {
+        "left": 276.4,
+        "top": 64.8,
+        "right": 528.7,
+        "bottom": 684.2
+      },
+      "margins": {
+        "left": 0.0,
+        "right": 24.1
+      },
+      "type": "RIGHT",
+      "answer_key": "C"
+    },
+    {
+      "subject": "turkce",
+      "question": 7,
+      "page": 6,
+      "file": "turkce/Q07.png",
+      "size": "2100x1892",
+      "anchor": {
+        "x0": 42.5,
+        "top": 84.8,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.5,
+        "y0": 84.8,
+        "x1": 506.2,
+        "y1": 499.0
+      },
+      "crop": {
+        "left": 22.5,
+        "top": 64.8,
+        "right": 526.2,
+        "bottom": 519.0
+      },
+      "margins": {
+        "left": 22.5,
+        "right": 26.6
+      },
+      "type": "CROSS",
+      "answer_key": "A"
+    },
+    {
+      "subject": "turkce",
+      "question": 8,
+      "page": 7,
+      "file": "turkce/Q08.png",
+      "size": "1059x1943",
+      "anchor": {
+        "x0": 42.5,
+        "top": 84.8,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.5,
+        "y0": 84.8,
+        "x1": 273.2,
+        "y1": 511.0
+      },
+      "crop": {
+        "left": 22.5,
+        "top": 64.8,
+        "right": 276.4,
+        "bottom": 531.0
+      },
+      "margins": {
+        "left": 22.5,
+        "right": 0.0
+      },
+      "type": "LEFT",
+      "answer_key": "D"
+    },
+    {
+      "subject": "turkce",
+      "question": 9,
+      "page": 7,
+      "file": "turkce/Q09.png",
+      "size": "1054x1999",
+      "anchor": {
+        "x0": 283.5,
+        "top": 84.8,
+        "col": 1
+      },
+      "bbox": {
+        "x0": 283.5,
+        "y0": 84.8,
+        "x1": 509.3,
+        "y1": 524.6
+      },
+      "crop": {
+        "left": 276.4,
+        "top": 64.8,
+        "right": 529.3,
+        "bottom": 544.6
+      },
+      "margins": {
+        "left": 0.0,
+        "right": 23.5
+      },
+      "type": "RIGHT",
+      "answer_key": "A"
+    },
+    {
+      "subject": "turkce",
+      "question": 10,
+      "page": 8,
+      "file": "turkce/Q10.png",
+      "size": "1059x1943",
+      "anchor": {
+        "x0": 42.5,
+        "top": 84.8,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.5,
+        "y0": 84.8,
+        "x1": 274.3,
+        "y1": 511.0
+      },
+      "crop": {
+        "left": 22.5,
+        "top": 64.8,
+        "right": 276.4,
+        "bottom": 531.0
+      },
+      "margins": {
+        "left": 22.5,
+        "right": 0.0
+      },
+      "type": "LEFT",
+      "answer_key": "B"
+    },
+    {
+      "subject": "turkce",
+      "question": 11,
+      "page": 8,
+      "file": "turkce/Q11.png",
+      "size": "1058x1356",
+      "anchor": {
+        "x0": 283.5,
+        "top": 84.8,
+        "col": 1
+      },
+      "bbox": {
+        "x0": 283.5,
+        "y0": 84.8,
+        "x1": 510.2,
+        "y1": 370.2
+      },
+      "crop": {
+        "left": 276.4,
+        "top": 64.8,
+        "right": 530.2,
+        "bottom": 390.2
+      },
+      "margins": {
+        "left": 0.0,
+        "right": 22.5
+      },
+      "type": "RIGHT",
+      "answer_key": "D"
+    },
+    {
+      "subject": "turkce",
+      "question": 12,
+      "page": 9,
+      "file": "turkce/Q12.png",
+      "size": "1059x1951",
+      "anchor": {
+        "x0": 42.5,
+        "top": 84.8,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.5,
+        "y0": 84.8,
+        "x1": 273.2,
+        "y1": 513.1
+      },
+      "crop": {
+        "left": 22.5,
+        "top": 64.8,
+        "right": 276.4,
+        "bottom": 533.1
+      },
+      "margins": {
+        "left": 22.5,
+        "right": 0.0
+      },
+      "type": "LEFT",
+      "answer_key": "C"
+    },
+    {
+      "subject": "turkce",
+      "question": 13,
+      "page": 9,
+      "file": "turkce/Q13.png",
+      "size": "1055x1309",
+      "anchor": {
+        "x0": 283.5,
+        "top": 84.8,
+        "col": 1
+      },
+      "bbox": {
+        "x0": 283.5,
+        "y0": 84.8,
+        "x1": 509.5,
+        "y1": 359.1
+      },
+      "crop": {
+        "left": 276.4,
+        "top": 64.8,
+        "right": 529.5,
+        "bottom": 379.1
+      },
+      "margins": {
+        "left": 0.0,
+        "right": 23.3
+      },
+      "type": "RIGHT",
+      "answer_key": "A"
+    },
+    {
+      "subject": "turkce",
+      "question": 14,
+      "page": 10,
+      "file": "turkce/Q14.png",
+      "size": "2088x2501",
+      "anchor": {
+        "x0": 42.5,
+        "top": 84.8,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.5,
+        "y0": 84.8,
+        "x1": 503.3,
+        "y1": 644.9
+      },
+      "crop": {
+        "left": 22.5,
+        "top": 64.8,
+        "right": 523.3,
+        "bottom": 664.9
+      },
+      "margins": {
+        "left": 22.5,
+        "right": 29.5
+      },
+      "type": "CROSS",
+      "answer_key": "C"
+    },
+    {
+      "subject": "turkce",
+      "question": 15,
+      "page": 11,
+      "file": "turkce/Q15.png",
+      "size": "2116x2531",
+      "anchor": {
+        "x0": 42.5,
+        "top": 84.8,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.5,
+        "y0": 84.8,
+        "x1": 510.1,
+        "y1": 652.2
+      },
+      "crop": {
+        "left": 22.5,
+        "top": 64.8,
+        "right": 530.1,
+        "bottom": 672.2
+      },
+      "margins": {
+        "left": 22.5,
+        "right": 22.7
+      },
+      "type": "CROSS",
+      "answer_key": "D"
+    },
+    {
+      "subject": "turkce",
+      "question": 16,
+      "page": 12,
+      "file": "turkce/Q16.png",
+      "size": "2024x407",
+      "anchor": {
+        "x0": 42.5,
+        "top": 84.8,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.5,
+        "y0": 84.8,
+        "x1": 488.0,
+        "y1": 142.5
+      },
+      "crop": {
+        "left": 22.5,
+        "top": 64.8,
+        "right": 508.0,
+        "bottom": 162.5
+      },
+      "margins": {
+        "left": 22.5,
+        "right": 44.7
+      },
+      "type": "CROSS",
+      "answer_key": "C"
+    },
+    {
+      "subject": "turkce",
+      "question": 17,
+      "page": 13,
+      "file": "turkce/Q17.png",
+      "size": "1059x1943",
+      "anchor": {
+        "x0": 42.5,
+        "top": 84.8,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.5,
+        "y0": 84.8,
+        "x1": 273.2,
+        "y1": 511.0
+      },
+      "crop": {
+        "left": 22.5,
+        "top": 64.8,
+        "right": 276.4,
+        "bottom": 531.0
+      },
+      "margins": {
+        "left": 22.5,
+        "right": 0.0
+      },
+      "type": "LEFT",
+      "answer_key": "B"
+    },
+    {
+      "subject": "turkce",
+      "question": 18,
+      "page": 13,
+      "file": "turkce/Q18.png",
+      "size": "1045x948",
+      "anchor": {
+        "x0": 283.5,
+        "top": 84.8,
+        "col": 1
+      },
+      "bbox": {
+        "x0": 283.5,
+        "y0": 84.8,
+        "x1": 507.2,
+        "y1": 272.2
+      },
+      "crop": {
+        "left": 276.4,
+        "top": 64.8,
+        "right": 527.2,
+        "bottom": 292.2
+      },
+      "margins": {
+        "left": 0.0,
+        "right": 25.5
+      },
+      "type": "RIGHT",
+      "answer_key": "D"
+    },
+    {
+      "subject": "turkce",
+      "question": 19,
+      "page": 14,
+      "file": "turkce/Q19.png",
+      "size": "1059x1943",
+      "anchor": {
+        "x0": 42.5,
+        "top": 84.8,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.5,
+        "y0": 84.8,
+        "x1": 274.3,
+        "y1": 511.0
+      },
+      "crop": {
+        "left": 22.5,
+        "top": 64.8,
+        "right": 276.4,
+        "bottom": 531.0
+      },
+      "margins": {
+        "left": 22.5,
+        "right": 0.0
+      },
+      "type": "LEFT",
+      "answer_key": "C"
+    },
+    {
+      "subject": "turkce",
+      "question": 20,
+      "page": 14,
+      "file": "turkce/Q20.png",
+      "size": "958x216",
+      "anchor": {
+        "x0": 283.5,
+        "top": 84.8,
+        "col": 1
+      },
+      "bbox": {
+        "x0": 283.5,
+        "y0": 84.8,
+        "x1": 486.3,
+        "y1": 96.8
+      },
+      "crop": {
+        "left": 276.4,
+        "top": 64.8,
+        "right": 506.3,
+        "bottom": 116.8
+      },
+      "margins": {
+        "left": 0.0,
+        "right": 46.5
+      },
+      "type": "RIGHT",
+      "answer_key": "B"
+    }
+  ]
+}

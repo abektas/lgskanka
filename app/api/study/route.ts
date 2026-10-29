@@ -1,13 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createHash, timingSafeEqual } from "node:crypto";
-import imageMapRaw from "./image-map.json";
 
 const R2_PUBLIC_URL = "https://pub-782be99090dc4f8586da5bf5d073c4a5.r2.dev";
 
-async function fetchJson(url: string): Promise<any> {
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status}`);
-  return res.json();
+let imageMapCache: Map<string, string> | null = null;
+
+async function getImageMap(): Promise<Map<string, string>> {
+  if (imageMapCache) return imageMapCache;
+  const raw = await fetchJson(`${R2_PUBLIC_URL}/study_manifests/image_map.json`);
+  const result = new Map<string, string>();
+  for (const [localPath, info] of Object.entries(raw as Record<string, any>)) {
+    const name = localPath.split("/").pop();
+    const webpPath = info?.webp_path;
+    if (name && webpPath) {
+      const r2Key = webpPath.split("/webp/")[1] || "";
+      result.set(name, r2Key);
+    }
+  }
+  imageMapCache = result;
+  return result;
 }
 
 interface StudyQuestion {
@@ -32,18 +43,11 @@ interface StudyQuestion {
   analysisStatus: string | null;
 }
 
-/** Build imageMap once at module load (build-time) */
-const imageMap: Map<string, string> = new Map(
-  Object.entries(imageMapRaw as Record<string, any>).map(([localPath, info]) => {
-    const name = localPath.split("/").pop();
-    const webpPath = info?.webp_path;
-    if (name && webpPath) {
-      const r2Key = webpPath.split("/webp/")[1] || "";
-      return [name, r2Key];
-    }
-    return null;
-  }).filter(Boolean) as [string, string][]
-);
+async function fetchJson(url: string): Promise<any> {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status}`);
+  return res.json();
+}
 
 async function loadAllQuestions(): Promise<StudyQuestion[]> {
   const data = await fetchJson(`${R2_PUBLIC_URL}/study_manifests/all_questions.json`);
@@ -54,22 +58,21 @@ async function loadAllQuestions(): Promise<StudyQuestion[]> {
     if (q.cancelledInSource) continue;
 
     const originalFile = q.file || `q-${q.q || 0}.png`;
-    // Derive question number from filename if missing (e.g. "q-01.png" -> 1)
     let qnum = q.q || q.questionNumber;
     if (!qnum) {
       const numMatch = originalFile.match(/(\d+)\.png$/i);
       qnum = numMatch ? parseInt(numMatch[1], 10) : 1;
     }
     // Try exact match first, then basename match
-    let webpPath = imageMap.get(originalFile);
+    let webpPath = imageMapCache?.get(originalFile);
     if (!webpPath) {
       const basename = originalFile.split("/").pop();
-      webpPath = imageMap.get(basename);
+      webpPath = imageMapCache?.get(basename);
     }
     const imagePath = webpPath ? `${R2_PUBLIC_URL}/${webpPath}` : null;
 
     const mebiMatch = originalFile.match(/^mebi/i);
-    const bookMatch = originalFile.match(/^((?:cal|nuli|mu|tu)\\d+)/i);
+    const bookMatch = originalFile.match(/^((?:cal|nuli|mu|tu)\d+)/i);
     const sourceBook = mebiMatch ? "MEBI" : bookMatch ? bookMatch[1].toUpperCase() : "UNKNOWN";
 
     questions.push({
@@ -105,6 +108,7 @@ let questionsCache: StudyQuestion[] | null = null;
 
 async function getQuestions(): Promise<StudyQuestion[]> {
   if (questionsCache) return questionsCache;
+  await getImageMap();
   questionsCache = await loadAllQuestions();
   return questionsCache;
 }

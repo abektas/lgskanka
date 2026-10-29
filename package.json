@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "opennextjs-cloudflare build",
+    "build": "next build",
     "start": "next start",
     "lint": "tsc --noEmit -p tsconfig.json",
     "test:source": "python3 -m unittest discover -s tests/source-ingestion -v && node --test tests/source-ingestion/api-contract.test.mjs",

@@ -99,7 +99,5 @@ _exam_silme_yedek_*/
 screenshots/
 .claude/
 wrangler.toml
-wrangler.jsonc
 public/exams/
 .open-next/
-wrangler.jsonc

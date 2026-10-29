@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "lgs-ai-coach",
+  "name": "lgsanka",
   "main": ".open-next/worker.js",
   "compatibility_date": "2025-10-14",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],

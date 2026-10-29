@@ -31,14 +31,16 @@ async function fetchJson(url: string): Promise<any> {
   return res.json();
 }
 
-/** local PNG filename -> R2 webp path (e.g. "webp/turkce/official/abc123.webp") */
+/** local PNG filename -> R2 webp path (e.g. "turkce/official/abc123.webp") */
 async function loadImageMap(): Promise<Map<string, string>> {
   const raw = await fetchJson(`${R2_PUBLIC_URL}/study_manifests/image_map.json`);
   const result = new Map<string, string>();
   for (const [localPath, info] of Object.entries(raw as Record<string, any>)) {
     const name = localPath.split("/").pop();
-    if (name && info?.webp_path) {
-      result.set(name, info.webp_path);
+    const webpPath = info?.webp_path;
+    if (name && webpPath) {
+      const r2Key = webpPath.replace(/^.*?\/webp\//, "");
+      result.set(name, r2Key);
     }
   }
   return result;
@@ -49,7 +51,7 @@ async function loadAllQuestions(imageMap: Map<string, string>): Promise<StudyQue
   const questions: StudyQuestion[] = [];
 
   for (const manifestKey of index.manifests) {
-    const manifest = await fetchJson(`${R2_PUBLIC_URL}/${manifestKey}`);
+    const manifest = await fetchJson(`${R2_PUBLIC_URL}/${encodeURIComponent(manifestKey)}`);
     for (const q of manifest.questions || []) {
       const qnum = q.q || q.questionNumber;
       if (!qnum) continue;

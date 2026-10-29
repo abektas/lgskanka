@@ -1,0 +1,90 @@
+/* Exam Timer Styles */
+.exam-timer {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.timer-display {
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--foreground);
+  margin-bottom: 12px;
+  transition: color 0.3s ease;
+}
+
+.timer-display.warning {
+  color: #f59e0b;
+}
+
+.timer-display.danger {
+  color: #ef4444;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.timer-progress {
+  height: 8px;
+  background: var(--muted);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.timer-progress i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #22c55e, #3b82f6);
+  border-radius: 4px;
+  transition: width 1s linear, background 0.3s ease;
+}
+
+.timer-display.warning ~ .timer-progress i {
+  background: linear-gradient(90deg, #f59e0b, #f97316);
+}
+
+.timer-display.danger ~ .timer-progress i {
+  background: linear-gradient(90deg, #ef4444, #f97316);
+}
+
+.timer-controls {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.timer-controls .btn {
+  font-size: 0.875rem;
+  padding: 8px 16px;
+}
+
+.timer-hint {
+  display: block;
+  text-align: center;
+  margin-top: 8px;
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .timer-display {
+    font-size: 1.5rem;
+  }
+  .timer-controls {
+    flex-direction: column;
+  }
+  .timer-controls .btn {
+    width: 100%;
+  }
+}

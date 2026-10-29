@@ -2,24 +2,23 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Icon } from "../components/icons";
 import { GameRightsCard } from "../components/dashboard-widgets";
+import { CycleCard } from "../components/cycle-card";
 import { Greeting } from "../components/greeting";
 import { HeroArt } from "../components/hero-art";
 import { StudyTimer } from "../components/study-timer";
 import { TaskList } from "../components/task-list";
 import {
-  coachInsights,
   errorSummary,
   errorTypes,
-  examPlan,
   subjects,
   weeklyProgress,
 } from "../data/content";
 import { learner } from "../data/nav";
 
 export const metadata: Metadata = {
-  title: { absolute: "LGS AI Koç — 8. sınıf için kişisel çalışma koçu" },
+  title: { absolute: "LGS KANKA — 8. sınıf için kişisel çalışma arkadaşı" },
   description:
-    "Günlük görevler, 5 haftalık deneme programı, ders bazlı ilerleme ve H1–H7 hata analizi tek ekranda. 8. sınıf öğrencileri için yapay zekâ destekli LGS çalışma paneli.",
+    "Günlük görevler, 12 aylık deneme takvimi, haftalık testler, ders bazlı ilerleme ve H1–H7 hata analizi tek ekranda. 8. sınıf öğrencileri için LGS çalışma paneli.",
   alternates: { canonical: "/" },
 };
 
@@ -37,7 +36,6 @@ function donutBackground() {
 }
 
 export default function HomePage() {
-  const activeExam = examPlan.find((exam) => exam.status === "active");
   const topErrors = [...errorTypes].sort((a, b) => b.share - a.share).slice(0, 4);
 
   return (
@@ -49,8 +47,8 @@ export default function HomePage() {
             Merhaba <Greeting /> 👋
           </h1>
           <p>
-            Bugün hedeflerine birlikte devam edelim. Önce 10 soruluk kısa bir çalışma, sonra hata
-            analizi — toplam 40 dakika.
+            Bugün hedeflerine birlikte devam edelim. Türkçe, Matematik, Fen 5'er; İngilizce,
+            İnkılap, Din 3'er — toplam 24 soru, sonra hata analizi.
           </p>
         </div>
         <Link className="btn btn-primary" href="/calis">
@@ -73,29 +71,29 @@ export default function HomePage() {
             <span className="topic-index" aria-hidden="true">
               1
             </span>
-            Üslü ifadelerde 5 dakikalık kısa tekrar
-            <span className="step-xp">+15 XP</span>
+            Günlük alıştırma: Türkçe, Matematik, Fen 5'er; İngilizce, İnkılap, Din 3'er = 24 soru
+            <span className="step-xp">+10 XP</span>
           </li>
           <li>
             <span className="topic-index" aria-hidden="true">
               2
             </span>
-            5 pekiştirme sorusu (H2 yöntem odağı)
-            <span className="step-xp">+10 XP</span>
+            Yanlışların H türünü seç (H1–H7 hata analizi)
+            <span className="step-xp">+5 XP</span>
           </li>
           <li>
             <span className="topic-index" aria-hidden="true">
               3
             </span>
-            5 soruluk mini test ve hata analizi
-            <span className="step-xp">+20 XP</span>
+            Pekiştirme sayfasından zayıf konularda 5 soruluk mini çalışma
+            <span className="step-xp">+15 XP</span>
           </li>
           <li>
             <span className="topic-index" aria-hidden="true">
               4
             </span>
-            H3 tekrar kontrolü (yarın sabah için planlanır)
-            <span className="step-xp">+5 XP</span>
+            Hafta sonu (cumartesi): 45 soruluk haftalık test (Tr 10, Mat 10, Fen 10, İnk 5, Din 5, Eng 5)
+            <span className="step-xp">+30 XP</span>
           </li>
         </ol>
         <p className="muted-text" style={{ fontSize: 12.5 }}>
@@ -122,9 +120,6 @@ export default function HomePage() {
           <section aria-labelledby="derslerim">
             <div className="section-head">
               <h2 id="derslerim">Derslerim</h2>
-              <Link className="text-link" href="/dersler">
-                Konu haritası <Icon name="arrow" size={14} />
-              </Link>
             </div>
             <div className="subjects-grid">
               {subjects.map((subject) => (
@@ -158,55 +153,9 @@ export default function HomePage() {
         </div>
 
         <div className="stack">
-          <section className="card" aria-labelledby="ai-kocum">
-            <div className="section-head">
-              <h2 id="ai-kocum">🤖 AI Koçum</h2>
-              <Link className="text-link" href="/ai-koc">
-                Panele git <Icon name="arrow" size={14} />
-              </Link>
-            </div>
-            <p className="coach-note">
-              Bugünkü analizine göre önerim: <strong>Üslü ifadelerde</strong> soru tiplerinde
-              ilerleme var. Şimdi cebirsel ifadeleri kısa bir tekrarla pekiştirelim, ardından 5
-              pekiştirme sorusu.
-            </p>
-
-            <h3 className="recent-title">Son çalışmalar</h3>
-            <div className="recent-list">
-              <div className="recent-item">
-                <span aria-hidden="true">📚</span> Üslü İfadeler – 10 soru
-                <small>%70 · 2 hata</small>
-              </div>
-              <div className="recent-item">
-                <span aria-hidden="true">📚</span> Cebirsel İfadeler – 15 soru
-                <small>%60 · 6 hata</small>
-              </div>
-              <div className="recent-item">
-                <span aria-hidden="true">📚</span> Fen – Madde ve Değişim
-                <small>%80 · 3 hata</small>
-              </div>
-            </div>
-
-            <Link className="btn btn-soft btn-block" href="/profil" style={{ marginTop: 16 }}>
-              👤 Karakterimi özelleştir
-            </Link>
-          </section>
-
           <StudyTimer />
 
-          <section className="card" aria-labelledby="deneme">
-            <div className="section-head">
-              <h2 id="deneme">5 Haftalık Deneme Programı</h2>
-            </div>
-            <p className="coach-note">
-              {activeExam
-                ? `${activeExam.week} · ${activeExam.subject} (${activeExam.date}) devam ediyor. Son denemede eksik kalan konular bu haftanın planına eklendi.`
-                : "Program başlıyor: her hafta bir deneme, ardından hata analizi."}
-            </p>
-            <Link className="btn btn-primary btn-block" href="/sinavlar" style={{ marginTop: 16 }}>
-              Sınav takvim <Icon name="arrow" size={18} />
-            </Link>
-          </section>
+          <CycleCard />
         </div>
       </section>
 
@@ -241,7 +190,7 @@ export default function HomePage() {
         <article className="card">
           <div className="section-head">
             <h2>Hata analizi özeti</h2>
-            <Link className="text-link" href="/ilerleme">
+            <Link className="text-link" href="/sonuclar">
               Detay <Icon name="arrow" size={14} />
             </Link>
           </div>

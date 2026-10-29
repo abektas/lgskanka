@@ -32,12 +32,12 @@ const index: Hit[] = [
     {
       title: subject.name,
       detail: `Ders · başarı %${subject.score}`,
-      href: `/dersler#${subject.slug}`,
+      href: `/sonuclar#ders-durum`,
     },
     ...subject.topics.map((topic) => ({
       title: topic,
       detail: `${subject.name} konusu`,
-      href: `/dersler#${subject.slug}`,
+      href: `/pekistirme`,
     })),
   ]),
   ...tasks.map((task) => ({ title: task.title, detail: task.detail, href: task.href })),
@@ -50,7 +50,7 @@ const index: Hit[] = [
   ...errorTypes.map((error) => ({
     title: `${error.code} · ${error.name}`,
     detail: error.definition,
-    href: "/ilerleme",
+    href: "/sonuclar",
   })),
 ];
 

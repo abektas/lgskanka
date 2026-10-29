@@ -1,7 +1,9 @@
 # Environment variables
+# `.env.example` istisnadır: yalnızca değişken adları ve yer tutucu içerir.
 .env
 .env.local
-.env.*.local
+.env.*
+!.env.example
 
 # Dependencies
 node_modules/
@@ -18,13 +20,85 @@ tsconfig.tsbuildinfo
 # Python artifacts
 __pycache__/
 *.py[cod]
+.venv/
 
 # Local tooling / editor
 .freebuff/
 .vercel/
 
+# Chrome crash dumps (tarayıcı cwd'ye düşürür)
+com.google.Chrome.*/
+
+# Agent scratch / backup artifacts
+*.backup
+*.backup-*
+*.save
+*.before-openai
+*.before-*
+app/api/ai/providers.ts'
+
+# Downloaded official source artifacts (MIME/binary; provenance lives in manifests)
+scripts/source-ingestion/data/questions/archive/
+
 # Logs
 *.log
+logs/
 
 # OS files
 .DS_Store
+
+# Extraction outputs (too large for git; tracked via manifests only)
+cal05_crops/
+cal05_pilot/
+lgs_çalışma_soruları/
+lgs_study_all_subjects_20pt/
+
+# Analysis outputs (large JSONL files)
+*.jsonl
+lgs_çalışma_soruları/*/analysis.jsonl
+
+# Hermes scratch
+.hermes/
+hermes-snap-*.sh
+
+# Cloudflare / OpenNext build outputs
+.open-next/
+.wrangler/
+.dev.vars
+cloudflare-env.d.ts
+
+# YouTube OAuth tokens (server-side, never commit)
+.youtube-tokens.json
+
+# R2'de barındırılan görseller (Git'e alınmaz)
+webp/
+lgs_18_26/
+public/study/
+public/pilot-2022-visual/
+scripts/source-ingestion/output/
+
+# Agent skills (proje değil)
+.agents/
+
+# Agent/CLI araçları
+.cline/
+.superpowers/
+tools/cline-watcher/
+clinesistemraporu.md
+CLINE_BRIEFING.md
+
+# Build cache / temp
+node-compile-cache/
+.headroom/
+*.db
+*.lock
+9736b02e*/
+hermes_kernel*/
+_standart_yedekler_*/
+_exam_silme_yedek_*/
+screenshots/
+.claude/
+wrangler.toml
+wrangler.jsonc
+public/exams/
+package-lock.json

@@ -22,7 +22,7 @@ export function Sidebar() {
           🎓
         </span>
         <span>
-          <b>LGS AI KOÇ</b>
+          <b>LGS KANKA</b>
           <small>Senin yol arkadaşın</small>
         </span>
       </div>
@@ -57,7 +57,7 @@ export function Sidebar() {
       </div>
 
       <p className="side-foot">
-        Ses ve fotoğraflar yalnızca analiz için kullanılır, analiz bitince silinir.
+        Öğrenme verisi (hata türü, konu, mastery) tarayıcıda saklanır; ham görüntü/ses tutulmaz.
       </p>
     </aside>
   );

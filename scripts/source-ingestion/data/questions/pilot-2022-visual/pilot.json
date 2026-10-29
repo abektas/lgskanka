@@ -1,0 +1,589 @@
+{
+  "schema_version": "1.0",
+  "pilot": "TASK-QBANK-003-2022-visual-representation",
+  "source": {
+    "source_id": "MEB-LGS-2022",
+    "source_type": "REAL_LGS",
+    "year": 2022,
+    "source_page_url": "https://odsgm.meb.gov.tr/www/5-haziran-2022-tarihinde-yapilan-sinavla-ogrenci-alacak-ortaogretim-kurumlarina-iliskin-merkezi-sinavin-soru-kitapciklari-ve-cevap-anahtarlari/icerik/822",
+    "pdf_url": "https://cdn.eba.gov.tr/icerik/lgs/2022_sayisal_bolum_a_kitapcigi_ve_cevap_anahtari.pdf",
+    "archive_path": "scripts/source-ingestion/data/questions/archive/MEB-LGS-2022/01-2022_sayisal_bolum_a_kitapcigi_ve_cevap_anahtari.pdf",
+    "sha256": "8a1c6526b50b4b695dd6f48bfce42c7fbed53d26f0057e554f666cb4682c4142"
+  },
+  "tooling": {
+    "render_tool": "PyMuPDF",
+    "render_tool_version": "1.28.2",
+    "render_dpi": 300,
+    "baseline_tool": "pypdf",
+    "layout_tool": "MinerU (flash tier, karşılaştırma amaçlı)"
+  },
+  "candidate_count": 8,
+  "image_backed_count": 6,
+  "control_count": 2,
+  "records": [
+    {
+      "id": "MEB-LGS-2022:SAYISAL:MAT:Q04",
+      "mode": "image",
+      "source": {
+        "source_id": "MEB-LGS-2022",
+        "source_type": "REAL_LGS",
+        "year": 2022,
+        "booklet": "SAYISAL",
+        "source_page_url": "https://odsgm.meb.gov.tr/www/5-haziran-2022-tarihinde-yapilan-sinavla-ogrenci-alacak-ortaogretim-kurumlarina-iliskin-merkezi-sinavin-soru-kitapciklari-ve-cevap-anahtarlari/icerik/822",
+        "pdf_url": "https://cdn.eba.gov.tr/icerik/lgs/2022_sayisal_bolum_a_kitapcigi_ve_cevap_anahtari.pdf",
+        "source_sha256": "8a1c6526b50b4b695dd6f48bfce42c7fbed53d26f0057e554f666cb4682c4142",
+        "archive_path": "scripts/source-ingestion/data/questions/archive/MEB-LGS-2022/01-2022_sayisal_bolum_a_kitapcigi_ve_cevap_anahtari.pdf"
+      },
+      "question": {
+        "subject": "MATEMATİK",
+        "subject_code": "MAT",
+        "question_number": 4,
+        "page": 3,
+        "representation": "IMAGE_BACKED"
+      },
+      "image": {
+        "path": "public/pilot-2022-visual/mat-q04-p03.png",
+        "public_path": "/pilot-2022-visual/mat-q04-p03.png",
+        "pixel_width": 1967,
+        "pixel_height": 1169,
+        "clip_rect_pt": {
+          "x0": 43.44,
+          "y0": 448.76,
+          "x1": 515.1,
+          "y1": 729.0
+        }
+      },
+      "extraction": {
+        "tool": "PyMuPDF",
+        "tool_version": "1.28.2",
+        "method": "page_render_clip",
+        "render_dpi": 300,
+        "region_detection": "left_margin_question_number_blocks",
+        "page_embedded_images": 0,
+        "page_vector_drawings": 305,
+        "page_text_characters": 1069,
+        "reconstructed_from_ocr": false
+      },
+      "reason": "figure_and_equation: eşit kollu terazi çizimi (Şekil I/II) ve kefe konumlarını gösteren şekil; pypdf metni 'Sol kefe/Sağ kefe/Zemin' gibi dağınık parçalara düşüyor ve şekil hiçbir şekilde temsil edilemiyor.",
+      "baseline": {
+        "baseline_tool": "pypdf",
+        "produced_question_block": false,
+        "page_text_excerpt": "4.   \nSol kefe\nSağ kefe\nZemin\nŞekil I\nŞekil II\nDenge durumundaki eşit kollu terazinin kefelerinin konumu Şekil I’deki gibidir.",
+        "authoritative": false
+      },
+      "structured_text": null,
+      "mineru_comparison": {
+        "tool": "MinerU",
+        "tier": "flash",
+        "authoritative": false,
+        "note": "Yerel MinerU yalnızca flash (parse_mode=txt) tier ile çalıştı; layout/table modelleri bu ortamda yok. Metin bloğu çıkarımı karşılaştırma amaçlıdır.",
+        "block_types": {
+          "header": 1,
+          "image": 1,
+          "text": 25,
+          "equation": 2,
+          "page_number": 1,
+          "footer": 1
+        },
+        "text_excerpt": "A | 3. |  a, b, c, d birer doğal sayı olmak üzere ab ab cb = _ac b 2 + = + ab i ab cbab cd = _ac b= - i - _ac bd dir. i $ $ $ | Çevresinin uzunluğu 800 cm olan dikdörtgen şeklindeki kâğıt, yukarıdaki gibi dikdörtgen ve kare şeklinde iki parçaya ayrılıyor. | Kare şeklindeki parçanın bir kenarının uzunluğu 8 cm olduğuna göre dikdörtgen şeklindeki parçanın bir yüzünün alanı kaç santimetrekaredir? | A) 16 | B) 24 | C) 32 | D) 40 | 4. | Sol kefe | Sağ kefe | Zemin | x g | 100 g | x g x g | 250 g | 60 g | Sol kefe | Sağ kefe | Zemin | Şekil I | Şekil II | Denge durumundaki eşit kollu terazinin kefelerinin konumu Şekil I’deki gibidir. Bu terazinin sol kefesine bir adet 100 gramlık ve üç adet x gramlık kutu, sağ kefesine ise bir adet 250 gramlık ve bir adet 60 gramlık kutu yerleştirildiğinde denge durumu bozulan terazinin kefelerinin konumu Şekil II’deki gibi olmuştur. | Buna göre, x’in alabileceği değerleri gösteren eşitsizlik aşağıdakilerden hangisidir? | A) x > 210 | C) x > 70 | 3 | Diğer sayfaya geçiniz."
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2022:SAYISAL:MAT:Q10",
+      "mode": "image",
+      "source": {
+        "source_id": "MEB-LGS-2022",
+        "source_type": "REAL_LGS",
+        "year": 2022,
+        "booklet": "SAYISAL",
+        "source_page_url": "https://odsgm.meb.gov.tr/www/5-haziran-2022-tarihinde-yapilan-sinavla-ogrenci-alacak-ortaogretim-kurumlarina-iliskin-merkezi-sinavin-soru-kitapciklari-ve-cevap-anahtarlari/icerik/822",
+        "pdf_url": "https://cdn.eba.gov.tr/icerik/lgs/2022_sayisal_bolum_a_kitapcigi_ve_cevap_anahtari.pdf",
+        "source_sha256": "8a1c6526b50b4b695dd6f48bfce42c7fbed53d26f0057e554f666cb4682c4142",
+        "archive_path": "scripts/source-ingestion/data/questions/archive/MEB-LGS-2022/01-2022_sayisal_bolum_a_kitapcigi_ve_cevap_anahtari.pdf"
+      },
+      "question": {
+        "subject": "MATEMATİK",
+        "subject_code": "MAT",
+        "question_number": 10,
+        "page": 7,
+        "representation": "IMAGE_BACKED"
+      },
+      "image": {
+        "path": "public/pilot-2022-visual/mat-q10-p07.png",
+        "public_path": "/pilot-2022-visual/mat-q10-p07.png",
+        "pixel_width": 1975,
+        "pixel_height": 2699,
+        "clip_rect_pt": {
+          "x0": 36.77,
+          "y0": 81.59,
+          "x1": 510.69,
+          "y1": 729.0
+        }
+      },
+      "extraction": {
+        "tool": "PyMuPDF",
+        "tool_version": "1.28.2",
+        "method": "page_render_clip",
+        "render_dpi": 300,
+        "region_detection": "left_margin_question_number_blocks",
+        "page_embedded_images": 0,
+        "page_vector_drawings": 1154,
+        "page_text_characters": 419,
+        "reconstructed_from_ocr": false
+      },
+      "reason": "coordinate_graph_and_options: noktalı kâğıt üzerinde k doğrusu boyunca öteleme/yansıma ve dört seçenek grafiği; pypdf yalnızca '1 birim' etiketlerini ve 'A) B) C) D)' boşluklarını veriyor.",
+      "baseline": {
+        "baseline_tool": "pypdf",
+        "produced_question_block": false,
+        "page_text_excerpt": "10.    \nk\nSol Sağ\n1 birim\n1 birim\nA) B)\nC) D)\nk\n1 birim",
+        "authoritative": false
+      },
+      "structured_text": null,
+      "mineru_comparison": {
+        "tool": "MinerU",
+        "tier": "flash",
+        "authoritative": false,
+        "note": "Yerel MinerU yalnızca flash (parse_mode=txt) tier ile çalıştı; layout/table modelleri bu ortamda yok. Metin bloğu çıkarımı karşılaştırma amaçlıdır.",
+        "block_types": {
+          "header": 2,
+          "image": 1,
+          "text": 23,
+          "page_number": 1,
+          "footer": 1
+        },
+        "text_excerpt": "A | 10. | 1 birim | 1 birim | k | Sol | Sağ | Noktalı kâğıt üzerinde verilen k doğrusu boyunca soldaki şekil 6 birim sağa, sağdaki şekil ise 6 birim sola ötelendikten sonra her ikisinin de k doğrusuna göre yansıma altındaki görüntüleri oluş turuluyor. | Buna göre, oluşan görüntüler aşağıdakilerden hangisidir? | A) | B) | 1 birim | 1 birim | k | 1 birim | 1 birim | k | C) | D) | 1 birim | 1 birim | k | 1 birim | 1 birim | k | 7 | Diğer sayfaya geçiniz."
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2022:SAYISAL:MAT:Q11",
+      "mode": "image",
+      "source": {
+        "source_id": "MEB-LGS-2022",
+        "source_type": "REAL_LGS",
+        "year": 2022,
+        "booklet": "SAYISAL",
+        "source_page_url": "https://odsgm.meb.gov.tr/www/5-haziran-2022-tarihinde-yapilan-sinavla-ogrenci-alacak-ortaogretim-kurumlarina-iliskin-merkezi-sinavin-soru-kitapciklari-ve-cevap-anahtarlari/icerik/822",
+        "pdf_url": "https://cdn.eba.gov.tr/icerik/lgs/2022_sayisal_bolum_a_kitapcigi_ve_cevap_anahtari.pdf",
+        "source_sha256": "8a1c6526b50b4b695dd6f48bfce42c7fbed53d26f0057e554f666cb4682c4142",
+        "archive_path": "scripts/source-ingestion/data/questions/archive/MEB-LGS-2022/01-2022_sayisal_bolum_a_kitapcigi_ve_cevap_anahtari.pdf"
+      },
+      "question": {
+        "subject": "MATEMATİK",
+        "subject_code": "MAT",
+        "question_number": 11,
+        "page": 8,
+        "representation": "IMAGE_BACKED"
+      },
+      "image": {
+        "path": "public/pilot-2022-visual/mat-q11-p08.png",
+        "public_path": "/pilot-2022-visual/mat-q11-p08.png",
+        "pixel_width": 1988,
+        "pixel_height": 2700,
+        "clip_rect_pt": {
+          "x0": 51.6,
+          "y0": 81.19,
+          "x1": 528.67,
+          "y1": 729.0
+        }
+      },
+      "extraction": {
+        "tool": "PyMuPDF",
+        "tool_version": "1.28.2",
+        "method": "page_render_clip",
+        "render_dpi": 300,
+        "region_detection": "left_margin_question_number_blocks",
+        "page_embedded_images": 0,
+        "page_vector_drawings": 216,
+        "page_text_characters": 285,
+        "reconstructed_from_ocr": false
+      },
+      "reason": "geometric_shape_grid: kareli zemin üzerinde sarı/mavi üçgen ve dört numaralı şekil; pypdf yalnızca 'Sarı Mavi IVIII I II' gibi etiket dizisi üretiyor.",
+      "baseline": {
+        "baseline_tool": "pypdf",
+        "produced_question_block": false,
+        "page_text_excerpt": "11.          \nSarı\nMavi IVIII\nI II\nYukarıdaki kareli zemin üzerinde geometrik şekiller verilmiştir.",
+        "authoritative": false
+      },
+      "structured_text": null,
+      "mineru_comparison": {
+        "tool": "MinerU",
+        "tier": "flash",
+        "authoritative": false,
+        "note": "Yerel MinerU yalnızca flash (parse_mode=txt) tier ile çalıştı; layout/table modelleri bu ortamda yok. Metin bloğu çıkarımı karşılaştırma amaçlıdır.",
+        "block_types": {
+          "header": 3,
+          "table": 1,
+          "text": 6,
+          "page_number": 1
+        },
+        "text_excerpt": "MATEMATİK | A | 11. | Yukarıdaki kareli zemin üzerinde geometrik şekiller verilmiştir. | Mavi renkli üçgenin bir kenarıyla, numaralanmış şekillerden hangisinin bir kenarı çakıştırıldı  | ğında sarı üçgene eş bir üçgen elde edilir? | A) I | B) II | C) III | D) IV | 8"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2022:SAYISAL:MAT:Q12",
+      "mode": "image",
+      "source": {
+        "source_id": "MEB-LGS-2022",
+        "source_type": "REAL_LGS",
+        "year": 2022,
+        "booklet": "SAYISAL",
+        "source_page_url": "https://odsgm.meb.gov.tr/www/5-haziran-2022-tarihinde-yapilan-sinavla-ogrenci-alacak-ortaogretim-kurumlarina-iliskin-merkezi-sinavin-soru-kitapciklari-ve-cevap-anahtarlari/icerik/822",
+        "pdf_url": "https://cdn.eba.gov.tr/icerik/lgs/2022_sayisal_bolum_a_kitapcigi_ve_cevap_anahtari.pdf",
+        "source_sha256": "8a1c6526b50b4b695dd6f48bfce42c7fbed53d26f0057e554f666cb4682c4142",
+        "archive_path": "scripts/source-ingestion/data/questions/archive/MEB-LGS-2022/01-2022_sayisal_bolum_a_kitapcigi_ve_cevap_anahtari.pdf"
+      },
+      "question": {
+        "subject": "MATEMATİK",
+        "subject_code": "MAT",
+        "question_number": 12,
+        "page": 9,
+        "representation": "IMAGE_BACKED"
+      },
+      "image": {
+        "path": "public/pilot-2022-visual/mat-q12-p09.png",
+        "public_path": "/pilot-2022-visual/mat-q12-p09.png",
+        "pixel_width": 1994,
+        "pixel_height": 2700,
+        "clip_rect_pt": {
+          "x0": 36.77,
+          "y0": 81.19,
+          "x1": 515.2,
+          "y1": 729.0
+        }
+      },
+      "extraction": {
+        "tool": "PyMuPDF",
+        "tool_version": "1.28.2",
+        "method": "page_render_clip",
+        "render_dpi": 300,
+        "region_detection": "left_margin_question_number_blocks",
+        "page_embedded_images": 0,
+        "page_vector_drawings": 184,
+        "page_text_characters": 775,
+        "reconstructed_from_ocr": false
+      },
+      "reason": "diagram_plus_pythagorean_equation: sarı/mavi kâğıtların çakıştırılması (Şekil I/II) ve a²+c²=b² denklemi; pypdf 'c b a CB' gibi okunamayan bir denklem satırı veriyor.",
+      "baseline": {
+        "baseline_tool": "pypdf",
+        "produced_question_block": false,
+        "page_text_excerpt": "12.   \nc b\na CB\na2 + c2 = b2\nKare şeklindeki sarı ve mavi kâğıtlar ... Şekil I\nŞekil II\n17 cm A",
+        "authoritative": false
+      },
+      "structured_text": null,
+      "mineru_comparison": {
+        "tool": "MinerU",
+        "tier": "flash",
+        "authoritative": false,
+        "note": "Yerel MinerU yalnızca flash (parse_mode=txt) tier ile çalıştı; layout/table modelleri bu ortamda yok. Metin bloğu çıkarımı karşılaştırma amaçlıdır.",
+        "block_types": {
+          "header": 2,
+          "image": 1,
+          "text": 24,
+          "equation": 1,
+          "page_number": 1,
+          "footer": 1
+        },
+        "text_excerpt": "A | 12. | Dik üçgenlerde 90° lik açının karşısındaki kenara “hipotenüs” denir. Bir dik üçgende dik kenarların uzunluklarının kareleri toplamı, hipotenüsün uzunluğunun karesine eşittir. | A c | b | B | a | Kare şeklindeki sarı ve mavi kâğıtlar, birer köşeleri ve birer kenarları Şekil Iʼdeki gibi çakıştırılmıştır. | Mavi | Mavi | Yukarı | Sarı | Sarı | 17 cm | Şekil I | 2 cm | A | B | Aşağı | Şekil II | Kâğıtlar Şekil Iʼdeki konumundayken sarı kâğıt sabit kalmak üzere mavi kâğıt yukarı doğru 2 cm hareket ettirildiğinde sarı kâğıdın bir köşesi, mavi kâğıdın kenarının orta noktası ile Şekil IIʼdeki gibi çakışmıştır. | Buna göre, Şekil IIʼde iki köşeyi birleştiren AB doğru parçasının uzunluğu kaç santimetredir? | A) 213 | B) 262 | C) 12 | D) 15 | 9 | Diğer sayfaya geçiniz."
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2022:SAYISAL:MAT:Q14",
+      "mode": "image",
+      "source": {
+        "source_id": "MEB-LGS-2022",
+        "source_type": "REAL_LGS",
+        "year": 2022,
+        "booklet": "SAYISAL",
+        "source_page_url": "https://odsgm.meb.gov.tr/www/5-haziran-2022-tarihinde-yapilan-sinavla-ogrenci-alacak-ortaogretim-kurumlarina-iliskin-merkezi-sinavin-soru-kitapciklari-ve-cevap-anahtarlari/icerik/822",
+        "pdf_url": "https://cdn.eba.gov.tr/icerik/lgs/2022_sayisal_bolum_a_kitapcigi_ve_cevap_anahtari.pdf",
+        "source_sha256": "8a1c6526b50b4b695dd6f48bfce42c7fbed53d26f0057e554f666cb4682c4142",
+        "archive_path": "scripts/source-ingestion/data/questions/archive/MEB-LGS-2022/01-2022_sayisal_bolum_a_kitapcigi_ve_cevap_anahtari.pdf"
+      },
+      "question": {
+        "subject": "MATEMATİK",
+        "subject_code": "MAT",
+        "question_number": 14,
+        "page": 11,
+        "representation": "IMAGE_BACKED"
+      },
+      "image": {
+        "path": "public/pilot-2022-visual/mat-q14-p11.png",
+        "public_path": "/pilot-2022-visual/mat-q14-p11.png",
+        "pixel_width": 1971,
+        "pixel_height": 2700,
+        "clip_rect_pt": {
+          "x0": 36.77,
+          "y0": 81.19,
+          "x1": 509.57,
+          "y1": 729.0
+        }
+      },
+      "extraction": {
+        "tool": "PyMuPDF",
+        "tool_version": "1.28.2",
+        "method": "page_render_clip",
+        "render_dpi": 300,
+        "region_detection": "left_margin_question_number_blocks",
+        "page_embedded_images": 0,
+        "page_vector_drawings": 167,
+        "page_text_characters": 846,
+        "reconstructed_from_ocr": false
+      },
+      "reason": "calendar_table: iki farklı ölçekte (Nisan/Mayıs 2013) takvim tablosu; pypdf hücre satırlarını 'P S Ç P C C' başlıklarıyla dağıtıyor, tablo ilişkisi kayboluyor.",
+      "baseline": {
+        "baseline_tool": "pypdf",
+        "produced_question_block": false,
+        "page_text_excerpt": "14.     \nP S Ç P C C P C C P\n1 2 3 4 5 6 7\n8 9 10 11 12 13 14\n... NİSAN MAYIS\n2013",
+        "authoritative": false
+      },
+      "structured_text": null,
+      "mineru_comparison": {
+        "tool": "MinerU",
+        "tier": "flash",
+        "authoritative": false,
+        "note": "Yerel MinerU yalnızca flash (parse_mode=txt) tier ile çalıştı; layout/table modelleri bu ortamda yok. Metin bloğu çıkarımı karşılaştırma amaçlıdır.",
+        "block_types": {
+          "header": 2,
+          "image": 1,
+          "text": 14,
+          "paragraph_title": 2,
+          "footer": 1
+        },
+        "text_excerpt": "A | 14. | 2013 | NİSAN | MAYIS | P S Ç P C C P | 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 | P S Ç P C C | P | 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 | Öğrenci sayısı 20 olan bir sınıftaki her bir öğrencinin doğum tarihi birbirinden farklıdır. Bu sınıfın öğrenci listesi, öğrencilerin doğum tarihlerine göre büyükten küçüğe doğru sıralanarak oluşturulmuştur. Listenin ilk sırasındaki öğrencinin doğum tarihi 18 Nisan 2013, son sırasındaki öğrencinin doğum tarihi 24 Mayıs 2013 olmuştur. | Bu listeden rastgele seçilen bir öğrencinin doğum tarihinin nisan ayında olma olasılığı, mayıs ayında olma olasılığından daha fazladır. | Buna göre, doğum tarihi 25 Nisan 2013’ten önce olan en az kaç öğrenci vardır? | A) 3 | B) 4 | C) 5 | D) 6 | 11 | Diğer sayfaya geçiniz."
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2022:SAYISAL:MAT:Q19",
+      "mode": "image",
+      "source": {
+        "source_id": "MEB-LGS-2022",
+        "source_type": "REAL_LGS",
+        "year": 2022,
+        "booklet": "SAYISAL",
+        "source_page_url": "https://odsgm.meb.gov.tr/www/5-haziran-2022-tarihinde-yapilan-sinavla-ogrenci-alacak-ortaogretim-kurumlarina-iliskin-merkezi-sinavin-soru-kitapciklari-ve-cevap-anahtarlari/icerik/822",
+        "pdf_url": "https://cdn.eba.gov.tr/icerik/lgs/2022_sayisal_bolum_a_kitapcigi_ve_cevap_anahtari.pdf",
+        "source_sha256": "8a1c6526b50b4b695dd6f48bfce42c7fbed53d26f0057e554f666cb4682c4142",
+        "archive_path": "scripts/source-ingestion/data/questions/archive/MEB-LGS-2022/01-2022_sayisal_bolum_a_kitapcigi_ve_cevap_anahtari.pdf"
+      },
+      "question": {
+        "subject": "MATEMATİK",
+        "subject_code": "MAT",
+        "question_number": 19,
+        "page": 15,
+        "representation": "IMAGE_BACKED"
+      },
+      "image": {
+        "path": "public/pilot-2022-visual/mat-q19-p15.png",
+        "public_path": "/pilot-2022-visual/mat-q19-p15.png",
+        "pixel_width": 1989,
+        "pixel_height": 2694,
+        "clip_rect_pt": {
+          "x0": 36.77,
+          "y0": 82.78,
+          "x1": 514.01,
+          "y1": 729.0
+        }
+      },
+      "extraction": {
+        "tool": "PyMuPDF",
+        "tool_version": "1.28.2",
+        "method": "page_render_clip",
+        "render_dpi": 300,
+        "region_detection": "left_margin_question_number_blocks",
+        "page_embedded_images": 0,
+        "page_vector_drawings": 183,
+        "page_text_characters": 598,
+        "reconstructed_from_ocr": false
+      },
+      "reason": "solid_geometry_with_labels: dik dairesel silindir ve açınımı (7 cm / 3 cm / Konserve etiketleri) ile hacim formülü pr²h; pypdf ölçü etiketlerini gövde metninden kopuk veriyor.",
+      "baseline": {
+        "baseline_tool": "pypdf",
+        "produced_question_block": false,
+        "page_text_excerpt": "19.   \nr\nh\nYarıçapının uzunluğu r, yüksekliği h olan dik dairesel silindirin hacmi pr 2h dir.\n7 cm 7 cm\n3 cm\n3 cm\nKonserve",
+        "authoritative": false
+      },
+      "structured_text": null,
+      "mineru_comparison": {
+        "tool": "MinerU",
+        "tier": "flash",
+        "authoritative": false,
+        "note": "Yerel MinerU yalnızca flash (parse_mode=txt) tier ile çalıştı; layout/table modelleri bu ortamda yok. Metin bloğu çıkarımı karşılaştırma amaçlıdır.",
+        "block_types": {
+          "header": 2,
+          "image": 1,
+          "text": 17,
+          "footer": 1
+        },
+        "text_excerpt": "A | 19. | Yarıçapının uzunluğu r, yüksekliği h olan dik dairesel silindirin hacmi pr 2 | h |  dir. | r | h | 3 cm | 7 cm | 7 cm | K | onserve | Konserve | 3 cm | Yukarıda bir ürüne ait dik dairesel silindir şeklindeki konserve kutusu ve bu kutunun açınımı verilmiş tir. Bu açınım üzerinde, alanı 100 cm | 2 |  olan mavi karesel bölgenin kenarları, yanal yüzeyin kenarları na paraleldir. Mavi bölgenin kenarlara olan uzaklıkları ise şekildeki gibi 3 cm ve 7 cm’dir. | Buna göre, bu konserve kutusunun hacmi kaç santimetreküptür? | (p yerine 3 alınız.) | A) 384 | B) 648 | C) 768 | D) 1296 | 15 | Diğer sayfaya geçiniz."
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2022:SAYISAL:MAT:Q06",
+      "mode": "control",
+      "source": {
+        "source_id": "MEB-LGS-2022",
+        "source_type": "REAL_LGS",
+        "year": 2022,
+        "booklet": "SAYISAL",
+        "source_page_url": "https://odsgm.meb.gov.tr/www/5-haziran-2022-tarihinde-yapilan-sinavla-ogrenci-alacak-ortaogretim-kurumlarina-iliskin-merkezi-sinavin-soru-kitapciklari-ve-cevap-anahtarlari/icerik/822",
+        "pdf_url": "https://cdn.eba.gov.tr/icerik/lgs/2022_sayisal_bolum_a_kitapcigi_ve_cevap_anahtari.pdf",
+        "source_sha256": "8a1c6526b50b4b695dd6f48bfce42c7fbed53d26f0057e554f666cb4682c4142",
+        "archive_path": "scripts/source-ingestion/data/questions/archive/MEB-LGS-2022/01-2022_sayisal_bolum_a_kitapcigi_ve_cevap_anahtari.pdf"
+      },
+      "question": {
+        "subject": "MATEMATİK",
+        "subject_code": "MAT",
+        "question_number": 6,
+        "page": 4,
+        "representation": "STRUCTURED_TEXT"
+      },
+      "image": {
+        "path": "public/pilot-2022-visual/mat-q06-p04.png",
+        "public_path": "/pilot-2022-visual/mat-q06-p04.png",
+        "pixel_width": 1947,
+        "pixel_height": 942,
+        "clip_rect_pt": {
+          "x0": 57.61,
+          "y0": 503.1,
+          "x1": 524.82,
+          "y1": 729.0
+        }
+      },
+      "extraction": {
+        "tool": "PyMuPDF",
+        "tool_version": "1.28.2",
+        "method": "page_render_clip",
+        "render_dpi": 300,
+        "region_detection": "left_margin_question_number_blocks",
+        "page_embedded_images": 0,
+        "page_vector_drawings": 317,
+        "page_text_characters": 971,
+        "reconstructed_from_ocr": false
+      },
+      "reason": "control_simple_table: sadece 3 satırlı tablo; pypdf tabloyu satır satır okunabilir metin olarak verdiği ve şekil/vektör içermediği için yapılandırılmış metin tercih edilir.",
+      "baseline": {
+        "baseline_tool": "pypdf",
+        "produced_question_block": true,
+        "page_text_excerpt": "6. Bir fabrikanın üç farklı ürün bandında paketlenen ürün sayıları ve bu ürünlerin paketlenme süreleri aşağıdaki tabloda verilmiştir. Tablo: Paketlenen Ürün Sayıları ve Paketlenme Süreleri / Ürün Bandı Ürün Sayısı Toplam Süre (dk.) / K 15 3 / L 16 4 / M x 6",
+        "authoritative": false
+      },
+      "structured_text": {
+        "tool": "pypdf",
+        "authoritative": false,
+        "stem": "Bir fabrikanın üç farklı ürün bandında paketlenen ürün sayıları ve bu ürünlerin paketlenme süreleri aşağıdaki tabloda verilmiştir. Tablo: Paketlenen Ürün Sayıları ve Paketlenme Süreleri Ürün Bandı Ürün Sayısı Toplam Süre (dk.) K 15 3 L 16 4 M x 6 Bu üç bandın her birinde 1 dakikada paketlenen ürün sayısı bir doğal sayıya eşit ve toplamları 13’ten azdır. Buna göre, x’in alabileceği değer en fazla kaçtır?",
+        "options": {
+          "A": "6",
+          "B": "12",
+          "C": "18",
+          "D": "22"
+        }
+      },
+      "mineru_comparison": {
+        "tool": "MinerU",
+        "tier": "flash",
+        "authoritative": false,
+        "note": "Yerel MinerU yalnızca flash (parse_mode=txt) tier ile çalıştı; layout/table modelleri bu ortamda yok. Metin bloğu çıkarımı karşılaştırma amaçlıdır.",
+        "block_types": {
+          "header": 2,
+          "text": 17,
+          "paragraph_title": 8,
+          "image": 1,
+          "page_number": 1
+        },
+        "text_excerpt": "MATEMATİK | A | 5. |  Zeynep’in kalem sayısının çarpanlarından  | kendisi hariç |  en büyük iki çarpanı ile Kuzey’in kalem sayısının çarpanlarından  | kendisi hariç |  en büyük iki çarpanı aşağıda gösterilmiştir. | Zeynep’in Kalemleri | Kuzey’in Kalemleri | Kendisi hariç en büyük | 4 | 27 ve | 9 | çarpanlar | 8 ve | Kendisi hariç |  en büyük | çarpanlar | Zeynep ve Kuzey, yukarıda verilen çarpanların toplamı kadar kalemi arkadaşlarına vermiştir. | Buna göre, Zeynep ve Kuzey’in toplam kaç kalemi kalmıştır? | A) 22 | B) 48 | C) 49 | D) 64 | 6. |  Bir fabrikanın üç farklı ürün bandında paketlenen ürün sayıları ve bu ürünlerin paketlenme süreleri aşağıdaki tabloda verilmiştir. | Tablo: |  Paketlenen Ürün Sayıları ve Paketlenme Süreleri | Bu üç bandın her birinde 1 dakikada paketlenen ürün sayısı bir doğal sayıya eşit ve toplamları 13’ten azdır. | Buna göre, x’in alabileceği değer en fazla kaçtır? | A) 6 | B) 12 | C) 18 | D) 22 | 4"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    },
+    {
+      "id": "MEB-LGS-2022:SAYISAL:MAT:Q13",
+      "mode": "control",
+      "source": {
+        "source_id": "MEB-LGS-2022",
+        "source_type": "REAL_LGS",
+        "year": 2022,
+        "booklet": "SAYISAL",
+        "source_page_url": "https://odsgm.meb.gov.tr/www/5-haziran-2022-tarihinde-yapilan-sinavla-ogrenci-alacak-ortaogretim-kurumlarina-iliskin-merkezi-sinavin-soru-kitapciklari-ve-cevap-anahtarlari/icerik/822",
+        "pdf_url": "https://cdn.eba.gov.tr/icerik/lgs/2022_sayisal_bolum_a_kitapcigi_ve_cevap_anahtari.pdf",
+        "source_sha256": "8a1c6526b50b4b695dd6f48bfce42c7fbed53d26f0057e554f666cb4682c4142",
+        "archive_path": "scripts/source-ingestion/data/questions/archive/MEB-LGS-2022/01-2022_sayisal_bolum_a_kitapcigi_ve_cevap_anahtari.pdf"
+      },
+      "question": {
+        "subject": "MATEMATİK",
+        "subject_code": "MAT",
+        "question_number": 13,
+        "page": 10,
+        "representation": "STRUCTURED_TEXT"
+      },
+      "image": {
+        "path": "public/pilot-2022-visual/mat-q13-p10.png",
+        "public_path": "/pilot-2022-visual/mat-q13-p10.png",
+        "pixel_width": 1973,
+        "pixel_height": 2700,
+        "clip_rect_pt": {
+          "x0": 50.94,
+          "y0": 81.19,
+          "x1": 524.22,
+          "y1": 729.0
+        }
+      },
+      "extraction": {
+        "tool": "PyMuPDF",
+        "tool_version": "1.28.2",
+        "method": "page_render_clip",
+        "render_dpi": 300,
+        "region_detection": "left_margin_question_number_blocks",
+        "page_embedded_images": 0,
+        "page_vector_drawings": 177,
+        "page_text_characters": 528,
+        "reconstructed_from_ocr": false
+      },
+      "reason": "control_simple_with_small_label: gövde metni pypdf tarafından eksiksiz çıkarıldı; yalnızca tek bir ölçü etiketi ((x + 2) cm) metne dâhil oldu, kutu/çizim okunabilirliği bozulmadı.",
+      "baseline": {
+        "baseline_tool": "pypdf",
+        "produced_question_block": true,
+        "page_text_excerpt": "13. Kısa kenarlarının uzunlukları x cm olan dikdörtgen şeklindeki 12 adet kâğıt ... (x + 2) cm ... A) 24x2 + 312x B) 24x 2 + 156 C) 12x 2 + 312 D) 12x 2 + 156x",
+        "authoritative": false
+      },
+      "structured_text": {
+        "tool": "pypdf",
+        "authoritative": false,
+        "stem": "Kısa kenarlarının uzunlukları x cm olan dikdörtgen şeklindeki 12 adet kâğıt uzun kenarlarından çakıştırılarak aşağıdaki şekil elde edilmiştir. (x + 2) cm Bu kâğıtlar; en üstteki kâğıdın uzun kenarının uzunluğu (x + 2) cm olmak üzere sonraki her kâğıt, bir önceki kâğıttan 2 cm daha uzun olacak biçimde yerleştirilmiştir. Buna göre, oluşan şeklin bir yüzünün alanını santimetrekare cinsinden veren cebirsel ifade aşağıdakilerden hangisidir?",
+        "options": {
+          "A": "24x2 + 312x",
+          "B": "24x 2 + 156",
+          "C": "12x 2 + 312",
+          "D": "12x 2 + 156x"
+        }
+      },
+      "mineru_comparison": {
+        "tool": "MinerU",
+        "tier": "flash",
+        "authoritative": false,
+        "note": "Yerel MinerU yalnızca flash (parse_mode=txt) tier ile çalıştı; layout/table modelleri bu ortamda yok. Metin bloğu çıkarımı karşılaştırma amaçlıdır.",
+        "block_types": {
+          "header": 2,
+          "text": 8,
+          "page_number": 1
+        },
+        "text_excerpt": "MATEMATİK | A | 13. |  Kısa kenarlarının uzunlukları x cm olan dikdörtgen şeklindeki 12 adet kâğıt uzun kenarlarından çakıştırılarak aşağıdaki şekil elde edilmiştir. | (x + 2) |  cm | Bu kâğıtlar; en üstteki kâğıdın uzun kenarının uzunluğu (x + 2) cm olmak üzere sonraki her kâğıt, bir önceki kâğıttan 2 cm daha uzun olacak biçimde yerleştirilmiştir. | Buna göre, oluşan şeklin bir yüzünün alanını santimetrekare cinsinden veren cebirsel ifade aşağıdakilerden hangisidir? | A) 24x | 2 |  + 312x | B) 24x | 2 |  + 156 | C) 12x | 2 |  + 312 | D) 12x | 2 |  + 156x | 10"
+      },
+      "status": "NEEDS_REVIEW",
+      "published": false
+    }
+  ],
+  "status": "NEEDS_REVIEW",
+  "published": false
+}

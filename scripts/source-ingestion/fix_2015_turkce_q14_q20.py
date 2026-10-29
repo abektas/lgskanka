@@ -1,0 +1,111 @@
+#!/usr/bin/env python3
+"""Fix 2015 Türkçe Q14-Q20 crops."""
+import json
+import hashlib
+from pathlib import Path
+import fitz
+from PIL import Image
+
+REPO = Path("/home/selam/roller/web/lgs-ai-coach")
+INPUT_DIR = Path("/home/selam/roller/web/kaynak dosyalar/Lgs_soruları/lgs 2015")
+DPI = 300
+
+# Fixed bounds for Türkçe 2015
+# Page 8: Q14 left (D at left col top=634.5), Q15 right (D at right col top=374.8)
+# Page 9: Q16 full width
+# Page 10: Q17 left, Q18 left, Q19 right, Q20 right
+
+FIXES = {
+    "turkce": {
+        # Page 8: Q14 left column - D at left col top=634.5
+        14: {"page": 8, "clipRectPt": {"x0": 20.0, "y0": 78.7, "x1": 271.4, "y1": 654.5}, "column": "left"},
+        # Page 8: Q15 right column - D at right col top=374.8
+        15: {"page": 8, "clipRectPt": {"x0": 281.4, "y0": 78.7, "x1": 532.8, "y1": 394.8}, "column": "right"},
+        # Page 9: Q16 full width - D at left col top=390.8
+        16: {"page": 9, "clipRectPt": {"x0": 20.0, "y0": 78.7, "x1": 532.8, "y1": 410.8}, "column": "single"},
+        # Page 10: Q17 left (D at left col?), Q18 left, Q19 right, Q20 right
+        17: {"page": 10, "clipRectPt": {"x0": 20.0, "y0": 78.7, "x1": 271.4, "y1": 464.2}, "column": "left"},
+        18: {"page": 10, "clipRectPt": {"x0": 20.0, "y0": 464.2, "x1": 271.4, "y1": 709.5}, "column": "left"},
+        19: {"page": 10, "clipRectPt": {"x0": 281.4, "y0": 78.7, "x1": 532.8, "y1": 464.2}, "column": "right"},
+        20: {"page": 10, "clipRectPt": {"x0": 281.4, "y0": 464.2, "x1": 532.8, "y1": 709.5}, "column": "right"},
+    },
+}
+
+def sha256(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as stream:
+        while chunk := stream.read(1024 * 1024):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def re_crop_question(pdf_path: Path, subj: str, qnum: int, fix: dict, output_dir: Path):
+    page_idx = fix["page"] - 1
+    clip = fix["clipRectPt"]
+    
+    doc = fitz.open(str(pdf_path))
+    page = doc[page_idx]
+    
+    mat = fitz.Matrix(DPI / 72, DPI / 72)
+    pix = page.get_pixmap(matrix=mat)
+    img = Image.frombytes("RGB", (pix.width, pix.height), pix.samples)
+    
+    sx = img.width / float(page.rect.width)
+    sy = img.height / float(page.rect.height)
+    
+    box = (round(clip["x0"] * sx), round(clip["y0"] * sy),
+           round(clip["x1"] * sx), round(clip["y1"] * sy))
+    
+    cropped = img.crop(box)
+    if cropped.width == 0 or cropped.height == 0:
+        print(f"  ERROR: Empty crop for {subj} Q{qnum}")
+        return False
+    
+    old_path = output_dir / f"MEB-LGS-2015-{subj.upper()}-Q{qnum:02d}.png"
+    if old_path.exists():
+        old_path.rename(output_dir / f"MEB-LGS-2015-{subj.upper()}-Q{qnum:02d}.png.bak")
+    
+    cropped.save(old_path, "PNG")
+    asset_hash = sha256(old_path)
+    h = clip['y1'] - clip['y0']
+    print(f"  Fixed {subj} Q{qnum}: page={fix['page']} col={fix['column']} h={h:.1f}pt crop=({clip['x0']:.1f},{clip['y0']:.1f})-({clip['x1']:.1f},{clip['y1']:.1f})")
+    return True
+
+
+def update_manifest(subj: str, qnum: int, fix: dict):
+    manifest_path = REPO / "lgs_18_26" / subj / "manifest_2015.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    
+    for q in manifest["questions"]:
+        if q["questionNumber"] == qnum:
+            q["visual"]["clipRectPt"] = fix["clipRectPt"]
+            q["page"] = fix["page"]
+            break
+    
+    manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(f"  Manifest updated: {subj} Q{qnum}")
+
+
+def main():
+    pdf_sozel = INPUT_DIR / "2015 Sözel.pdf"
+    output_dir = REPO / "lgs_18_26" / "turkce"
+    
+    for qnum in [14, 15, 16, 17, 18, 19, 20]:
+        fix = FIXES["turkce"][qnum]
+        re_crop_question(pdf_sozel, "turkce", qnum, fix, output_dir)
+        update_manifest("turkce", qnum, fix)
+    
+    import shutil
+    dst = REPO / "public" / "exams"
+    for qnum in [14, 15, 16, 17, 18, 19, 20]:
+        src_png = output_dir / f"MEB-LGS-2015-TURKCE-Q{qnum:02d}.png"
+        target = dst / f"2015-turkce-q{qnum:02d}.png"
+        if src_png.exists():
+            shutil.copy2(src_png, target)
+            print(f"  Copied: {target.name}")
+    
+    print("Türkçe Q14-20 tamamlandı!")
+
+
+if __name__ == "__main__":
+    main()

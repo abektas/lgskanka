@@ -5,12 +5,12 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 const routes: { path: string; priority: number; changeFrequency: "weekly" | "monthly" }[] = [
   { path: "/", priority: 1, changeFrequency: "weekly" },
   { path: "/calis", priority: 0.9, changeFrequency: "weekly" },
-  { path: "/ai-koc", priority: 0.9, changeFrequency: "weekly" },
-  { path: "/dersler", priority: 0.8, changeFrequency: "monthly" },
-  { path: "/sinavlar", priority: 0.8, changeFrequency: "weekly" },
+  { path: "/haftalik-test", priority: 0.8, changeFrequency: "weekly" },
+  { path: "/sonuclar", priority: 0.8, changeFrequency: "weekly" },
+  { path: "/pekistirme", priority: 0.8, changeFrequency: "weekly" },
+  { path: "/aylik-denemeler", priority: 0.8, changeFrequency: "weekly" },
   { path: "/kaynaklar", priority: 0.7, changeFrequency: "monthly" },
   { path: "/oduller", priority: 0.6, changeFrequency: "monthly" },
-  { path: "/ilerleme", priority: 0.6, changeFrequency: "monthly" },
   { path: "/profil", priority: 0.4, changeFrequency: "monthly" },
 ];
 

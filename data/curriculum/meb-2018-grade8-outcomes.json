@@ -1,0 +1,1783 @@
+{
+  "schemaVersion": "1.0",
+  "framework": "CURRENT_TYMM",
+  "note": "Official MEB/TTKB 8th-grade learning outcomes for the programs in force for LGS 2018-2026. Grade 8 is not part of the Maarif Modeli rollout, so the 2018 (and 2019 Turkish) programs apply. Codes and text are copied verbatim from the TTKB PDFs; nothing is inferred.",
+  "sourcePortal": "https://mufredat.meb.gov.tr",
+  "subjects": {
+    "matematik": {
+      "subject": "Matematik",
+      "programYear": 2018,
+      "sourceFile": "matematik-2018.pdf",
+      "sourceUrl": "https://mufredat.meb.gov.tr/Dosyalar/201813017165445-MATEMAT%C4%B0K%20%C3%96%C4%9ERET%C4%B0M%20PROGRAMI%202018v.pdf",
+      "sha256": "ca94096da33478c822772425b1384bacdbe40548b0813302257fec7e8c9f9c8b",
+      "outcomeCount": 52,
+      "unitNames": {
+        "1": "Sayılar ve İşlemler",
+        "2": "Cebir",
+        "3": "Geometri ve Ölçme",
+        "4": "Veri İşleme",
+        "5": "Olasılık"
+      },
+      "unitOutcomeCounts": {
+        "1": 16,
+        "2": 13,
+        "3": 16,
+        "4": 2,
+        "5": 5
+      },
+      "outcomes": [
+        {
+          "code": "M.8.1.1.1",
+          "text": "Verilen pozitif tam sayıların pozitif tam sayı çarpanlarını bulur, pozitif tam sayıların pozitif tam sayı çarpanlarını üslü ifadelerin çarpımı şeklinde yazar.",
+          "explanation": "Bir pozitif tam sayının asal çarpanlarını bulmaya yönelik çalışmalara da yer verilir."
+        },
+        {
+          "code": "M.8.1.1.2",
+          "text": "İki doğal sayının en büyük ortak bölenini (EBOB) ve en küçük ortak katını (EKOK) hesaplar, ilgili problemleri çözer.",
+          "explanation": "Alan ve hacim hesaplamayı gerektiren problemlere girilmez."
+        },
+        {
+          "code": "M.8.1.1.3",
+          "text": "Verilen iki doğal sayının aralarında asal olup olmadığını belirler.",
+          "explanation": null
+        },
+        {
+          "code": "M.8.1.2.1",
+          "text": "Tam sayıların, tam sayı kuvvetlerini hesaplar.",
+          "explanation": null
+        },
+        {
+          "code": "M.8.1.2.2",
+          "text": "Üslü ifadelerle ilgili temel kuralları anlar, birbirine denk ifadeler oluşturur.",
+          "explanation": "a � 0 k, m, n tam sayılar olmak üzere an = a-n, an = 1 a-n , an . a m= an+m, an = a m-n ) m = an.m, (a.b) k = ak .bk , ( b"
+        },
+        {
+          "code": "M.8.1.2.3",
+          "text": "Sayıların ondalık gösterimlerini 10’un tam sayı kuvvetlerini kullanarak çözümler.",
+          "explanation": "Örneğin 82,53 = 8 .10¹ + 2 . 10⁰ + 5 . 10 ⁻¹ + 3 . 10 ⁻²"
+        },
+        {
+          "code": "M.8.1.2.4",
+          "text": "Verilen bir sayıyı 10’un farklı tam sayı kuvvetlerini kullanarak ifade eder.",
+          "explanation": "Örneğin 51,2×10 5 sayısı 512×10 4 veya 5,12×10 6 şeklinde de ifade edilebilir."
+        },
+        {
+          "code": "M.8.1.2.5",
+          "text": "Çok büyük ve çok küçük sayıları bilimsel gösterimle ifade eder ve karşılaştırır.",
+          "explanation": "|a| , 1 veya 1’den büyük, 10’dan küçük bir gerçek sayı ve n bir tam sayı olmak üzere a x10 n “bilimsel gösterim”dir. a’nın pozitif olduğu durumlarla sınırlı kalınır."
+        },
+        {
+          "code": "M.8.1.3.1",
+          "text": "Tam kare pozitif tam sayılarla bu sayıların karekökleri arasındaki ilişkiyi belirler.",
+          "explanation": "Kare modelleri kullanılarak alanla kenar arasındaki ilişkiden yararlanılarak bir sayıyla karekökü arasındaki ilişki ele alınabilir. Matematik Dersi Öğretim Programı"
+        },
+        {
+          "code": "M.8.1.3.2",
+          "text": "Tam kare olmayan kareköklü bir sayının hangi iki doğal sayı arasında olduğunu belirler.",
+          "explanation": "Örneğin 31 sayısının 5 ile 6 sayıları arasında bulunduğunu ve 6’ya daha yakın olduğunu belirlemeye yönelik çalışmalar yapılır."
+        },
+        {
+          "code": "M.8.1.3.3",
+          "text": "Kareköklü bir ifadeyi a b şeklinde yazar ve a b şeklindeki ifadede katsayıyı kök içine alır.",
+          "explanation": null
+        },
+        {
+          "code": "M.8.1.3.4",
+          "text": "Kareköklü ifadelerde çarpma ve bölme işlemlerini yapar.",
+          "explanation": "Paydasında a± c veya a± b gibi birden fazla terim bulunan ifadelerle işlemlere girilmez."
+        },
+        {
+          "code": "M.8.1.3.5",
+          "text": "Kareköklü ifadelerde toplama ve çıkarma işlemlerini yapar.",
+          "explanation": "Paydasında a± c veya a± b gibi birden fazla terim bulunan ifadelerle işlemlere girilmez."
+        },
+        {
+          "code": "M.8.1.3.6",
+          "text": "Kareköklü bir ifade ile çarpıldığında, sonucu bir doğal sayı yapan çarpanlara örnek verir.",
+          "explanation": "Örneğin 18 ’i doğal sayı yapan çarpanlara 2 , 5 2 ve 18 sayıları örnek olarak verilebilir."
+        },
+        {
+          "code": "M.8.1.3.7",
+          "text": "Ondalık ifadelerin kareköklerini belirler.",
+          "explanation": "Kesir olarak ifade edildiğinde payı ve paydası tam kare olan ondalık gösterimlerin kareköklerini bulmaya yönelik çalışmalara yer verilir."
+        },
+        {
+          "code": "M.8.1.3.8",
+          "text": "Gerçek sayıları tanır, rasyonel ve irrasyonel sayılarla ilişkilendirir.",
+          "explanation": "Tam kare olmayan sayıların kareköklerinin rasyonel sayı olarak belirtilemediğine (iki tam sayının oranı şeklinde yazılamadığına) dikkat çekilir. π sayısı bir irrasyonel sayı olarak tanıtılır. İrrasyonel sayı olmasına rağmen işlemlerde kolaylık sağlaması açısından π sayısı yerine 3; 3,14 veya 22/7 de alınabileceği"
+        },
+        {
+          "code": "M.8.2.1.1",
+          "text": "Basit cebirsel ifadeleri anlar ve farklı biçimlerde yazar.",
+          "explanation": "a) Terim, katsayı ve değişkenin anlamları üzerinde durulur. Sabit terimin de bir katsayı olduğu vurgulanır. b) x+5, 3x, x², -6y², a².b, 2a+2b gibi temel cebirsel ifadeler üzerinde durulur."
+        },
+        {
+          "code": "M.8.2.1.2",
+          "text": "Cebirsel ifadelerin çarpımını yapar.",
+          "explanation": "a) y(3y-2), (2x+3)(5x-1) gibi işlemler üzerinde durulur. b) Cebirsel ifadelerdeki katsayılar tam sayılardan seçilir. c) Cebirsel ifadelerle çarpma işlemini modellerle yapmaya yönelik çalışmalara yer verilir."
+        },
+        {
+          "code": "M.8.2.1.3",
+          "text": "Özdeşlikleri modellerle açıklar.",
+          "explanation": "a) (a ± b)² = a² ± 2ab + b² ve a² - b² = (a-b)(a+b) özdeşlikleriyle sınırlı kalınır. b) Özdeşliklerdeki katsayılar tam sayılardan seçilir."
+        },
+        {
+          "code": "M.8.2.1.4",
+          "text": "Cebirsel ifadeleri çarpanlara ayırır.",
+          "explanation": "a) Ortak çarpan parantezine alma ile iki kare farkı ve a² ± 2ab + b² biçimindeki tam kare ifadelerin çarpanlara ayırma işlemleri ele alınır. b) Cebirsel ifadelerdeki katsayılar ve kökleri tam sayılar içinde kalacak biçimde seçilir. c) Gruplandırarak çarpanlarına ayırma yöntemine girilmez. ç) Tam kare olmayan ikinci dereceden ifadelerin çarpanlara ayrılma işlemlerine girilmez. Matematik Dersi Öğretim Programı"
+        },
+        {
+          "code": "M.8.2.2.1",
+          "text": "Birinci dereceden bir bilinmeyenli denklemleri çözer.",
+          "explanation": "Bu sınıf düzeyinde katsayıları rasyonel sayı olan denklemlere yer verilir."
+        },
+        {
+          "code": "M.8.2.2.2",
+          "text": "Koordinat sistemini özellikleriyle tanır ve sıralı ikilileri gösterir.",
+          "explanation": "Koordinat sistemi üzerinde yer belirlemeyle gerçek hayat durumlarını ilişkilendirmeye yönelik çalışmalara yer verilir."
+        },
+        {
+          "code": "M.8.2.2.3",
+          "text": "Aralarında doğrusal ilişki bulunan iki değişkenden birinin diğerine bağlı olarak nasıl değiştiğini tablo ve denklem ile ifade eder.",
+          "explanation": "a) Tablo ile yapılan gösterimlerde sıralı ikililer biçiminde ifadelere de yer verilir. b) İki değişkenden birinin değerinin, diğer değişkenin aldığı değere göre nasıl değiştiği ve bu durumda hangisinin bağımlı hangisinin bağımsız değişken olduğu incelenir."
+        },
+        {
+          "code": "M.8.2.2.4",
+          "text": "Doğrusal denklemlerin grafiğini çizer.",
+          "explanation": "Doğrunun eksenleri hangi noktalarda kestiği, eksenlere paralelliği, orijinden geçip geçmediği durumlar ele alınır."
+        },
+        {
+          "code": "M.8.2.2.5",
+          "text": "Doğrusal ilişki içeren gerçek hayat durumlarına ait denklem, tablo ve grafiği oluşturur ve yorumlar.",
+          "explanation": "Doğrunun grafiği yorumlanırken doğru üzerindeki noktaların x ve y koordinatları arasındaki ilişki, eksenleri hangi noktalarda kestiği, orijinden geçip geçmediği, eksenlere paralelliği durumları ele alınır."
+        },
+        {
+          "code": "M.8.2.2.6",
+          "text": "Doğrunun eğimini modellerle açıklar, doğrusal denklemleri ve grafiklerini eğimle ilişkilendirir.",
+          "explanation": "a) Eğimin işaretinin ve büyüklüğünün anlamı üzerinde durulur. b) Günlük hayatla ilişkili modellemelerde eğimin dikey uzunluğun yatay uzunluğa oranı olduğu dikkate alınarak işareti üzerinde durulmaz. c) Gerektiğinde uygun bilgi ve iletişim teknolojilerinden yararlanılır."
+        },
+        {
+          "code": "M.8.2.3.1",
+          "text": "Birinci dereceden bir bilinmeyenli eşitsizlik içeren günlük hayat durumlarına uygun matematik cümleleri yazar.",
+          "explanation": "Örneğin “Anaokuluna en az 3 yaşında olan çocuklar kabul ediliyor.”ifadesinde çocukların yaşı x ile temsil edildiğinde, eşitsizlik x ≥ 3 olarak belirtilebilir."
+        },
+        {
+          "code": "M.8.2.3.2",
+          "text": "Birinci dereceden bir bilinmeyenli eşitsizlikleri sayı doğrusunda gösterir.",
+          "explanation": "x ≥ -1, -3 ≤ t < 7, a < 1 gibi durumlar inceletilir."
+        },
+        {
+          "code": "M.8.2.3.3",
+          "text": "Birinci dereceden bir bilinmeyenli eşitsizlikleri çözer.",
+          "explanation": "a) En çok iki işlem gerektiren eşitsizlikler seçilir. b) Eşitsizliğin her iki tarafı negatif bir sayı ile çarpılır veya bölünürse eşitsizliğin yön değiştireceğinin fark edilmesine yönelik çalışmalara yer verilir. Matematik Dersi Öğretim Programı"
+        },
+        {
+          "code": "M.8.3.1.1",
+          "text": "Üçgende kenarortay, açıortay ve yüksekliği inşa eder.",
+          "explanation": "a) Kâğıtları katlayarak, keserek veya kareli kâğıt üzerinde çizim yaparak üçgenin elemanlarını oluşturmaya yönelik çalışmalara yer verilir. b) Eşkenar, ikizkenar ve dik üçgen gibi özel üçgenlerde kenarortay, açıortay ve yüksekliğin özelliklerini belirlemeye yönelik çalışmalara da yer verilir."
+        },
+        {
+          "code": "M.8.3.1.2",
+          "text": "Üçgenin iki kenar uzunluğunun toplamı veya farkı ile üçüncü kenarının uzunluğunu ilişkilendirir.",
+          "explanation": "a) Somut modeller kullanılarak yapılacak etkinliklere yer verilebilir. b) Uygun bilgisayar yazılımları ile üçgen eşitsizliğini anlamaya yönelik çalışmalara yer verilebilir."
+        },
+        {
+          "code": "M.8.3.1.3",
+          "text": "Üçgenin kenar uzunlukları ile bu kenarların karşısındaki açıların ölçülerini ilişkilendirir.",
+          "explanation": null
+        },
+        {
+          "code": "M.8.3.1.4",
+          "text": "Yeterli sayıda elemanının ölçüleri verilen bir üçgeni çizer.",
+          "explanation": "a) (1) Üç kenarının uzunluğu, (2) bir kenarının uzunluğu ile iki açısının ölçüsü, (3) iki kenar uzunluğu ile bu kenarların arasındaki açının ölçüsü verilen üçgenlerin uygun araçlar kullanılarak çizilmesi sağlanır. b) Dinamik geometri yazılımları ile yapılacak çalışmalara yer verilebilir."
+        },
+        {
+          "code": "M.8.3.1.5",
+          "text": "Pisagor bağıntısını oluşturur, ilgili problemleri çözer.",
+          "explanation": "a) Pisagor bağıntısının gerçek hayat uygulamalarına yönelik çalışmalara yer verilir. b) Koordinat düzlemi üzerinde verilen iki nokta arasındaki uzaklığı Pisagor bağıntısını kullanarak bulma çalışmalarına yer verilir. İki nokta arasındaki uzaklık formülü verilmez. c) Kenar uzunlukları verilen bir üçgenin dik üçgen olup olmadığına Pisagor bağıntısını kullanarak karar vermeye yönelik çalışmalar yapılır."
+        },
+        {
+          "code": "M.8.3.2.1",
+          "text": "Nokta, doğru parçası ve diğer şekillerin öteleme sonucundaki görüntülerini çizer.",
+          "explanation": "a) Kareli veya noktalı kâğıt, koordinat sistemi üzerinde çalışmalar yapılır. b) Dinamik geometri yazılımları ile yapılacak çalışmalara da yer verilebilir . c) Ötelemede şekil üzerindeki her bir noktanın aynı yönde hareket ettiği ve şekil ile görüntüsünün eş olduğu fark ettirilir."
+        },
+        {
+          "code": "M.8.3.2.2",
+          "text": "Nokta, doğru parçası ve diğer şekillerin yansıma sonucu oluşan görüntüsünü oluşturur.",
+          "explanation": "a) Kareli veya noktalı kâğıt, koordinat sistemi üzerinde çalışmalar yapılır. b) Dinamik geometri yazılımları ile yapılacak çalışmalara da yer verilebilir. c) Yansımada şekil ile görüntüsü üzerinde birbirlerine karşılık gelen noktaların simetri doğrusuna dik ve aralarındaki uzaklıkların eşit olduğu bu nedenle şekil ile görüntüsünün eş olduğu fark ettirilir. ç) Simetri doğrularının üzerinde olan şekillerle de çalışmalar yapılır. Matematik Dersi Öğretim Programı"
+        },
+        {
+          "code": "M.8.3.2.3",
+          "text": "Çokgenlerin öteleme ve yansımalar sonucunda ortaya çıkan görüntüsünü oluşturur.",
+          "explanation": "a) En çok iki ardışık öteleme veya yansımaya yer verilir. b) Desen, motif ve benzeri görsellerde öteleme veya yansıma dönüşümlerini belirlemeye yönelik çalışmalara yer verilir. c) Geleneksel sanatlarımızdan (çini, seramik, dokuma vb.) örnekler de dikkate alınır."
+        },
+        {
+          "code": "M.8.3.3.1",
+          "text": "Eşlik ve benzerliği ilişkilendirir, eş ve benzer şekillerin kenar ve açı ilişkilerini belirler.",
+          "explanation": "a) Düzlemsel şekilleri karşılaştırarak eş olup olmadıklarını belirlemeye yönelik etkinliklere yer verilir. b) Eş çokgenlerde karşılıklı kenar uzunluklarının ve açı ölçülerinin eşit, benzer çokgenlerde ise karşılık gelen açı ölçülerinin eşit fakat kenar uzunluklarının orantılı olduğu vurgulanır. Eş çokgenlerin benzer olduğu ancak benzer çokgenlerin eş olmalarının gerekmediği vurgulanır. KKK, AKA gibi üçgenlerde eşlik ve benzerlik kuralları özel olarak verilmez. c) Somut modellerle, kareli kâğıtla veya kâğıtları katlayarak yapılacak çalışmalara yer verilir."
+        },
+        {
+          "code": "M.8.3.3.2",
+          "text": "Benzer çokgenlerin benzerlik oranını belirler, bir çokgene eş ve benzer çokgenler oluşturur.",
+          "explanation": "a) Somut modellerle, kareli kâğıtla veya kâğıtları katlayarak yapılacak çalışmalara yer verilir. b) Gerektiğinde uygun bilgi ve iletişim teknolojilerinden yararlanılır. c) Çokgenlerde benzerlik problemlerine girilmez."
+        },
+        {
+          "code": "M.8.3.4.1",
+          "text": "Dik prizmaları tanır, temel elemanlarını belirler, inşa eder ve açınımını çizer.",
+          "explanation": "a) Somut modellerle çalışmalara yer verilir. b) Bilgi ve iletişim teknolojilerinden yararlanılabilir."
+        },
+        {
+          "code": "M.8.3.4.2",
+          "text": "Dik dairesel silindirin temel elemanlarını belirler, inşa eder ve açınımını çizer.",
+          "explanation": "a) Somut modellerle çalışmalara yer verilir. b) Bilgi ve iletişim teknolojilerinden yararlanılabilir."
+        },
+        {
+          "code": "M.8.3.4.3",
+          "text": "Dik dairesel silindirin yüzey alanı bağıntısını oluşturur, ilgili problemleri çözer.",
+          "explanation": "a) Somut modellerle çalışmalara yer verilir. b) Bilgi ve iletişim teknolojilerinden yararlanılabilir."
+        },
+        {
+          "code": "M.8.3.4.4",
+          "text": "Dik dairesel silindirin hacim bağıntısını oluşturur; ilgili problemleri çözer.",
+          "explanation": "a) Somut modellerle çalışmalara yer verilir. b) Bilgi ve iletişim teknolojilerinden yararlanılabilir. c) Dik dairesel silindirin hacmini tahmin etmeye yönelik çalışmalara yer verilir. ç) Dik dairesel silindirin hacim bağıntısını dik prizmanın hacim bağıntısı ile ilişkilendirmeye yönelik çalışmalara Matematik Dersi Öğretim Programı"
+        },
+        {
+          "code": "M.8.3.4.5",
+          "text": "Dik piramidi tanır, temel elemanlarını belirler, inşa eder ve açınımını çizer.",
+          "explanation": "a) Somut modellerle çalışmalara yer verilir. b) Bilgi ve iletişim teknolojilerinden yararlanılabilir. c) Alan ve hacim problemlerine girilmez."
+        },
+        {
+          "code": "M.8.3.4.6",
+          "text": "Dik koniyi tanır, temel elemanlarını belirler, inşa eder ve açınımını çizer.",
+          "explanation": "a) Somut modellerle çalışmalara yer verilir. b) Bilgi ve iletişim teknolojilerinden yararlanılabilir. c) Alan ve hacim problemlerine girilmez."
+        },
+        {
+          "code": "M.8.4.1.1",
+          "text": "En fazla üç veri grubuna ait çizgi ve sütun grafiklerini yorumlar.",
+          "explanation": null
+        },
+        {
+          "code": "M.8.4.1.2",
+          "text": "Verileri sütun, daire veya çizgi grafiği ile gösterir ve bu gösterimler arasında uygun olan dönüşümleri yapar.",
+          "explanation": "Farklı gösterimlerin birbirlerine göre üstün ve zayıf yönleri üzerinde durulur."
+        },
+        {
+          "code": "M.8.5.1.1",
+          "text": "Bir olaya ait olası durumları belirler.",
+          "explanation": "Örneğin 3 kırmızı, 5 mavi renkli topun bulunduğu bir torbadan top çekilmesi olayı ile ilgili olası durumların sayısının 8 olduğu ifade edilir . Birden fazla olayın olası durumları ele alınmaz."
+        },
+        {
+          "code": "M.8.5.1.2",
+          "text": "“Daha fazla”, “eşit”, “daha az” olasılıklı olayları ayırt eder, örnek verir.",
+          "explanation": "Olasılığı hesaplamayı gerektirmeyen sezgisel durumlar ele alınır. Örneğin bir okuldaki tüm öğretmen ve öğrencilerin isimlerinin yazılı olduğu bir listeden rastgele çekilen bir ismin öğrenciye ait olma olasılığının daha fazla olduğu, 15’i erkek öğrenci ve 15’i kız öğrenci olan bir sınıftan rastgele seçilen birinin kız öğrenci olma olasılığı ile erkek öğrenci olma olasılığının eşit olduğunu belirten çalışmalar yapılır."
+        },
+        {
+          "code": "M.8.5.1.3",
+          "text": "Eşit şansa sahip olan olaylarda her bir çıktının olasılık değerinin eşit olduğunu ve bu değerin 1/n olduğunu açıklar.",
+          "explanation": "a) Kazanım ifadesindeki n, olası durum sayısını temsil etmektedir. b) Eşit şansa sahip olan ve olmayan olayları ayırt etmeye yönelik çalışmalara yer verilir. c) Olasılığın bir olayın olma şansına (olabilirliğine) ilişkin bir ölçüm olduğu vurgulanır."
+        },
+        {
+          "code": "M.8.5.1.4",
+          "text": "Olasılık değerinin 0 ile 1 arasında (0 ve 1 dâhil) olduğunu anlar.",
+          "explanation": "a) İmkânsız olay ve kesin olayın olasılık değerleri vurgulanır. b) Bir olayın olma olasılığı ile olmama olasılığının toplamının 1 olduğu fark ettirilir."
+        },
+        {
+          "code": "M.8.5.1.5",
+          "text": "Basit bir olayın olma olasılığını hesaplar.",
+          "explanation": "a) Zar atıldığında tek sayı gelmesi gibi örnekler verilir. b) Ayrık olan ve olmayan, bağımlı ve bağımsız olayların olasılığına girilmez. c) Birden fazla olayın olma olasılığı ele alınmaz."
+        }
+      ]
+    },
+    "fen": {
+      "subject": "Fen Bilimleri",
+      "programYear": 2018,
+      "sourceFile": "fen-bilimleri-2018.pdf",
+      "sourceUrl": "https://mufredat.meb.gov.tr/Dosyalar/201812312311937-FEN%20B%C4%B0L%C4%B0MLER%C4%B0%20%C3%96%C4%9ERET%C4%B0M%20PROGRAMI2018.pdf",
+      "sha256": "3a8aa21327083bf15c33b9c404f299ff784b11d26024522a8c24b61387c8c0c1",
+      "outcomeCount": 61,
+      "unitNames": {
+        "1": "Dünya ve Evren",
+        "2": "Canlılar ve Yaşam",
+        "3": "Fiziksel Olaylar",
+        "4": "Madde ve Doğası"
+      },
+      "unitOutcomeCounts": {
+        "1": 3,
+        "2": 13,
+        "3": 3,
+        "4": 17,
+        "5": 2,
+        "6": 12,
+        "7": 11
+      },
+      "outcomes": [
+        {
+          "code": "F.8.1.1.1",
+          "text": "Mevsimlerin oluşumuna yönelik tahminlerde bulunur.",
+          "explanation": "a. Dünya’nın dönme ekseni olduğuna değinilir. b. Dünya’nın dönme ekseni ile Güneş etrafındaki dolanma düzlemi arasındaki ilişkiye değinilir. c. Işığın birim yüzeye düşen enerji miktarının mevsimler üzerindeki etkisine değinilir. Önerilen Süre: 6 ders saati Konu / Kavramlar: : İklim, iklim bilimi, iklim bilimci, küresel iklim değişiklikleri"
+        },
+        {
+          "code": "F.8.1.2.1",
+          "text": "İklim ve hava olayları arasındaki farkı açıklar.",
+          "explanation": null
+        },
+        {
+          "code": "F.8.1.2.2",
+          "text": "İklim biliminin (klimatoloji) bir bilim dalı olduğunu ve bu alanda çalışan uzmanlara iklim bilimci (klima￾tolog) adı verildiğini söyler.",
+          "explanation": "Fen Bilimleri Dersi Öğretim Programı Bu ünitede öğrencilerin; DNA ve genetik kod ile ilişkili kavramları açıklamaları ve aralarındaki ilişkileri keşfet￾meleri, kalıtım, mutasyon, modifikasyon, adaptasyon, seçilim, varyasyon, genetik mühendisliği ve biyoteknoloji uygulamalarının farkında olmaları ve olumlu/olumsuz etkilerini tartışmalarına ilişkin bilgi ve beceriler kazanmaları Önerilen Süre: 4 ders saati Konu / Kavramlar: DNA’nın yapısı, DNA’nın kendini eşlemesi, nükleotid, gen, kromozom"
+        },
+        {
+          "code": "F.8.2.1.1",
+          "text": "Nükleotid, gen, DNA ve kromozom kavramlarını açıklayarak bu kavramlar arasında ilişki kurar.",
+          "explanation": "Bazların isimleri verilirken pürin ve pirimidin ayrımına girilmez."
+        },
+        {
+          "code": "F.8.2.1.2",
+          "text": "DNA’nın yapısını model üzerinde gösterir.",
+          "explanation": "a. Hidrojen, glikozit, ester, fosfodiester bağlarına girilmez. b. DNA’daki hataların onarılıp onarılmadığı belirtilir. c. DNA’daki nükleotid hesaplamaları verilmez."
+        },
+        {
+          "code": "F.8.2.1.3",
+          "text": "DNA’nın kendini nasıl eşlediğini ifade eder.",
+          "explanation": "a. Replikasyon ifadesi kullanılmaz. b. Eşlenme deneyleri anlatılmaz. c. Eşlenme ile ilgili hesaplama sorularına girilmez. Önerilen Süre: 10 ders saati Konu / Kavramlar: Gen, genotip, fenotip, saf döl, melez döl, baskın, çekinik, çaprazlama, cinsiyet, akraba evlilik￾leri"
+        },
+        {
+          "code": "F.8.2.2.1",
+          "text": "Kalıtım ile ilgili kavramları tanımlar.",
+          "explanation": "a. Gen, fenotip, genotip, saf döl ve melez döl kavramlarına değinilir. b. Baskın ve çekinik gen kavramlarına değinilir."
+        },
+        {
+          "code": "F.8.2.2.2",
+          "text": "Tek karakter çaprazlamaları ile ilgili problemler çözerek sonuçlar hakkında yorum yapar.",
+          "explanation": "a. Çaprazlamalarda sadece bezelye karakterleri kullanılır. b. Diğer canlılarda da karakterlerin aktarımının benzer olduğu vurgulanır. c. İnsanda çocuğun cinsiyetinin babadan gelen eşey kromozomu ile belirlendiği vurgulanır."
+        },
+        {
+          "code": "F.8.2.2.3",
+          "text": "Akraba evliliklerinin genetik sonuçlarını tartışır.",
+          "explanation": "Önerilen Süre: 2 ders saati Konu / Kavramlar: Mutasyon, modifikasyon"
+        },
+        {
+          "code": "F.8.2.3.1",
+          "text": "Örneklerden yola çıkarak mutasyonu açıklar.",
+          "explanation": null
+        },
+        {
+          "code": "F.8.2.3.2",
+          "text": "Örneklerden yola çıkarak modifikasyonu açıklar.",
+          "explanation": null
+        },
+        {
+          "code": "F.8.2.3.3",
+          "text": "Mutasyonla modifikasyon arasındaki farklar ile ilgili çıkarımda bulunur.",
+          "explanation": "Fen Bilimleri Dersi Öğretim Programı Önerilen Süre: 2 ders saati Konu / Kavramlar: Adaptasyon, doğal seçilim, varyasyon"
+        },
+        {
+          "code": "F.8.2.4.1",
+          "text": "Canlıların yaşadıkları çevreye uyumlarını gözlem yaparak açıklar.",
+          "explanation": "Adaptasyonların kalıtsal olduğu vurgulanır. Önerilen Süre: 4 ders saati Konu / Kavramlar: Genetik mühendisliği,yapay seçilim, biyoteknolojik çalışmalar, biyoteknoloji uygulamalarının"
+        },
+        {
+          "code": "F.8.2.5.1",
+          "text": "Genetik mühendisliğini ve biyoteknolojiyi ilişkilendirir.",
+          "explanation": "Islah, aşılama, gen aktarımı, klonlama, gen tedavisi örnekleri üzerinde durulur."
+        },
+        {
+          "code": "F.8.2.5.2",
+          "text": "Biyoteknolojik uygulamalar kapsamında oluşturulan ikilemlerle bu uygulamaların insanlık için yararlı ve zararlı yönlerini tartışır.",
+          "explanation": null
+        },
+        {
+          "code": "F.8.2.5.3",
+          "text": "Gelecekteki genetik mühendisliği ve biyoteknoloji uygulamalarının neler olabileceği hakkında tah￾minde bulunur.",
+          "explanation": "Bu ünitede öğrencilerin; katı, sıvı ve gaz basınçlarını ve bu basınçları etkileyen faktörler hakkında bilgi ve beceriler kazanmaları, aynı zamanda basıncın günlük hayattaki uygulamalarını fark etmeleri amaçlanmaktadır. Önerilen Süre: 10 ders saati Konu / Kavramlar: Basınç, katı basıncını etkileyen değişkenler, sıvı basıncını etkileyen değişkenler, basıncın günlük yaşam ve teknolojideki uygulamaları"
+        },
+        {
+          "code": "F.8.3.1.1",
+          "text": "Katı basıncını etkileyen değişkenleri deneyerek keşfeder.",
+          "explanation": "Basınç birimi olarak Pascal verilir. Matematiksel bağıntılara girilmez."
+        },
+        {
+          "code": "F.8.3.1.2",
+          "text": "Sıvı basıncını etkileyen değişkenleri tahmin eder ve tahminlerini test eder.",
+          "explanation": "a. Gazların da sıvılara benzer şekilde basınç uyguladıkları belirtilir. Açık hava basıncı örneklendirilir. b. Matematiksel bağıntılara girilmez. c. Gaz basıncını etkileyen değişkenlere girilmez."
+        },
+        {
+          "code": "F.8.3.1.3",
+          "text": "Katı, sıvı ve gazların basınç özelliklerinin günlük yaşam ve teknolojideki uygulamalarına örnekler verir.",
+          "explanation": "a. Sıvı basıncı ile ilgili Pascal prensibinin uygulamalarından örnekler verilir. b. Bilimsel bilgi türü olarak ilke ve prensiplere vurgu yapılır. Fen Bilimleri Dersi Öğretim Programı Bu ünitede öğrencilerin; elementleri metal, ametal ve soygaz olarak sınıflandırıldığını bilmeleri, maddede meydana gelen değişimleri, fiziksel ve kimyasal değişim olarak sınıflandırmaları; asit-baz kavramları ve asit yağ￾murlarına ilişkin bilgi ve beceriler kazanmaları amaçlanmaktadır. Önerilen Süre: 4 ders saati Konu / Kavramlar: Grup, periyot, periyodik sistemin sınıflandırılması"
+        },
+        {
+          "code": "F.8.4.1.1",
+          "text": "Periyodik sistemde, grup ve periyotların nasıl oluşturulduğunu açıklar.",
+          "explanation": "Periyodik sisteme duyulan ihtiyaç ve periyodik sistemin oluşturulma süreci ayrıntıya girilmeden"
+        },
+        {
+          "code": "F.8.4.1.2",
+          "text": "Elementleri periyodik tablo üzerinde metal, yarımetal ve ametal olarak sınıflandırır.",
+          "explanation": "a. Elementlerin özelliklerine girilmez. b. Soygazların üzerinde durulur. Önerilen Süre: 4 ders saati Konu / Kavramlar: Fiziksel değişim, kimyasal değişim"
+        },
+        {
+          "code": "F.8.4.2.1",
+          "text": "Fiziksel ve kimyasal değişim arasındaki farkları, çeşitli olayları gözlemleyerek açıklar.",
+          "explanation": "Önerilen Süre: 3 ders saati Konu / Kavramlar: Kimyasal tepkimelerin oluşumu, kütlenin korunumu"
+        },
+        {
+          "code": "F.8.4.3.1",
+          "text": "Bileşiklerin kimyasal tepkime sonucunda oluştuğunu bilir.",
+          "explanation": "Kimyasal tepkime denklemlerine formüller kullanılarak girilmez. Önerilen Süre: 8 ders saati Konu / Kavramlar: Asit, baz, pH, asit yağmurları, asit yağmurlarına karşı çözüm önerileri"
+        },
+        {
+          "code": "F.8.4.4.1",
+          "text": "Asit ve bazların genel özelliklerini ifade eder.",
+          "explanation": null
+        },
+        {
+          "code": "F.8.4.4.2",
+          "text": "Asit ve bazlara günlük yaşamdan örnekler verir.",
+          "explanation": null
+        },
+        {
+          "code": "F.8.4.4.3",
+          "text": "Günlük hayatta ulaşılabilecek malzemeleri asit-baz ayracı olarak kullanır.",
+          "explanation": null
+        },
+        {
+          "code": "F.8.4.4.4",
+          "text": "Maddelerin asitlik ve bazlık durumlarına ilişkin pH değerlerini kullanarak çıkarımda bulunur.",
+          "explanation": "Konu ile ilgili deney yolu ile çıkarımlarda bulunmaları sağlanır."
+        },
+        {
+          "code": "F.8.4.4.5",
+          "text": "Asit ve bazların çeşitli maddeler üzerindeki etkilerini gözlemler.",
+          "explanation": null
+        },
+        {
+          "code": "F.8.4.4.6",
+          "text": "Asit ve bazların temizlik malzemesi olarak kullanılması esnasında oluşabilecek tehlikelerle ilgili gerekli tedbirleri alır.",
+          "explanation": null
+        },
+        {
+          "code": "F.8.4.4.7",
+          "text": "Asit yağmurlarının önlenmesine yönelik çözüm önerileri sunar.",
+          "explanation": "Asit yağmurlarının oluşum sebepleri ve sonuçlarına değinilir. Önerilen Süre: 5 ders saati Konu / Kavramlar: Isı ve öz ısının bağlı olduğu faktörler Fen Bilimleri Dersi Öğretim Programı"
+        },
+        {
+          "code": "F.8.4.5.1",
+          "text": "Isınmanın maddenin cinsine, kütlesine ve/veya sıcaklık değişimine bağlı olduğunu deney yaparak keşfeder.",
+          "explanation": "a. Q=m.c. Δt bağıntısına girilmez. b. Bağımlı, bağımsız ve kontrol edilen değişkenler örneklerle açıklanır."
+        },
+        {
+          "code": "F.8.4.5.2",
+          "text": "Hâl değiştirmek için gerekli ısının maddenin cinsi ve kütlesiyle ilişkili olduğunu deney yaparak keşfeder.",
+          "explanation": "a. Saf maddelerin hâl değişimi sırasında sıcaklığının sabit kaldığına değinilir. b. Matematiksel hesaplamalara girilmez."
+        },
+        {
+          "code": "F.8.4.5.3",
+          "text": "Maddelerin hâl değişimi ve ısınma grafiğini çizerek yorumlar.",
+          "explanation": null
+        },
+        {
+          "code": "F.8.4.5.4",
+          "text": "Günlük yaşamda meydana gelen hâl değişimleri ile ısı alışverişini ilişkilendirir.",
+          "explanation": "F.8.4.6.Türkiye’de Kimya Endüstrisi Önerilen Süre: 4 ders saati Konu / Kavramlar: İthal edilen kimyasal ürünler, ihraç edilen kimyasal ürünler, ülkemizdeki kimya endüstrisinin gelişimine katkı sağlayan resmî/özel kurumlar, kimya temelli meslekler"
+        },
+        {
+          "code": "F.8.4.6.1",
+          "text": "Geçmişten günümüze Türkiye’deki kimya endüstrisinin gelişimini araştırır.",
+          "explanation": "a. Ülkemizdeki kimya endüstrisinin gelişimine katkı sağlayan resmi / özel kurum ve sivil toplum kuru￾luşlarının yaptığı çalışmalara değinilir. b. İthal ve ihraç edilen kimyasal ürünlerden birkaç önemli örnek verilerek Türkiye kimya endüstrisinin"
+        },
+        {
+          "code": "F.8.4.6.2",
+          "text": "Kimya endüstrisinde meslek dallarını araştırır ve gelecekteki yeni meslek alanları hakkında öneriler sunar.",
+          "explanation": "Bu ünitede öğrencilerin; günlük yaşamda sıkça karşılaştıkları basit makine çeşitleri hakkında bilgi ve bece￾riler kazanmaları; kazandıkları bilgi ve becerileri ortaya koyarak günlük yaşamda iş kolaylığı sağlayacak özgün basit makine düzenekleri tasarlamaları; böylece yaratıcı ve yenilikçi düşünme becerisi kazanmaları amaçlan￾maktadır. Önerilen Süre: 10 ders saati Konu / Kavramlar: Sabit makara, hareketli makara, palanga, kaldıraç, eğik düzlem, çıkrık, basit makinelerin"
+        },
+        {
+          "code": "F.8.5.1.1",
+          "text": "Basit makinelerin sağladığı avantajları örnekler üzerinden açıklar.",
+          "explanation": "a. Basit makinelerden, sabit makara, hareketli makara, palanga, kaldıraç, eğik düzlem ve çıkrık üze￾rinde durulur. b. Dişli çarklar, vida ve kasnakların da birer basit makine olduğu görsellerle belirtilir, ayrıntıya girilmez. c. Basit makinelerde işten kazanç olmadığı vurgulanır. ç. Matematiksel bağıntılara girilmez."
+        },
+        {
+          "code": "F.8.5.1.2",
+          "text": "Basit makinelerden yararlanarak günlük yaşamda iş kolaylığı sağlayacak bir düzenek tasarlar.",
+          "explanation": "Öncelikle tasarımını çizimle ifade etmesi istenir. Şartlar uygunsa üç boyutlu modele dönüştürmesi Fen Bilimleri Dersi Öğretim Programı Bu ünitede öğrencilerin; fotosentez, solunum, enerji dönüşümlerini kavramaları, besin zinciri ve bu zinciri oluşturan elemanları açıklayabilmeleri ve elemanlar arasındaki ilişkiyi keşfetmeleri, çevre bilimle ilgili yaşam içe￾risindeki madde döngülerini fark etmeleri, çevre sorunlarını bilmeleri ve çevre sorunlarına karşı çözüm önerileri sunabilmeleri bunlara ilişkin bilgi ve beceriler kazanmaları amaçlanmaktadır. Önerilen Süre: 2 ders saati Konu / Kavramlar: Besin zinciri, besin ağı, üretici, tüketici, ayrıştırıcı, ekoloji piramidi, biyolojik birikim"
+        },
+        {
+          "code": "F.8.6.1.1",
+          "text": "Besin zincirindeki üretici, tüketici, ayrıştırıcılara örnekler verir.",
+          "explanation": "a. Parazit besin zincirlerine değinilmez. b. Ekoloji piramitlerinde enerji aktarımı, vücut büyüklüğü, birey sayısı ve biyolojik birikim vurgulanır. Önerilen Süre: 8 ders saati Konu / Kavramlar: Fotosentez, fotosentez hızını etkileyen faktörler, solunum, oksijensiz solunum, oksijenli solunum"
+        },
+        {
+          "code": "F.8.6.2.1",
+          "text": "Bitkilerde besin üretiminde fotosentezin önemini fark eder.",
+          "explanation": "a. Fotosentezde karbondioksit ve su kullanıldığı, besin ve oksijen üretildiği vurgulanır. Kimyasal denk￾lemine girilmez. b. Fotosentezin yapay ışıkta da meydana gelebileceği vurgulanır. c. Fotosentez yapan canlıların üretici olduğu ifade edilir."
+        },
+        {
+          "code": "F.8.6.2.2",
+          "text": "Fotosentez hızını etkileyen faktörler ile ilgili çıkarımlarda bulunur.",
+          "explanation": "Işık rengi, karbondioksit miktarı, su miktarı, ışık şiddeti ve sıcaklık vurgulanır."
+        },
+        {
+          "code": "F.8.6.2.3",
+          "text": "Canlılarda solunumun önemini belirtir.",
+          "explanation": "a. Solunumun kimyasal denklemine girilmez. b. Bitkilerin gece ve gündüz solunum yaptığına değinilir. c. Oksijenli ve oksijensiz solunum evrelerine girilmeden verilir fakat açığa çıkan enerji miktarları sayısal ç. ATP’nin yapısına girilmeden isminden bahsedilir. Önerilen Süre: 8 ders saati Konu / Kavramlar: Su döngüsü, oksijen döngüsü, azot döngüsü, karbon döngüsü, ozon tabakası, küresel ısınma"
+        },
+        {
+          "code": "F.8.6.3.1",
+          "text": "Madde döngülerini şema üzerinde göstererek açıklar.",
+          "explanation": null
+        },
+        {
+          "code": "F.8.6.3.2",
+          "text": "Madde döngülerinin yaşam açısından önemini sorgular.",
+          "explanation": null
+        },
+        {
+          "code": "F.8.6.3.3",
+          "text": "Küresel iklim değişikliklerinin nedenlerini ve olası sonuçlarını tartışır.",
+          "explanation": "a. Sera etkisi açıklanır. b. Küresel iklim değişikliği bağlamında çevre sorunlarının Dünya'nın geleceğine ve insan yaşamına nasıl bir etkisi olabileceği sorgulanır. Fen Bilimleri Dersi Öğretim Programı c. Çevre sorunlarının dünyanın geleceğine nasıl bir etkisinin olabileceğine yönelik öngörüleri sanatsal yollarla ifade etmeleri istenir. ç. Öğrencilerin ekolojik ayak izini hesaplaması (uzantısı edu, org ve mil gibi güvenli sitelerden yarar￾lanılabilinir) sağlanır. d. Dünya ülkelerinin küresel iklim değişikliğini önlemek için aldıkları önlemlere (ör. Kyoto Protokolü) Önerilen Süre: 6 ders saati Konu / Kavramlar: Sürdürülebilir yaşam, kaynakların tasarruflu kullanımı, geri dönüşüm"
+        },
+        {
+          "code": "F.8.6.4.1",
+          "text": "Kaynakların kullanımında tasarruflu davranmaya özen gösterir.",
+          "explanation": null
+        },
+        {
+          "code": "F.8.6.4.2",
+          "text": "Kaynakların tasarruflu kullanımına yönelik proje tasarlar.",
+          "explanation": null
+        },
+        {
+          "code": "F.8.6.4.3",
+          "text": "Geri dönüşüm için katı atıkların ayrıştırılmasının önemini açıklar.",
+          "explanation": null
+        },
+        {
+          "code": "F.8.6.4.4",
+          "text": "Geri dönüşümün ülke ekonomisine katkısına ilişkin araştırma verilerini kullanarak çözüm önerileri sunar.",
+          "explanation": null
+        },
+        {
+          "code": "F.8.6.4.5",
+          "text": "Kaynakların tasarruflu kullanılmaması durumunda gelecekte karşılaşılabilecek problemleri belirterek çözüm önerileri sunar.",
+          "explanation": "Bu ünitede öğrencilerin; elektrik yüklerini tanımaları, elektrik yükleri arasında itme ve çekme kuvvetleri oldu￾ğunun farkına varmaları; cisimlerin, sahip oldukları elektrik yükü bakımından üç farklı durumda olabileceklerini ve “topraklama” olayını kavramaları; elektroskopun, cisimlerin sahip olduğu elektrik yüklerinin tespitinde kolaylık sağladığını deneyerek gözlemlemeleri, elektrik enerjisinin ısı, ışık ve hareket enerjilerine, hareket enerjisinin de elektrik enerjisine dönüşebileceğini deneyerek gözlemlemeleri, güç santrallerinde elektrik enerjisinin nasıl üre￾tildiğini ve bunların doğurabileceği zararlı veya yararlı durumları tahmin etmeleri, elektrik enerjisinin bilinçli ve tasarruflu kullanılmasına yönelik bilgi ve beceri kazanmaları hedeflenmektedir. Önerilen Süre: 6 ders saati Konu / Kavramlar: Elektrik yükleri, elektrik yükleri arasındaki itme ve çekme kuvvetleri, elektriklenme çeşitleri"
+        },
+        {
+          "code": "F.8.7.1.1",
+          "text": "Elektriklenmeyi, bazı doğa olayları ve teknolojideki uygulama örnekleri ile açıklar.",
+          "explanation": null
+        },
+        {
+          "code": "F.8.7.1.2",
+          "text": "Elektrik yüklerini sınıflandırarak aynı ve farklı cins elektrik yüklerinin birbirlerine etkisini açıklar.",
+          "explanation": null
+        },
+        {
+          "code": "F.8.7.1.3",
+          "text": "Deneyler yaparak elektriklenme çeşitlerini fark eder.",
+          "explanation": "Önerilen Süre: 8 ders saati Konu / Kavramlar: Pozitif yüklü cisim, negatif yüklü cisim, elektroskop, topraklama"
+        },
+        {
+          "code": "F.8.7.2.1",
+          "text": "Cisimleri, sahip oldukları elektrik yükleri bakımından sınıflandırır.",
+          "explanation": "Özellikle nötr cismin, yüksüz cisim anlamına gelmediği; nötr cisimlerde pozitif ve negatif yük miktar￾larının eşit olduğu vurgusu yapılır. Elektroskopun yük ölçümünde kullanıldığı belirtilir, çalışma prensi￾bine girilmez. Fen Bilimleri Dersi Öğretim Programı"
+        },
+        {
+          "code": "F.8.7.2.2",
+          "text": "Topraklamayı açıklar.",
+          "explanation": "Topraklamanın günlük yaşam ve teknolojideki uygulamaları dikkate alınarak can ve mal güvenliği açısından önemine vurgu yapılır. Önerilen Süre: 10 ders saati Konu / Kavramlar: Elektrik enerjisinin ısı ve ışık enerjisine dönüşümü, elektrik enerjisinin hareket enerjisine ve hareket enerjisinin elektrik enerjisine dönüşümü, güç santralleri, elektrik enerjisinin bilinçli ve tasarruflu kullanımı"
+        },
+        {
+          "code": "F.8.7.3.1",
+          "text": "Elektrik enerjisinin ısı, ışık ve hareket enerjisine dönüştüğü uygulamalara örnekler verir.",
+          "explanation": "a. Güvenlik açısından elektrik sigortasının önemi üzerinde durulur. b. Robotların, elektrik enerjisinin, hareket enerjisine dönüşümü temel alınarak geliştirildiği vurgulanır."
+        },
+        {
+          "code": "F.8.7.3.2",
+          "text": "Elektirik enerjisinin ısı, ışık veya hareket enerjisine dönüşümü temel alan bir model tasarlar.",
+          "explanation": "Öncelikle tasarımlarını çizimle ifade etmeleri istenir. Şartlar uygunsa üç boyutlu modele dönüştürmesi"
+        },
+        {
+          "code": "F.8.7.3.3",
+          "text": "Güç santrallerinde elektrik enerjisinin nasıl üretildiğini açıklar.",
+          "explanation": "Güç santrallerinden hidroelektrik, termik, rüzgâr, jeotermal ve nükleer santrallere değinilir."
+        },
+        {
+          "code": "F.8.7.3.4",
+          "text": "Güç santrallerinin avantaj ve dezavantajları konusunda fikirler üretir.",
+          "explanation": "Güç santrallerinin yarar-zarar ve riskler yönünden değerlendirilmesine yönelik fikir üretmeleri ve bu fikirlerini savunmaları istenir."
+        },
+        {
+          "code": "F.8.7.3.5",
+          "text": "Elektrik enerjisinin bilinçli ve tasarruflu kullanılmasının aile ve ülke ekonomisi bakımından önemini tartışır.",
+          "explanation": "a. Enerji verimliliği konusunda ülkemizdeki resmî kurumlar ve sivil toplum kuruluşları tarafından yapılan çalışmalar ve elektrik enerjisi kullanımı bakımından yapılması gerekenler belirtilir. b. Kaçak elektrik kullanımının ülke ekonomisine verdiği zarar vurgulanır."
+        },
+        {
+          "code": "F.8.7.3.6",
+          "text": "Evlerde elektriği tasarruflu kullanmaya özen gösterir.",
+          "explanation": "Öğrencilerden elektrik faturasını azaltmaya yönelik uzun süreli çalışmalar yapmaları istenir, süreç izlenir."
+        }
+      ]
+    },
+    "turkce": {
+      "subject": "Türkçe",
+      "programYear": 2019,
+      "sourceFile": "turkce-2019.pdf",
+      "sourceUrl": "https://mufredat.meb.gov.tr/Dosyalar/20195716392253-02-T%C3%BCrk%C3%A7e%20%C3%96%C4%9Fretim%20Program%C4%B1%202019.pdf",
+      "sha256": "10e55d403a708d35abc192710977a47df933210a0c54a15e86ea7b9d09401633",
+      "outcomeCount": 76,
+      "unitNames": {
+        "1": "Sözlü İletişim",
+        "2": "Okuma",
+        "3": "Yazma"
+      },
+      "unitOutcomeCounts": {
+        "1": 14,
+        "2": 7,
+        "3": 35,
+        "4": 20
+      },
+      "outcomes": [
+        {
+          "code": "T.8.1.1",
+          "text": "Dinlediklerinde/izlediklerinde geçen olayların gelişimi ve sonucu hakkında tahminde bulunur.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.1.2",
+          "text": "Dinlediklerinde/izlediklerinde geçen bilmediği kelimelerin anlamını tahmin eder.",
+          "explanation": "Öğrencilerin kelime anlamlarına yönelik tahminleri ile sözlük anlamlarını karşılaştırmaları sağlanır."
+        },
+        {
+          "code": "T.8.1.3",
+          "text": "Dinlediklerini/izlediklerini özetler.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.1.4",
+          "text": "Dinledikleri/izlediklerine yönelik sorulara cevap verir.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.1.5",
+          "text": "Dinlediklerinin/izlediklerinin konusunu tespit eder.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.1.6",
+          "text": "Dinlediklerinin/izlediklerinin ana fikrini/ana duygusunu tespit eder.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.1.7",
+          "text": "Dinlediklerine/izlediklerine yönelik farklı başlıklar önerir.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.1.8",
+          "text": "Dinlediği/izlediği hikâye edici metinleri canlandırır.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.1.9",
+          "text": "Dinlediklerinde/izlediklerinde tutarlılığı sorgular.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.1.10",
+          "text": "Dinledikleriyle/izledikleriyle ilgili görüşlerini bildirir.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.1.11",
+          "text": "Dinledikleri/izledikleri medya metinlerini değerlendirir.",
+          "explanation": "Medya metinlerinin amacını ve kaynağını sorgulamaları sağlanır."
+        },
+        {
+          "code": "T.8.1.12",
+          "text": "Dinlediklerinde/izlediklerinde başvurulan düşünceyi geliştirme yollarını tespit eder.",
+          "explanation": "Düşünceyi geliştirme yollarından örneklendirme, tanık gösterme ve sayısal verilerden yararlanma belirlenir."
+        },
+        {
+          "code": "T.8.1.13",
+          "text": "Konuşmacının sözlü olmayan mesajlarını kavrar.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.1.14",
+          "text": "Dinleme stratejilerini uygular.",
+          "explanation": "Seçici, yaratıcı, eleştirel, empati kurarak, not alarak dinleme gibi yöntem ve teknikleri uygulamaları sağlanır."
+        },
+        {
+          "code": "T.8.2.1",
+          "text": "Hazırlıklı konuşma yapar.",
+          "explanation": "a) Öğrencilerin düşüncelerini mantıksal bir bütünlük içinde sunmaları, görsel, işitsel vb. destekleyici materyaller kullanmaları, sunu hazırlamaları sağlanır. b)Öğrenciler araştırma sonuçlarını sempozyum, panel, forum vb. ortamlarda sunmaya teşvik edilir."
+        },
+        {
+          "code": "T.8.2.2",
+          "text": "Hazırlıksız konuşma yapar.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.2.3",
+          "text": "Konuşma stratejilerini uygular.",
+          "explanation": "Yaratıcı, güdümlü, empati kurma, tartışma, ikna etme ve eleştirel konuşma gibi yöntem ve tekniklerinin"
+        },
+        {
+          "code": "T.8.2.4",
+          "text": "Konuşmalarında beden dilini etkili bir şekilde kullanır.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.2.5",
+          "text": "Kelimeleri anlamlarına uygun kullanır.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.2.6",
+          "text": "Konuşmalarında yabancı dillerden alınmış, dilimize henüz yerleşmemiş kelimelerin Türkçelerini kullanır.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.2.7",
+          "text": "Konuşmalarında uygun geçiş ve bağlantı ifadelerini kullanır.",
+          "explanation": "Türkçe Dersi Öğretim Programı"
+        },
+        {
+          "code": "T.8.3.1",
+          "text": "Noktalama işaretlerine dikkat ederek sesli ve sessiz okur.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.3.2",
+          "text": "Metni türün özelliklerine uygun biçimde okur.",
+          "explanation": "Öğrencilerin seviyelerine uygun, edebî değeri olan şiirleri ve kısa yazıları türünün özelliğine göre okumaları ve ezberlemeleri sağlanır."
+        },
+        {
+          "code": "T.8.3.3",
+          "text": "Farklı yazı karakterleri ile yazılmış yazıları okur.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.3.4",
+          "text": "Okuma stratejilerini kullanır.",
+          "explanation": "Göz atarak, özetleyerek, not alarak, tartışarak ve eleştirerek okuma gibi yöntem ve teknikleri kullanmaları"
+        },
+        {
+          "code": "T.8.3.5",
+          "text": "Bağlamdan yararlanarak bilmediği kelime ve kelime gruplarının anlamını tahmin eder.",
+          "explanation": "a) Öğrencilerin tahmin ettikleri kelime ve kelime gruplarını öğrenmek için sözlük, atasözleri ve deyimler sözlüğü vb. araçları kullanmaları sağlanır. b) Öğrencinin öğrendiği kelime ve kelime gruplarından sözlük oluşturması teşvik edilir."
+        },
+        {
+          "code": "T.8.3.6",
+          "text": "Deyim, atasözü ve özdeyişlerin metne katkısını belirler.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.3.7",
+          "text": "Metindeki söz sanatlarını tespit eder.",
+          "explanation": "Benzetme (teşbih), kişileştirme (teşhis), konuşturma (intak) ve karşıtlık (tezat), abartma (mübalağa) söz sanatlarının belirlenmesi sağlanır."
+        },
+        {
+          "code": "T.8.3.8",
+          "text": "Metindeki anlatım bozukluklarını belirler.",
+          "explanation": "Dil bilgisi yönünden anlatım bozuklukları üzerinde durulur."
+        },
+        {
+          "code": "T.8.3.9",
+          "text": "Fiilimsilerin cümledeki işlevlerini kavrar.",
+          "explanation": "Fiilimsilerin türleri fark ettirilir. Ekler ezberletilmez."
+        },
+        {
+          "code": "T.8.3.10",
+          "text": "Geçiş ve bağlantı ifadelerinin metnin anlamına olan katkısını değerlendirir.",
+          "explanation": "Oysaki, başka bir deyişle, özellikle, kısaca, böylece, ilk olarak ve son olarak ifadeleri üzerinde durulur."
+        },
+        {
+          "code": "T.8.3.11",
+          "text": "Metindeki anlatım biçimlerini belirler.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.3.12",
+          "text": "Görsel ve başlıktan hareketle okuyacağı metnin konusunu tahmin eder.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.3.13",
+          "text": "Okuduklarını özetler.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.3.14",
+          "text": "Metinle ilgili soruları cevaplar.",
+          "explanation": "Metin içi ve metin dışı anlam ilişkisi kurulur."
+        },
+        {
+          "code": "T.8.3.15",
+          "text": "Metinle ilgili sorular sorar.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.3.16",
+          "text": "Metnin konusunu belirler.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.3.17",
+          "text": "Metnin ana fikrini/ana duygusunu belirler.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.3.18",
+          "text": "Metindeki yardımcı fikirleri belirler.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.3.19",
+          "text": "Metnin içeriğine uygun başlık/başlıklar belirler.",
+          "explanation": "Türkçe Dersi Öğretim Programı"
+        },
+        {
+          "code": "T.8.3.20",
+          "text": "Okuduğu metinlerdeki hikâye unsurlarını belirler.",
+          "explanation": "Olay örgüsü, mekân, zaman, şahıs ve varlık kadrosu, anlatıcı üzerinde durulur."
+        },
+        {
+          "code": "T.8.3.21",
+          "text": "Metnin içeriğini yorumlar.",
+          "explanation": "a) Yazarın olaylara bakış açısının tespit edilmesi sağlanır. b) Metindeki öznel ve nesnel yaklaşımların tespit edilmesi sağlanır. c) Metindeki örnek ve ayrıntılara atıf yapılması sağlanır."
+        },
+        {
+          "code": "T.8.3.22",
+          "text": "Metinde ele alınan sorunlara farklı çözümler üretir.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.3.23",
+          "text": "Metinler arasında karşılaştırma yapar.",
+          "explanation": "Aynı metnin çeviri, farklı baskı vb. özellikleri itibarıyla karşılaştırılması sağlanır."
+        },
+        {
+          "code": "T.8.3.24",
+          "text": "Metindeki gerçek ve kurgusal unsurları ayırt eder.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.3.25",
+          "text": "Okudukları ile ilgili çıkarımlarda bulunur.",
+          "explanation": "Neden-sonuç, amaç-sonuç, koşul, karşılaştırma, benzetme, örneklendirme, abartma, nesnel, öznel ve duygu belirten ifadeler üzerinde durulur."
+        },
+        {
+          "code": "T.8.3.26",
+          "text": "Metin türlerini ayırt eder.",
+          "explanation": "a) Fıkra (köşe yazısı), makale, deneme, roman, destan türleri üzerinde durulur. b) Metin türlerine ilişkin ayrıntılı bilgi verilmemelidir."
+        },
+        {
+          "code": "T.8.3.27",
+          "text": "Görsellerle ilgili soruları cevaplar.",
+          "explanation": "a) Çizgi roman ve karikatürleri yorumlayarak görüşlerini bildirmeleri sağlanır. b) Haberi/bilgiyi görsel yorumcuların nasıl ilettikleri üzerinde durulur."
+        },
+        {
+          "code": "T.8.3.28",
+          "text": "Metinde önemli noktaların vurgulanış biçimlerini kavrar.",
+          "explanation": "Altını çizmenin, koyu veya italik yazmanın, renklendirmenin, farklı punto veya font kullanmanın işlevi"
+        },
+        {
+          "code": "T.8.3.29",
+          "text": "Medya metinlerini analiz eder.",
+          "explanation": "Medya metinlerinin amaçlarının (kültür aktarma, olay yorumlama, bilgilendirme, eğlendirme, ikna etme)"
+        },
+        {
+          "code": "T.8.3.30",
+          "text": "Bilgi kaynaklarını etkili bir şekilde kullanır.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.3.31",
+          "text": "Bilgi kaynaklarının güvenilirliğini sorgular.",
+          "explanation": "a) Blog ve şahsi internet sayfalarındaki bilgilerin güvenilirliği konusunda çalışmalar yapılır. b) Bilimsel çalışmalarda ağırlıklı olarak “edu” ve “gov” uzantılı sitelerin kullanıldığı vurgulanır."
+        },
+        {
+          "code": "T.8.3.32",
+          "text": "Grafik, tablo ve çizelgeyle sunulan bilgileri yorumlar.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.3.33",
+          "text": "Edebî eserin yazılı metni ile medya sunumunu karşılaştırır.",
+          "explanation": "Kahramanlar, mekân, zaman ve olay yönünden karşılaştırılması sağlanır."
+        },
+        {
+          "code": "T.8.3.34",
+          "text": "Okuduklarında kullanılan düşünceyi geliştirme yollarını belirler.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.3.35",
+          "text": "Metindeki iş ve işlem basamaklarını kavrar.",
+          "explanation": "Kullanım kılavuzları inceletilir. Türkçe Dersi Öğretim Programı"
+        },
+        {
+          "code": "T.8.4.1",
+          "text": "Şiir yazar.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.4.2",
+          "text": "Bilgilendirici metin yazar.",
+          "explanation": "a) Öğrencilerin belirledikleri bir konu ve ana fikir etrafında giriş, gelişme ve sonuç bölümlerinden oluşan bir metin taslağı oluşturmaları, gelişme bölümünde düşünceyi geliştirme yollarını kullanarak görüşlerini ifade etmeleri, görüşlerini destekleyecek kanıtlar sunmaları, sonuç bölümünde ise görüşlerini sonuca b) Öğrenciler günlük hayattan örnekler vermeye teşvik edilir."
+        },
+        {
+          "code": "T.8.4.3",
+          "text": "Hikâye edici metin yazar.",
+          "explanation": "a) Öğrencilerin anlatımın türü ve konusuna göre gerçekçi veya hayalî ögeleri tasarlamaları, uyumlu bir zaman ve mekân kurgusu yapmaları, serim, düğüm ve çözüm bölümlerine yer vermeleri sağlanır. b) Öğrenciler yazım kılavuzundan yaralanmaya, günlük hayattan örnekler vermeye yönlendirilir."
+        },
+        {
+          "code": "T.8.4.4",
+          "text": "Yazma stratejilerini uygular.",
+          "explanation": "Not alma, özet çıkarma, eleştirel, yaratıcı, serbest, kelime ve kavram havuzundan seçerek yazma, bir metinden ve duyulardan hareketle yazma gibi yöntem ve tekniklerin kullanılması sağlanır."
+        },
+        {
+          "code": "T.8.4.5",
+          "text": "Anlatımı desteklemek için grafik ve tablo kullanır.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.4.6",
+          "text": "Bir işi işlem basamaklarına göre yazar.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.4.7",
+          "text": "Yazılarını zenginleştirmek için atasözleri, deyimler ve özdeyişler kullanır.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.4.8",
+          "text": "Yazılarında mizahi ögeler kullanır.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.4.9",
+          "text": "Yazılarında anlatım biçimlerini kullanır.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.4.10",
+          "text": "Yazdıklarında yabancı dillerden alınmış, dilimize henüz yerleşmemiş kelimelerin Türkçelerini kullanır.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.4.11",
+          "text": "Formları yönergelerine uygun doldurur.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.4.12",
+          "text": "Kısa metinler yazar.",
+          "explanation": "Haber metni, günlük ve anı yazmaya teşvik edilir."
+        },
+        {
+          "code": "T.8.4.13",
+          "text": "Yazdıklarının içeriğine uygun başlık belirler.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.4.14",
+          "text": "Araştırmalarının sonuçlarını yazılı olarak sunar.",
+          "explanation": "a) Öğrencilerin taslak hazırlamaları, taslaklarında giriş, gelişme, sonuç bölümlerine yer vermeleri sağlanır. b) Kaynak gösterme hakkında bilgi verilir."
+        },
+        {
+          "code": "T.8.4.15",
+          "text": "Yazılarında uygun geçiş ve bağlantı ifadelerini kullanır.",
+          "explanation": "Oysaki, başka bir deyişle, özellikle, ilk olarak ve son olarak ifadelerinin kullanılması sağlanır."
+        },
+        {
+          "code": "T.8.4.16",
+          "text": "Yazdıklarını düzenler.",
+          "explanation": "a) Dil bilgisine dayalı anlatım bozuklukları bakımından yazdıklarını gözden geçirmesi ve düzeltmesi b) Metinde yer alan yazım ve noktalama kuralları ile sınırlı tutulur."
+        },
+        {
+          "code": "T.8.4.17",
+          "text": "Yazdıklarını paylaşır.",
+          "explanation": "Öğrenciler yazdıklarını sınıf ve okul panosu ile sosyal medya ortamlarında paylaşmaya, şiir ve kompozisyon yarışmalarına katılmaya teşvik edilir."
+        },
+        {
+          "code": "T.8.4.18",
+          "text": "Cümlenin ögelerini ayırt eder.",
+          "explanation": null
+        },
+        {
+          "code": "T.8.4.19",
+          "text": "Cümle türlerini tanır.",
+          "explanation": "Kavramsal tanımlamalara girilmez."
+        },
+        {
+          "code": "T.8.4.20",
+          "text": "Fiillerin çatı özelliklerinin anlama olan katkısını kavrar.",
+          "explanation": "Kavram tanımlarına girilmeden anlamsal farklılıklara değinilir. Türkçe Dersi Öğretim Programı ses kaynaklarından çıkan sesleri ayırt eder. Doğal ve yapay ses kaynakları hakkında bilgi gelen harfleri ayırt eder. metin hakkında tahminde olayların gelişimi hakkında Olayları oluş sırasına göre anlatması için teşvik edilir. sorulara cevap verir. Sadece olay, şahıs ve varlık kadrosuna yönelik sorular (ne, kim) yöneltilir. Yönerge sayısı beş aşamadan fazla olmamalıdır. a) Dinlerken/izlerken nezaket kurallarına (söz kesmeden dinleme, söz alarak konuşma) uymanın önemi vurgulanır. b) Öğrencilerin dikkatlerini TÜRKÇE DERSİ ÖĞRETİM PROGRAMI KAZANIM VE AÇIKLAMALAR TABLOSU olayların gelişimi ve sonucu hakkında tahminde bulunur. anlamını tahmin eder. anlamlarına yönelik tahminleri ile sözlük anlamlarını izlediklerinin ana fikrini/ana duygusunu tespit eder. sorulara cevap verir. izlediklerine yönelik farklı hikâye edici metinleri olmayan mesajlarını kavrar. a) Çizgi film vb. izletilerek örtülü anlamlar hakkında metnin konusunu tahmin olayların gelişimi ve sonucu hakkında tahminde bulunur. metni ana hatlarıyla anlatır. anlamını tahmin eder. izlediklerinin ana fikrini/ana sorulara cevap verir. Olay, şahıs, varlık kadrosu ve mekâna yönelik sorular (ne, kim, nerede ve nasıl) izlediklerine farklı başlıklar hikâye edici metinleri görüşlerini ifade eder. a) Dinlerken nezaket kurallarına uymaları gerektiği olayların gelişimi ve sonucu hakkında tahminde bulunur. anlamını tahmin eder. anlamlarına yönelik tahminleri ile sözlük anlamlarını izlediklerinin ana fikrini/ana izlediklerine yönelik farklı hikâye edici metinleri yollarını tespit eder. karşılaştırma ve benzetmenin metnin konusunu tahmin olayların gelişimi ve sonucu hakkında tahminde bulunur. Olayların oluş sırasına göre sorulara cevap verir. Olay, şahıs, varlık kadrosu ve mekâna yönelik sorular (ne, kim, nerede) yöneltilir. izlediklerine farklı başlıklar a) Nezaket kurallarına (söz kesmeden dinleme, söz alma, dinleyiciyi izleme ve göz teması kurma) uygun dinlemenin önemi hatırlatılır. b) Öğrenciler, dikkatlerini yoğunlaştırmaları için teşvik olmayan mesajlarını kavrar. olayların gelişimi ve sonucu hakkında tahminde bulunur. anlamını tahmin eder. kelimelerin sözlük anlamları ile karşılaştırmaları sağlanır. sorulara cevap verir. izlediklerinin ana fikrini/ana duygusunu tespit eder. izlediklerine yönelik farklı hikâye edici metinleri olmayan mesajlarını kavrar. a) Öğrencilere reklam bunlardaki mesajların ve örtülü anlamların tespit edilmesine yönelik çalışmalar b) Öğrencilerin içeriklerdeki metnin konusunu tahmin olayların gelişimi ve sonucu hakkında tahminde bulunur. metni ana hatlarıyla anlatır. anlamını tahmin eder. izlediklerinin ana fikrini/ana sorulara cevap verir. Olay, şahıs, varlık kadrosu ve mekâna yönelik sorular (ne, kim, nerede, nasıl, neden ve ne zaman) yöneltilir. izlediklerine farklı başlıklar görüşlerini ifade eder. hikâye edici metinleri a) Öğrencilere medya metinleri (reklam, kamu spotu bunların hedef kitlesi ve amacı hakkında çıkarımda"
+        }
+      ]
+    },
+    "inkilap": {
+      "subject": "T.C. İnkılap Tarihi ve Atatürkçülük",
+      "programYear": 2018,
+      "sourceFile": "inkilap-tarihi-2018.pdf",
+      "sourceUrl": "https://mufredat.meb.gov.tr/Dosyalar/201812104016155-%C4%B0NKILAP%20TAR%C4%B0H%C4%B0%20VE%20ATAT%C3%9CRK%C3%87%C3%9CL%C3%9CK%20%C3%96%C4%9ERET%C4%B0M%20PROGRAMI.pdf",
+      "sha256": "38a24b11191f7ebca2fc85831d787e7187eca70e82f0bd36e7de5c81524357d5",
+      "outcomeCount": 39,
+      "unitNames": {
+        "1": "Bir Kahraman Doğuyor",
+        "2": "Millî Uyanış",
+        "3": "Millî Bir Destan",
+        "4": "Atatürkçülük ve Çağdaşlaşan Türkiye",
+        "5": "Demokratikleşme Çabaları",
+        "6": "Atatürk Dönemi Türk Dış Politikası",
+        "7": "Atatürk'ün Ölümü ve Sonrası"
+      },
+      "unitOutcomeCounts": {
+        "1": 4,
+        "2": 8,
+        "3": 7,
+        "4": 9,
+        "5": 3,
+        "6": 3,
+        "7": 5
+      },
+      "outcomes": [
+        {
+          "code": "İTA.8.1.1",
+          "text": "Avrupa’daki gelişmelerin yansımaları bağlamında Osmanlı Devleti’nin yirminci yüzyılın başlarındaki siyasi ve sosyal durumunu kavrar.",
+          "explanation": "a) Fransız İhtilali ile ortaya çıkan siyasi düşüncelere, Avrupa devletlerinin sömürgecilik faaliyetlerine, Tanzimat ve Meşrutiyet dönemlerinin Osmanlı siyasi ve sosyal yapısına etkisine kısaca değinilir. b) Osmanlı Devleti ile Avrupa devletlerinin yirminci yüzyılın başlarındaki durumu harita üzerinde c) Osmanlı Devleti’nin son döneminde siyasi ve sosyal hayatı etkileyen başlıca fikir akımlarına (Osmanlıcılık, İslamcılık, Türkçülük, Batıcılık) kısaca değinilir."
+        },
+        {
+          "code": "İTA.8.1.2",
+          "text": "Mustafa Kemal’in çocukluk ve öğrenim hayatından hareketle onun kişilik özelliklerinin oluşumu hakkında çıkarımlarda bulunur.",
+          "explanation": "Mustafa Kemal’in kişilik gelişimi ve yetişmesinde rol oynayan şahsiyetlere değinilir."
+        },
+        {
+          "code": "İTA.8.1.3",
+          "text": "Gençlik döneminde Mustafa Kemal’in fikir hayatını etkileyen önemli kişileri ve olayları kavrar.",
+          "explanation": null
+        },
+        {
+          "code": "İTA.8.1.4",
+          "text": "Mustafa Kemal’in askerlik hayatı ile ilgili olayları ve olguları onun kişilik özellikleri ile ilişkilendirir.",
+          "explanation": "a) Mustafa Kemal’in Birinci Dünya Savaşı öncesinde yaptığı görev ve hizmetler üzerinde durulur. b) 31 Mart Olayı, Trablusgarp Savaşı, Balkan Savaşları’na kısaca değinilir. 2.ÜNİTE: MİLLÎ UYANIŞ: BAĞIMSIZLIK YOLUNDA ATILAN ADIMLAR"
+        },
+        {
+          "code": "İTA.8.2.1",
+          "text": "Birinci Dünya Savaşı’nın sebeplerini ve savaşın başlamasına yol açan gelişmeleri kavrar.",
+          "explanation": "Savaş öncesinde ülkeler arasındaki bloklaşmalara değinilir."
+        },
+        {
+          "code": "İTA.8.2.2",
+          "text": "Birinci Dünya Savaşı’nda Osmanlı Devleti’nin durumu hakkında çıkarımlarda bulunur.",
+          "explanation": "a) Birinci Dünya Savaşı’nda Osmanlı Devleti’nin savaştığı cepheler taarruz ve savunma özellikleri belirtilerek (Kafkas, Kanal, Çanakkale, Hicaz-Yemen, Irak ve Suriye) harita üzerinde gösterilir. b) Çanakkale Cephesi’ndeki deniz ve kara zaferleri ile Irak Cephesi’ndeki Kut’ül-Amâre Zaferi’ne ve Kafkas Cephesi’ndeki Sarıkamış Harekâtı’na değinilir. c) Mustafa Kemal Paşa ve diğer önemli şahsiyetlerin cephelerdeki görev ve başarıları çeşitli alıntılar üzerinden ele alınır. ç) 1915 Olayları ve Tehcir Kanunu’na değinilir. d) Birinci Dünya Savaşı’nın sonuçları ele alınır."
+        },
+        {
+          "code": "İTA.8.2.3",
+          "text": "Mondros Ateşkes Antlaşması’nın imzalanması ve uygulanması karşısında Osmanlı yönetiminin, Mustafa Kemal’in ve halkın tutumunu analiz eder.",
+          "explanation": "Mustafa Kemal’in ve halkın tepkisi millî birlik ve beraberlik ile vatanseverlik açısından ele alınır."
+        },
+        {
+          "code": "İTA.8.2.4",
+          "text": "Kuvâ-yı Millîye’nin oluşum sürecini ve sonrasında meydana gelen gelişmeleri kavrar.",
+          "explanation": "Millî cemiyetler ve millî varlığa düşman cemiyetlerin başlıca özelliklerine değinilir. T.C. İnkılap Tarihi ve Atatürkçülük Dersi Öğretim Programı"
+        },
+        {
+          "code": "İTA.8.2.5",
+          "text": "Millî Mücadele’nin hazırlık döneminde Mustafa Kemal’in yaptığı çalışmaları analiz eder.",
+          "explanation": "a) Mustafa Kemal’in Samsun’a çıkışı, Havza Genelgesi, Amasya Genelgesi, Erzurum Kongresi, Sivas Kongresi ve Amasya Görüşmeleri ele alınır. b) Millî Mücadele’nin hazırlık aşamasında karşılaşılan sorunlara Mustafa Kemal’in bulduğu çözüm c) Millî Mücadele Dönemi’nde basının rolüne kısaca değinilir."
+        },
+        {
+          "code": "İTA.8.2.6",
+          "text": "Misakımilli’nin kabulünü ve Büyük Millet Meclisinin açılışını vatanın bütünlüğü esası ile “ulusal egemenlik” ve “tam bağımsızlık” ilkeleri ile ilişkilendirir.",
+          "explanation": "Birinci Büyük Millet Meclisinin nasıl teşekkül ettiğine kısaca değinilir."
+        },
+        {
+          "code": "İTA.8.2.7",
+          "text": "Büyük Millet Meclisine karşı ayaklanmalar ile ayaklanmaların bastırılması için alınan tedbirleri analiz eder.",
+          "explanation": "Hıyanet-i Vataniye Kanunu’nun çıkarılma gerekçelerine ve kanunun uygulanma sürecine değinilir."
+        },
+        {
+          "code": "İTA.8.2.8",
+          "text": "Mustafa Kemal’in ve Türk milletinin Sevr Antlaşması’na karşı tepkilerini değerlendirir.",
+          "explanation": null
+        },
+        {
+          "code": "İTA.8.3.1",
+          "text": "Millî Mücadele Dönemi’nde Doğu Cephesi ve Güney Cephesi’nde meydana gelen gelişmeleri kavrar.",
+          "explanation": "a) Doğu Cephesi’nde kazanılan başarılar ve bunların siyasi önemi açıklanır. b) Güney Cephesi’nde vatanseverlik duygularıyla hareket eden Türk milletinin örgütlenmesi vurgulanarak millî ve yerel kahramanlara değinilir."
+        },
+        {
+          "code": "İTA.8.3.2",
+          "text": "Millî Mücadele Dönemi’nde Batı Cephesi’nde meydana gelen gelişmeleri kavrar.",
+          "explanation": "a) Kuvâ-yı Millîye birliklerinin faaliyetleri ve düzenli ordunun kurulma süreci ele alınır. b) I. İnönü ve II. İnönü Muharebeleri ile Kütahya-Eskişehir Muharebeleri ele alınır. c) Teşkilat-ı Esasiye Kanunu’nun kabul edilmesi, Londra Konferansı, Afganistan ile Dostluk Antlaşması, İstiklal Marşı’nın kabul edilmesi ve Moskova Antlaşması’na değinilir."
+        },
+        {
+          "code": "İTA.8.3.3",
+          "text": "Millî Mücadele’nin zor bir döneminde Maarif Kongresi yapan Atatürk’ün, millî ve çağdaş eğitime verdiği önemi kavrar.",
+          "explanation": null
+        },
+        {
+          "code": "İTA.8.3.4",
+          "text": "Türk milletinin millî birlik, beraberlik ve dayanışmasının bir örneği olarak Tekalif-i Millîye Emirleri doğrultusunda yapılan uygulamaları analiz eder.",
+          "explanation": "Millî birlik, beraberlik ve dayanışma için sorumluluk almanın önemi vurgulanır."
+        },
+        {
+          "code": "İTA.8.3.5",
+          "text": "Sakarya Meydan Savaşı’nın kazanılmasında ve Büyük Taarruz’un başarılı olmasında Mustafa Kemal’in rolüne ilişkin çıkarımlarda bulunur.",
+          "explanation": "Kars Antlaşması, Ankara Antlaşması ve Mudanya Ateşkes Antlaşması üzerinde durulur."
+        },
+        {
+          "code": "İTA.8.3.6",
+          "text": "Lozan Antlaşması’nın sağladığı kazanımları analiz eder.",
+          "explanation": null
+        },
+        {
+          "code": "İTA.8.3.7",
+          "text": "Millî Mücadele Dönemi’nin siyasi, sosyal ve kültürel olaylarının sanat ve edebiyat ürünlerine yansımalarına kanıtlar gösterir.",
+          "explanation": "T.C. İnkılap Tarihi ve Atatürkçülük Dersi Öğretim Programı"
+        },
+        {
+          "code": "İTA.8.4.1",
+          "text": "Çağdaşlaşan Türkiye’nin temeli olan Atatürk ilkelerini açıklar.",
+          "explanation": "Cumhuriyetçilik, Milliyetçilik, Halkçılık, Devletçilik, Laiklik ve İnkılapçılık ilkeleri kavramsal düzeyde ele alınır."
+        },
+        {
+          "code": "İTA.8.4.2",
+          "text": "Siyasi alanda meydana gelen gelişmeleri kavrar.",
+          "explanation": "a) Saltanatın kaldırılması, Ankara’nın başkent oluşu, Cumhuriyet’in ilan edilmesi, Halifeliğin kaldırılması, Şeriye ve Evkâf Vekâleti’nin kaldırılması ile Erkân-ı Harbiye Vekâleti’nin kaldırılmasının neden ve sonuçları ele alınır. b) 1924 Anayasası’nın kabulüne değinilir."
+        },
+        {
+          "code": "İTA.8.4.3",
+          "text": "Hukuk alanında meydana gelen gelişmelerin toplumsal hayata yansımalarını kavrar.",
+          "explanation": "a) Hukuki düzenlemelerin gerekçeleri kısaca açıklanır. b) Türk Medeni Kanunu’nun aile yapısında ve kadının toplumsal statüsünde meydana getirdiği değişim"
+        },
+        {
+          "code": "İTA.8.4.4",
+          "text": "Eğitim ve kültür alanında yapılan inkılapları ve gelişmeleri kavrar.",
+          "explanation": "a) Tevhid-i Tedrisat Kanunu, Harf İnkılabı, Millet Mektepleri, Türk Tarih Kurumu ve Türk Dil Kurumu b) 1933 Üniversite Reformu’ndan hareketle Atatürk’ün bilimsel gelişme ve kalkınmaya verdiği önem c) Atatürk’ün güzel sanatlara ve spora verdiği önem örneklerle açıklanır."
+        },
+        {
+          "code": "İTA.8.4.5",
+          "text": "Toplumsal alanda yapılan inkılapları ve meydana gelen gelişmeleri kavrar.",
+          "explanation": "a) Şapka ve kıyafetler konusunda yapılan düzenlemeler, tekke, zaviye ve türbelerin kapatılması, takvim, saat ve ölçülerde değişim ile Soyadı Kanunu ele alınır. b) Türk kadınına eğitim alanı ile sosyal, kültürel ve siyasi alanlarda sağlanan haklar ele alınır ve bu haklar diğer ülkelerde kadınlara verilen haklar ile karşılaştırılır."
+        },
+        {
+          "code": "İTA.8.4.6",
+          "text": "Ekonomi alanında meydana gelen gelişmeleri kavrar.",
+          "explanation": "a) İzmir İktisat Kongresi’nde alınan kararlar millî iktisat anlayışı ve tasarruf bilinci açılarından incelenir. b) Tarım, sanayi, ticaret ve denizcilik alanlarında yapılan çalışmalar üzerinde durulur. c) 1929 Dünya Ekonomik Bunalımı’nın Türkiye ekonomisine etkilerine değinilir."
+        },
+        {
+          "code": "İTA.8.4.7",
+          "text": "Atatürk Dönemi’nde sağlık alanında yapılan çalışmaları devletin temel görevleri ile ilişkilendirir.",
+          "explanation": null
+        },
+        {
+          "code": "İTA.8.4.8",
+          "text": "Cumhuriyet’in sağladığı kazanımları ve Atatürk’ün Türk milleti için gösterdiği hedefleri analiz eder.",
+          "explanation": "a) Büyük Nutuk ve Onuncu Yıl Nutku ele alınır. b) Atatürk’ün Gençliğe Hitabesi’nden hareketle Cumhuriyet’in korunmasında ve sürekliliğinin sağlanmasında gençliğe verilen görev ve sorumluluklar vurgulanır. c) Atatürk’ün kişilik özelliklerinden; çok yönlülüğü, akılcılığı, bilimselliği ve çağdaşlığı vurgulanır."
+        },
+        {
+          "code": "İTA.8.4.9",
+          "text": "Atatürk ilke ve inkılaplarını oluşturan temel esasları kavrar.",
+          "explanation": "Atatürk ilkeleri; millî tarih bilinci, bağımsızlık ve özgürlük, egemenliğin millete ait olması, millî kültürün geliştirilmesi, Türk milletini çağdaş uygarlık düzeyinin üzerine çıkarma ideali, millî birlik ve beraberlik ile ülke bütünlüğü bağlamında açıklanır. T.C. İnkılap Tarihi ve Atatürkçülük Dersi Öğretim Programı"
+        },
+        {
+          "code": "İTA.8.5.1",
+          "text": "Atatürk Dönemi’ndeki demokratikleşme yolunda atılan adımları açıklar.",
+          "explanation": "a) Cumhuriyet Halk Fırkası, Terakkiperver Cumhuriyet Fırkası ve Serbest Cumhuriyet Fırkası ele alınır. b) Demokratikleşme çabalarına ilişkin olarak Büyük Nutuk’ta yer alan kısımlardan kanıtlar gösterilir."
+        },
+        {
+          "code": "İTA.8.5.2",
+          "text": "Mustafa Kemal’e suikast girişimini analiz eder.",
+          "explanation": null
+        },
+        {
+          "code": "İTA.8.5.3",
+          "text": "Cumhuriyetin ilk yıllarında Türkiye Cumhuriyetine yönelik tehditleri analiz eder.",
+          "explanation": null
+        },
+        {
+          "code": "İTA.8.6.1",
+          "text": "Atatürk Dönemi Türk dış politikasının temel ilkelerini ve amaçlarını açıklar.",
+          "explanation": "Tam bağımsızlık, gerçekçilik, akılcılık, mütekabiliyet, barış, millî menfaatleri esas alma, Türk ve dünya kamuoyunu dikkate alma ilkeleri, Atatürk dönemi Türk dış politikası çerçevesinde işlenerek Atatürk’ün ileri görüşlülüğü vurgulanır."
+        },
+        {
+          "code": "İTA.8.6.2",
+          "text": "Atatürk Dönemi Türk dış politikasında yaşanan gelişmeleri analiz eder.",
+          "explanation": "a) Lozan Barış Antlaşması, Atatürk dönemi Türk dış politikasının temel ilkeleri ile ilişkilendirilir. b) Yabancı okullar, Dış Borçlar Sorunu, Musul Sorunu, Nüfus Mübadelesi ve Montrö Boğazlar Sözleşmesi Atatürk dönemi Türk dış politikası açısından ele alınır. c) Milletler Cemiyeti’ne girişte izlenen politika vurgulanır. d) Balkan Antantı ve Sadabat Paktı ele alınır."
+        },
+        {
+          "code": "İTA.8.6.3",
+          "text": "Atatürk’ün Hatay’ı ülkemize katmak konusunda yaptıklarına ve bu uğurda gösterdiği özveriye kanıtlar gösterir.",
+          "explanation": "Atatürk Dönemi Türk dış politikasının temel ilkeleri ile Hatay’ın anavatana katılması ilişkilendirilir. 7.ÜNİTE: ATATÜRK’ÜN ÖLÜMÜ VE SONRASI"
+        },
+        {
+          "code": "İTA.8.7.1",
+          "text": "Atatürk’ün ölümüne ilişkin yansıma ve değerlendirmelerden hareketle onun fikir ve eserlerinin evrensel değerine ilişkin çıkarımlarda bulunur.",
+          "explanation": "a) Atatürk’ün ölümüne ilişkin yerli ve yabancı basında çıkan haber ve yorumlara değinilir. b) İsmet İnönü’nün cumhurbaşkanı seçilmesine değinilir."
+        },
+        {
+          "code": "İTA.8.7.2",
+          "text": "Atatürk’ün Türk Milleti’ne bıraktığı eserlerinden örnekler verir.",
+          "explanation": "Atatürk’ün “En büyük eserim Türkiye Cumhuriyeti’dir.” sözüne ve yazılı eserlerine değinilir."
+        },
+        {
+          "code": "İTA.8.7.3",
+          "text": "Atatürk’ün İkinci Dünya Savaşı öncesi tespitleri ve girişimleri Türkiye’nin savaşta izlediği denge siyaseti ile ilişkilendirilir.",
+          "explanation": null
+        },
+        {
+          "code": "İTA.8.7.4",
+          "text": "İkinci Dünya Savaşı’ndaki gelişmelerin ve bu savaşın sonuçlarının Türkiye’ye etkilerini analiz eder.",
+          "explanation": "İkinci Dünya Savaşı’nın Türkiye’ye etkileri; siyasi, sosyal ve ekonomik yönden ele alınır."
+        },
+        {
+          "code": "İTA.8.7.5",
+          "text": "Türkiye’de çok partili siyasi hayata geçişi hızlandıran gelişmeleri, demokrasinin gerekleri açısından analiz eder.",
+          "explanation": "Konu işlenişi, 1946 yılında gerçekleştirilen ilk çok partili genel seçime değinilerek bitirilir."
+        }
+      ]
+    },
+    "ingilizce": {
+      "subject": "İngilizce",
+      "programYear": 2018,
+      "sourceFile": "ingilizce-2018.pdf",
+      "sourceUrl": "https://mufredat.meb.gov.tr/Dosyalar/201812411191321-%C4%B0NG%C4%B0L%C4%B0ZCE%20%C3%96%C4%9ERET%C4%B0M%20PROGRAMI%20Klas%C3%B6r%C3%BC.pdf",
+      "sha256": "e976ae163c83bb1b3bcf79d7d77ce8cb8308dbdc97a630b941951b9b57653279",
+      "outcomeCount": 70,
+      "unitNames": {},
+      "unitOutcomeCounts": {
+        "1": 6,
+        "2": 6,
+        "3": 6,
+        "4": 6,
+        "5": 8,
+        "6": 7,
+        "7": 8,
+        "8": 8,
+        "9": 8,
+        "10": 7
+      },
+      "outcomes": [
+        {
+          "code": "E8.1.L1",
+          "text": "Students will be able to understand the specific information in short conversations on everyday topics, such as accepting and refusing an offer/invitation, apologizing and making simple inquiries.",
+          "explanation": null
+        },
+        {
+          "code": "E8.1.SI1",
+          "text": "Students will be able to interact with reasonable ease in structured situations and short conversations involving accepting and refusing an offer/invitation, apologizing and making simple inquiries.",
+          "explanation": null
+        },
+        {
+          "code": "E8.1.SP1",
+          "text": "Students will be able to structure a talk to make simple inquiries, give explanations and reasons.",
+          "explanation": null
+        },
+        {
+          "code": "E8.1.R1",
+          "text": "Students will be able to understand short and simple texts about friendship.",
+          "explanation": null
+        },
+        {
+          "code": "E8.1.R2",
+          "text": "Students will be able to understand short and simple invitation letters, cards and e-mails.",
+          "explanation": null
+        },
+        {
+          "code": "E8.1.W1",
+          "text": "Students will be able to write a short and simple letter apologizing and giving reasons for not attending a party in response to an invitation.",
+          "explanation": "Notes and Messages Drama (Role Play, Simulation, Pantomime) Find Someone Who … Questions and Answers • Students prepare a visual dictionary by including new vocabulary items. İngilizce Dersi Öğretim Programı 8. SINIF / 8th GRADE Unit / Theme Functions & Useful Language Language Skills and Learning Outcomes Suggested Contexts, Tasks and Assignments Expressing likes and dislikes I love/like/enjoy going to concerts. I hate/dislike shopping with my parents. I prefer hip-hop concerts, I think they’re I prefer reading the news online. Stating personal opinions (Making simple inquiries) What do you do in the evenings? I usually do my homework, but I also listen to music. I love rap. And to be honest, I never listen to pop music; I can’t stand it. I think it’s unbearable. I rarely/seldom go to the theater. I am fond of/keen on camping. types of music"
+        },
+        {
+          "code": "E8.2.L1",
+          "text": "Students will be able to understand phrases and expressions about regular activities of teenagers.",
+          "explanation": null
+        },
+        {
+          "code": "E8.2.SI1",
+          "text": "Students will be able to talk about regular activities of teenagers.",
+          "explanation": null
+        },
+        {
+          "code": "E8.2.SP1",
+          "text": "Students will be able to express what they prefer, like and dislike.",
+          "explanation": null
+        },
+        {
+          "code": "E8.2.SP2",
+          "text": "Students will be able to give a simple description of daily activities in a simple way.",
+          "explanation": null
+        },
+        {
+          "code": "E8.2.R1",
+          "text": "Students will be able to understand short and simple texts about regular activities of teenagers.",
+          "explanation": null
+        },
+        {
+          "code": "E8.2.W1",
+          "text": "Students will be able to write a short and simple paragraph about regular activities of teenagers.",
+          "explanation": "Notes and Messages Drama (Role Play, Simulation, Pantomime) Find Someone Who … Questions and Answers • Students write a short and simple paragraph about a music band and state the characterictics of the band. İngilizce Dersi Öğretim Programı In The Kitchen Functions & Useful Language Language Skills and Learning Outcomes Suggested Contexts, Tasks and Assignments Describing simple processes It’s easy to make an omlette. Let me tell you how to make an omlette. First, put some oil into a pan and heat it. Second, mix two eggs in a bowl. Then add some salt. After that, add some cheese and milk. Finally, pour the mixture into the Do you prefer cooking pizza or pasta? —I love cooking and eating pizza. —I usually prefer cooking pasta. Making simple inquiries Do I use two or three eggs? What can/should I use to cook soup? kitchen tools (knife, spoon, fork, pan, plate, oven …)"
+        },
+        {
+          "code": "E8.3.L1",
+          "text": "Students will be able to get the gist of short, clear, simple descriptions of a process.",
+          "explanation": null
+        },
+        {
+          "code": "E8.3.SI1",
+          "text": "Students will be able to ask and answer questions and exchange ideas and information on a topic related to how something is processed.",
+          "explanation": null
+        },
+        {
+          "code": "E8.3.SP1",
+          "text": "Students will be able to give a simple description about a process.",
+          "explanation": null
+        },
+        {
+          "code": "E8.3.R1",
+          "text": "Students will be able to understand the overall meaning of short texts about a process.",
+          "explanation": null
+        },
+        {
+          "code": "E8.3.R2",
+          "text": "Students will be able to guess the meaning of unknown words from the text.",
+          "explanation": null
+        },
+        {
+          "code": "E8.3.W1",
+          "text": "Students will be able to write a series of simple phrases and sentences by using linkers to describe a process.",
+          "explanation": "Notes and Messages Drama (Role Play, Simulation, Pantomime) Find Someone Who … Questions and Answers • Students keep expanding their visual dictionary by including new vocabulary items. • Students prepare a poster about their favorite meal and provide the preparation process. İngilizce Dersi Öğretim Programı 8. SINIF / 8th GRADE Unit / Theme On The Phone Functions & Useful Language Language Skills and Learning Outcomes Suggested Contexts, Tasks and Assignments Following phone conversations Hello! This is ... calling, is ... in? May I speak to ...? Is ... there? Hang on a minute; I’ll get him/ her. Can you hold on a moment, please? I’m afraid he is not available at the moment. He has gone out. Would you like to leave a message? Stating decisions taken at the time of I’ll talk to you soon. I’ll see you at the café tomorrow, then. We’ll meet next Saturday, then. I’m sorry to hear that. We’ll meet up later, then. I’ll get back to you in an hour. [The phone rings] I will take that. get/keep in touch put someone through"
+        },
+        {
+          "code": "E8.4.L1",
+          "text": "Students will be able to understand phrases and related vocabulary items.",
+          "explanation": null
+        },
+        {
+          "code": "E8.4.L2",
+          "text": "Students will be able to follow a phone conversation.",
+          "explanation": null
+        },
+        {
+          "code": "E8.4.SI1",
+          "text": "Students will be able to make a simple phone call asking and responding to questions.",
+          "explanation": null
+        },
+        {
+          "code": "E8.4.SP1",
+          "text": "Students will be able to express their decisions taken at the moment of conversation.",
+          "explanation": null
+        },
+        {
+          "code": "E8.4.R1",
+          "text": "Students will be able to understand short and simple texts with related vocabulary.",
+          "explanation": null
+        },
+        {
+          "code": "E8.4.W1",
+          "text": "Students will be able to write short and simple conversations.",
+          "explanation": "Notes and Messages Drama (Role Play, Simulation, Pantomime) Find Someone Who … Questions and Answers • Students work to act out a call center drama task. In groups, students are given role cards describing tasks for each. One by one they call the call center to share their problems. İngilizce Dersi Öğretim Programı Functions & Useful Language Language Skills and Learning Outcomes Suggested Contexts, Tasks and Assignments Accepting and refusing / Making Would you like to join our WhatsApp —Yes, sure/That sounds great. —No, thanks. I am really busy. Why don’t we chat online at two o’clock? I want to tell you something important. —I’m sorry, but I can’t. My internet is What do you mean? Do you mean the —Yes. It isn’t working properly. reply screen, -s search engine, -s social networking site, -s"
+        },
+        {
+          "code": "E8.5.L1",
+          "text": "Students will be able to understand the gist of oral texts.",
+          "explanation": null
+        },
+        {
+          "code": "E8.5.L2",
+          "text": "Students will be able to comprehend phrases and related vocabulary items.",
+          "explanation": null
+        },
+        {
+          "code": "E8.5.SI1",
+          "text": "Students will be able to talk about their Internet habits.",
+          "explanation": null
+        },
+        {
+          "code": "E8.5.SI2",
+          "text": "Students will be able to exchange information about the Internet.",
+          "explanation": null
+        },
+        {
+          "code": "E8.5.SP1",
+          "text": "Students will be able to make excuses, and to accept and refuse offers by using a series of phrases and simple sentences.",
+          "explanation": null
+        },
+        {
+          "code": "E8.5.R1",
+          "text": "Students will be able to identify main ideas in short and simple texts about internet habits.",
+          "explanation": null
+        },
+        {
+          "code": "E8.5.R2",
+          "text": "Students will be able to find specific information about the Internet in various texts.",
+          "explanation": null
+        },
+        {
+          "code": "E8.5.W1",
+          "text": "Students will be able to write a basic paragraph to describe their internet habits.",
+          "explanation": "Notes and Messages Drama (Role Play, Simulation, Pantomime) Find Someone Who … Questions and Answers • Students keep expanding their visual dictionary by including new vocabulary items. • Students prepare a poster to illustrate their internet habits and hang it on the classroom İngilizce Dersi Öğretim Programı 8. SINIF / 8th GRADE Unit / Theme Functions & Useful Language Language Skills and Learning Outcomes Suggested Contexts, Tasks and Assignments Expressing preferences / Giving explanations and reasons What do you prefer doing on summer —I would rather go rafting than canoeing because it is easier. —I prefer rafting to kayaking because it is more entertaining. I think bungee-jumping is more/less dangerous and challenging than I think extreme sports are more exciting than indoor sports."
+        },
+        {
+          "code": "E8.6.L1",
+          "text": "Students will be able to follow a discussion on adventures.",
+          "explanation": null
+        },
+        {
+          "code": "E8.6.L2",
+          "text": "Students will be able to understand the main points of simple messages.",
+          "explanation": null
+        },
+        {
+          "code": "E8.6.SI1",
+          "text": "Students will be able to interact with reasonable ease in short conversations.",
+          "explanation": null
+        },
+        {
+          "code": "E8.6.SI2",
+          "text": "Students will be able to talk about comparisons, preferences and their reasons.",
+          "explanation": null
+        },
+        {
+          "code": "E8.6.SP1",
+          "text": "Students will be able to make comparisons about sports and games by using simple descriptive language.",
+          "explanation": null
+        },
+        {
+          "code": "E8.6.R1",
+          "text": "Students will be able to understand short and simple texts to find the main points about adventures.",
+          "explanation": null
+        },
+        {
+          "code": "E8.6.W1",
+          "text": "Students will be able to write a short and simple paragraph comparing two objects.",
+          "explanation": "Notes and Messages Drama (Role Play, Simulation, Pantomime) Find Someone Who … Questions and Answers • Students search the Internet and find towns/ cities from Turkey where different kinds of extreme sports can be performed. They prepare a poster in which they illustrate three of those İngilizce Dersi Öğretim Programı Functions & Useful Language Language Skills and Learning Outcomes Suggested Contexts, Tasks and Assignments What do you think about Rome? Did you enjoy your trip? —It was incredible. It’s truly an ancient city, and the weather was just perfect. It is in fact usually warm and sunny in Rome. Which one do you prefer? Historic sites or —I’d rather visit historic sites because they are usually more interesting. —I think/guess/believe/suppose it is —In my opinion/to me, it is lovely. —In my opinion/to me, it sounds/looks —In my opinion/to me, historical architecture is more beautiful than modern architecture. —I think/guess/believe/suppose all-inclusive hotels are more attractive than bed and Talking about experiences Have you ever been to …? —Yes, I have. —No, I have not. —I have been to Side before. —I have never been to Mardin. bed and breakfast historic site, -s incredible resort, -s"
+        },
+        {
+          "code": "E8.7.L1",
+          "text": "Students will be able to understand and extract the specific information from short and simple oral texts.",
+          "explanation": null
+        },
+        {
+          "code": "E8.7.SI1",
+          "text": "Students will be able to exchange information about tourism.",
+          "explanation": null
+        },
+        {
+          "code": "E8.7.SI2",
+          "text": "Students will be able to talk about their favorite tourist attractions by giving details.",
+          "explanation": null
+        },
+        {
+          "code": "E8.7.SP1",
+          "text": "Students will be able to express their preferences for particular tourist attractions and give reasons.",
+          "explanation": null
+        },
+        {
+          "code": "E8.7.SP2",
+          "text": "Students will be able to make simple comparisons between different tourist attractions.",
+          "explanation": null
+        },
+        {
+          "code": "E8.7.SP3",
+          "text": "Students will be able to express their experiences about places.",
+          "explanation": null
+        },
+        {
+          "code": "E8.7.R1",
+          "text": "Students will be able to find specific information from various texts about tourism.",
+          "explanation": null
+        },
+        {
+          "code": "E8.7.W1",
+          "text": "Students will be able to design a brochure, advertisement or a postcard about their favorite tourist attraction(s).",
+          "explanation": "Notes and Messages Drama (Role Play, Simulation, Pantomime) Find Someone Who … Questions and Answers • Students keep expanding their visual dictionary by including new vocabulary items. • Students interview with the peers about their holiday preferences, and then they prepare a travel plan using maps and pictures to compare each destination. İngilizce Dersi Öğretim Programı 8. SINIF / 8th GRADE Unit / Theme Functions & Useful Language Language Skills and Learning Outcomes Suggested Contexts, Tasks and Assignments Expressing likes and dislikes I like it when my parents give me some I don’t like it when my mom asks too Do you have to help your parents in —Well, I must help my parents to set —I must help my brother to do his We must respect the elderly/ people/ My brother has to respect my rights. I’m responsible for cooking dinner. S/he is in charge of taking out the Don’t you think it is necessary to tidy up It is time to do the laundry. arrive on time do the laundry load/empty the dishwasher make the bed obey the rules set the table take out the garbage/trash wash/dry the dishes"
+        },
+        {
+          "code": "E8.8.L1",
+          "text": "Students will be able to identify the main points of a short talk describing the responsibilities of people.",
+          "explanation": null
+        },
+        {
+          "code": "E8.8.L2",
+          "text": "Students will be able to understand obligations, likes and dislikes in various oral texts.",
+          "explanation": null
+        },
+        {
+          "code": "E8.8.L3",
+          "text": "Students will be able to follow topic change during factual, short talks.",
+          "explanation": null
+        },
+        {
+          "code": "E8.8.SI1",
+          "text": "Students will be able to interact during simple, routine tasks requiring a direct exchange of information.",
+          "explanation": null
+        },
+        {
+          "code": "E8.8.SI2",
+          "text": "Students will be able to talk about responsibilities.",
+          "explanation": null
+        },
+        {
+          "code": "E8.8.SP1",
+          "text": "Students will be able to express their obligations, likes and dislikes in simple terms.",
+          "explanation": null
+        },
+        {
+          "code": "E8.8.R1",
+          "text": "Students will be able to understand various short and simple texts about responsibilities.",
+          "explanation": null
+        },
+        {
+          "code": "E8.8.W1",
+          "text": "Students will be able to write short and simple poems/stories about their feelings and responsibilities.",
+          "explanation": "Notes and Messages Drama (Role Play, Simulation, Pantomime) Find Someone Who … Questions and Answers • Students keep expanding their visual dictionary by including new vocabulary items. • Students write a short paragraph explaining the responsibilities of their family members. İngilizce Dersi Öğretim Programı Functions & Useful Language Language Skills and Learning Outcomes Suggested Contexts, Tasks and Assignments Describing the actions happening My brother and his friends are preparing a science project nowadays. They are doing some research in the library. What kind of books are you reading in these —I am reading a science fiction novel. —Currently, I am reading a book about Talking about past events Scientific achievements of the past century changed the world. For example, Archimedes invented the water screw. Researchers found some new fossils, and now they are working on them in the labs. Newton discovered the gravity of the matter and now scientists are exploring the solar do an experiment test tube, -s"
+        },
+        {
+          "code": "E8.9.L1",
+          "text": "Students will be able to recognize main ideas and key information in short oral texts about science.",
+          "explanation": null
+        },
+        {
+          "code": "E8.9.SI1",
+          "text": "Students will be able to talk about actions happening currently and in the past.",
+          "explanation": null
+        },
+        {
+          "code": "E8.9.SI2",
+          "text": "Students will be able to involve in simple discussions about scientific achievements.",
+          "explanation": null
+        },
+        {
+          "code": "E8.9.SP1",
+          "text": "Students will be able to describe actions happening currently.",
+          "explanation": null
+        },
+        {
+          "code": "E8.9.SP2",
+          "text": "Students will be able to present information about scientific achievements in a simple way.",
+          "explanation": null
+        },
+        {
+          "code": "E8.9.R1",
+          "text": "Students will be able to understand short and simple texts about actions happening currently and in the past.",
+          "explanation": null
+        },
+        {
+          "code": "E8.9.R2",
+          "text": "Students will be able to identify main ideas and supporting details in short texts about science.",
+          "explanation": null
+        },
+        {
+          "code": "E8.9.W1",
+          "text": "Students will be able to write simple descriptions of scientific achievements in a short paragraph.",
+          "explanation": "Notes and Messages Drama (Role Play, Simulation, Pantomime) Find Someone Who … Questions and Answers • Students keep expanding their visual dictionary by including new vocabulary items. • Students prepare a poster about scientific inventions/ İngilizce Dersi Öğretim Programı 8. SINIF / 8th GRADE Unit / Theme Functions & Useful Language Language Skills and Learning Outcomes Suggested Contexts, Tasks and Assignments Making predictions about the future (Giving reasons and results) —I think we will have water shortage in the future because we waste too much water. So we should/must stop wasting water —I think there will be serious droughts. So schools should educate students to use less Do you think there will be a water shortage? —Yes. There won’t be enough water. —No. There will be a lot of rain in the future."
+        },
+        {
+          "code": "E8.10.L1",
+          "text": "Students will be able to identify the main points of TV news about natural forces and disasters.",
+          "explanation": null
+        },
+        {
+          "code": "E8.10.SI1",
+          "text": "Students will be able to talk about predictions concerning future of the Earth.",
+          "explanation": null
+        },
+        {
+          "code": "E8.10.SI2",
+          "text": "Students will be able to negotiate reasons and results to support their predictions about natural forces and disasters.",
+          "explanation": null
+        },
+        {
+          "code": "E8.10.SP1",
+          "text": "Students will be able to express predictions concerning future of the Earth.",
+          "explanation": null
+        },
+        {
+          "code": "E8.10.SP2",
+          "text": "Students will be able to give reasons and results to support their predictions about natural forces and disasters.",
+          "explanation": null
+        },
+        {
+          "code": "E8.10.R1",
+          "text": "Students will be able to identify specific information in simple texts about natural forces and disasters.",
+          "explanation": null
+        },
+        {
+          "code": "E8.10.W1",
+          "text": "Students will be able to write a short and simple paragraph about reasons and results of natural forces and disasters.",
+          "explanation": "Notes and Messages Drama (Role Play, Simulation, Pantomime) Find Someone Who … Questions and Answers • Students complete and reflect on their visual İngilizce Dersi Öğretim Programı İNGİLİZCE ÖĞRETİM PROGRAMI’NIN MODELİ (2 - 8. SINIFLAR İÇİN) (Saat / Hafta) Sınıf Hedef Beceriler Ana Etkinlikler/Stratejiler 2 Dinleme ve Konuşma Tüm Fiziksel Tepki (TFT)/ 3 Dinleme ve Konuşma Çok Sınırlı Okuma ve Yazma° 4 Dinleme ve Konuşma Çok Sınırlı Okuma ve Yazma° Dinleme ve Konuşma Çok Sınırlı Yazma° Drama/Canlandırma Dinleme ve Konuşma 7 Birincil: Dinleme ve Konuşma İkincil: Okuma ve Yazma 8 Birincil: Dinleme ve Konuşma İkincil: Okuma ve Yazma * ADOÇEP = Avrupa Dilleri Öğretimi Ortak Çerçeve Programı ° Bu işaretin olduğu kutularda yer alan çok sınırlı olarak belirtilen beceriler, basit ve kısa sözlü/yazılı metinleri ve materyalleri ifade etmektedir. Örneğin 2-4. sınıflarda ana hedef dinleme ve konuşmanın geliştirilmesidir. Cameron’un (2001) dediği gibi çocuklar için konuşma dili çocuğun ilk karşılaştığı, anladığı, pratik yaptığı ve öğrendiği dildir (s. 18). Dolayısıyla okuma ve yazma becerilerini geliştirmeye yönelik etkinlikler sözcük düzeyini geçmemelidir (Örnek: Çocuklar kedi resminin altına “cat” yazabilir). Buna ek olarak, sınırlı olarak belirtilmiş becerilerde 25 sözcüğe kadar okuma ve yazma etkinlikleri yapılabilir. Örneğin 5 ve 6. sınıflarda okuma etkinlikleri cümle düzeyine çıkabilir, 7 ve 8. sınıflardaki yaşca büyük öğrenciler okuma-yazma etkinliklerine ait temel bilgileri edindiklerinden okuma ve yazmayı dil öğreniminin önemli bir parçası olarak kullanabilirler. ∞ Tema bazlı öğretimin temel özellikleri şunlardır : Yüksek düzeyde bağlamlandırılmış öğrenme ortamı, bir konu çerçevesinde ele alınan sözcük ve dil bilgisi yapıları, anlamlı duruma dayalı öğrenmeyi sağlayan ders konusuna (örneğin; bilim insanları, coğrafya, evdeki sorumluluklar vb.) göre seçilmiş tema ile bütünleşen beceriler ve etkinlikler. İngilizce Dersi Öğretim Programı İNGİLİZCE ÖĞRETİM PROGRAMI’NIN UYGULANMASINA DAİR ÖNEMLİ HUSUSLAR Sınıftaki öğrenme ortamımız aşağıdaki iletişimsel özelliklere dayandırılmaktadır: • İletişim mümkün olduğunca İngilizce yürütülür. • İletişim gerçek anlam oluşturmaya odaklıdır. • Öğrenciler gerçek yaşamda o dili konuşan ülkelerdeki insanlar gibi dinleme ve konuşma eylemlerinde • Öğrenciler gelişen İngilizce becerilerini öğrenmenin her alanında kullanırlar. • Öğrenciler görsel ve işitsel araçlar yardımıyla hedef dilde kullanılan yapı ve sözcüklerle sürekli olarak • Öğrenciler dili, el işleri, tüm bedensel tepki ve drama etkinlikleriyle eğlenceli bir şekilde kullanırlar. • Öğrenciler İngilizce öğrenirken kendi ana dillerine de saygı duyar ve ana dillerini, gelişimlerinin önemli bir parçası olarak görürler. • Ana dilin kullanımı yasaklanmaz ve engellenmez. Ana dili gerektiğinde kullanılır (Örneğin karmaşık yönergeler verirken, zor yapıları açıklarken). • Öğrenciler kendilerini jest, mimik gibi olumlu pekiştireçlerle “anlayan” öğretmenler tarafından desteklenir • Öğretmenlerin sınıfta bulunma nedeni İngilizce (ve gerekirse Türkçe) iletişim kurmalarıdır. • Öğrenmenin amacı belirli bir zaman aralığında Öğretim Programı’ndaki konuları işleyip bitirebilmek yerine kurulan iletişimi derinleştirmeye çalışmaktır. • Öğrenciler iletişim kurarken hata yapmaları hâlinde uyarılmaz ve düzeltilmez. Öğretmenler iletişimin devamlılığına odaklanarak öğrencilerin hatalarını daha sonra düzeltirler. • Öğrenciler daha önceki derslerde karşılaştıkları işlev ve bilgileri tekrar tekrar kullanırlar ve böylece bilgi ve becerilerini taze tutarlar. • Öğrenciler kendilerini zorlayan ama yapılabilir etkinliklerin üstesinden başarıyla gelerek motivasyonlarını • Öğrenciler okul içinde ve dışında paylaşılacak ürünler ortaya koyarlar. • Veliler sürecin bir parçası olmaları için cesaretlendirilirler ve veli toplantıları aracılığıyla çocuklarının öğrenme sürecinden haberdar olurlar. • Öğrenciler “bir dil hakkında bir şeyler öğrenmek” yerine “o dille bir şeyler yaparak” İngilizce iletişim • Kitap yazarlarının ve materyal geliştirme uzmanlarının Öğretim Programı’nda bahsedilen değerlere ve temel yeterliklere bağlam tercihlerinde yer vermeleri gerekmektedir. • Kitap yazarlarının ve materyal geliştirme uzmanlarının Öğretim Programı’nda bahsedilen değerleri ve temel yeterlikleri ders materyallerinde örtük bir biçimde sunmaları gerekmektedir. • Kitap yazarlarının ve materyal geliştirme uzmanlarının öğrencilerin günlük yaşamlarında karşılaşmaları muhtemel karakter ve yerleri daha çok örnek vermeleri gerekmektedir. • Ders kitapları Ek 2›deki tabloda verilen forma sayısı ve ebat standartlara uygun olarak hazırlanmalıdır. İngilizce Dersi Öğretim Programı 2 VE 3. SINIF İNGİLİZCE ÖĞRETİM PROGRAMI - UYGULAMA ÖNERİLERİ • Bilinenden bilinmeyene doğru gidiniz. Özellikle Türkçe ve İngilizcede ortak olan sözcüklerden yararlanarak derse başlayınız (Örneğin doctor, zebra, lemon vb.). Çocukların sevdiği ve bildiği medya ve kültür ögelerine de öncelik veriniz. • Çocuklara İngilizcenin kolay ve çok zevkli olduğunu hatırlatınız. • Çocukların yaptıkları hataları anında düzeltmeyiniz. Ancak bu hataları not ederek ve kendiniz doğrusunu sık sık kullanarak sınıfa hatırlatınız. • 2. Sınıf Öğretim Programı’nda gerek sözcük gerekse yapı çeşitleri en az seviyede tutulmuştur. Bunun iki temel nedeni vardır. Birincisi, öğrencilere yaptırılan etkinliklerle İngilizceyi sevdirerek motivasyonlarını ve dile olan ilgilerini artırmaktır. İkincisi ise içerikten çok iletişime ağırlık vermektir. Dolayısıyla derslerde etkinlikler eğlenceli ve öğretici geçiyorken öğrencilerle soru-yanıt ve tekrar kullanım yoluyla iletişim kurmaya gayret • Öğretim Programı sarmal olarak düşünülmeli ve öyle uygulanılmalıdır. Öğrencilerin önceki öğrenmelerini hatırlatınız ve öğrenmelerin kalıcılığını desteklemek için daha önceki etkinlik şarkı ve kelimeleri kullanınız. • Öğrencilere sık sık evlerinde ailelerine öğrendikleri şarkıları söylemelerini öneriniz. Velilerle görüşerek çocuklarını yüreklendirmelerini ve onları takdir etmelerini hatırlatınız. • İngilizce konuşurken “headlines” kullanmaya özen gösteriniz (Bir fikri veya mesajı iletmek için yalnızca birkaç içerik sözcüğünü kullanmak ki çoğunlukla nesnelerin vurgu ve tonlama ile zenginleştirilerek isimlendirilmesi yoluyla olur.). Örneğin Are you thirsty? “Water?” / Are you having fun “Fun?” Take out your crayons. “Your crayons!” / It’s easy, isn’t it? “Easy, huh?” • 2 ve 3. Sınıf Öğretim Programlarında 4 temel beceriden okuma ve yazma öğretimi geliştirilmesi gereken hedefler arasında değildir. Öğrencilerin İngilizce defterleri olmamalıdır. Öğrenciler şarkı sözlerini dinleyerek ve tekrar ederek öğrenmelidir. Şarkı sözlerini veya sözcükleri öğretmek için okuma ve yazma yolu • Öğretmenin sesli okuması bu düzey öğrenciler için ilgi çekicidir. Onlara şarkı sözlerini dahi dramatizasyon ve jest-mimik kullanarak, tonlayarak, taklit ederek ve vurgulamalara dikkat ederek okuyunuz. • Üniteler/temalar arasında geçiş akıcı olmalıdır. Her ne kadar sırayla gidilecek olsa da bir sonraki ünite/tema önceki ünitede/temada öğrenilenlerle ilişkilendirilmeli ve böylece birbirlerine entegre edilmelidir. • Kültürel farkındalıklara dikkat ediniz. Bunu yaparken eğitimsel ve kültürel olarak çocuklarda yanlış davranış ve alışkanlıklar oluşturabilecek etkinlik ve hareketlerden uzak durunuz. İngilizce Dersi Öğretim Programı İNGİLİZCE DERSİ 2-8. SINIFLAR DERS KİTABI FORMA SAYILARI VE EBATLARI En Fazla Forma Sayısı* Ebadı *En fazla forma sayıları yazılmıştır. Hazırlanacak Ders Kitabı daha az forma sayılarında da olabilir."
+        }
+      ]
+    },
+    "din": {
+      "subject": "Din Kültürü ve Ahlak Bilgisi",
+      "programYear": 2018,
+      "sourceFile": "din-kulturu-2018.pdf",
+      "sourceUrl": "https://dogm.meb.gov.tr/meb_iys_dosyalar/2019_02/25182918_DKAB_4-8_9-12_Ogretim_Programi_Turkce.pdf",
+      "sha256": "a609b13412bc3815108362e4832da5202ad5e2b0d3007390d70ae76f4e53675e",
+      "outcomeCount": 28,
+      "unitNames": {
+        "1": "Kader ve Kaza",
+        "2": "Zekât ve Sadaka",
+        "3": "Din ve Hayat",
+        "4": "Hz. Muhammed'in Örnekliği",
+        "5": "Kur'an-ı Kerim ve Özellikleri"
+      },
+      "unitOutcomeCounts": {
+        "1": 6,
+        "2": 5,
+        "3": 4,
+        "4": 9,
+        "5": 4
+      },
+      "outcomes": [
+        {
+          "code": "8.1.1",
+          "text": "Kader ve kaza inancını ayet ve hadislerle açıklar.",
+          "explanation": " Allah’ın (c.c.) her şeyi bir ölçüye göre yaratmasına,  Sünnetullah kavramı kapsamında evrendeki fiziksel, biyolojik ve toplumsal yasalara yer"
+        },
+        {
+          "code": "8.1.2",
+          "text": "İnsanın ilmi, iradesi, sorumluluğu ile kader arasında ilişki kurar.",
+          "explanation": null
+        },
+        {
+          "code": "8.1.3",
+          "text": "Kaza ve kader ile ilgili kavramları analiz eder.",
+          "explanation": " Kavramlar; ecel, ömür, rızık, tevekkül, başarı, başarısızlık, sağlık ve hastalık ile sınırlandırılır; kavramlar, kaderle ilişkilendirilerek ele alınır."
+        },
+        {
+          "code": "8.1.4",
+          "text": "Toplumda kader ve kaza ile ilgili yaygın olan yanlış anlayışları sorgular.",
+          "explanation": " Alın yazısı, kara talih, baht, kısmetsizlik gibi kalıp yargılar,  Gerekli güvenlik tedbirlerinin alınmaması sonucunda yaşanan iş kazalarının kaderle olumsuz bir şekilde ilişkilendirilerek bireysel ve toplumsal sorumluluğunun göz ardı edilmesi gibi yanlış anlayışlar eleştirel bir bakışla ele alınır."
+        },
+        {
+          "code": "8.1.5",
+          "text": "Hz. Musa’nın (a.s.) hayatını ana hatlarıyla tanır.",
+          "explanation": " Hz. Harun’dan (a.s.) kısaca bahsedilir. Kazanım, A’râf, Tâhâ ve Kasas surelerindeki ilgili ayetler kapsamında öğrenci düzeyi dikkate alınarak ele alınır."
+        },
+        {
+          "code": "8.1.6",
+          "text": "Ayet el-Kürsi'yi okur, anlamını söyler.",
+          "explanation": " Ayet el-Kürsi ile ilgili kısa açıklamalara yer verilir, ayette verilen mesajlara ve ayetin nerelerde kader, kaza, sünnetullah, küllî irade, cüzî irade. Bu ünitede sırasıyla; “İslam’ın Paylaşma ve Yardımlaşmaya Verdiği Önem”, “Zekât ve Sadaka İbadeti”, “Zekât ve Sadakanın Bireysel ve Toplumsal Faydaları”, “Bir Peygamber Tanıyorum: Hz. Şuayb (a.s.)”, “Bir Sure Tanıyorum: Maûn Suresi ve Anlamı” konularına yer verilir. Ünite genelinde konular, günlük hayattan ve öğrencilerin somut deneyimlerinden örneklerle işlenir. Ayrıca öğrenci düzeyine uygun edebî metinlerden yararlanılır. Kazanım ve Açıklamaları"
+        },
+        {
+          "code": "8.2.1",
+          "text": "İslam’ın paylaşma ve yardımlaşmaya verdiği önemi ayet ve hadisler ışığında yorumlar.",
+          "explanation": null
+        },
+        {
+          "code": "8.2.2",
+          "text": "Zekât ve sadaka ibadetini ayet ve hadislerle açıklar.",
+          "explanation": " Zekâtın nisap miktarı, zekât verecek ve zekât verilecek kişiler fıkhi ayrıntılara girilmeden öğrenci seviyesi gözetilerek ele alınır."
+        },
+        {
+          "code": "8.2.3",
+          "text": "Zekât, infak ve sadakanın bireysel ve toplumsal önemini fark eder.",
+          "explanation": " İnfak kültürünün önemine,  Zekâtın fakirlik ve sosyal adaletsizliğin çözüm yollarından biri olduğuna değinilir."
+        },
+        {
+          "code": "8.2.4",
+          "text": "Hz. Şuayb’in (a.s.) hayatını ana hatlarıyla tanır.",
+          "explanation": " Hz. Şuayb’in, (a.s.) “ölçü ve tartıda hile yapmama” konusunda ortaya koyduğu duyarlılıkla ilgili Kur’an-ı Kerim’den örneklere yer verilir.  Kazanım, sahih kaynaklarda yer alan rivayetler ışığında ayrıntıya girilmeden ve öğrenci düzeyi dikkate alınarak ele alınır."
+        },
+        {
+          "code": "8.2.5",
+          "text": "Maûn suresini okur, anlamını söyler.",
+          "explanation": " Maûn suresi ile ilgili kısa açıklamalara yer verilir; surede verilen mesajlar belirlenir. zekât, sadaka, infak, nisap, öşür. Bu ünitede sırasıyla; “Din, Birey ve Toplum”, “Dinin Temel Gayesi”, “Bir Peygamber Tanıyorum: Hz. Yusuf (a.s.)”, “Bir Sure Tanıyorum: Asr Suresi ve Anlamı” konularına yer verilir. Ünite genelinde konular, günlük hayattan ve öğrencilerin somut deneyimlerinden örneklerle işlenir. Konular; ayet ve hadisler başta olmak üzere, öğrenci seviyesine uygun atasözü, vecize, beyit, ilahi, nefes gibi edebî örneklerle ele alınır. Kazanım ve Açıklamaları"
+        },
+        {
+          "code": "8.3.1",
+          "text": "Din, birey ve toplum arasındaki ilişkiyi yorumlar.",
+          "explanation": " İslam dininin temel inanç, ibadet ve ahlaki esasları bireysel, sosyal ve iktisadi hayatla ilişkilendirilerek ele alınır."
+        },
+        {
+          "code": "8.3.2",
+          "text": "İslam dininin can, nesil, akıl, mal ve din emniyetiyle ilgili ortaya koyduğu ilke ve hedefleri analiz eder.",
+          "explanation": " Canın korunmasında, “iş sağlığı ve güvenliği”; malın korunmasında, “haksız kazanç”; aklın korunmasında, “zararlı alışkanlıklar”; neslin korunmasında, “aile kurumunun önemi” gibi konulara da değinilir."
+        },
+        {
+          "code": "8.3.3",
+          "text": "Hz. Yusuf’un (a.s.) örnek hayatından ilkeler çıkarır.",
+          "explanation": " Hz. Yusuf’un (a.s.) hayatı, sahih kaynaklarda yer alan rivayetler ışığında ayrıntıya girilmeden ve öğrenci düzeyi dikkate alınarak ele alınır."
+        },
+        {
+          "code": "8.3.4",
+          "text": "Asr suresini okur, anlamını söyler.",
+          "explanation": " Asr suresiyle ilgili kısa açıklamalara yer verilir; surede verilen mesajlar belirlenir. din, birey, toplum. Bu ünitede sırasıyla; “Hz. Muhammed’in (s.a.v.) Doğruluğu ve Güvenilir Kişiliği”, “Hz. Muhammed’in (s.a.v.) Merhametli ve Affedici Oluşu”, “Hz. Muhammed’in (s.a.v.) İstişareye Önem Vermesi”, “Hz. Muhammed’in (s.a.v.) Davasındaki Cesaret ve Kararlılığı”, “Hz. Muhammed’in (s.a.v.) Hakkı Gözetmedeki Hassasiyeti”, “Hz. Muhammed’in (s.a.v.) İnsanlara Değer Vermesi”, “Bir Sure Tanıyorum: Kureyş Suresi ve Anlamı” konularına yer verilir. Ünite genelinde; Hz. Muhammed’in (s.a.v.) hayatındaki örnek olaylarla ilgili etkinliklere yer verilir. Konular; ayet ve hadisler başta olmak üzere Hz. Muhammed (s.a.v.) ile ilgili atasözü, vecize, beyit, ilahi, nefes gibi öğrenci seviyesine uygun edebî metinlerle desteklenir. Kazanım ve Açıklamaları"
+        },
+        {
+          "code": "8.4.1",
+          "text": "Hz. Muhammed’in (s.a.v.) doğruluğu ve güvenilir kişiliği ile peygamberlerin özellikleri arasında ilişki kurar.",
+          "explanation": null
+        },
+        {
+          "code": "8.4.2",
+          "text": "Hz. Muhammed’in (s.a.v.) merhametli ve affedici oluşunu davranışlarında yansıtmaya özen gösterir.",
+          "explanation": null
+        },
+        {
+          "code": "8.4.3",
+          "text": "Hz. Muhammed’in (s.a.v.) istişareye verdiği önemi ortaya koyan örnek olaylardan hareketle gündelik hayatla ilgili çıkarımlarda bulunur.",
+          "explanation": null
+        },
+        {
+          "code": "8.4.4",
+          "text": "Hz. Muhammed’in (s.a.v.) cesaret ve kararlılığını örnek olaylarla açıklar.",
+          "explanation": null
+        },
+        {
+          "code": "8.4.5",
+          "text": "Hz. Muhammed’in (s.a.v.) hakkı gözetmedeki hassasiyetine örnekler verir.",
+          "explanation": null
+        },
+        {
+          "code": "8.4.6",
+          "text": "Hz. Muhammed’in (s.a.v.) insanlara verdiği değeri örneklerle açıklar.",
+          "explanation": null
+        },
+        {
+          "code": "8.4.7",
+          "text": "Hz. Muhammed’in (s.a.v.) örnek davranışlarının toplumsal hayattaki önemini değerlendirir.",
+          "explanation": null
+        },
+        {
+          "code": "8.4.8",
+          "text": "Hz. Muhammed’in (s.a.v.) hikmetli söz ve davranışlarıyla insanları iyiye ve güzele yönlendirdiğini fark eder.",
+          "explanation": null
+        },
+        {
+          "code": "8.4.9",
+          "text": "Kureyş suresini okur, anlamını söyler.",
+          "explanation": " Kureyş suresi ile ilgili kısa açıklamalara yer verilir; surede verilen mesajlar belirlenir. üsve-i hasene, sıdk, emanet, istişare, azim. Bu ünitede sırasıyla; “İslam Dininin Temel Kaynakları”, “Kur’an-ı Kerim’in Ana Konuları”, “Kur’an-ı Kerim’in Temel Özellikleri”, “Bir Peygamber Tanıyorum: Hz. Nuh (a.s.)” konularına yer verilir. Ünite genelinde konular, günlük hayattan ve öğrencilerin somut deneyimlerinden örneklerle işlenir. Konular; ayet ve hadisler başta olmak üzere öğrenci seviyesine uygun atasözü, vecize, beyit, ilahi, nefes gibi edebî metinlerle desteklenir. Kazanım ve Açıklamaları"
+        },
+        {
+          "code": "8.5.1",
+          "text": "İslam dininin temel kaynaklarını tanır.",
+          "explanation": " İslam dininin temel kaynakları; öğrenci düzeyi dikkate alınarak Kur’an ve sünnet ile  İslam dininde sünnetin konumu örneklerle açıklanır."
+        },
+        {
+          "code": "8.5.2",
+          "text": "Ayetlerden hareketle Kur’an’ın ana konularını sınıflandırır.",
+          "explanation": " Kur’an-ı Kerim’in ana konuları; inanç, ibadet, ahlak, sosyal hayat ve kıssalar öğrenci düzeyine uygun olarak ele alınır."
+        },
+        {
+          "code": "8.5.3",
+          "text": "Kur’an-ı Kerim’in temel özelliklerini değerlendirir.",
+          "explanation": " Kur’an-ı Kerim’in temel özellikleri; Kur’an’ın iyiye, doğruya ve güzele yönlendirmesi, kötülüklerden sakındırması, yol göstermesi, açıklayıcı olması, insanları düşünmeye ve aklını kullanmaya yöneltmesi gibi konular öğrenci düzeyine uygun olarak ele alınır."
+        },
+        {
+          "code": "8.5.4",
+          "text": "Hz. Nuh’un (a.s.) tevhide davetini özetler.",
+          "explanation": " Kazanım; Yunus, Hud ve Nuh surelerindeki ilgili ayetler kapsamında ve öğrenci düzeyi dikkate alınarak ele alınır. Kur’an, furkan, sünnet, inanç, ibadet, ahlak, muamelat, kıssa."
+        }
+      ]
+    }
+  }
+}

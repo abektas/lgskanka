@@ -1,0 +1,138 @@
+name: gemini-review
+
+# Faz 1 kapsami: YALNIZCA PR teknik incelemesi.
+# Uygulama tarafi bu fazda DEGISTIRILMEZ.
+#
+# Neden `pull_request` ve `pull_request_target` degil?
+#   `pull_request_target` repo secret'larini fork PR'larina da acar ve
+#   dokumani uyariyor; o yuzden kullanilmaz. Fork PR'larinda secret
+#   verilmedigi icin bu workflow fork'larda sessizce bos kaliyor — bu
+#   KASTEN bir guvenlik tercihidir, acikca yorum birakilir.
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  # Elle tetikleme: test, "tekrar incele" ve private repo'da fork PR
+  # korumasini dogrulama icin gerekli. workflow_dispatch eklenmeden
+  # bir workflow yalnizca kendi event'iyle calisir.
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR numarasi (fork PR denemesi icin)'
+        required: true
+        type: string
+
+# Ayni PR icin iki inceleme paralel calismasin. `github.workflow` eklenerek
+# baska workflow'larla grup cakismasi onlenir.
+concurrency:
+  group: gemini-review-${{ github.workflow }}-${{ github.event.pull_request.number || inputs.pr_number }}
+  cancel-in-progress: true
+
+# Minimum yetki: repo disina yazma yok, PR'a yorum yazma var.
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  review:
+    # Fork PR: secret yok -> sessiz hata yerine acikca dur.
+    # pull_request event'inde `github.event.pull_request` her zaman vardir.
+    # workflow_dispatch'te yoktur; bu yuzden onkoşul ile elenir.
+    if: >-
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      # PR numarasi ve head sha'yi tek yerde coz. workflow_dispatch'te
+      # bunlar event payload'inda YOK; PR'dan okunmasi gerekir.
+      - name: PR kimligini coz
+        id: pr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          EVENT_PR: ${{ github.event.pull_request.number }}
+          INPUT_PR: ${{ inputs.pr_number }}
+        run: |
+          set -euo pipefail
+          pr="${EVENT_PR:-${INPUT_PR}}"
+          echo "number=$pr" >> "$GITHUB_OUTPUT"
+          echo "sha=$(gh pr view "$pr" --repo "$GITHUB_REPOSITORY" --json headRefOid --jq .headRefOid)" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/checkout@v4
+        with:
+          # İncelenecek kod PR head'idir (diff ve dosya içerikleri buradan).
+          ref: ${{ steps.pr.outputs.sha }}
+          fetch-depth: 0
+
+      # REVIEWER KODU GÜVENİLİR REF'TEN GELİR — PR'ın kodundan DEĞİL.
+      #
+      # Neden ayrı: `workflow_dispatch` ile PR #4 incelenmek istendiğinde
+      # checkout PR #4'ün kodunu getiriyordu; `scripts/pr_review/*.py` ise
+      # PR #6'da olduğu için dosya bulunamadı ve job "No such file" ile
+      # düşüyordu. Reviewer'ın kendisi ile incelenen kod iki farklı ref'tir.
+      #
+      # `github.workflow_ref` = `<owner>/<repo>/.github/workflows/<file>@<ref>`.
+      # Script dosyaları bu ref'ten çekilir; çalışma ağacı PR head'de kalır.
+      - name: Reviewer betiklerini güvenilir ref'ten al
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          reviewer_ref="${GITHUB_WORKFLOW_REF##*@}"
+          echo "Reviewer kaynagi: $reviewer_ref"
+          for f in gemini_review.py post_review.py; do
+            mkdir -p scripts/pr_review
+            gh api "repos/${GITHUB_REPOSITORY}/contents/scripts/pr_review/${f}?ref=${reviewer_ref}" \
+              --jq .content | base64 -d > "scripts/pr_review/${f}"
+            test -s "scripts/pr_review/${f}" || { echo "${f} alinamadi"; exit 1; }
+            echo "  alindi: scripts/pr_review/${f}"
+          done
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Secret maskesi
+        # GitHub maskesi best-effort; acikca bir kez daha maskeliyoruz.
+        # NOT: bu ek bir garanti degil, katmanli savunma.
+        run: echo "::add-mask::${GEMINI_API_KEY}"
+
+      - name: Gemini PR incelemesi
+        id: review
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ steps.pr.outputs.number }}
+        run: |
+          set -euo pipefail
+          python3 scripts/pr_review/gemini_review.py \
+            --pr "$PR_NUMBER" \
+            --max-chars 12000 \
+            --timeout 240 \
+            --json-out review.json
+          # Sonuc dosyasi HATA durumunda da uretilir; asagi yaziliyor
+          # olmazsa sonraki step FileNotFoundError ile cokup gercek hatayi
+          # gizliyordu.
+          test -s review.json || { echo "review.json uretilmedi"; exit 1; }
+          echo "status=$(python3 -c "import json;print(json.load(open('review.json'))['status'])")" >> "$GITHUB_OUTPUT"
+          echo "model=$(python3 -c "import json;print(json.load(open('review.json')).get('_model','') or 'yok')")" >> "$GITHUB_OUTPUT"
+
+      - name: Sonucu PR'a yaz
+        # Review JSON'u PR gorunur olmayan bir step'a basilir (PR'da sadece
+        # ozet gorunur). Ham JSON, uzunlugu ve ogrenici verisi riski
+        # nedeniyle loga yazilmaz.
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ steps.pr.outputs.number }}
+          HEAD_SHA: ${{ steps.pr.outputs.sha }}
+        run: |
+          python3 scripts/pr_review/post_review.py \
+            --json review.json \
+            --pr "$PR_NUMBER" \
+            --head-sha "$HEAD_SHA"
+
+      - name: Ozet
+        run: |
+          echo "durum: ${{ steps.review.outputs.status }}"
+          echo "model: ${{ steps.review.outputs.model }}"

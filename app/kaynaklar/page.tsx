@@ -6,7 +6,7 @@ import { resources } from "../../data/content";
 export const metadata: Metadata = {
   title: "Kaynaklar",
   description:
-    "LGS için güvenilir kaynaklar: konu özetleri, MEB örnek soruları, EBA ders videoları, deneme arşivi ve sınav kaygısı rehberi. Koçun önerdiği sırayla çalış.",
+    "LGS için güvenilir kaynaklar: konu özetleri, MEB örnek soruları, EBA ders videoları, deneme arşivi ve sınav kaygısı rehberi. Kankanın önerdiği sırayla çalış.",
   alternates: { canonical: "/kaynaklar" },
 };
 
@@ -18,13 +18,11 @@ export default function KaynaklarPage() {
           <span className="eyebrow">Kütüphane</span>
           <h1>Kaynaklar</h1>
           <p>
-            Kaynak çokluğu değil, doğru sıra önemli. Aşağıdaki liste koçun önerdiği sırayla dizildi:
+            EBA konu anlatımları, YouTube kanalları, MEB örnek sorular ve sınav kaygısı rehberi — ihtiyacına göre seç, çalış.
             önce özet, sonra soru, sonra deneme.
           </p>
         </div>
-        <Link className="btn btn-primary" href="/dersler">
-          Konu haritası <Icon name="arrow" size={18} />
-        </Link>
+
       </header>
 
       <div className="resource-grid">
@@ -39,12 +37,25 @@ export default function KaynaklarPage() {
                 </span>
               ))}
             </div>
-            {resource.external ? (
+            {resource.links && resource.links.length > 0 ? (
+              <div className="resource-links">
+                {resource.links.map((link) => (
+                  <a key={link.url} className="text-link" href={link.url} target="_blank" rel="noopener noreferrer">
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+            ) : resource.external ? (
               <a className="text-link" href={resource.href} target="_blank" rel="noopener noreferrer">
                 Resmî siteye git <Icon name="arrow" size={14} />
               </a>
             ) : (
-              <Link className="text-link" href={resource.href}>
+              <Link
+                className="text-link"
+                href={resource.href}
+                target={resource.newTab ? "_blank" : undefined}
+                rel={resource.newTab ? "noopener noreferrer" : undefined}
+              >
                 Aç <Icon name="arrow" size={14} />
               </Link>
             )}
@@ -52,26 +63,6 @@ export default function KaynaklarPage() {
         ))}
       </div>
 
-      <section className="card" aria-labelledby="kaynak-notu">
-        <h2 id="kaynak-notu">Nasıl kullanmalı?</h2>
-        <ul className="step-list">
-          <li>
-            <b>Tek oturumda tek kaynak:</b> aynı anda hem video hem özet açmak dikkat dağınıklığını
-            artırır (H7).
-          </li>
-          <li>
-            <b>Özetten sonra hemen 3 soru:</b> pasif okuma yerine hemen hatırlama denemesi, kalıcılığı
-            belirgin biçimde artırır.
-          </li>
-          <li>
-            <b>Denemeyi 09:30&apos;da çöz:</b> gerçek sınav saatine benzer bir saatte çözmek, bedeni ve
-            dikkati alıştırır.
-          </li>
-          <li>
-            <b>Kaynağı bitirme zorunluluğu yok:</b> işe yaramayan kaynağı bırakmak da planın parçası.
-          </li>
-        </ul>
-      </section>
     </div>
   );
 }

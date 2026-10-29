@@ -10,13 +10,13 @@ export type NavItem = {
 
 export const navItems: NavItem[] = [
   { href: "/", label: "Ana Sayfa", icon: "home", mobile: true },
-  { href: "/calis", label: "Çalış", icon: "target", mobile: true },
-  { href: "/ai-koc", label: "AI Koç", icon: "robot", mobile: true },
-  { href: "/dersler", label: "Dersler", icon: "book" },
-  { href: "/sinavlar", label: "Sınavlar", icon: "trophy" },
+  { href: "/calis", label: "Günlük Alıştırmalar", icon: "target", mobile: true },
+  { href: "/sonuclar", label: "Sonuçlar ve İlerleme", icon: "chart", mobile: true },
+  { href: "/pekistirme", label: "Pekiştirme Soruları", icon: "book" },
+  { href: "/aylik-denemeler", label: "Aylık Denemeler", icon: "trophy" },
+  { href: "/haftalik-test", label: "Haftalık Test", icon: "target" },
   { href: "/kaynaklar", label: "Kaynaklar", icon: "compass" },
   { href: "/oduller", label: "Ödüller", icon: "star" },
-  { href: "/ilerleme", label: "İlerleme", icon: "chart", mobile: true },
   { href: "/profil", label: "Profil", icon: "user", mobile: true },
 ];
 
@@ -27,11 +27,11 @@ export const learner = {
   level: 4,
   levelXp: 145,
   levelTarget: 320,
-  badgeCount: 8,
+  badgeCount: 6,
   gameRights: 2,
   roomItems: 3,
-  solvedThisWeek: 42,
-  weeklyGoal: 60,
+  solvedThisWeek: 32,
+  weeklyGoal: 45,
   totalSolved: 286,
 };
 

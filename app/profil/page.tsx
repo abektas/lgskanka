@@ -4,19 +4,40 @@ import { CharacterAvatar } from "../../components/character-avatar";
 import { Icon } from "../../components/icons";
 import { ProfileForm } from "../../components/profile-form";
 import { badges } from "../../data/content";
-import { learner } from "../../data/nav";
+import { learner, gameEconomy } from "../../data/nav";
 
 export const metadata: Metadata = {
   title: "Profil ve karakter",
   description:
-    "Öğrenci profilini düzenle, karakterini seç, XP ve rozetlerini gör. Ses ve çözüm fotoğrafı için gizlilik ayarlarını yönet.",
+    "Öğrenci profilini düzenle, karakterini seç, XP ve rozetlerini gör. Veri saklama ayarlarını yönet.",
   alternates: { canonical: "/profil" },
 };
 
-const customization = [
-  { icon: "👕", title: "Kıyafetler", detail: "3 eşya açık · LGS kapüşonlusu, okul forması" },
-  { icon: "💇", title: "Saç modelleri", detail: "Karakter seçiminde 3 model hazır" },
-  { icon: "🎧", title: "Aksesuarlar", detail: "Kulaklık, gözlük, sırt çantası" },
+const unlockables = [
+  {
+    icon: "🪑",
+    title: "Çalışma odası eşyaları",
+    detail: `${learner.roomItems} / ${gameEconomy.tiers.length + 2} eşya açık`,
+    earned: learner.roomItems > 0,
+  },
+  {
+    icon: "🏆",
+    title: "Rozetler",
+    detail: `${badges.filter((b) => b.earned).length} / ${badges.length} rozet kazanıldı`,
+    earned: badges.filter((b) => b.earned).length > 0,
+  },
+  {
+    icon: "🎮",
+    title: "Oyun hakları",
+    detail: `Günlük ${learner.gameRights} hak · ${gameEconomy.dailyMinuteLimit} dk limit`,
+    earned: learner.gameRights > 0,
+  },
+  {
+    icon: "⭐",
+    title: "Seviye ödülleri",
+    detail: `Seviye ${learner.level} · ${gameEconomy.tiers.find((t) => t.xp <= learner.xp)?.label ?? "Henüz yok"}`,
+    earned: learner.level > 1,
+  },
 ];
 
 export default function ProfilPage() {
@@ -74,20 +95,26 @@ export default function ProfilPage() {
           </section>
 
           <section className="card" aria-labelledby="kisisellestirme">
-            <h2 id="kisisellestirme">Özelleştirme</h2>
+            <h2 id="kisisellestirme">Kazanılan ödüller</h2>
             <div className="customize-grid">
-              {customization.map((item) => (
-                <div className="customize-item" key={item.title}>
+              {unlockables.map((item) => (
+                <div className={`customize-item${item.earned ? "" : " is-locked"}`} key={item.title}>
                   <span className="customize-emoji" aria-hidden="true">
                     {item.icon}
                   </span>
                   <b>{item.title}</b>
                   <small>{item.detail}</small>
+                  {item.earned ? (
+                    <span className="tag" style={{ marginTop: 6, fontSize: 11 }}>Açık</span>
+                  ) : (
+                    <span className="tag" style={{ marginTop: 6, fontSize: 11 }}>Kilitli</span>
+                  )}
                 </div>
               ))}
             </div>
             <p className="muted-text" style={{ marginTop: 12, fontSize: 12.5 }}>
-              Yeni kıyafet ve aksesuarlar çalışma hedefleri, hata çözümü ve mastery artışıyla açılır.
+              Ödüller: çalışma odası eşyaları (hata analizi + mini test başarıları), rozetler (seri, mastery,
+              hata çözümü), oyun hakları (XP eşine göre), seviye ödülleri.
             </p>
           </section>
 
@@ -95,24 +122,20 @@ export default function ProfilPage() {
             <h2 id="gizlilik">Verin ve gizlilik</h2>
             <ul className="privacy-list">
               <li>
-                <b>Ses kaydı:</b> yalnızca analiz için kullanılır, en fazla 60 saniye; analiz
-                tamamlandığında kalıcı olarak silinir.
+                <b>Öğrenme verisi:</b> yalnızca türetilmiş sonuçlar (hata türü, konu, mastery) tarayıcıda
+                saklanır; ham görüntü ve ses tutulmaz.
               </li>
               <li>
-                <b>Çözüm fotoğrafı:</b> profilde veya veritabanında saklanmaz, yedeklere dâhil edilmez.
+                <b>Yerel depolama:</b> profil, ayarlar ve görev durumu yalnızca bu tarayıcıda kalır;
+                sunucuya gönderilmez.
               </li>
               <li>
-                <b>Öğrenme verisi:</b> yalnızca türetilmiş sonuçlar (hata türü, konu, mastery) saklanır;
-                ham görüntü ve ses tutulmaz.
-              </li>
-              <li>
-                <b>Ebeveyn onayı:</b> üretim sürümünde 18 yaş altı kullanımlar için onay akışı
-                zorunludur.
+                <b>Veri silme:</b> Profil sayfasındaki &ldquo;Öğrenme verisi saklansın&rdquo; ayarını
+                kapatırsan tüm yerel kayıtlar silinir.
               </li>
             </ul>
             <p className="muted-text" style={{ marginTop: 12, fontSize: 12.5 }}>
-              Bu sürümde profil, ayarlar ve görev durumu yalnızca senin tarayıcında saklanır; sunucuya
-              gönderilmez.
+              Ebeveyn onayı: üretim sürümünde 18 yaş altı kullanımlar için onay akışı zorunludur.
             </p>
           </section>
         </div>

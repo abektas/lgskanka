@@ -1,0 +1,377 @@
+{
+  "manifest_version": "1.0",
+  "source": {
+    "local_path": "/home/selam/İndirilenler/2025 LGS – Matematik.pdf",
+    "sha256": "e3e3b9b1ccf0e1384ce454d5bf947b5e72acb1f4ba9f4ea5c31f814ce6be5359",
+    "file_size_bytes": 1491195,
+    "file_name": "2025 LGS – Matematik.pdf"
+  },
+  "document": {
+    "exam_year": 2025,
+    "educational_period": "2024-2025",
+    "subject": "Matematik",
+    "grade": 8,
+    "question_count_declared": 20,
+    "question_numbers": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "answer_key_page": 15,
+    "answers": {
+      "1": "D",
+      "2": "C",
+      "3": "C",
+      "4": "B",
+      "5": "A",
+      "6": "D",
+      "7": "A",
+      "8": "B",
+      "9": "D",
+      "10": "D",
+      "11": "B",
+      "12": "C",
+      "13": "C",
+      "14": "B",
+      "15": "B",
+      "16": "D",
+      "17": "A",
+      "18": "C",
+      "19": "B",
+      "20": "A"
+    }
+  },
+  "render": {
+    "dpi": 300,
+    "margin_pt_all_sides": 20.0,
+    "footer_exclusion_pt": 70.0,
+    "content_aware_bbox_margin_pt": 20.0,
+    "reconstructed_from_ocr": false
+  },
+  "questions": [
+    {
+      "question_number": 1,
+      "page": 1,
+      "column": "left",
+      "answer_key_candidate": "D",
+      "asset_path": "/home/selam/.hermes/cache/scratch/nuli-2025-matematik-full-question-20pt/page-01_q-01.png",
+      "asset_sha256": "99c7be5ca7ff6b37474d512c12676efe11728f62d612a3a80534a2b84ec145f0",
+      "clip_rect_pt": {
+        "x0": 29.994,
+        "y0": 156.0,
+        "x1": 269.709,
+        "y1": 265.969
+      },
+      "render_dpi": 300
+    },
+    {
+      "question_number": 2,
+      "page": 1,
+      "column": "left",
+      "answer_key_candidate": "C",
+      "asset_path": "/home/selam/.hermes/cache/scratch/nuli-2025-matematik-full-question-20pt/page-01_q-02.png",
+      "asset_sha256": "451c90943133d0ee2a20bb67fb44feb2afca0ec6a20f2cfd52010f4fc30c6025",
+      "clip_rect_pt": {
+        "x0": 29.994,
+        "y0": 473.713,
+        "x1": 269.709,
+        "y1": 618.925
+      },
+      "render_dpi": 300
+    },
+    {
+      "question_number": 3,
+      "page": 1,
+      "column": "right",
+      "answer_key_candidate": "C",
+      "asset_path": "/home/selam/.hermes/cache/scratch/nuli-2025-matematik-full-question-20pt/page-01_q-03.png",
+      "asset_sha256": "153e81e896953175624570a1b0bf7d053910d6bbca915b32bb0f5ff9a42c8cc1",
+      "clip_rect_pt": {
+        "x0": 283.047,
+        "y0": 156.0,
+        "x1": 496.94,
+        "y1": 249.971
+      },
+      "render_dpi": 300
+    },
+    {
+      "question_number": 4,
+      "page": 1,
+      "column": "right",
+      "answer_key_candidate": "B",
+      "asset_path": "/home/selam/.hermes/cache/scratch/nuli-2025-matematik-full-question-20pt/page-01_q-04.png",
+      "asset_sha256": "4c369f7ed75fbf7e29352bd33e1a082f99a17184717eec85bc72fce01eb8fcdb",
+      "clip_rect_pt": {
+        "x0": 283.047,
+        "y0": 359.367,
+        "x1": 523.937,
+        "y1": 658.92
+      },
+      "render_dpi": 300
+    },
+    {
+      "question_number": 5,
+      "page": 2,
+      "column": "single",
+      "answer_key_candidate": "A",
+      "asset_path": "/home/selam/.hermes/cache/scratch/nuli-2025-matematik-full-question-20pt/page-02_q-05.png",
+      "asset_sha256": "cb394328a64df559d1f55f5e5455267925abbd1b4464ad590c4c844a4574ef0c",
+      "clip_rect_pt": {
+        "x0": 44.992,
+        "y0": 71.918,
+        "x1": 542.935,
+        "y1": 593.928
+      },
+      "render_dpi": 300
+    },
+    {
+      "question_number": 6,
+      "page": 3,
+      "column": "single",
+      "answer_key_candidate": "D",
+      "asset_path": "/home/selam/.hermes/cache/scratch/nuli-2025-matematik-full-question-20pt/page-03_q-06.png",
+      "asset_sha256": "74f01d7305ba909347143421e6a0b2ca4a328997dc922909150e1ed93430c81b",
+      "clip_rect_pt": {
+        "x0": 29.994,
+        "y0": 71.918,
+        "x1": 526.937,
+        "y1": 593.928
+      },
+      "render_dpi": 300
+    },
+    {
+      "question_number": 7,
+      "page": 4,
+      "column": "single",
+      "answer_key_candidate": "A",
+      "asset_path": "/home/selam/.hermes/cache/scratch/nuli-2025-matematik-full-question-20pt/page-04_q-07.png",
+      "asset_sha256": "b1aecfc4a4572ae5edb1d21620dc9cf915dc0634671572b4202d74422a21742c",
+      "clip_rect_pt": {
+        "x0": 44.992,
+        "y0": 71.918,
+        "x1": 541.935,
+        "y1": 497.94
+      },
+      "render_dpi": 300
+    },
+    {
+      "question_number": 8,
+      "page": 5,
+      "column": "single",
+      "answer_key_candidate": "B",
+      "asset_path": "/home/selam/.hermes/cache/scratch/nuli-2025-matematik-full-question-20pt/page-05_q-08.png",
+      "asset_sha256": "f776ea121591f95ce9ad9fbf544d6eb887ddc5040f1f0ac1d16110090ae8a2da",
+      "clip_rect_pt": {
+        "x0": 28.994,
+        "y0": 71.918,
+        "x1": 519.937,
+        "y1": 353.958
+      },
+      "render_dpi": 300
+    },
+    {
+      "question_number": 9,
+      "page": 5,
+      "column": "single",
+      "answer_key_candidate": "D",
+      "asset_path": "/home/selam/.hermes/cache/scratch/nuli-2025-matematik-full-question-20pt/page-05_q-09.png",
+      "asset_sha256": "4fae6439d44957db0afc8904e3d4b9fd66ef57aadf3b2e0f5178fd4830fca67d",
+      "clip_rect_pt": {
+        "x0": 28.994,
+        "y0": 391.95,
+        "x1": 520.937,
+        "y1": 699.915
+      },
+      "render_dpi": 300
+    },
+    {
+      "question_number": 10,
+      "page": 6,
+      "column": "single",
+      "answer_key_candidate": "D",
+      "asset_path": "/home/selam/.hermes/cache/scratch/nuli-2025-matematik-full-question-20pt/page-06_q-10.png",
+      "asset_sha256": "7b4063882bf920214ff0b965472d8c3e01b0f0415cfd1380cee4ae1363514976",
+      "clip_rect_pt": {
+        "x0": 37.993,
+        "y0": 71.918,
+        "x1": 541.935,
+        "y1": 314.963
+      },
+      "render_dpi": 300
+    },
+    {
+      "question_number": 11,
+      "page": 6,
+      "column": "single",
+      "answer_key_candidate": "B",
+      "asset_path": "/home/selam/.hermes/cache/scratch/nuli-2025-matematik-full-question-20pt/page-06_q-11.png",
+      "asset_sha256": "1a0ad2977813389132dd8e455df57569ec5f49dc57ff9d42c65f315d7522f962",
+      "clip_rect_pt": {
+        "x0": 38.993,
+        "y0": 407.737,
+        "x1": 543.934,
+        "y1": 660.92
+      },
+      "render_dpi": 300
+    },
+    {
+      "question_number": 12,
+      "page": 7,
+      "column": "single",
+      "answer_key_candidate": "C",
+      "asset_path": "/home/selam/.hermes/cache/scratch/nuli-2025-matematik-full-question-20pt/page-07_q-12.png",
+      "asset_sha256": "99de94f22d4ed1615a5260efaea25a0fbbbc3d75d9bf6d469bc3fa898474076f",
+      "clip_rect_pt": {
+        "x0": 23.994,
+        "y0": 71.918,
+        "x1": 503.939,
+        "y1": 363.957
+      },
+      "render_dpi": 300
+    },
+    {
+      "question_number": 13,
+      "page": 7,
+      "column": "single",
+      "answer_key_candidate": "C",
+      "asset_path": "/home/selam/.hermes/cache/scratch/nuli-2025-matematik-full-question-20pt/page-07_q-13.png",
+      "asset_sha256": "01693976d0df00cc13b6fb9eca4b1dd1fdb39ea4217cd6de2628ad01f6a3d03c",
+      "clip_rect_pt": {
+        "x0": 23.994,
+        "y0": 456.627,
+        "x1": 447.946,
+        "y1": 687.916
+      },
+      "render_dpi": 300
+    },
+    {
+      "question_number": 14,
+      "page": 8,
+      "column": "single",
+      "answer_key_candidate": "B",
+      "asset_path": "/home/selam/.hermes/cache/scratch/nuli-2025-matematik-full-question-20pt/page-08_q-14.png",
+      "asset_sha256": "669ba9f5ff52741b7522a49da77d19c73473b188e25adb2365a908d50a1fdd0f",
+      "clip_rect_pt": {
+        "x0": 37.993,
+        "y0": 71.918,
+        "x1": 535.935,
+        "y1": 361.957
+      },
+      "render_dpi": 300
+    },
+    {
+      "question_number": 15,
+      "page": 9,
+      "column": "single",
+      "answer_key_candidate": "B",
+      "asset_path": "/home/selam/.hermes/cache/scratch/nuli-2025-matematik-full-question-20pt/page-09_q-15.png",
+      "asset_sha256": "ee99c48d7cb2f363e41426d9fcda0d66ec7de2637ddcdefe8e2593f47a409a7d",
+      "clip_rect_pt": {
+        "x0": 23.994,
+        "y0": 71.918,
+        "x1": 521.937,
+        "y1": 351.958
+      },
+      "render_dpi": 300
+    },
+    {
+      "question_number": 16,
+      "page": 10,
+      "column": "single",
+      "answer_key_candidate": "D",
+      "asset_path": "/home/selam/.hermes/cache/scratch/nuli-2025-matematik-full-question-20pt/page-10_q-16.png",
+      "asset_sha256": "96c9058dc1ff5d7b349ee94772d46435b82d094031216376c63b146b708313a1",
+      "clip_rect_pt": {
+        "x0": 37.993,
+        "y0": 71.918,
+        "x1": 538.935,
+        "y1": 404.952
+      },
+      "render_dpi": 300
+    },
+    {
+      "question_number": 17,
+      "page": 11,
+      "column": "single",
+      "answer_key_candidate": "A",
+      "asset_path": "/home/selam/.hermes/cache/scratch/nuli-2025-matematik-full-question-20pt/page-11_q-17.png",
+      "asset_sha256": "1fcad88a9f667200cfe4e66e9b397c051af4cfcf3b3e8cf19c66dfb434dcbff1",
+      "clip_rect_pt": {
+        "x0": 23.994,
+        "y0": 71.918,
+        "x1": 521.937,
+        "y1": 393.953
+      },
+      "render_dpi": 300
+    },
+    {
+      "question_number": 18,
+      "page": 12,
+      "column": "single",
+      "answer_key_candidate": "C",
+      "asset_path": "/home/selam/.hermes/cache/scratch/nuli-2025-matematik-full-question-20pt/page-12_q-18.png",
+      "asset_sha256": "abf7692ab9f077b95d47095ca24024a90b98118b886e14a902dc70ed8165637c",
+      "clip_rect_pt": {
+        "x0": 37.993,
+        "y0": 71.918,
+        "x1": 535.935,
+        "y1": 368.956
+      },
+      "render_dpi": 300
+    },
+    {
+      "question_number": 19,
+      "page": 13,
+      "column": "single",
+      "answer_key_candidate": "B",
+      "asset_path": "/home/selam/.hermes/cache/scratch/nuli-2025-matematik-full-question-20pt/page-13_q-19.png",
+      "asset_sha256": "141117794325e1f8c87f75f215858a833949def3842fa633ace9adf14726b661",
+      "clip_rect_pt": {
+        "x0": 23.994,
+        "y0": 71.918,
+        "x1": 528.936,
+        "y1": 396.953
+      },
+      "render_dpi": 300
+    },
+    {
+      "question_number": 20,
+      "page": 14,
+      "column": "single",
+      "answer_key_candidate": "A",
+      "asset_path": "/home/selam/.hermes/cache/scratch/nuli-2025-matematik-full-question-20pt/page-14_q-20.png",
+      "asset_sha256": "4cf2b8146ef844bfd21ce297a9d6b8c22424b37b3b38c7a9d1e275f88dac8830",
+      "clip_rect_pt": {
+        "x0": 36.993,
+        "y0": 71.918,
+        "x1": 542.935,
+        "y1": 430.949
+      },
+      "render_dpi": 300
+    }
+  ],
+  "status": "NEEDS_REVIEW",
+  "published": false,
+  "summary": {
+    "pages_processed": 14,
+    "questions_extracted": 20,
+    "ambiguous_pages": 0
+  }
+}

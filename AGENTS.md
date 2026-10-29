@@ -59,7 +59,8 @@ Use this source hierarchy for curriculum, exam, and official policy claims:
 1. Official MEB sources: current curriculum documents, official guides, announcements, and publications.
 2. ÖDSGM / official Ministry assessment and evaluation materials, including official LGS questions and answer keys.
 3. Other official public institutions when directly relevant.
-4. Secondary sources only as discovery/context; they cannot establish an official curriculum or answer-key fact when an authoritative source is available.
+4. **Product Owner–approved curated official-corpus source:** For the Nüli QBANK corpus, the KerimHoca `LGS Çıkmış Sorular 2018–2026` page is accepted as the trusted distribution/index source for the official exam PDFs it groups by year, exam section, and subject. Routine per-question re-verification against MEB is not required before extraction. Preserve the KerimHoca page URL, linked Drive/file URL or ID, file hash, year, section, subject, and retrieval metadata. This acceptance does not authorize invented provenance, answers, curriculum mappings, or `VERIFIED` status; structural QA, canonical validation, and human review gates still apply.
+5. Secondary sources only as discovery/context when the approved curated source is not available; they cannot establish an official curriculum or answer-key fact.
 
 Record provenance for every imported or verified record: source title/type, issuing organization, canonical URL or repository locator, publication/exam year, retrieval date, applicable curriculum layer/version, and verification status. Preserve source attribution and any usage/licensing restrictions. Do not invent sources or claim a source was verified when it was not.
 
@@ -82,17 +83,26 @@ Use explicit source types such as `OFFICIAL_CURRICULUM`, `OFFICIAL_EXAM_QUESTION
 
 ## Error taxonomy: H1–H7
 
-Use the established first-error taxonomy consistently in analysis, feedback, analytics, and spaced repetition:
+Use the established first-error taxonomy consistently in analysis, feedback, analytics, and spaced repetition.
 
-- **H1 — Concept/knowledge gap:** the required concept, rule, or fact is not known or understood.
-- **H2 — Misconception:** a known idea is applied through an incorrect mental model.
-- **H3 — Reading/interpretation:** the prompt, data, condition, or requested output is misunderstood.
-- **H4 — Strategy/method selection:** an unsuitable approach is selected or the problem is not decomposed effectively.
-- **H5 — Procedure/calculation:** the selected method is appropriate but an execution, operation, or calculation step is wrong.
-- **H6 — Attention/working discipline:** a preventable omission, sign/unit/marking slip, or loss of focus causes the error.
-- **H7 — Time/exam management:** time allocation, pacing, or pressure management prevents a correct solution.
+The canonical wording of this taxonomy is the project’s own model in `LGS_AI_COACH_MASTER_PROJE_PLANI_v2.0.md` §6 (“Hata Analiz Modeli H1–H7”), which is also the wording used at runtime in `data/content.ts` (`errorTypes`) and in the AI diagnosis prompt (`app/api/ai/route.ts`, `buildPrompt`). This section was deliberately canonicalized on 2026-10-01 to match that product decision; the earlier generic wording (H2 = misconception, H4 = strategy, H5 = procedure, H6 = attention, H7 = time/exam management) is **retired** and must not be reintroduced.
 
-Classify the earliest causal error (“first error”), not merely the final wrong answer. Allow evidence-based uncertainty and review; do not force a confident label from insufficient evidence. If project data currently defines a more specific canonical wording for these codes, preserve that wording and update this section deliberately rather than changing code meanings silently.
+- **H1 — Conceptual/knowledge gap:** the learner does not know the basic concept, or knows it incorrectly. (Master Plan: “Kavramsal eksiklik”.)
+- **H2 — Method/strategy gap:** the learner knows the concept but cannot set up a solution approach. (Master Plan: “Yöntem / strateji eksikliği”.)
+- **H3 — Reading/interpretation/modelling:** the learner cannot read the information in the question correctly or turn it into a working model. (Master Plan: “Okuma / anlama / modelleme”.)
+- **H4 — Calculation/procedure error:** the learner chose the right method but makes an error while carrying out the steps. (Master Plan: “Hesaplama / işlem hatası”.)
+- **H5 — Failure to filter irrelevant information:** the learner cannot distinguish which of the given details are actually needed. (Master Plan: “Gereksiz bilgiyi filtreleyememe”.)
+- **H6 — Failure to connect knowledge:** the learner cannot use several pieces of information together. (Master Plan: “Bilgileri ilişkilendirememe”.)
+- **H7 — Carelessness / haste / randomness:** concept and method are sufficient, but the error comes from inattention or rushing. (Master Plan: “Dikkat / acele / rastgelelik”.)
+
+Notes on this canonical form:
+- A wrong answer is never automatically H1.
+- H7 covers attention, haste and careless slips. **Time/exam management is deliberately not a separate H code at this stage**; it is addressed through pacing/practice design (see “Learning loop and assessment”) rather than by re-labelling H7.
+- Runtime labels, prompt text, analytics, spaced repetition and any future persistence must all use these seven codes and these meanings. Do not translate a code into a different code when a new surface is added.
+- If a change appears to require a different meaning for a code, that is a Product Owner decision: update Master Plan §6, this section, `data/content.ts` and the AI prompt deliberately in the same change, or create a new code — never a silent reinterpretation.
+- If the canonical H1–H7 wording changes, the runtime source (`data/content.ts` → `errorTypes`) and the verification tests (`tests/canonical-taxonomy/canonical-taxonomy.test.mjs`, run with `npm run test:taxonomy`) must be updated in the same change. The prompt dictionary is derived from `errorTypes`; do not reintroduce a second hand-written H1–H7 dictionary in `app/api/ai/route.ts`.
+
+Classify the earliest causal error (“first error”), not merely the final wrong answer. Allow evidence-based uncertainty and review; do not force a confident label from insufficient evidence. The “preserve project data’s wording and update this section deliberately” clause has been applied: see the canonicalization note above.
 
 ## Learning loop and assessment
 

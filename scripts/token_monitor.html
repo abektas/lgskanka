@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Token Traffic Monitor — All Providers</title>
+<style>
+:root {
+  --bg: #0d1117; --card: #161b22; --border: #30363d;
+  --fg: #e6edf3; --muted: #8b949e; --accent: #58a6ff;
+  --green: #3fb950; --yellow: #d29922; --red: #f85149;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--fg); min-height: 100vh; padding: 20px; }
+header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
+h1 { font-size: 1.5rem; font-weight: 600; color: var(--accent); }
+.controls { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.btn { padding: 6px 12px; border: 1px solid var(--border); background: var(--card); color: var(--fg); border-radius: 6px; cursor: pointer; font-size: 0.85rem; }
+.btn:hover { background: var(--border); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #000; }
+input.key-input { padding: 6px 10px; border: 1px solid var(--border); background: var(--bg); color: var(--fg); border-radius: 6px; font-family: monospace; font-size: 0.85rem; min-width: 200px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; transition: border-left 0.3s; }
+.card.ok { border-left: 4px solid var(--green); }
+.card.warn { border-left: 4px solid var(--yellow); }
+.card.danger { border-left: 4px solid var(--red); }
+.card.dim { border-left: 4px solid var(--muted); }
+.card h2 { font-size: 1rem; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.metric { display: flex; justify-content: space-between; margin: 8px 0; font-size: 0.9rem; }
+.metric .label { color: var(--muted); }
+.metric .value { font-weight: 600; font-variant-numeric: tabular-nums; word-break: break-all; }
+.progress { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; margin: 8px 0; }
+.progress-bar { height: 100%; border-radius: 4px; transition: width 0.3s; }
+.progress-bar.ok { background: var(--green); }
+.progress-bar.warn { background: var(--yellow); }
+.progress-bar.danger { background: var(--red); }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
+.badge-green { background: rgba(63,185,80,0.2); color: var(--green); }
+.badge-yellow { background: rgba(210,153,34,0.2); color: var(--yellow); }
+.badge-red { background: rgba(248,81,73,0.2); color: var(--red); }
+.badge-gray { background: var(--border); color: var(--muted); }
+.badge-blue { background: rgba(88,166,255,0.2); color: var(--accent); }
+.footer { margin-top: 20px; padding: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; font-size: 0.85rem; color: var(--muted); }
+.small { font-size: 0.8rem; color: var(--muted); }
+code { background: var(--bg); padding: 2px 6px; border-radius: 4px; font-size: 0.85em; }
+.section { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
+.error-msg { color: var(--red); font-size: 0.85rem; }
+.success-msg { color: var(--green); font-size: 0.85rem; }
+.debug-btn { font-size: 0.75rem; padding: 2px 6px; margin-left: 8px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🔐 Token Traffic Monitor — All Providers</h1>
+  <div class="controls">
+    <button class="btn primary" onclick="saveKeys()">💾 Keyleri Kaydet</button>
+    <button class="btn" onclick="loadKeys()">📂 Yükle</button>
+    <button class="btn" onclick="clearKeys()">🗑️ Temizle</button>
+    <button class="btn" onclick="refresh()">🔄 Şimdi Yenile</button>
+    <span class="small">Otomatik: 30sn</span>
+  </div>
+</header>
+
+<div class="grid" id="grid"></div>
+
+<div class="footer" id="footer">Son güncelleme: — | Keyler localStorage'da saklanır</div>
+
+<script>
+const REFRESH_MS = 30000;
+const PROVIDERS = [
+  {id: 'evren', name: '🌐 Evren', base: 'https://evren-llmapi.ssyz.org.tr/v1', quotaPath: '/v1/quota', needsKey: true, keyName: 'EVREN_API_KEY', corsIssue: true},
+  {id: 'omniroute', name: '🔀 OmniRoute', base: 'http://localhost:20128/v1', quotaPath: '/v1/quota', needsKey: true, keyName: 'OMNIROUTE_API_KEY'},
+  {id: 'ollama', name: '🦙 Yerel Ollama', base: 'http://127.0.0.1:11434', modelsPath: '/api/tags', needsKey: false},
+  {id: 'nvidia', name: '🟢 NVIDIA NIM', base: 'https://integrate.api.nvidia.com/v1', modelsPath: '/models', needsKey: true, keyName: 'NVIDIA_API_KEY'},
+  {id: 'openai', name: '🤖 OpenAI', base: 'https://api.openai.com/v1', quotaPath: '/usage', needsKey: true, keyName: 'OPENAI_API_KEY'},
+  {id: 'opencode', name: '📝 Opencode Zen', base: 'https://opencode.ai/zen/v1', modelsPath: '/models', needsKey: true, keyName: 'OPENCODE_ZEN_API_KEY', publicModels: true},
+  {id: 'freellm', name: '🆓 FreeLLMAPI', base: 'http://localhost:3001/v1', modelsPath: '/models', needsKey: true, keyName: 'FREELLMAPI_API_KEY'},
+];
+
+function fmt(n) { if (!n && n !== 0) return '—'; if (n >= 1e6) return (n/1e6).toFixed(2)+'M'; if (n >= 1e3) return (n/1e3).toFixed(1)+'K'; return n.toString(); }
+function pct(r) { return r ? (r*100).toFixed(1)+'%' : '—'; }
+function cls(p) { if (!p && p !== 0) return 'ok'; return p<0.8?'ok':p<0.95?'warn':'danger'; }
+function humanDelta(sec) { const h=Math.floor(sec/3600), m=Math.floor((sec%3600)/60), s=sec%60; return [h?' '+h+'sa':'', m?' '+m+'dk':'', s?' '+s+'sn':''].join('').trim() || '—'; }
+function badge(text, cls) { return `<span class="badge badge-${cls}">${text}</span>`; }
+
+function getKey(providerId) {
+  return localStorage.getItem('tokenmon_' + providerId) || '';
+}
+function setKey(providerId, val) {
+  localStorage.setItem('tokenmon_' + providerId, val);
+}
+function clearKey(providerId) {
+  localStorage.removeItem('tokenmon_' + providerId);
+}
+
+function saveKeys() {
+  PROVIDERS.filter(p => p.needsKey).forEach(p => {
+    const input = document.getElementById('key-' + p.id);
+    if (input) setKey(p.id, input.value.trim());
+  });
+  alert('Keyler kaydedildi!');
+  refresh();
+}
+function loadKeys() {
+  PROVIDERS.filter(p => p.needsKey).forEach(p => {
+    const input = document.getElementById('key-' + p.id);
+    if (input) input.value = getKey(p.id);
+  });
+}
+function clearKeys() {
+  if (confirm('Tüm keyleri sil?')) {
+    PROVIDERS.filter(p => p.needsKey).forEach(p => clearKey(p.id));
+    loadKeys();
+    refresh();
+  }
+}
+
+function renderKeyInput(p) {
+  if (!p.needsKey) return '';
+  const val = getKey(p.id);
+  return `<div class="section"><label class="small">API Key (${p.keyName}):</label><br>
+    <input type="password" class="key-input" id="key-${p.id}" value="${val}" placeholder="Key girin...">
+    <button class="btn" onclick="document.getElementById('key-${p.id}').type = document.getElementById('key-${p.id}').type === 'password' ? 'text' : 'password'">👁️</button>
+  </div>`;
+}
+
+async function fetchWithTimeout(url, options, ms=8000) {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), ms);
+  try {
+    return await fetch(url, {...options, signal: controller.signal});
+  } finally {
+    clearTimeout(id);
+  }
+}
+
+async function fetchProvider(p) {
+  const key = getKey(p.id);
+  const headers = { 'Content-Type': 'application/json' };
+  if (key) headers.Authorization = 'Bearer ' + key;
+
+  try {
+    if (p.id === 'ollama') {
+      const r = await fetchWithTimeout(p.base + (p.modelsPath || '/api/tags'), {headers});
+      if (!r.ok) return {status: 'error', error: `HTTP ${r.status}`};
+      const data = await r.json();
+      return {status: 'running', models: data.models?.map(m => m.name) || []};
+    }
+
+    if (p.id === 'omniroute') {
+      const r = await fetchWithTimeout(p.base + p.quotaPath, {headers});
+      if (r.ok) {
+        const q = await r.json();
+        return {status: 'running', quota: q};
+      }
+      const r2 = await fetchWithTimeout(p.base + '/models', {headers});
+      if (r2.ok) return {status: 'running', models: (await r2.json()).data?.map(m => m.id) || []};
+      return {status: 'error', error: `HTTP ${r.status} / ${r2.status}`};
+    }
+
+    if (p.id === 'evren') {
+      const r = await fetchWithTimeout(p.base + p.quotaPath, {headers});
+      if (!r.ok) return {status: 'error', error: `HTTP ${r.status}`};
+      return await r.json();
+    }
+
+    if (p.id === 'nvidia') {
+      const r = await fetchWithTimeout(p.base + (p.modelsPath || '/models'), {headers});
+      if (!r.ok) return {status: 'error', error: `HTTP ${r.status}`};
+      const data = await r.json();
+      return {status: 'running', models: data.data?.map(m => m.id) || []};
+    }
+
+    if (p.id === 'openai') {
+      const date = new Date().toISOString().split('T')[0];
+      const r = await fetchWithTimeout(`https://api.openai.com/v1/usage?date=${date}`, {headers});
+      if (!r.ok) return {status: 'error', error: `HTTP ${r.status}`};
+      return await r.json();
+    }
+
+    if (p.id === 'opencode') {
+      const testHeaders = p.publicModels ? {'Content-Type': 'application/json'} : headers;
+      const r = await fetchWithTimeout(p.base + (p.modelsPath || '/models'), {headers: testHeaders});
+      if (!r.ok) return {status: 'error', error: `HTTP ${r.status}`};
+      const data = await r.json();
+      return {status: 'running', models: data.data?.map(m => m.id) || [], public: true};
+    }
+
+    if (p.id === 'freellm') {
+      const r = await fetchWithTimeout(p.base + (p.modelsPath || '/models'), {headers});
+      if (!r.ok) return {status: 'error', error: `HTTP ${r.status}`};
+      const data = await r.json();
+      return {status: 'running', models: data.data?.map(m => m.id) || []};
+    }
+
+  } catch (e) {
+    if (e.name === 'AbortError') return {status: 'error', error: 'Timeout (8s)'};
+    return {status: 'error', error: e.message};
+  }
+  return {status: 'unknown'};
+}
+
+function renderCard(p, data) {
+  const card = document.createElement('div');
+  const keyInput = renderKeyInput(p);
+
+  if (data.status === 'error' || data.error) {
+    card.className = 'card danger';
+    card.innerHTML = `<h2>${p.name} ${badge('Hata', 'red')}</h2>
+      <div class="error-msg">${data.error || 'Bilinmeyen hata'}</div>
+      ${keyInput}
+      <button class="btn debug-btn" onclick="debugFetch('${p.id}')">🔍 Debug</button>`;
+    return card;
+  }
+
+  if (p.id === 'evren') {
+    const used = data.daily_used_tokens || 0, limit = data.daily_limit_tokens || 15e6, rem = data.daily_remaining_tokens || 0;
+    const pctDaily = used / limit;
+    const wUsed = data.used_tokens || 0, wCap = data.cap || 2.5e6, pctWin = wUsed / wCap;
+    let resetStr = '—';
+    if (data.daily_reset_at) { const diff = Math.floor((new Date(data.daily_reset_at).getTime() - Date.now()) / 1000); resetStr = humanDelta(diff); }
+    card.className = 'card ' + cls(pctDaily);
+    card.innerHTML = `
+      <h2>${p.name} ${badge('Aktif', 'green')}</h2>
+      <div class="metric"><span class="label">Günlük</span><span class="value">${fmt(used)} / ${fmt(limit)} (${pct(pctDaily)})</span></div>
+      <div class="progress"><div class="progress-bar ${cls(pctDaily)}" style="width:${Math.min(100, pctDaily*100)}%"></div></div>
+      <div class="metric"><span class="label">Kalan</span><span class="value" style="color:var(--green)">${fmt(rem)}</span></div>
+      <div class="metric"><span class="label">Sıfırlama</span><span class="value">${resetStr}</span></div>
+      <hr style="border-color:var(--border);margin:12px 0">
+      <div class="metric"><span class="label">5dk Pencere</span><span class="value">${fmt(wUsed)} / ${fmt(wCap)} (${pct(pctWin)})</span></div>
+      <div class="progress"><div class="progress-bar ${cls(pctWin)}" style="width:${Math.min(100, pctWin*100)}%"></div></div>
+      ${p.corsIssue ? '<div class="error-msg small">⚠️ CORS: API localhost origin izin vermiyor. Proxy gerekebilir.</div>' : ''}
+      ${keyInput}
+    `;
+    return card;
+  }
+
+  if (p.id === 'omniroute' && data.quota) {
+    const q = data.quota;
+    const used = q.used_tokens || 0, limit = q.daily_limit_tokens || q.cap || 0, rem = q.daily_remaining_tokens || 0;
+    const pctDaily = limit ? used / limit : 0;
+    card.className = 'card ' + cls(pctDaily);
+    card.innerHTML = `
+      <h2>${p.name} ${badge('Aktif', 'green')}</h2>
+      <div class="metric"><span class="label">Kullanım</span><span class="value">${fmt(used)} / ${fmt(limit)} (${pct(pctDaily)})</span></div>
+      <div class="progress"><div class="progress-bar ${cls(pctDaily)}" style="width:${Math.min(100, pctDaily*100)}%"></div></div>
+      <div class="metric"><span class="label">Kalan</span><span class="value" style="color:var(--green)">${fmt(rem)}</span></div>
+      ${keyInput}
+    `;
+    return card;
+  }
+
+  if (data.status === 'running') {
+    const isPublic = data.public === true;
+    const models = data.models || [];
+    const modelList = models.slice(0, 8).join(', ') + (models.length > 8 ? ` … (+${models.length-8})` : '');
+    const badgeText = isPublic ? 'Public (key gerekmez)' : 'Running';
+    const badgeClass = isPublic ? 'blue' : 'green';
+    card.className = 'card ok';
+    card.innerHTML = `
+      <h2>${p.name} ${badge(badgeText, badgeClass)}</h2>
+      <div class="metric"><span class="label">Modeller</span><span class="value">${modelList || '—'}</span></div>
+      <div class="metric"><span class="label">Kota</span><span class="value" style="color:var(--green)">${p.id === 'ollama' ? 'Yok (yerel)' : (isPublic ? 'Public endpoint' : 'Key ile')}</span></div>
+      ${keyInput}
+    `;
+    return card;
+  }
+
+  card.className = 'card dim';
+  card.innerHTML = `<h2>${p.name} ${badge('Key gerekli', 'gray')}</h2><div class="metric"><span class="label">Durum</span><span class="value">API key girilmedi</span></div>${keyInput}`;
+  return card;
+}
+
+async function refresh() {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '<div class="card" style="grid-column:1/-1"><div class="metric"><span class="label">Yükleniyor...</span></div></div>';
+  const results = await Promise.all(PROVIDERS.map(p => fetchProvider(p).then(d => [p, d])));
+  grid.innerHTML = '';
+  results.forEach(([p, data]) => grid.appendChild(renderCard(p, data)));
+  document.getElementById('footer').textContent = `Son güncelleme: ${new Date().toLocaleTimeString('tr-TR')} | Otomatik yenileme: ${REFRESH_MS/1000}s`;
+}
+
+async function debugFetch(pid) {
+  const p = PROVIDERS.find(x => x.id === pid);
+  if (!p) return;
+  const key = getKey(p.id);
+  const headers = { 'Content-Type': 'application/json' };
+  if (key) headers.Authorization = 'Bearer ' + key;
+  const url = p.base + (p.quotaPath || p.modelsPath || '/models');
+  try {
+    const r = await fetch(url, {headers});
+    const text = await r.text();
+    alert(`${p.name} Debug\nURL: ${url}\nStatus: ${r.status}\nResponse:\n${text.slice(0, 1000)}`);
+  } catch (e) {
+    alert(`${p.name} Debug\nError: ${e.message}`);
+  }
+}
+
+loadKeys();
+refresh();
+setInterval(refresh, REFRESH_MS);
+</script>
+</body>
+</html>

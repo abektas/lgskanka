@@ -1,36 +1,25 @@
 import type { Metadata, Viewport } from "next";
-import { Baloo_2, Nunito } from "next/font/google";
 import "./globals.css";
 import { ProfileProvider } from "../components/profile-provider";
 import { MobileNav, Sidebar, TopBar } from "../components/chrome";
 
-const bodyFont = Nunito({
-  subsets: ["latin", "latin-ext"],
-  display: "swap",
-  variable: "--font-body",
-});
-
-const displayFont = Baloo_2({
-  subsets: ["latin", "latin-ext"],
-  display: "swap",
-  variable: "--font-display",
-});
+// CSS font variables defined in globals.css for offline compatibility
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "LGS AI Koç — 8. sınıf için kişisel çalışma koçu",
-    template: "%s · LGS AI Koç",
+    default: "LGS KANKA — 8. sınıf için kişisel çalışma arkadaşı",
+    template: "%s · LGS KANKA",
   },
   description:
-    "LGS AI Koç, 8. sınıf öğrencileri için yapay zekâ destekli çalışma koçudur: günlük görevler, deneme takvimi, H1–H7 hata analizi ve kişiye özel konu tekrarı.",
+    "LGS KANKA, 8. sınıf öğrencileri için çalışma arkadaşıdır: günlük görevler, deneme takvimi, H1–H7 hata analizi ve kişiye özel konu tekrarı.",
   keywords: [
     "LGS",
     "LGS hazırlık",
     "8. sınıf",
-    "yapay zeka koç",
+    "LGS deneme takvimi",
     "hata analizi",
     "deneme sınavı",
     "konu tekrarı",
@@ -38,19 +27,19 @@ export const metadata: Metadata = {
     "matematik",
     "fen bilimleri",
   ],
-  applicationName: "LGS AI Koç",
+  applicationName: "LGS KANKA",
   category: "education",
-  authors: [{ name: "LGS AI Koç" }],
-  creator: "LGS AI Koç",
-  publisher: "LGS AI Koç",
+  authors: [{ name: "LGS KANKA" }],
+  creator: "LGS KANKA",
+  publisher: "LGS KANKA",
   alternates: { canonical: "/" },
   formatDetection: { telephone: false, address: false, email: false },
   openGraph: {
     type: "website",
     locale: "tr_TR",
     url: "/",
-    siteName: "LGS AI Koç",
-    title: "LGS AI Koç — 8. sınıf için kişisel çalışma koçu",
+    siteName: "LGS KANKA",
+    title: "LGS KANKA — 8. sınıf için kişisel çalışma arkadaşı",
     description:
       "Günlük görevler, hata analizi ve kişiye özel tekrar planıyla LGS'ye hazırlan. Yanlışını sadece işaretlemiyoruz, nedenini birlikte buluyoruz.",
     images: [
@@ -58,13 +47,13 @@ export const metadata: Metadata = {
         url: "/art/hero-boy.webp",
         width: 434,
         height: 536,
-        alt: "LGS AI Koç ekranı: çalışma masasındaki öğrenci karakteri",
+        alt: "LGS KANKA ekranı: çalışma masasındaki öğrenci karakteri",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "LGS AI Koç — 8. sınıf için kişisel çalışma koçu",
+    title: "LGS KANKA — 8. sınıf için kişisel çalışma arkadaşı",
     description: "Günlük görevler, H1–H7 hata analizi ve kişiye özel tekrar planı.",
     images: ["/art/hero-boy.webp"],
   },
@@ -89,23 +78,23 @@ const structuredData = {
       "@type": "WebSite",
       "@id": `${siteUrl}/#website`,
       url: siteUrl,
-      name: "LGS AI Koç",
+      name: "LGS KANKA",
       inLanguage: "tr-TR",
       description:
-        "8. sınıf öğrencileri için yapay zekâ destekli LGS çalışma koçu: görevler, deneme takvimi ve hata analizi.",
+        "8. sınıf öğrencileri için LGS çalışma arkadaşı: görevler, deneme takvimi ve hata analizi.",
       publisher: { "@id": `${siteUrl}/#organization` },
     },
     {
       "@type": "EducationalOrganization",
       "@id": `${siteUrl}/#organization`,
-      name: "LGS AI Koç",
+      name: "LGS KANKA",
       url: siteUrl,
       logo: `${siteUrl}/icon.svg`,
       areaServed: "TR",
     },
     {
       "@type": "SoftwareApplication",
-      name: "LGS AI Koç",
+      name: "LGS KANKA",
       applicationCategory: "EducationalApplication",
       operatingSystem: "Web",
       inLanguage: "tr-TR",
@@ -116,7 +105,7 @@ const structuredData = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="tr" className={`${bodyFont.variable} ${displayFont.variable}`}>
+    <html lang="tr" className="font-loaded">
       <body>
         <script
           type="application/ld+json"

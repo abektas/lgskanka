@@ -1,0 +1,318 @@
+{
+  "subject": "din",
+  "count": 10,
+  "answer_key": [
+    "D",
+    "C",
+    "A",
+    "A",
+    "C",
+    "B",
+    "D",
+    "C",
+    "A",
+    "B"
+  ],
+  "items": [
+    {
+      "subject": "din",
+      "question": 1,
+      "page": 20,
+      "file": "din/Q01.png",
+      "size": "1059x1795",
+      "anchor": {
+        "x0": 42.5,
+        "top": 155.7,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.5,
+        "y0": 155.7,
+        "x1": 274.2,
+        "y1": 546.5
+      },
+      "crop": {
+        "left": 22.5,
+        "top": 135.7,
+        "right": 276.4,
+        "bottom": 566.5
+      },
+      "margins": {
+        "left": 22.5,
+        "right": 0.0
+      },
+      "type": "LEFT",
+      "answer_key": "D"
+    },
+    {
+      "subject": "din",
+      "question": 2,
+      "page": 20,
+      "file": "din/Q02.png",
+      "size": "1054x913",
+      "anchor": {
+        "x0": 283.5,
+        "top": 155.7,
+        "col": 1
+      },
+      "bbox": {
+        "x0": 283.5,
+        "y0": 155.7,
+        "x1": 509.4,
+        "y1": 334.8
+      },
+      "crop": {
+        "left": 276.4,
+        "top": 135.7,
+        "right": 529.4,
+        "bottom": 354.8
+      },
+      "margins": {
+        "left": 0.0,
+        "right": 23.4
+      },
+      "type": "RIGHT",
+      "answer_key": "C"
+    },
+    {
+      "subject": "din",
+      "question": 3,
+      "page": 21,
+      "file": "din/Q03.png",
+      "size": "1059x1943",
+      "anchor": {
+        "x0": 42.5,
+        "top": 84.8,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.5,
+        "y0": 84.8,
+        "x1": 273.2,
+        "y1": 511.0
+      },
+      "crop": {
+        "left": 22.5,
+        "top": 64.8,
+        "right": 276.4,
+        "bottom": 531.0
+      },
+      "margins": {
+        "left": 22.5,
+        "right": 0.0
+      },
+      "type": "LEFT",
+      "answer_key": "A"
+    },
+    {
+      "subject": "din",
+      "question": 4,
+      "page": 21,
+      "file": "din/Q04.png",
+      "size": "1021x574",
+      "anchor": {
+        "x0": 283.5,
+        "top": 84.8,
+        "col": 1
+      },
+      "bbox": {
+        "x0": 283.5,
+        "y0": 84.8,
+        "x1": 501.5,
+        "y1": 182.6
+      },
+      "crop": {
+        "left": 276.4,
+        "top": 64.8,
+        "right": 521.5,
+        "bottom": 202.6
+      },
+      "margins": {
+        "left": 0.0,
+        "right": 31.3
+      },
+      "type": "RIGHT",
+      "answer_key": "A"
+    },
+    {
+      "subject": "din",
+      "question": 5,
+      "page": 22,
+      "file": "din/Q05.png",
+      "size": "1059x1943",
+      "anchor": {
+        "x0": 42.5,
+        "top": 84.8,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.5,
+        "y0": 84.8,
+        "x1": 274.3,
+        "y1": 511.0
+      },
+      "crop": {
+        "left": 22.5,
+        "top": 64.8,
+        "right": 276.4,
+        "bottom": 531.0
+      },
+      "margins": {
+        "left": 22.5,
+        "right": 0.0
+      },
+      "type": "LEFT",
+      "answer_key": "C"
+    },
+    {
+      "subject": "din",
+      "question": 6,
+      "page": 22,
+      "file": "din/Q06.png",
+      "size": "1058x1890",
+      "anchor": {
+        "x0": 283.5,
+        "top": 84.8,
+        "col": 1
+      },
+      "bbox": {
+        "x0": 283.5,
+        "y0": 84.8,
+        "x1": 510.2,
+        "y1": 498.5
+      },
+      "crop": {
+        "left": 276.4,
+        "top": 64.8,
+        "right": 530.2,
+        "bottom": 518.5
+      },
+      "margins": {
+        "left": 0.0,
+        "right": 22.5
+      },
+      "type": "RIGHT",
+      "answer_key": "B"
+    },
+    {
+      "subject": "din",
+      "question": 7,
+      "page": 23,
+      "file": "din/Q07.png",
+      "size": "1059x1943",
+      "anchor": {
+        "x0": 42.5,
+        "top": 84.8,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.5,
+        "y0": 84.8,
+        "x1": 273.2,
+        "y1": 511.0
+      },
+      "crop": {
+        "left": 22.5,
+        "top": 64.8,
+        "right": 276.4,
+        "bottom": 531.0
+      },
+      "margins": {
+        "left": 22.5,
+        "right": 0.0
+      },
+      "type": "LEFT",
+      "answer_key": "D"
+    },
+    {
+      "subject": "din",
+      "question": 8,
+      "page": 23,
+      "file": "din/Q08.png",
+      "size": "1057x924",
+      "anchor": {
+        "x0": 283.5,
+        "top": 84.8,
+        "col": 1
+      },
+      "bbox": {
+        "x0": 283.5,
+        "y0": 84.8,
+        "x1": 510.2,
+        "y1": 266.6
+      },
+      "crop": {
+        "left": 276.4,
+        "top": 64.8,
+        "right": 530.2,
+        "bottom": 286.6
+      },
+      "margins": {
+        "left": 0.0,
+        "right": 22.6
+      },
+      "type": "RIGHT",
+      "answer_key": "C"
+    },
+    {
+      "subject": "din",
+      "question": 9,
+      "page": 24,
+      "file": "din/Q09.png",
+      "size": "1058x1944",
+      "anchor": {
+        "x0": 42.8,
+        "top": 84.8,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.8,
+        "y0": 84.8,
+        "x1": 274.3,
+        "y1": 511.0
+      },
+      "crop": {
+        "left": 22.8,
+        "top": 64.8,
+        "right": 276.4,
+        "bottom": 531.0
+      },
+      "margins": {
+        "left": 22.8,
+        "right": 0.0
+      },
+      "type": "LEFT",
+      "answer_key": "A"
+    },
+    {
+      "subject": "din",
+      "question": 10,
+      "page": 24,
+      "file": "din/Q10.png",
+      "size": "1049x2688",
+      "anchor": {
+        "x0": 283.7,
+        "top": 84.8,
+        "col": 1
+      },
+      "bbox": {
+        "x0": 283.7,
+        "y0": 84.8,
+        "x1": 508.1,
+        "y1": 690.5
+      },
+      "crop": {
+        "left": 276.4,
+        "top": 64.8,
+        "right": 528.1,
+        "bottom": 709.5
+      },
+      "margins": {
+        "left": 0.0,
+        "right": 24.6
+      },
+      "type": "RIGHT",
+      "answer_key": "B"
+    }
+  ]
+}

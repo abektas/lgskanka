@@ -4,17 +4,26 @@ import argparse
 import json
 from pathlib import Path
 
-from validate_canonical import REQUIRED_CHECKS, canonical_fingerprint, validate_record
+from validate_canonical import REQUIRED_CHECKS, canonical_fingerprint, representation_of, validate_record
 
 
 def api_row(record):
     source, question = record["source"], record["question"]
     mappings = record["curriculum"]
     layer, mapping = next((key, value) for key, value in mappings.items() if value.get("status") == "VERIFIED")
+    visual = question.get("visual")
     return {
         "id": record["id"], "sourceId": source["source_id"], "sourceType": source["source_type"],
         "year": source.get("year"), "booklet": source["booklet"], "subject": question["subject"] or mapping["subject"],
         "grade": 8, "questionNumber": source["question_number"], "stem": question["stem"], "options": question["options"],
+        "representation": representation_of(record),
+        # Görsel temsil yalnız *kanıtlı* IMAGE_BACKED/HYBRID kayıtlarında taşınır;
+        # asset yolu sunulacak göreli yoldur (depo mutlak yolu/arşiv yolu sızmaz).
+        "visual": None if visual is None else {
+            "publicPath": visual["public_path"], "page": visual["page"],
+            "clipRectPt": visual["clip_rect_pt"], "renderDpi": visual["render_dpi"],
+            "authority": visual["authority"],
+        },
         "answer": record["answer_key"]["answer"], "solution": record.get("solution", ""), "status": "VERIFIED",
         "curriculum": {"layer": layer, "subject": mapping["subject"], "unit": mapping["unit"], "topic": mapping["topic"], "learningOutcome": mapping["learning_outcome"], "skill": mapping["skill"], "version": mapping["version"]},
         "verification": {key: True for key in REQUIRED_CHECKS}, "sourceHash": source["source_sha256"],

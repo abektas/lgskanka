@@ -1,0 +1,318 @@
+{
+  "subject": "inkilap",
+  "count": 10,
+  "answer_key": [
+    "B",
+    "D",
+    "C",
+    "A",
+    "C",
+    "A",
+    "B",
+    "D",
+    "B",
+    "C"
+  ],
+  "items": [
+    {
+      "subject": "inkilap",
+      "question": 1,
+      "page": 15,
+      "file": "inkilap/Q01.png",
+      "size": "1058x1795",
+      "anchor": {
+        "x0": 42.8,
+        "top": 155.7,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.8,
+        "y0": 155.7,
+        "x1": 274.3,
+        "y1": 546.5
+      },
+      "crop": {
+        "left": 22.8,
+        "top": 135.7,
+        "right": 276.4,
+        "bottom": 566.5
+      },
+      "margins": {
+        "left": 22.8,
+        "right": 0.0
+      },
+      "type": "LEFT",
+      "answer_key": "B"
+    },
+    {
+      "subject": "inkilap",
+      "question": 2,
+      "page": 15,
+      "file": "inkilap/Q02.png",
+      "size": "1059x1427",
+      "anchor": {
+        "x0": 283.7,
+        "top": 155.7,
+        "col": 1
+      },
+      "bbox": {
+        "x0": 283.7,
+        "y0": 155.7,
+        "x1": 510.5,
+        "y1": 457.9
+      },
+      "crop": {
+        "left": 276.4,
+        "top": 135.7,
+        "right": 530.5,
+        "bottom": 477.9
+      },
+      "margins": {
+        "left": 0.0,
+        "right": 22.3
+      },
+      "type": "RIGHT",
+      "answer_key": "D"
+    },
+    {
+      "subject": "inkilap",
+      "question": 3,
+      "page": 16,
+      "file": "inkilap/Q03.png",
+      "size": "1059x1943",
+      "anchor": {
+        "x0": 42.5,
+        "top": 84.8,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.5,
+        "y0": 84.8,
+        "x1": 274.3,
+        "y1": 511.0
+      },
+      "crop": {
+        "left": 22.5,
+        "top": 64.8,
+        "right": 276.4,
+        "bottom": 531.0
+      },
+      "margins": {
+        "left": 22.5,
+        "right": 0.0
+      },
+      "type": "LEFT",
+      "answer_key": "C"
+    },
+    {
+      "subject": "inkilap",
+      "question": 4,
+      "page": 16,
+      "file": "inkilap/Q04.png",
+      "size": "1054x1951",
+      "anchor": {
+        "x0": 283.5,
+        "top": 84.8,
+        "col": 1
+      },
+      "bbox": {
+        "x0": 283.5,
+        "y0": 84.8,
+        "x1": 509.4,
+        "y1": 513.1
+      },
+      "crop": {
+        "left": 276.4,
+        "top": 64.8,
+        "right": 529.4,
+        "bottom": 533.1
+      },
+      "margins": {
+        "left": 0.0,
+        "right": 23.3
+      },
+      "type": "RIGHT",
+      "answer_key": "A"
+    },
+    {
+      "subject": "inkilap",
+      "question": 5,
+      "page": 17,
+      "file": "inkilap/Q05.png",
+      "size": "2055x1671",
+      "anchor": {
+        "x0": 42.1,
+        "top": 84.8,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.1,
+        "y0": 84.8,
+        "x1": 495.3,
+        "y1": 445.9
+      },
+      "crop": {
+        "left": 22.1,
+        "top": 64.8,
+        "right": 515.3,
+        "bottom": 465.9
+      },
+      "margins": {
+        "left": 22.1,
+        "right": 37.5
+      },
+      "type": "CROSS",
+      "answer_key": "C"
+    },
+    {
+      "subject": "inkilap",
+      "question": 6,
+      "page": 17,
+      "file": "inkilap/Q06.png",
+      "size": "2111x901",
+      "anchor": {
+        "x0": 42.1,
+        "top": 513.2,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.1,
+        "y0": 513.2,
+        "x1": 508.6,
+        "y1": 689.4
+      },
+      "crop": {
+        "left": 22.1,
+        "top": 493.2,
+        "right": 528.6,
+        "bottom": 709.4
+      },
+      "margins": {
+        "left": 22.1,
+        "right": 24.2
+      },
+      "type": "CROSS",
+      "answer_key": "A"
+    },
+    {
+      "subject": "inkilap",
+      "question": 7,
+      "page": 18,
+      "file": "inkilap/Q07.png",
+      "size": "1059x1943",
+      "anchor": {
+        "x0": 42.5,
+        "top": 84.8,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.5,
+        "y0": 84.8,
+        "x1": 274.3,
+        "y1": 511.0
+      },
+      "crop": {
+        "left": 22.5,
+        "top": 64.8,
+        "right": 276.4,
+        "bottom": 531.0
+      },
+      "margins": {
+        "left": 22.5,
+        "right": 0.0
+      },
+      "type": "LEFT",
+      "answer_key": "B"
+    },
+    {
+      "subject": "inkilap",
+      "question": 8,
+      "page": 18,
+      "file": "inkilap/Q08.png",
+      "size": "1058x1485",
+      "anchor": {
+        "x0": 283.5,
+        "top": 84.8,
+        "col": 1
+      },
+      "bbox": {
+        "x0": 283.5,
+        "y0": 84.8,
+        "x1": 510.2,
+        "y1": 401.3
+      },
+      "crop": {
+        "left": 276.4,
+        "top": 64.8,
+        "right": 530.2,
+        "bottom": 421.3
+      },
+      "margins": {
+        "left": 0.0,
+        "right": 22.5
+      },
+      "type": "RIGHT",
+      "answer_key": "D"
+    },
+    {
+      "subject": "inkilap",
+      "question": 9,
+      "page": 19,
+      "file": "inkilap/Q09.png",
+      "size": "1060x1943",
+      "anchor": {
+        "x0": 42.1,
+        "top": 84.8,
+        "col": 0
+      },
+      "bbox": {
+        "x0": 42.1,
+        "y0": 84.8,
+        "x1": 273.2,
+        "y1": 511.0
+      },
+      "crop": {
+        "left": 22.1,
+        "top": 64.8,
+        "right": 276.4,
+        "bottom": 531.0
+      },
+      "margins": {
+        "left": 22.1,
+        "right": 0.0
+      },
+      "type": "LEFT",
+      "answer_key": "B"
+    },
+    {
+      "subject": "inkilap",
+      "question": 10,
+      "page": 19,
+      "file": "inkilap/Q10.png",
+      "size": "1051x2687",
+      "anchor": {
+        "x0": 283.1,
+        "top": 84.8,
+        "col": 1
+      },
+      "bbox": {
+        "x0": 283.1,
+        "y0": 84.8,
+        "x1": 508.6,
+        "y1": 713.2
+      },
+      "crop": {
+        "left": 276.4,
+        "top": 64.8,
+        "right": 528.6,
+        "bottom": 709.5
+      },
+      "margins": {
+        "left": 0.0,
+        "right": 24.1
+      },
+      "type": "RIGHT",
+      "answer_key": "C"
+    }
+  ]
+}

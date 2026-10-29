@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createHash } from "crypto";
 import { questionBank } from "../../../../data/content";
 
 type RunnerQuestion = (typeof questionBank)[number];
@@ -11,6 +12,15 @@ function publicQuestion(question: RunnerQuestion) {
     text: question.text,
     options: question.options,
   };
+}
+
+function timingSafeEqual(a: string, b: string): boolean {
+  const ha = createHash("sha256").update(a).digest();
+  const hb = createHash("sha256").update(b).digest();
+  if (ha.length !== hb.length) return false;
+  let diff = 0;
+  for (let i = 0; i < ha.length; i++) diff |= ha[i] ^ hb[i];
+  return diff === 0;
 }
 
 export async function POST(request: NextRequest) {
@@ -38,9 +48,14 @@ export async function POST(request: NextRequest) {
     if (!question || !Number.isInteger(selectedIndex) || (selectedIndex as number) < 0 || (selectedIndex as number) >= question.options.length) {
       return NextResponse.json({ error: "Soru veya seçenek geçersiz." }, { status: 400 });
     }
+    // Hash-based verification: correctIndex is NEVER sent to the client.
+    const submittedHash = typeof input.answerHash === "string" ? input.answerHash : "";
+    const expectedHash = createHash("sha256")
+      .update(`${question.id}:${question.correct}`)
+      .digest("hex");
+    const correct = timingSafeEqual(submittedHash, expectedHash);
     return NextResponse.json({
-      correct: selectedIndex === question.correct,
-      correctIndex: question.correct,
+      correct,
       explanation: question.explain,
     });
   }

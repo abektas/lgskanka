@@ -101,3 +101,5 @@ screenshots/
 wrangler.toml
 wrangler.jsonc
 public/exams/
+.open-next/
+wrangler.jsonc

@@ -1,15 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createHash, timingSafeEqual } from "node:crypto";
-import { readdirSync, readFileSync, existsSync } from "fs";
-import path from "path";
 
-export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
-
-const STUDY_BASE = path.join(process.cwd(), "public", "study");
-// Workspace folder is the source of truth; override with STUDY_DATA_DIR if needed.
-const MANIFEST_BASE =
-  process.env.STUDY_DATA_DIR || path.join(process.cwd(), "lgs_çalışma_soruları");
+const R2_PUBLIC_URL = "https://pub-782be99090dc4f8586da5bf5d073c4a5.r2.dev";
 
 interface StudyQuestion {
   id: string;
@@ -17,7 +9,7 @@ interface StudyQuestion {
   sourceBook: string;
   questionNumber: number;
   page: number;
-  imagePath: string;
+  imagePath: string | null;
   answer: string | null;
   unit: number | null;
   unitName: string | null;
@@ -33,134 +25,86 @@ interface StudyQuestion {
   analysisStatus: string | null;
 }
 
-interface AnalysisInfo {
-  topic: string | null;
-  learningOutcomeCode: string | null;
-  learningOutcomeText: string | null;
-  pedagogicalDifficulty: number | null;
-  difficultyConfidence: string | null;
-  skill: string | null;
-  questionType: string | null;
-  analysisStatus: string | null;
+async function fetchJson(url: string): Promise<any> {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status}`);
+  return res.json();
 }
 
-function loadAnalysisIndex(subjPath: string): Map<string, AnalysisInfo> {
-  const index = new Map<string, AnalysisInfo>();
-  const analysisFiles = ["analysis.jsonl", ...readdirSync(subjPath).filter((f) => /^analysis_mebi.*\.jsonl$/i.test(f))];
-  for (const af of analysisFiles) {
-    const ap = path.join(subjPath, af);
-    if (!existsSync(ap)) continue;
-    try {
-      const lines = readFileSync(ap, "utf-8").split("\n").filter(Boolean);
-      for (const line of lines) {
-        try {
-          const a = JSON.parse(line);
-          const key = path.basename(a.file || "");
-          if (!key) continue;
-          // İlk (tam analiz) kayıt öncelikli; aday eşleştirme yalnızca boşsa doldurur
-          if (index.has(key) && index.get(key)!.learningOutcomeCode) continue;
-          index.set(key, {
-            topic: a.topic ?? null,
-            learningOutcomeCode: a.learningOutcomeCode ?? null,
-            learningOutcomeText: a.learningOutcomeText ?? null,
-            pedagogicalDifficulty:
-              typeof a.pedagogicalDifficulty === "number" ? a.pedagogicalDifficulty : null,
-            difficultyConfidence: a.difficultyConfidence ?? null,
-            skill: a.skill ?? null,
-            questionType: a.questionType ?? null,
-            analysisStatus: a.status ?? null,
-          });
-        } catch {
-          // Skip malformed analysis lines
-        }
-      }
-    } catch {
-      // Skip unreadable analysis files
+/** local PNG filename -> R2 webp path (e.g. "webp/turkce/official/abc123.webp") */
+async function loadImageMap(): Promise<Map<string, string>> {
+  const raw = await fetchJson(`${R2_PUBLIC_URL}/study_manifests/image_map.json`);
+  const result = new Map<string, string>();
+  for (const [localPath, info] of Object.entries(raw as Record<string, any>)) {
+    const name = localPath.split("/").pop();
+    if (name && info?.webp_path) {
+      result.set(name, info.webp_path);
     }
   }
-  return index;
+  return result;
 }
 
-function loadStudyQuestions(): StudyQuestion[] {
+async function loadAllQuestions(imageMap: Map<string, string>): Promise<StudyQuestion[]> {
+  const index = await fetchJson(`${R2_PUBLIC_URL}/study_manifests/manifests_index.json`);
   const questions: StudyQuestion[] = [];
-  const subjects = readdirSync(MANIFEST_BASE).filter((d) => {
-    return existsSync(path.join(MANIFEST_BASE, d));
-  });
 
-  for (const subj of subjects) {
-    const subjPath = path.join(MANIFEST_BASE, subj);
-    // A subject may hold more than one source workbook (e.g. manifest.json +
-    // manifest_mu2.json + manifest_tu2.json) — all of them are served.
-    const manifestFiles = readdirSync(subjPath).filter((f) =>
-      /^manifest.*\.json$/i.test(f)
-    );
-    const analysisIndex = loadAnalysisIndex(subjPath);
+  for (const manifestKey of index.manifests) {
+    const manifest = await fetchJson(`${R2_PUBLIC_URL}/${manifestKey}`);
+    for (const q of manifest.questions || []) {
+      const qnum = q.q || q.questionNumber;
+      if (!qnum) continue;
+      if (q.published === false) continue;
+      if (q.cancelledInSource) continue;
 
-    for (const manifestFile of manifestFiles) {
-      const manifestPath = path.join(subjPath, manifestFile);
-      try {
-        const manifest = JSON.parse(readFileSync(manifestPath, "utf-8"));
-        for (const q of manifest.questions || []) {
-          const qnum = q.q || q.questionNumber;
-          if (!qnum) continue;
-          // Never deliver unpublished questions or questions cancelled in the
-          // official source (e.g. "13. İPTAL" in the exam key).
-          if (q.published === false) continue;
-          if (q.cancelledInSource) continue;
+      const originalFile = q.file || `q-${String(qnum).padStart(2, "0")}.png`;
+      const webpPath = imageMap.get(originalFile);
+      const imagePath = webpPath ? `${R2_PUBLIC_URL}/${webpPath}` : null;
 
-          // Manifests store `file` either as a bare filename or as a relative
-          // path — always normalise to the bare filename.
-          const originalFile = path.basename(
-            q.file || `q-${String(qnum).padStart(2, "0")}.png`
-          );
-          const imagePath = `/study/${subj}-${originalFile}`;
+      const mebiMatch = originalFile.match(/^mebi/i);
+      const bookMatch = originalFile.match(/^((?:cal|nuli|mu|tu)\\d+)/i);
+      const sourceBook = mebiMatch ? "MEBI" : bookMatch ? bookMatch[1].toUpperCase() : "UNKNOWN";
 
-          // Extract source book from filename (e.g., cal05, cal06, mu2, tu2)
-          const mebiMatch = originalFile.match(/^mebi/i);
-          const bookMatch = originalFile.match(/^((?:cal|nuli|mu|tu)\d+)/i);
-          const sourceBook = mebiMatch
-            ? "MEBI"
-            : bookMatch
-            ? bookMatch[1].toUpperCase()
-            : "UNKNOWN";
-
-          const analysis = analysisIndex.get(originalFile);
-          questions.push({
-            id:
-              q.id ||
-              // Question numbers restart per page, so the filename is the only
-              // collision-free identifier within a subject.
-              `STUDY-${subj.toUpperCase()}-${originalFile
-                .replace(/\.png$/i, "")
-                .toUpperCase()}`,
-            subject: subj,
-            sourceBook,
-            questionNumber: qnum,
-            page: q.page || 0,
-            imagePath,
-            answer: q.answer || null,
-            unit: q.unit || null,
-            unitName: q.unitName || null,
-            section: q.section || null,
-            questionText: q.questionText || null,
-            topic: analysis?.topic ?? null,
-            learningOutcomeCode: analysis?.learningOutcomeCode ?? null,
-            learningOutcomeText: analysis?.learningOutcomeText ?? null,
-            pedagogicalDifficulty: analysis?.pedagogicalDifficulty ?? null,
-            difficultyConfidence: analysis?.difficultyConfidence ?? null,
-            skill: analysis?.skill ?? null,
-            questionType: analysis?.questionType ?? null,
-            analysisStatus: analysis?.analysisStatus ?? null,
-          });
-        }
-      } catch {
-        // Skip malformed manifests
-      }
+      questions.push({
+        id:
+          q.id ||
+          `STUDY-${(q.subject || "UNKNOWN").toUpperCase()}-${originalFile
+            .replace(/\.png$/i, "")
+            .toUpperCase()}`,
+        subject: q.subject || "UNKNOWN",
+        sourceBook,
+        questionNumber: qnum,
+        page: q.page || 0,
+        imagePath,
+        answer: q.answer || null,
+        unit: q.unit || null,
+        unitName: q.unitName || null,
+        section: q.section || null,
+        questionText: q.questionText || null,
+        topic: null,
+        learningOutcomeCode: null,
+        learningOutcomeText: null,
+        pedagogicalDifficulty: null,
+        difficultyConfidence: null,
+        skill: null,
+        questionType: null,
+        analysisStatus: null,
+      });
     }
   }
-
   return questions;
 }
+
+let questionsCache: StudyQuestion[] | null = null;
+
+async function getQuestions(): Promise<StudyQuestion[]> {
+  if (questionsCache) return questionsCache;
+  const imageMap = await loadImageMap();
+  questionsCache = await loadAllQuestions(imageMap);
+  return questionsCache;
+}
+
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
   try {
@@ -169,10 +113,9 @@ export async function GET(request: NextRequest) {
     const unit = searchParams.get("unit");
     const limit = parseInt(searchParams.get("limit") || "0", 10);
     const wrongMode = searchParams.get("wrong_mode");
-    // Sıralama: unit asc, pedagogicalDifficulty asc (1=kolay, 2=orta, 3=zor)
     const sort = searchParams.get("sort") || "unit_difficulty";
 
-    let questions = loadStudyQuestions();
+    let questions = await getQuestions();
 
     if (subject) {
       questions = questions.filter((q) => q.subject === subject);
@@ -181,7 +124,6 @@ export async function GET(request: NextRequest) {
       questions = questions.filter((q) => q.unit === parseInt(unit, 10));
     }
 
-    // Sıralama uygula
     if (sort === "unit_difficulty") {
       questions.sort((a, b) => {
         const unitA = a.unit ?? 999;
@@ -197,7 +139,6 @@ export async function GET(request: NextRequest) {
       questions = questions.slice(0, limit);
     }
 
-    // Never send answer keys to client unless in wrong_mode (repeat mode)
     const publicQuestions = questions.map((q) => {
       if (wrongMode === "true") {
         return q;
@@ -218,7 +159,6 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// Cevap kontrolü: doğru/yanlış söylenir, cevap anahtarı ASLA istemciye gitmez.
 export async function POST(request: NextRequest) {
   let body: unknown;
   try {
@@ -230,13 +170,22 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Geçersiz istek." }, { status: 400 });
   }
   const { id, answer } = body as Record<string, unknown>;
-  if (typeof id !== "string" || id.length > 200 || typeof answer !== "string" || !/^[A-D]$/.test(answer)) {
+  if (
+    typeof id !== "string" ||
+    id.length > 200 ||
+    typeof answer !== "string" ||
+    !/^[A-D]$/.test(answer)
+  ) {
     return NextResponse.json({ error: "id ve answer (A-D) alanları gerekli." }, { status: 400 });
   }
   try {
-    const question = loadStudyQuestions().find((q) => q.id === id);
+    const questions = await getQuestions();
+    const question = questions.find((q) => q.id === id);
     if (!question || !question.answer) {
-      return NextResponse.json({ error: "Soru bulunamadı." }, { status: 404, headers: { "Cache-Control": "no-store" } });
+      return NextResponse.json(
+        { error: "Soru bulunamadı." },
+        { status: 404, headers: { "Cache-Control": "no-store" } }
+      );
     }
     const submitted = createHash("sha256").update(answer).digest();
     const expected = createHash("sha256").update(question.answer).digest();

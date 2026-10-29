@@ -39,6 +39,8 @@ async function loadImageMap(): Promise<Map<string, string>> {
     const name = localPath.split("/").pop();
     const webpPath = info?.webp_path;
     if (name && webpPath) {
+      // webp_path: "/home/selam/roller/web/lgs-ai-coach/webp/turkce/official/b4ea8d4c0594d208.webp"
+      // R2 key: "turkce/official/b4ea8d4c0594d208.webp"
       const r2Key = webpPath.replace(/^.*?\/webp\//, "");
       result.set(name, r2Key);
     }
@@ -47,55 +49,48 @@ async function loadImageMap(): Promise<Map<string, string>> {
 }
 
 async function loadAllQuestions(imageMap: Map<string, string>): Promise<StudyQuestion[]> {
-  const index = await fetchJson(`${R2_PUBLIC_URL}/study_manifests/manifests_index.json`);
+  const data = await fetchJson(`${R2_PUBLIC_URL}/study_manifests/all_questions.json`);
   const questions: StudyQuestion[] = [];
 
-  for (const manifestKey of index.manifests) {
-    if (manifestKey === "study_manifests/image_map.json") continue;
-    const manifest = await fetchJson(`${R2_PUBLIC_URL}/${manifestKey}`);
-    // Derive subject from manifest key path: study_manifests/lgs_calisma_sorulari/{subject}/manifest_*.json
-    const pathParts = manifestKey.split("/");
-    const subjectFromPath = pathParts[pathParts.length - 2] || "UNKNOWN";
-    for (const q of manifest.questions || []) {
-      const qnum = q.q || q.questionNumber;
-      if (!qnum) continue;
-      if (q.published === false) continue;
-      if (q.cancelledInSource) continue;
+  for (const q of data.questions || []) {
+    const qnum = q.q || q.questionNumber;
+    if (!qnum) continue;
+    if (q.published === false) continue;
+    if (q.cancelledInSource) continue;
 
-      const originalFile = q.file || `q-${String(qnum).padStart(2, "0")}.png`;
-      const webpPath = imageMap.get(originalFile);
-      const imagePath = webpPath ? `${R2_PUBLIC_URL}/${webpPath}` : null;
+    const originalFile = q.file || `q-${String(qnum).padStart(2, "0")}.png`;
+    const webpPath = imageMap.get(originalFile);
+    const imagePath = webpPath ? `${R2_PUBLIC_URL}/${webpPath}` : null;
 
-      const mebiMatch = originalFile.match(/^mebi/i);
-      const bookMatch = originalFile.match(/^((?:cal|nuli|mu|tu)\\d+)/i);
-      const sourceBook = mebiMatch ? "MEBI" : bookMatch ? bookMatch[1].toUpperCase() : "UNKNOWN";
+    const mebiMatch = originalFile.match(/^mebi/i);
+    const bookMatch = originalFile.match(/^((?:cal|nuli|mu|tu)\\d+)/i);
+    const sourceBook = mebiMatch ? "MEBI" : bookMatch ? bookMatch[1].toUpperCase() : "UNKNOWN";
 
-      questions.push({
-        id:
-          q.id ||
-          `STUDY-${subjectFromPath.toUpperCase()}-${originalFile
-            .replace(/\.png$/i, "")
-            .toUpperCase()}`,
-        subject: subjectFromPath,
-        sourceBook,
-        questionNumber: qnum,
-        page: q.page || 0,
-        imagePath,
-        answer: q.answer || null,
-        unit: q.unit || null,
-        unitName: q.unitName || null,
-        section: q.section || null,
-        questionText: q.questionText || null,
-        topic: null,
-        learningOutcomeCode: null,
-        learningOutcomeText: null,
-        pedagogicalDifficulty: null,
-        difficultyConfidence: null,
-        skill: null,
-        questionType: null,
-        analysisStatus: null,
-      });
-    }
+    questions.push({
+      id:
+        q.id ||
+        `STUDY-${(q._subject || "UNKNOWN").toUpperCase()}-${originalFile
+          .replace(/\.png$/i, "")
+          .toUpperCase()}`,
+      subject: q._subject || "UNKNOWN",
+      sourceBook,
+      questionNumber: qnum,
+      page: q.page || 0,
+      imagePath,
+      answer: q.answer || null,
+      unit: q.unit || null,
+      unitName: q.unitName || null,
+      section: q.section || null,
+      questionText: q.questionText || null,
+      topic: null,
+      learningOutcomeCode: null,
+      learningOutcomeText: null,
+      pedagogicalDifficulty: null,
+      difficultyConfidence: null,
+      skill: null,
+      questionType: null,
+      analysisStatus: null,
+    });
   }
   return questions;
 }
@@ -157,9 +152,9 @@ export async function GET(request: NextRequest) {
       { items: publicQuestions, count: publicQuestions.length },
       { headers: { "Cache-Control": "no-store" } }
     );
-  } catch {
+  } catch (e) {
     return NextResponse.json(
-      { error: "Çalışma verisi şu anda kullanılamıyor." },
+      { error: "Çalışma verisi şu anda kullanılamıyor.", detail: String(e) },
       { status: 503, headers: { "Cache-Control": "no-store" } }
     );
   }
@@ -199,9 +194,9 @@ export async function POST(request: NextRequest) {
       { correct: timingSafeEqual(submitted, expected) },
       { headers: { "Cache-Control": "no-store" } }
     );
-  } catch {
+  } catch (e) {
     return NextResponse.json(
-      { error: "Çalışma verisi şu anda kullanılamıyor." },
+      { error: "Cevap kontrolü şu anda kullanılamıyor.", detail: String(e) },
       { status: 503, headers: { "Cache-Control": "no-store" } }
     );
   }

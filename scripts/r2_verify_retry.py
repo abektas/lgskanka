@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""R2'de eksik nesneleri doğrular (public URL HEAD) ve yalnızca eksikleri tekrar yükler."""
+"""R2'de eksik nesneleri doğrular ve yalnızca eksikleri --remote ile tekrar yükler.
+
+Doğrulama yolları (r2.dev 404 cache'i yanılttığı için kullanılmaz):
+- *.webp  -> worker /r2 proxy (R2 binding, doğrudan bucket okur)
+- manifestolar -> wrangler r2 object get --remote (cevap anahtarı içerdiğinden
+  proxy'den sunulmaz; varlıkları S3 API'den teyit edilir)
+"""
 import subprocess, sys, time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
@@ -8,7 +14,7 @@ import urllib.request, urllib.error
 REPO = Path("/home/selam/roller/web/lgs-ai-coach")
 WEBP = REPO / "webp"
 BUCKET = "lgs-ai-coach"
-BASE = "https://pub-ddee1949bfea484b8ea4ec1574e492c6.r2.dev"
+PROXY = "https://lgskanka.alibey.workers.dev/r2"
 WR = ["node", str(REPO / "node_modules/.bin/wrangler")]
 
 jobs = []
@@ -19,19 +25,25 @@ jobs.append(("study_manifests/all_questions.json", str(REPO / "scripts/source-in
 
 print(f"toplam {len(jobs)} nesne kontrol edilecek", flush=True)
 
-def head(key):
-    req = urllib.request.Request(f"{BASE}/{key}", method="HEAD")
-    try:
-        with urllib.request.urlopen(req, timeout=30) as r:
-            return key, r.status
-    except urllib.error.HTTPError as e:
-        return key, e.code
-    except Exception:
-        return key, 0
+def check(key):
+    if key.endswith(".webp"):
+        # NOT: Python-urllib UA'ları 403 alıyor (bot koruması); curl ile kontrol et.
+        r = subprocess.run(
+            ["curl", "-s", "-o", "/dev/null", "-w", "%{http_code}", "--max-time", "30",
+             "-A", "Mozilla/5.0", f"{PROXY}/{key}"],
+            capture_output=True, text=True)
+        try:
+            return key, int(r.stdout.strip())
+        except ValueError:
+            return key, 0
+    # manifestolar: S3 API üzerinden varlık kontrolü
+    cmd = WR + ["r2", "object", "get", f"{BUCKET}/{key}", "--file", "/dev/null", "--remote"]
+    r = subprocess.run(cmd, capture_output=True, text=True, cwd=str(REPO))
+    return key, 200 if r.returncode == 0 else 404
 
 missing = []
-with ThreadPoolExecutor(max_workers=32) as pool:
-    futs = [pool.submit(head, k) for k, _, _ in jobs]
+with ThreadPoolExecutor(max_workers=16) as pool:
+    futs = [pool.submit(check, k) for k, _, _ in jobs]
     for i, fu in enumerate(as_completed(futs), 1):
         k, st = fu.result()
         if st != 200:
@@ -47,24 +59,31 @@ if not missing:
 by_key = {k: (p, c) for k, p, c in jobs}
 done = fail = 0
 failures = []
-for k in missing:
+
+def retry_put(k):
     path, ctype = by_key[k]
-    ok = False
-    for attempt in range(3):
+    err = ""
+    for attempt in range(4):
         cmd = WR + ["r2", "object", "put", f"{BUCKET}/{k}", "--file", path, "--remote",
                     "--content-type", ctype, "--cache-control", "public, max-age=31536000, immutable"]
         r = subprocess.run(cmd, capture_output=True, text=True, cwd=str(REPO))
         if r.returncode == 0:
-            ok = True
-            break
-        time.sleep(2 * (attempt + 1))
-    if ok:
-        done += 1
-    else:
-        fail += 1
-        failures.append((k, (r.stderr or r.stdout)[-200:]))
-    if (done + fail) % 50 == 0:
-        print(f"retry {done + fail}/{len(missing)} tamam={done} hata={fail}", flush=True)
+            return k, True, ""
+        err = (r.stderr or r.stdout)[-200:]
+        time.sleep(3 * (attempt + 1))
+    return k, False, err
+
+with ThreadPoolExecutor(max_workers=5) as pool:
+    futs = [pool.submit(retry_put, k) for k in missing]
+    for fu in as_completed(futs):
+        k, ok, err = fu.result()
+        if ok:
+            done += 1
+        else:
+            fail += 1
+            failures.append((k, err))
+        if (done + fail) % 100 == 0:
+            print(f"retry {done + fail}/{len(missing)} tamam={done} hata={fail}", flush=True)
 
 print(f"RETRY BITTI: tamam={done} hata={fail}", flush=True)
 for k, e in failures[:20]:

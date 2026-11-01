@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createHash, timingSafeEqual } from "node:crypto";
-import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { getStudentIdByUsername, getLevelTestResult } from "../../../lib/db";
 
 // Görseller /r2 proxy rotasından sunulur (yalnızca .webp).
 const R2_PUBLIC_URL = "https://lgskanka.alibey.workers.dev/r2";
@@ -130,6 +130,49 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get("limit") || "0", 10);
     const wrongMode = searchParams.get("wrong_mode");
     const sort = searchParams.get("sort") || "unit_difficulty";
+    const profileId = searchParams.get("profileId"); // Kişiselleştirme için öğrenci kullanıcı adı
+
+    // Kişiselleştirilmiş ders kotalarını hesapla
+    let subjectLimits: Record<string, number> = {
+      turkce: 5,
+      matematik: 5,
+      fen: 5,
+      "inkilap-tarihi": 3,
+      "din-kulturu": 3,
+      ingilizce: 3,
+    };
+
+    if (profileId) {
+      const studentId = await getStudentIdByUsername(profileId);
+      if (studentId) {
+        const levelTest = await getLevelTestResult(studentId);
+        if (levelTest && typeof levelTest === "object" && "by_subject" in levelTest) {
+          // Her dersin yüzdesini hesapla; %60 altı zayıf sayılır
+          const bySubject = (levelTest as any).by_subject as Record<string, { correct: number; total: number }>;
+          const weakSubjects = new Set<string>();
+          for (const [subject, stats] of Object.entries(bySubject)) {
+            if (stats.total > 0 && (stats.correct / stats.total) < 0.6) {
+              weakSubjects.add(subject);
+            }
+          }
+          // Zayıf derslere +2 soru, güçlü derslerden -1 (toplam 24 korunur)
+          let totalAdjustment = 0;
+          for (const subject of Object.keys(subjectLimits)) {
+            if (weakSubjects.has(subject)) {
+              subjectLimits[subject] += 2;
+              totalAdjustment += 2;
+            }
+          }
+          // Toplam 24'e inmesi için güçlü derslerden azalt
+          const strongSubjects = Object.keys(subjectLimits).filter((s) => !weakSubjects.has(s) && subjectLimits[s] > 1);
+          for (const subject of strongSubjects) {
+            if (totalAdjustment <= 0) break;
+            subjectLimits[subject] -= 1;
+            totalAdjustment -= 1;
+          }
+        }
+      }
+    }
 
     let questions = await getQuestions();
 

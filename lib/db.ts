@@ -94,3 +94,18 @@ export function dbUpdate(
 export function dbDelete(table: string, query: string): Promise<null> {
   return rest(`${table}?${query}`, { method: "DELETE" }) as Promise<null>;
 }
+
+/** Öğrencinin seviye tespit (month 0) sınav sonucunu getirir. */
+export async function getLevelTestResult(studentId: string) {
+  return dbSelectOne(
+    "exam_results",
+    `student_id=eq.${studentId}&month=eq.0`,
+    "by_subject,correct,wrong,empty,percentage,level,details"
+  );
+}
+
+/** Kullanıcı adından öğrenci UUID'sini getirir. */
+export async function getStudentIdByUsername(username: string): Promise<string | null> {
+  const row = await dbSelectOne<{ id: string }>("students", `username=eq.${username}`, "id");
+  return row?.id ?? null;
+}

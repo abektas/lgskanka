@@ -23,7 +23,7 @@ start = time.time()
 
 def put(job):
     key, path, ctype = job
-    cmd = WR + ["r2", "object", "put", f"{BUCKET}/{key}", "--file", path,
+    cmd = WR + ["r2", "object", "put", f"{BUCKET}/{key}", "--file", path, "--remote",
                 "--content-type", ctype, "--cache-control", "public, max-age=31536000, immutable"]
     r = subprocess.run(cmd, capture_output=True, text=True, cwd=str(REPO))
     return key, r.returncode, (r.stderr or r.stdout)[-200:]

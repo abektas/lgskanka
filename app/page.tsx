@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+"use client";
+
 import Link from "next/link";
 import { Icon } from "../components/icons";
 import { GameRightsCard } from "../components/dashboard-widgets";
@@ -7,6 +8,7 @@ import { Greeting } from "../components/greeting";
 import { HeroArt } from "../components/hero-art";
 import { StudyTimer } from "../components/study-timer";
 import { TaskList } from "../components/task-list";
+import { ContinueCard } from "../components/continue-card";
 import {
   errorSummary,
   errorTypes,
@@ -14,13 +16,6 @@ import {
   weeklyProgress,
 } from "../data/content";
 import { learner } from "../data/nav";
-
-export const metadata: Metadata = {
-  title: { absolute: "LGS KANKA — 8. sınıf için kişisel çalışma arkadaşı" },
-  description:
-    "Günlük görevler, 12 aylık deneme takvimi, haftalık testler, ders bazlı ilerleme ve H1–H7 hata analizi tek ekranda. 8. sınıf öğrencileri için LGS çalışma paneli.",
-  alternates: { canonical: "/" },
-};
 
 /** Hata türlerinin paylarından pasta grafiği üretir. */
 function donutBackground() {
@@ -55,6 +50,8 @@ export default function HomePage() {
           Çalışmaya başla <Icon name="arrow" size={18} />
         </Link>
       </header>
+
+      <ContinueCard />
 
       <section className="card next-step" aria-labelledby="simdi-ne-yapmaliyim">
         <div className="next-step-head">

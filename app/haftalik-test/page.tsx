@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Icon } from "../../components/icons";
 import { CycleBadge } from "../../components/cycle-badge";
 import { errorTypes } from "../../data/content";
 import { ERROR_REASON_OPTIONS, loadAnswerRecords, saveAnswerRecord } from "../../lib/error-reason";
+import { apiFetch } from "../../lib/sync";
 import { computeUnitMasteries, formatDueLabel, subjectName } from "../../lib/mastery";
 import {
   CATEGORY_LABELS,
@@ -41,6 +42,36 @@ export default function HaftalikTestPage() {
   const [savedRecord, setSavedRecord] = useState<WeeklyTestRecord | null>(null);
   const [pastRecords, setPastRecords] = useState<WeeklyTestRecord[]>([]);
   const questionStartRef = useRef<number>(Date.now());
+  const [reportedIds, setReportedIds] = useState<Set<string>>(new Set());
+
+  /** "Soru eksik veya bozuk" bildirimi — öğretmen paneline düşer. */
+  const reportQuestion = useCallback(
+    async (q: { id: string; subject: string; questionNumber: number; imagePath: string }) => {
+      if (reportedIds.has(q.id)) return;
+      setReportedIds((prev) => new Set(prev).add(q.id));
+      try {
+        await apiFetch("/api/question-reports", {
+          method: "POST",
+          body: JSON.stringify({
+            source: "haftalik",
+            monthName: "Haftalık Test",
+            questionId: q.id,
+            questionNumber: q.questionNumber,
+            subject: q.subject,
+            imagePath: q.imagePath,
+          }),
+        });
+      } catch {
+        // Sunucuya ulaşılamadıysa buton geri açılsın
+        setReportedIds((prev) => {
+          const next = new Set(prev);
+          next.delete(q.id);
+          return next;
+        });
+      }
+    },
+    [reportedIds]
+  );
 
   // Havuzu çek, kural tabanlı 45 soruluk testi kur (hafta içi yapamadıklarından)
   useEffect(() => {
@@ -354,6 +385,19 @@ export default function HaftalikTestPage() {
           />
         </div>
         <p className="exam-image-hint">Görseli büyütmek için tıkla</p>
+
+        <div className="exam-report-row">
+          <button
+            type="button"
+            className={`exam-report-btn ${reportedIds.has(current!.question.id) ? "is-done" : ""}`}
+            onClick={() => reportQuestion(current!.question)}
+            disabled={reportedIds.has(current!.question.id)}
+          >
+            {reportedIds.has(current!.question.id)
+              ? "✓ Öğretmene bildirildi"
+              : "⚠ Soru eksik veya bozuk"}
+          </button>
+        </div>
 
         <div className="exam-answers">
           {["A", "B", "C", "D"].map((letter) => (

@@ -32,14 +32,14 @@ const settingRows: { key: keyof Settings; title: string; detail: string }[] = [
 
 /** Profil & karakter formu: ad, cinsiyet, karakter seçimi ve gizlilik ayarları. */
 export function ProfileForm() {
-  const { profile, ready, saveProfile } = useProfile();
-  const [draft, setDraft] = useState<Profile>(profile);
+  const { ready, updateProfile, activeProfile } = useProfile();
+  const [draft, setDraft] = useState<Profile | null>(null);
   const [settings, setSettings] = useState<Settings>(defaultSettings);
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    if (ready) setDraft(profile);
-  }, [ready, profile]);
+    if (ready && activeProfile) setDraft(activeProfile);
+  }, [ready, activeProfile]);
 
   useEffect(() => {
     try {
@@ -67,10 +67,14 @@ export function ProfileForm() {
 
   function onSubmit(event: React.FormEvent) {
     event.preventDefault();
-    saveProfile(draft);
-    setSaved(true);
-    window.setTimeout(() => setSaved(false), 2600);
+    if (draft) {
+      updateProfile({ name: draft.name, gender: draft.gender, variant: draft.variant });
+      setSaved(true);
+      window.setTimeout(() => setSaved(false), 2600);
+    }
   }
+
+  if (!draft) return null;
 
   return (
     <form className="card" onSubmit={onSubmit}>

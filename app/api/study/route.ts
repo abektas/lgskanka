@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createHash, timingSafeEqual } from "node:crypto";
 
-const R2_PUBLIC_URL = "https://pub-782be99090dc4f8586da5bf5d073c4a5.r2.dev";
+const R2_PUBLIC_URL = "https://pub-ddee1949bfea484b8ea4ec1574e492c6.r2.dev";
 
 interface StudyQuestion {
   id: string;
@@ -195,8 +195,20 @@ export async function POST(request: NextRequest) {
     }
     const submitted = createHash("sha256").update(answer).digest();
     const expected = createHash("sha256").update(question.answer).digest();
+    const correct = timingSafeEqual(submitted, expected);
+
+    // Return question metadata so client can save answer record with full context
     return NextResponse.json(
-      { correct: timingSafeEqual(submitted, expected) },
+      {
+        correct,
+        question: {
+          id: question.id,
+          subject: question.subject,
+          unit: question.unit,
+          unitName: question.unitName,
+          topic: question.topic,
+        },
+      },
       { headers: { "Cache-Control": "no-store" } }
     );
   } catch (e) {

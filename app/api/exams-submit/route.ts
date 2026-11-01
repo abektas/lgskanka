@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { readFileSync, existsSync } from "fs";
-import path from "path";
+import { getExamManifest } from "../../../lib/exam-manifests";
+import { dbInsert, dbDelete } from "../../../lib/db";
+import { authFromRequest } from "../../../lib/auth";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-
-const EXAMS_BASE = path.join(process.cwd(), "lgs_18_26", "exams_by_month");
 
 interface SubmitBody {
   month: number;
@@ -13,23 +12,16 @@ interface SubmitBody {
   studentId?: string;
 }
 
-function loadManifest(month: number) {
-  const monthName = month === 0 ? "00_seviye_tespit" : `${month.toString().padStart(2, "0")}_ay`;
-  const p = path.join(EXAMS_BASE, monthName, `manifest_${monthName}.json`);
-  if (!existsSync(p)) return null;
-  return JSON.parse(readFileSync(p, "utf-8"));
-}
-
 export async function POST(request: NextRequest) {
   try {
     const body: SubmitBody = await request.json();
-    const { month, answers, studentId } = body;
+    const { month, answers } = body;
 
     if (typeof month !== "number" || month < 0 || month > 11) {
       return NextResponse.json({ error: "Geçersiz ay" }, { status: 400 });
     }
 
-    const manifest = loadManifest(month);
+    const manifest = getExamManifest(month);
     if (!manifest) {
       return NextResponse.json({ error: "Sınav bulunamadı" }, { status: 404 });
     }
@@ -90,6 +82,32 @@ export async function POST(request: NextRequest) {
     else if (percentage >= 70) level = "Orta-İleri";
     else if (percentage >= 55) level = "Orta";
     else if (percentage >= 40) level = "Temel";
+
+    // Sonucu sunucuya kaydet (giriş yapılmışsa) ve yarım kalan oturumu temizle
+    const auth = await authFromRequest(request);
+    if (auth) {
+      try {
+        await dbInsert("exam_results", {
+          student_id: auth.sub,
+          month: manifest.month,
+          month_name: manifest.monthName,
+          correct,
+          wrong,
+          empty,
+          percentage,
+          level,
+          by_subject: bySubject,
+          details,
+          completed_at: new Date().toISOString(),
+        });
+        await dbDelete(
+          "exam_sessions",
+          `student_id=eq.${encodeURIComponent(auth.sub)}&month=eq.${month}`
+        );
+      } catch {
+        // Kayıt hatası değerlendirmeyi engellemez
+      }
+    }
 
     return NextResponse.json({
       month: manifest.month,

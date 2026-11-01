@@ -1,17 +1,13 @@
-import type { Metadata } from "next";
+"use client";
+
 import Link from "next/link";
 import { CharacterAvatar } from "../../components/character-avatar";
 import { Icon } from "../../components/icons";
 import { ProfileForm } from "../../components/profile-form";
+import { ProfileSelector } from "../../components/profile-selector";
+import { useProfile } from "../../components/profile-provider";
 import { badges } from "../../data/content";
 import { learner, gameEconomy } from "../../data/nav";
-
-export const metadata: Metadata = {
-  title: "Profil ve karakter",
-  description:
-    "Öğrenci profilini düzenle, karakterini seç, XP ve rozetlerini gör. Veri saklama ayarlarını yönet.",
-  alternates: { canonical: "/profil" },
-};
 
 const unlockables = [
   {
@@ -41,6 +37,7 @@ const unlockables = [
 ];
 
 export default function ProfilPage() {
+  const { profiles, activeProfile, switchProfile } = useProfile();
   const earned = badges.filter((badge) => badge.earned);
 
   return (
@@ -48,7 +45,7 @@ export default function ProfilPage() {
       <header className="page-head">
         <div>
           <span className="eyebrow">Karakter ve ayarlar</span>
-          <h1>Profil &amp; Karakter</h1>
+          <h1>Profil & Karakter</h1>
           <p>
             Karakterin öğrenme ilerlemenin görsel temsilidir: seviye, rozet ve çalışma odası
             gelişiminle birlikte büyür.
@@ -58,6 +55,39 @@ export default function ProfilPage() {
           Çalışmaya dön <Icon name="arrow" size={18} />
         </Link>
       </header>
+
+      {profiles.length > 1 && (
+        <section className="card" aria-labelledby="profile-switcher" style={{ marginBottom: 20 }}>
+          <div className="section-head">
+            <h2 id="profile-switcher">Profiller</h2>
+            <Link className="text-link" href="/profil" onClick={(e) => e.preventDefault()}>
+              <ProfileSelector required={false} />
+            </Link>
+          </div>
+          <div className="profile-cards" role="list" style={{ display: "grid", gap: 10 }}>
+            {profiles.map((profile) => (
+              <article
+                key={profile.id}
+                className={`profile-card${activeProfile?.id === profile.id ? " is-active" : ""}`}
+                role="listitem"
+                onClick={() => switchProfile(profile.id)}
+                aria-selected={activeProfile?.id === profile.id}
+                style={{ cursor: "pointer" }}
+              >
+                <div className="profile-card-avatar">
+                  <CharacterAvatar size={56} />
+                </div>
+                <div className="profile-card-info">
+                  <b style={{ fontSize: 15 }}>{profile.name}</b>
+                  <small className="muted-text">
+                    {activeProfile?.id === profile.id ? "✓ Aktif" : "Tıkla ve değiştir"}
+                  </small>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
 
       <div className="profile-grid">
         <ProfileForm />

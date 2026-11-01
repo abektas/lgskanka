@@ -88,7 +88,7 @@ export function MobileNav() {
 }
 
 export function TopBar({ query }: { query?: string }) {
-  const { profile, ready } = useProfile();
+  const { activeProfile, ready } = useProfile();
   const percent = Math.round((learner.levelXp / learner.levelTarget) * 100);
 
   return (
@@ -124,8 +124,8 @@ export function TopBar({ query }: { query?: string }) {
 
         <Link href="/profil" className="avatar-btn" aria-label="Profilim ve karakterim">
           <Avatar
-            gender={ready ? profile.gender : "boy"}
-            variant={ready ? profile.variant : 0}
+            gender={ready && activeProfile ? activeProfile.gender : "boy"}
+            variant={ready && activeProfile ? activeProfile.variant : 0}
             size={40}
             className="topbar-avatar"
           />

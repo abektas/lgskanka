@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { ProfileProvider } from "../components/profile-provider";
 import { MobileNav, Sidebar, TopBar } from "../components/chrome";
+import { ProfileGateWrapper } from "../components/profile-gate-wrapper";
 
 // CSS font variables defined in globals.css for offline compatibility
 
@@ -103,27 +104,28 @@ const structuredData = {
   ],
 };
 
+function AppShell({ children }: { children: React.ReactNode }) {
+  return (
+    <ProfileProvider>
+      <ProfileGateWrapper>
+        <div className="shell">
+          <Sidebar />
+          <div className="main">
+            <TopBar />
+            <main id="icerik">{children}</main>
+          </div>
+        </div>
+        <MobileNav />
+      </ProfileGateWrapper>
+    </ProfileProvider>
+  );
+}
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="tr" className="font-loaded">
       <body>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, "\\u003c") }}
-        />
-        <a className="skip-link" href="#icerik">
-          İçeriğe geç
-        </a>
-        <ProfileProvider>
-          <div className="shell">
-            <Sidebar />
-            <div className="main">
-              <TopBar />
-              <main id="icerik">{children}</main>
-            </div>
-          </div>
-          <MobileNav />
-        </ProfileProvider>
+        <AppShell>{children}</AppShell>
       </body>
     </html>
   );

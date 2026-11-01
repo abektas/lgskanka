@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Icon } from "../../components/icons";
 import { subjects, errorTypes } from "../../data/content";
 import { learner } from "../../data/nav";
-import { ERROR_REASON_OPTIONS, saveAnswerRecord } from "../../lib/error-reason";
+import { ERROR_REASON_OPTIONS, saveAnswerRecord, loadAnswerRecords } from "../../lib/error-reason";
+import { pushStudySession, apiFetch } from "../../lib/sync";
 import {
   computeCycleState,
   cycleSummary,
@@ -194,6 +195,36 @@ export default function CalisPage() {
   const [cycle, setCycle] = useState<CycleState | null>(null);
   const [completed, setCompleted] = useState(false);
   const questionStartRef = useRef<number>(Date.now());
+  const [reportedIds, setReportedIds] = useState<Set<string>>(new Set());
+
+  /** "Soru eksik veya bozuk" bildirimi — öğretmen paneline düşer. */
+  const reportQuestion = useCallback(
+    async (q: StudyQuestion) => {
+      if (reportedIds.has(q.id)) return;
+      setReportedIds((prev) => new Set(prev).add(q.id));
+      try {
+        await apiFetch("/api/question-reports", {
+          method: "POST",
+          body: JSON.stringify({
+            source: "gunluk",
+            monthName: q.sourceBook,
+            questionId: q.id,
+            questionNumber: q.questionNumber,
+            subject: q.subject,
+            imagePath: q.imagePath,
+          }),
+        });
+      } catch {
+        // Sunucuya ulaşılamadıysa buton geri açılsın
+        setReportedIds((prev) => {
+          const next = new Set(prev);
+          next.delete(q.id);
+          return next;
+        });
+      }
+    },
+    [reportedIds]
+  );
 
   // Döngü: kayıt tarihinden itibaren 4 hafta.
   // Hafta sonu (cumartesi veya pazar) sınav günü: 1-3. hafta haftalık test,
@@ -230,7 +261,15 @@ export default function CalisPage() {
       .then((batches) => {
         const merged = batches.flat();
         setQuestions(merged);
-        setCurrentIndex(0);
+        // Kaldığın yerden devam: sunucudaki son soru indeksini geri yükle
+        apiFetch("/api/study-session")
+          .then((r) => (r.ok ? r.json() : null))
+          .then((d) => {
+            const lastIndex = Number(d?.session?.state?.lastIndex) || 0;
+            const resumeAt = lastIndex > 0 && lastIndex < merged.length ? lastIndex : 0;
+            setCurrentIndex(resumeAt);
+          })
+          .catch(() => setCurrentIndex(0));
         setSelectedAnswer(null);
         setShowResult(false);
         setLoading(false);
@@ -264,6 +303,19 @@ export default function CalisPage() {
     setUnitMastery(found ?? null);
   }, [currentQuestion?.subject, currentQuestion?.unit, checkState, errorReason]);
 
+  /** Bugünkü ilerlemeyi sunucuya yaz (kaldığın yerden devam et). */
+  const syncTodayProgress = useCallback((index?: number) => {
+    const today = new Date().toISOString().slice(0, 10);
+    const records = loadAnswerRecords().filter((r) => r.createdAt.slice(0, 10) === today);
+    pushStudySession({
+      solved: records.length,
+      correct: records.filter((r) => r.correct).length,
+      target: 24,
+      state: { lastIndex: index ?? currentIndex },
+      date: today,
+    });
+  }, [currentIndex]);
+
   const handleAnswer = (letter: string) => {
     if (showResult) return;
     setSelectedAnswer(letter);
@@ -284,40 +336,53 @@ export default function CalisPage() {
           return;
         }
         setCheckState(data.correct ? "correct" : "wrong");
+        // Use question metadata from API response (includes unit/unitName/topic)
+        const qmeta = data.question || q;
         if (data.correct) {
           saveAnswerRecord({
             questionId: q.id,
-            subject: q.subject,
-            unit: q.unit,
-            unitName: q.unitName,
-            topic: q.topic,
+            subject: qmeta.subject,
+            unit: qmeta.unit,
+            unitName: qmeta.unitName,
+            topic: qmeta.topic,
             selectedAnswer: letter,
             correct: true,
             errorReasonCode: null,
             timeSpentSec: Math.max(0, Math.round((Date.now() - startedAt) / 1000)),
             createdAt: new Date().toISOString(),
           });
+          syncTodayProgress();
         }
       })
       .catch(() => setCheckState(null));
   };
 
-  const selectErrorReason = (code: string | null) => {
+  const selectErrorReason = async (code: string | null) => {
     setErrorReason(code ?? "SKIPPED");
     const q = currentQuestion;
     if (!q || !selectedAnswer) return;
+    // Fetch question metadata from API to get unit/unitName/topic
+    let qmeta = q;
+    try {
+      const res = await fetch(`/api/study?id=${q.id}`);
+      const data = await res.json();
+      if (data.items?.[0]) {
+        qmeta = data.items[0];
+      }
+    } catch {}
     saveAnswerRecord({
       questionId: q.id,
-      subject: q.subject,
-      unit: q.unit,
-      unitName: q.unitName,
-      topic: q.topic,
+      subject: qmeta.subject,
+      unit: qmeta.unit,
+      unitName: qmeta.unitName,
+      topic: qmeta.topic,
       selectedAnswer,
       correct: false,
       errorReasonCode: code,
       timeSpentSec: Math.max(0, Math.round((Date.now() - questionStartRef.current) / 1000)),
       createdAt: new Date().toISOString(),
     });
+    syncTodayProgress();
   };
 
   const nextQuestion = () => {
@@ -410,6 +475,18 @@ export default function CalisPage() {
             />
           </div>
           <p className="exam-image-hint">Görseli büyütmek için tıkla</p>
+          <div className="exam-report-row">
+            <button
+              type="button"
+              className={`exam-report-btn ${reportedIds.has(currentQuestion.id) ? "is-done" : ""}`}
+              onClick={() => reportQuestion(currentQuestion)}
+              disabled={reportedIds.has(currentQuestion.id)}
+            >
+              {reportedIds.has(currentQuestion.id)
+                ? "✓ Öğretmene bildirildi"
+                : "⚠ Soru eksik veya bozuk"}
+            </button>
+          </div>
           <div className="exam-answers">
             {["A", "B", "C", "D"].map((letter) => (
               <button

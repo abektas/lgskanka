@@ -2,12 +2,14 @@
 
 import { useEffect, useState, useCallback, useMemo, useRef } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { Icon } from "../../components/icons";
 import { CycleBadge } from "../../components/cycle-badge";
 import { subjects } from "../../data/content";
 import { saveExamRecord, examDelta, type ExamRecord } from "../../lib/exam-history";
 import { getEnrollmentDate } from "../../lib/cycle";
 import { syncReinforcementTasks } from "../../lib/reinforcement";
+import { pushExamSession, pullExamSession, apiFetch } from "../../lib/sync";
 
 interface ExamQuestion {
   id: string;
@@ -65,6 +67,9 @@ interface MonthInfo {
 }
 
 export default function AylikDenemelerPage() {
+  const searchParams = useSearchParams();
+  const urlMonth = searchParams.get("month");
+  const urlResume = searchParams.get("resume") === "1";
   const [months, setMonths] = useState<MonthInfo[]>([]);
   const [selectedMonth, setSelectedMonth] = useState<number | null>(null);
   const [questions, setQuestions] = useState<ExamQuestion[]>([]);
@@ -83,6 +88,37 @@ export default function AylikDenemelerPage() {
   const subjectElapsedRef = useRef<Record<string, number>>({});
   const subjectPausedRef = useRef<Record<string, boolean>>({});
   const currentSubjectRef = useRef<string | null>(null);
+  const [reportedIds, setReportedIds] = useState<Set<string>>(new Set());
+
+  /** "Soru eksik veya bozuk" bildirimi — öğretmen paneline düşer. */
+  const reportQuestion = useCallback(
+    async (q: ExamQuestion) => {
+      if (reportedIds.has(q.id)) return;
+      setReportedIds((prev) => new Set(prev).add(q.id));
+      try {
+        await apiFetch("/api/question-reports", {
+          method: "POST",
+          body: JSON.stringify({
+            source: "deneme",
+            month: q.month,
+            monthName: q.monthName,
+            questionId: q.id,
+            questionNumber: q.questionNumber,
+            subject: q.subject,
+            imagePath: q.imagePath,
+          }),
+        });
+      } catch {
+        // Sunucuya ulaşılamadıysa buton geri açılsın
+        setReportedIds((prev) => {
+          const next = new Set(prev);
+          next.delete(q.id);
+          return next;
+        });
+      }
+    },
+    [reportedIds]
+  );
 
   // Büyütülmüş görsel açıkken ESC ile kapat
   useEffect(() => {
@@ -110,8 +146,11 @@ export default function AylikDenemelerPage() {
           setCompletedMonths(done);
           // İlk erişilebilir deneme: kayıt tarihine göre kademeli açılır
           // Seviye tespit (0) hemen aktif; diğerleri ay ay açılır
-          const first = data.months.find((m: MonthInfo) => isMonthUnlocked(m.month)) ||
-            data.months[0];
+          // URL'de ?month= varsa o ayı seç (kaldığın yerden devam)
+          const urlMonthNum = urlMonth !== null ? parseInt(urlMonth, 10) : NaN;
+          const first = (!isNaN(urlMonthNum) && data.months.some((m: MonthInfo) => m.month === urlMonthNum)
+            ? data.months.find((m: MonthInfo) => m.month === urlMonthNum)
+            : data.months.find((m: MonthInfo) => isMonthUnlocked(m.month)) || data.months[0]);
           if (first) setSelectedMonth(first.month);
         }
       })
@@ -134,6 +173,16 @@ export default function AylikDenemelerPage() {
       .then((r) => r.json())
       .then((data) => {
         if (data.items) setQuestions(data.items);
+        // Kaldığın yerden devam: yarım kalmış oturumu geri yükle
+        if (urlResume) {
+          pullExamSession(selectedMonth).then((session) => {
+            if (session) {
+              setAnswers(session.answers || {});
+              const idx = Math.max(0, Math.min((session.current_index || 0), (data.items?.length || 1) - 1));
+              setCurrentIndex(idx);
+            }
+          });
+        }
         setLoading(false);
       })
       .catch(() => setLoading(false));
@@ -163,12 +212,15 @@ export default function AylikDenemelerPage() {
 
   const handleAnswer = useCallback((letter: string) => {
     if (submitted || timerEnded) return;
-    setAnswers((prev) => {
-      const currentQ = questions[currentIndex];
-      if (!currentQ) return prev;
-      return { ...prev, [currentQ.id]: letter };
-    });
-  }, [currentIndex, questions]);
+    const currentQ = questions[currentIndex];
+    if (!currentQ) return;
+    const nextAnswers = { ...answers, [currentQ.id]: letter };
+    setAnswers(nextAnswers);
+    // Sunucuya kaydet — cihaz değiştirdiğinde kaldığın yerden devam
+    if (selectedMonth !== null) {
+      pushExamSession(selectedMonth, nextAnswers, currentIndex);
+    }
+  }, [currentIndex, questions, answers, submitted, timerEnded, selectedMonth]);
 
   const nextQuestion = useCallback(() => {
     if (currentIndex < questions.length - 1) {
@@ -193,9 +245,8 @@ export default function AylikDenemelerPage() {
     if (selectedMonth === null) return;
     setSubmitted(true);
     try {
-      const res = await fetch("/api/exams-submit", {
+      const res = await apiFetch("/api/exams-submit", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ month: selectedMonth, answers }),
       });
       const data = await res.json();
@@ -344,6 +395,19 @@ export default function AylikDenemelerPage() {
           />
         </div>
         <p className="exam-image-hint">Görseli büyütmek için tıkla</p>
+
+        <div className="exam-report-row">
+          <button
+            type="button"
+            className={`exam-report-btn ${reportedIds.has(currentQuestion.id) ? "is-done" : ""}`}
+            onClick={() => reportQuestion(currentQuestion)}
+            disabled={reportedIds.has(currentQuestion.id)}
+          >
+            {reportedIds.has(currentQuestion.id)
+              ? "✓ Öğretmene bildirildi"
+              : "⚠ Soru eksik veya bozuk"}
+          </button>
+        </div>
 
         <div className="exam-answers-row">
           <div className="exam-answers">

@@ -4,8 +4,11 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Icon } from "../../components/icons";
 import { subjects } from "../../data/content";
+import { saveAnswerRecord } from "../../lib/error-reason";
+import { pushReinforcementTasks } from "../../lib/sync";
 import {
   syncReinforcementTasks,
+  loadReinforcementTasks,
   getTasksBySubject,
   updateTaskStatus,
   assignQuestionsToTask,
@@ -81,6 +84,10 @@ export default function PekistirmePage() {
   const [activeSubject, setActiveSubject] = useState<string | null>(null);
 
   useEffect(() => {
+    // Load existing tasks first (persisted), then sync for new weak units
+    const existing = loadReinforcementTasks();
+    setTasks(existing);
+    // Sync in background to add any newly detected weak units
     const synced = syncReinforcementTasks();
     setTasks(synced);
     setLoading(false);
@@ -90,6 +97,7 @@ export default function PekistirmePage() {
     if (task.questionIds.length > 0) {
       updateTaskStatus(task.id, "devam-ediyor");
       setTasks(syncReinforcementTasks());
+      pushReinforcementTasks(getAllTasks());
       return;
     }
     fetch(
@@ -108,6 +116,7 @@ export default function PekistirmePage() {
           assignQuestionsToTask(task.id, selected);
           updateTaskStatus(task.id, "devam-ediyor");
           setTasks(syncReinforcementTasks());
+          pushReinforcementTasks(getAllTasks());
         }
       })
       .catch(() => {});
@@ -122,6 +131,21 @@ export default function PekistirmePage() {
       .then((r) => r.json())
       .then((data) => {
         if (typeof data.correct === "boolean") {
+          // Save answer record for reinforcement tracking with metadata from API
+          const qmeta = data.question || {};
+          saveAnswerRecord({
+            questionId,
+            subject: qmeta.subject || "",
+            unit: qmeta.unit ?? null,
+            unitName: qmeta.unitName ?? null,
+            topic: qmeta.topic ?? null,
+            selectedAnswer: answer,
+            correct: data.correct,
+            errorReasonCode: null,
+            timeSpentSec: 0,
+            createdAt: new Date().toISOString(),
+          });
+
           updateTaskStatus(
             taskId,
             "devam-ediyor",
@@ -129,6 +153,7 @@ export default function PekistirmePage() {
             { [questionId]: data.correct }
           );
           setTasks(syncReinforcementTasks());
+          pushReinforcementTasks(getAllTasks());
         }
       })
       .catch(() => {});

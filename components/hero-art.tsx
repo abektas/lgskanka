@@ -8,8 +8,8 @@ import { useProfile } from "./profile-provider";
  * Görsel sunucudan varsayılan olarak (erkek) gönderilir, profil hazır olunca değişir.
  */
 export function HeroArt() {
-  const { profile, ready } = useProfile();
-  const isGirl = ready && profile.gender === "girl";
+  const { activeProfile, ready } = useProfile();
+  const isGirl = ready && activeProfile?.gender === "girl";
   const src = isGirl ? "/art/hero-girl.webp" : "/art/hero-boy.webp";
 
   return (

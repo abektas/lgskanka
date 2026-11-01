@@ -39,6 +39,10 @@ export type AnswerRecord = {
 const STORAGE_KEY = "lgs_answer_log";
 const MAX_RECORDS = 500;
 
+/**
+ * Cevap kaydı: önce sunucuya gönderilir (gerçek veri), sonra yerel
+ * aynaya yazılır (hızlı görüntüleme için).
+ */
 export function saveAnswerRecord(record: AnswerRecord): void {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -48,6 +52,8 @@ export function saveAnswerRecord(record: AnswerRecord): void {
   } catch {
     // Depolama kapalıysa kayıt sessizce atlanır.
   }
+  // Online senkron (ateşle-unut)
+  import("./sync").then(({ pushAnswerRecord }) => pushAnswerRecord(record));
 }
 
 export function loadAnswerRecords(): AnswerRecord[] {
@@ -57,5 +63,14 @@ export function loadAnswerRecords(): AnswerRecord[] {
     return Array.isArray(list) ? list : [];
   } catch {
     return [];
+  }
+}
+
+/** Sunucudan gelen kayıtlarla yerel aynayı değiştir. */
+export function hydrateAnswerLog(records: AnswerRecord[]): void {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(records.slice(-MAX_RECORDS)));
+  } catch {
+    /* yok say */
   }
 }

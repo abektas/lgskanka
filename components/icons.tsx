@@ -22,7 +22,11 @@ export type IconName =
   | "check"
   | "arrow"
   | "sparkle"
-  | "shield";
+  | "shield"
+  | "close"
+  | "edit"
+  | "trash"
+  | "plus";
 
 const paths: Record<IconName, string> = {
   home: "M4 11.5 12 4.5l8 7M6.5 10.5V19h11v-8.5",
@@ -48,6 +52,10 @@ const paths: Record<IconName, string> = {
   arrow: "M5 12h13.5M13 6.5l5.5 5.5-5.5 5.5",
   sparkle: "M12 3.8 13.6 9l5.2 1.6-5.2 1.6L12 17.4l-1.6-5.2L5.2 10.6 10.4 9 12 3.8ZM18.5 16.2l.6 1.9 1.9.6-1.9.6-.6 1.9-.6-1.9-1.9-.6 1.9-.6.6-1.9Z",
   shield: "M12 3.6 19 6v6c0 4-2.9 7-7 8.4C7 19 4 16 4 12V6l8-2.4Z",
+  close: "M18 6 6 18M6 6l12 12",
+  edit: "M12.5 4.5 19 11M12.5 4.5 4 19.5M19 11 4 19.5",
+  trash: "M3.5 5.5h17M6.5 5.5v13a2 2 0 0 0 2 2h5a2 2 0 0 0 2-2v-13M10 10v8M14 10v8",
+  plus: "M12 5.5v13M5.5 12h13",
 };
 
 type IconProps = {

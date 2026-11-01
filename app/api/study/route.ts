@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createHash, timingSafeEqual } from "node:crypto";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { getStudentIdByUsername, getLevelTestResult } from "../../../lib/db";
 
 // Görseller /r2 proxy rotasından sunulur (yalnızca .webp).

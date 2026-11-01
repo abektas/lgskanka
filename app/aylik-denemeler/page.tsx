@@ -7,6 +7,7 @@ import { Icon } from "../../components/icons";
 import { CycleBadge } from "../../components/cycle-badge";
 import { subjects } from "../../data/content";
 import { saveExamRecord, examDelta, type ExamRecord } from "../../lib/exam-history";
+import { calculateExamScore } from "../../lib/exam-score";
 import { getCycleAnchor, isMonthUnlocked, setCycleAnchor } from "../../lib/cycle";
 import { syncReinforcementTasks } from "../../lib/reinforcement";
 import { pushExamSession, pullExamSession, apiFetch } from "../../lib/sync";
@@ -29,6 +30,7 @@ interface ExamQuestion {
 }
 
 interface ExamResult {
+  total: number;
   correct: number;
   wrong: number;
   empty: number;
@@ -457,6 +459,7 @@ export default function AylikDenemelerPage() {
   const renderResultScreen = () => {
     if (!examResult) return null;
     const delta = examDelta();
+    const score = calculateExamScore(examResult);
     return (
       <section className="exam-result-screen">
         <div className="result-header">
@@ -474,6 +477,7 @@ export default function AylikDenemelerPage() {
           <div className="stat"><b>{examResult.correct}</b><small>Doğru</small></div>
           <div className="stat"><b>{examResult.wrong}</b><small>Yanlış</small></div>
           <div className="stat"><b>{examResult.empty}</b><small>Boş</small></div>
+          <div className="stat lgs-score"><b>{score.overall.rawScore}</b><small>LGS Ham Puanı</small></div>
         </div>
         <div className="result-by-subject">
           <h3>Ders Bazında</h3>

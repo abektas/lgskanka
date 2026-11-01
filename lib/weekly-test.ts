@@ -126,16 +126,16 @@ export function composeWeeklyTest(
           return a.question.id.localeCompare(b.question.id);
         });
 
-    const picked: TestItem[] = [];
+    const items: TestItem[] = [];
     for (const cat of ["zayif", "yeni", "karma"] as const) {
       for (const c of byCategory(cat)) {
-        if (picked.length >= quota) break;
-        if (picked.some((p) => p.question.id === c.question.id)) continue;
-        picked.push(c);
+        if (items.length >= quota) break;
+        if (items.some((p) => p.question.id === c.question.id)) continue;
+        items.push(c);
       }
-      if (picked.length >= quota) break;
+      if (items.length >= quota) break;
     }
-    items.push(...picked);
+    items.push(...items);
   }
   return items;
 }
@@ -144,4 +144,105 @@ export const CATEGORY_LABELS: Record<TestCategory, string> = {
   zayif: "Yapamadığın konu",
   yeni: "Yeni çalıştığın",
   karma: "Genel tekrar",
+};
+
+/** Pazar telafi testi kotaları (günlük çalışma ile aynı: 24 soru). */
+export const TELAFI_QUOTA: Record<string, number> = {
+  turkce: 5,
+  matematik: 5,
+  fen: 5,
+  "inkilap-tarihi": 3,
+  "din-kulturu": 3,
+  ingilizce: 3,
+};
+
+/**
+ * Pazar telafi testi (24 soru) — haftanın yanlışlarını kapatır.
+ * Kaynaklar:
+ *  - Son 7 gündeki günlük çalışma yanlışları (cevap kayıtları)
+ *  - Bu haftanın Cumartesi haftalık testi yanlışları
+ * Strateji: Önce tam yanlış yapılan soruları (varsa havuzda), sonra aynı ünite/konu.
+ * Kategori: "telafi" (kesin yanlış), "genel" (doldurma).
+ */
+export type TelafiCategory = "telafi" | "genel";
+
+export type TelafiItem = {
+  question: TestQuestion;
+  category: TelafiCategory;
+};
+
+/**
+ * 24 soruluk Pazar Telafi testi kurar.
+ * Kaynaklar:
+ * - records: son 7 gündeki günlük cevap kayıtları (AnswerRecord[])
+ * - weeklyWrongIds: bu hafta Cumartesi haftalık testi yanlışları
+ * - pool: mevcut soru havuzu (TestQuestion[])
+ */
+export function composeTelafiTest(
+  pool: TestQuestion[],
+  records: { createdAt: string; correct: boolean; questionId: string; subject: string; unit: number | null; unitName: string | null; topic: string | null }[],
+  weeklyWrongIds: Set<string>,
+  now: Date = new Date()
+): { question: TestQuestion; category: "telafi" | "genel" }[] {
+  // 1) Son 7 gündeki günlük yanlışları topla (questionId bazında)
+  const dailyWrongIds = new Set<string>();
+  for (const r of records) {
+    if (!r.correct && new Date(r.createdAt).getTime() >= now.getTime() - 7 * 24 * 60 * 60 * 1000) {
+      dailyWrongIds.add(r.questionId);
+    }
+  }
+
+  // 2) Haftalık test yanlışları + günlük yanlışlar birleşimi
+  const allWrongIds = new Set([...dailyWrongIds, ...weeklyWrongIds]);
+
+  // 3) Pool içinde bu ID'lerle eşleşen soruları "telafi" kategorisinde topla
+  const telafiBySubject: Record<string, { id: string; question: TestQuestion }[]> = {};
+  for (const q of pool) {
+    if (allWrongIds.has(q.id)) {
+      if (!telafiBySubject[q.subject]) telafiBySubject[q.subject] = [];
+      telafiBySubject[q.subject].push({ id: q.id, question: q });
+    }
+  }
+
+  // 4) Aynı subject'ten "genel" doldurma adayları
+  const fillerBySubject: Record<string, typeof pool> = {};
+  for (const q of pool) {
+    if (!allWrongIds.has(q.id)) {
+      if (!fillerBySubject[q.subject]) fillerBySubject[q.subject] = [];
+      fillerBySubject[q.subject].push(q);
+    }
+  }
+
+  const items: { question: TestQuestion; category: "telafi" | "genel" }[] = [];
+
+  for (const [subject, quota] of Object.entries(TELAFI_QUOTA)) {
+    const telafiCandidates = telafiBySubject[subject] || [];
+    const fillerCandidates = fillerBySubject[subject] || [];
+
+    const picked: { question: TestQuestion; category: "telafi" | "genel" }[] = [];
+
+    // Önce tam yanlışlar (telafi)
+    for (const c of telafiCandidates) {
+      if (picked.length >= (TELAFI_QUOTA as Record<string, number>)[subject]) break;
+      if (picked.some((p) => p.question.id === c.id)) continue;
+      picked.push({ question: c.question, category: "telafi" });
+    }
+
+    // Sonra filler (genel) — aynı subject'ten
+    for (const q of fillerCandidates) {
+      if (picked.length >= (TELAFI_QUOTA as Record<string, number>)[subject]) break;
+      if (picked.some((p) => p.question.id === q.id)) continue;
+      picked.push({ question: q, category: "genel" });
+    }
+
+    items.push(...picked);
+  }
+
+  return items.map((i) => ({ question: i.question, category: i.category }));
+}
+
+/** Pazar telafi kategori etiketleri. */
+export const TELAFI_CATEGORY_LABELS: Record<"telafi" | "genel", string> = {
+  telafi: "Bu hafta yanlış yaptığın",
+  genel: "Genel tekrar",
 };

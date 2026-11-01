@@ -14,6 +14,13 @@ import {
   isWeeklyTestOpen,
   type CycleState,
 } from "../../lib/cycle";
+import {
+  composeTelafiTest,
+  TELAFI_QUOTA,
+  TELAFI_CATEGORY_LABELS,
+  type TestQuestion,
+} from "../../lib/weekly-test";
+import { loadWeeklyTestHistory } from "../../lib/weekly-test-history";
 
 const ERROR_REASON_OPTIONS_LOCAL = [
   { id: "anlamadim", label: "Soruyu anlamadım", code: "H3" },
@@ -201,9 +208,13 @@ export default function CalisPage() {
   const [unitMastery, setUnitMastery] = useState<UnitMastery | null>(null);
   const [cycle, setCycle] = useState<CycleState | null>(null);
   const weeklyOpen = isWeeklyTestOpen();
+  const [telafiItems, setTelafiItems] = useState<{ question: TestQuestion; category: "telafi" | "genel" }[] | null>(null);
+  const [telafiLoading, setTelafiLoading] = useState(false);
   const [completed, setCompleted] = useState(false);
   const questionStartRef = useRef<number>(Date.now());
   const [reportedIds, setReportedIds] = useState<Set<string>>(new Set());
+
+  const currentQuestion = questions[currentIndex] ?? null;
 
   /** "Soru eksik veya bozuk" bildirimi — öğretmen paneline düşer. */
   const reportQuestion = useCallback(
@@ -285,6 +296,45 @@ export default function CalisPage() {
       .catch(() => setLoading(false));
   }, [dayType]);
 
+  // Pazar telafi testi verilerini çek (dayType === "telafi")
+  useEffect(() => {
+    if (dayType !== "telafi") return;
+    setTelafiLoading(true);
+    Promise.all(
+      subjects.map((s) =>
+        fetch(`/api/study?subject=${s.slug}&limit=${(TELAFI_QUOTA as Record<string, number>)[s.slug]}&sort=unit_difficulty`)
+          .then((r) => r.json())
+          .then((d) => (d.items || []) as StudyQuestion[])
+      )
+    )
+      .then((batches) => {
+        const pool = batches.flat();
+        // Geçmiş haftalık test yanlışlarını al
+        const history = loadWeeklyTestHistory();
+        const latestWeekly = history[0];
+        const weeklyWrongIds = new Set<string>();
+        if (latestWeekly?.wrongQuestionIds) {
+          for (const id of latestWeekly.wrongQuestionIds) {
+            weeklyWrongIds.add(id);
+          }
+        }
+        // Son 7 gündeki günlük yanlışlar
+        const dailyRecords = loadAnswerRecords().filter((r) => {
+          const daysDiff = (Date.now() - new Date(r.createdAt).getTime()) / (24 * 60 * 60 * 1000);
+          return daysDiff <= 7 && !r.correct;
+        });
+        const composed = composeTelafiTest(
+          pool,
+          dailyRecords,
+          weeklyWrongIds,
+          new Date()
+        );
+        setTelafiItems(composed);
+        setTelafiLoading(false);
+      })
+      .catch(() => setTelafiLoading(false));
+  }, [dayType]);
+
   // Cumartesi: döngüdeki haftaya göre haftalık test veya aylık denemeye yönlendir
   useEffect(() => {
     if (!cycle) return;
@@ -294,8 +344,6 @@ export default function CalisPage() {
       window.location.href = "/aylik-denemeler";
     }
   }, [cycle]);
-
-  const currentQuestion = questions[currentIndex];
 
   // Soru değişince çözüm süresi sayacı sıfırlanır
   useEffect(() => {

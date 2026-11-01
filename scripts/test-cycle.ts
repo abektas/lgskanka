@@ -36,7 +36,7 @@ check("Cmt 31.10 döngü haftası", s.cycleWeek, 1);
 check("Cmt 31.10 hafta sonu mu", s.isWeekend, true);
 
 s = computeCycleState(d("2026-11-01T10:00:00"), enrollment);
-check("Paz 01.11 gün tipi (haftalık test sadece cumartesi)", s.dayType, "gunluk");
+check("Paz 01.11 gün tipi (haftalık test sadece cumartesi, pazar=telafi)", s.dayType, "telafi");
 check("Paz 01.11 döngü haftası (cumartesiyle aynı)", s.cycleWeek, 1);
 check("Paz 01.11 cumartesi değil", s.isSaturday, false);
 
@@ -45,7 +45,7 @@ s = computeCycleState(d("2026-11-07T10:00:00"), enrollment);
 check("Cmt 07.11 gün tipi", s.dayType, "haftalik");
 check("Cmt 07.11 döngü haftası", s.cycleWeek, 2);
 s = computeCycleState(d("2026-11-08T10:00:00"), enrollment);
-check("Paz 08.11 gün tipi (haftalık sadece cumartesi)", s.dayType, "gunluk");
+check("Paz 08.11 gün tipi (haftalık test sadece cumartesi, pazar=telafi)", s.dayType, "telafi");
 check("Paz 08.11 döngü haftası", s.cycleWeek, 2);
 
 console.log("\n--- Hafta 3: 9-15 Kas ---");

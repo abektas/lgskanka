@@ -34,6 +34,8 @@ export interface WeeklyTestRecord {
   }>;
   /** Testteki soruların ID'leri (tekrar sormamak için) */
   questionIds: string[];
+  /** Yanlış yapılan soru ID'leri (telafi testi için) */
+  wrongQuestionIds?: string[];
 }
 
 /** Geçmiş kayıtlarını okur (en yenisi sonda). */

@@ -243,6 +243,7 @@ export default function HaftalikTestPage() {
         byCategory: byCat,
         weakUnits,
         questionIds: items.map((it) => it.question.id),
+        wrongQuestionIds: results.filter((r) => !r.correct).map((r) => r.id),
       };
       const updatedHistory = saveWeeklyTestRecord(record);
       setSavedRecord(record);

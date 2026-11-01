@@ -9,7 +9,7 @@
  * - Anchor tarihi localStorage'da tutulur (`lgs_cycle_anchor`).
  */
 
-export type DayType = "gunluk" | "haftalik" | "aylik" | "dinlenme";
+export type DayType = "gunluk" | "haftalik" | "aylik" | "telafi" | "dinlenme";
 
 export const ENROLLMENT_STORAGE_KEY = "lgs_enrollment_date";
 export const CYCLE_ANCHOR_KEY = "lgs_cycle_anchor";
@@ -165,9 +165,16 @@ export function computeCycleState(now: Date = new Date(), enrollment?: Date): Cy
   let dayType: DayType;
   if (isSaturday) {
     dayType = weekendTest;
-  } else if (isSunday && weekendTest === "aylik") {
-    // Aylık deneme pazar günü de devam eder (90 soru için 2 gün)
-    dayType = "aylik";
+  } else if (isSunday) {
+    if (weekendTest === "aylik") {
+      // Aylık deneme pazar günü de devam eder (90 soru için 2 gün)
+      dayType = "aylik";
+    } else if (weekendTest === "haftalik") {
+      // 1-3. hafta pazarları: telafi günü
+      dayType = "telafi";
+    } else {
+      dayType = "gunluk";
+    }
   } else {
     dayType = "gunluk";
   }
@@ -208,6 +215,8 @@ export function dayTypeLabel(dayType: DayType): string {
       return "Haftalık test günü";
     case "aylik":
       return "Aylık deneme günü";
+    case "telafi":
+      return "Haftalık telafi günü";
     case "dinlenme":
       return "Dinlenme günü";
   }
@@ -220,6 +229,8 @@ export function dayTypeHref(dayType: DayType): string | null {
       return "/haftalik-test";
     case "aylik":
       return "/aylik-denemeler";
+    case "telafi":
+      return "/telafi";
     default:
       return null;
   }

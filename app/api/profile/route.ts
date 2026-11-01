@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabase } from "../../../lib/supabase";
+import { dbSelectOne, dbUpsert, dbDelete } from "../../../lib/db";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -9,20 +9,15 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "profileId required" }, { status: 400 });
   }
 
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", profileId)
-    .single();
-
-  if (error) {
-    if (error.code === "PGRST116") {
+  try {
+    const row = await dbSelectOne("profiles", `id=eq.${encodeURIComponent(profileId)}`);
+    if (!row) {
       return NextResponse.json({ error: "Profile not found" }, { status: 404 });
     }
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json(row);
+  } catch (err) {
+    return NextResponse.json({ error: (err as Error).message }, { status: 500 });
   }
-
-  return NextResponse.json(data);
 }
 
 export async function POST(request: NextRequest) {
@@ -43,20 +38,23 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "profileId required" }, { status: 400 });
   }
 
-  const { data, error } = await supabase.from("profiles").upsert({
-    id: profileId,
-    user_id: profileId, // For now, profileId = user_id (no auth yet)
-    name: profileData.name as string,
-    gender: profileData.gender as "boy" | "girl",
-    variant: (profileData.variant as number) ?? 0,
-    registered_at: profileData.registeredAt as string,
-  } as any);
-
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  try {
+    const rows = await dbUpsert(
+      "profiles",
+      {
+        id: profileId,
+        user_id: profileId, // For now, profileId = user_id (no auth yet)
+        name: profileData.name as string,
+        gender: profileData.gender as "boy" | "girl",
+        variant: (profileData.variant as number) ?? 0,
+        registered_at: profileData.registeredAt as string,
+      },
+      "id"
+    );
+    return NextResponse.json({ success: true, data: rows });
+  } catch (err) {
+    return NextResponse.json({ error: (err as Error).message }, { status: 500 });
   }
-
-  return NextResponse.json({ success: true, data });
 }
 
 export async function DELETE(request: NextRequest) {
@@ -67,11 +65,10 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json({ error: "profileId required" }, { status: 400 });
   }
 
-  const { error } = await supabase.from("profiles").delete().eq("id", profileId);
-
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  try {
+    await dbDelete("profiles", `id=eq.${encodeURIComponent(profileId)}`);
+    return NextResponse.json({ success: true });
+  } catch (err) {
+    return NextResponse.json({ error: (err as Error).message }, { status: 500 });
   }
-
-  return NextResponse.json({ success: true });
 }

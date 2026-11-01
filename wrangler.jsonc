@@ -1,11 +1,12 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "lgsanka",
+  "name": "lgskanka",
   "main": ".open-next/worker.js",
   "compatibility_date": "2025-10-14",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "vars": {
-    "SUPABASE_URL": "https://mtucfiaiomyowkyeevvo.supabase.co"
+    "SUPABASE_URL": "https://mtucfiaiomyowkyeevvo.supabase.co",
+    "NEXT_PUBLIC_SITE_URL": "https://lgskanka.alibey.workers.dev"
   },
   "assets": {
     "directory": ".open-next/assets",

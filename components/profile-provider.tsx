@@ -2,7 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import type { AvatarGender } from "./avatar";
-import { setEnrollmentDate, ENROLLMENT_CHANGED_EVENT } from "../lib/cycle";
+import { ENROLLMENT_CHANGED_EVENT } from "../lib/cycle";
 import {
   getAuthToken,
   setAuthToken,
@@ -179,13 +179,6 @@ async function migrateLegacyLocalData(): Promise<void> {
 export function ProfileProvider({ children }: { children: React.ReactNode }) {
   const [activeProfile, setActiveProfile] = useState<Profile | null>(null);
   const [ready, setReady] = useState(false);
-
-  // Kayıt tarihi → çalışma döngüsü
-  useEffect(() => {
-    if (activeProfile) {
-      setEnrollmentDate(new Date(activeProfile.registeredAt));
-    }
-  }, [activeProfile?.registeredAt]);
 
   useEffect(() => {
     const handleEnrollmentChange = () => {

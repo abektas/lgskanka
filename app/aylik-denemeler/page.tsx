@@ -7,7 +7,7 @@ import { Icon } from "../../components/icons";
 import { CycleBadge } from "../../components/cycle-badge";
 import { subjects } from "../../data/content";
 import { saveExamRecord, examDelta, type ExamRecord } from "../../lib/exam-history";
-import { getEnrollmentDate } from "../../lib/cycle";
+import { getCycleAnchor, isMonthUnlocked, setCycleAnchor } from "../../lib/cycle";
 import { syncReinforcementTasks } from "../../lib/reinforcement";
 import { pushExamSession, pullExamSession, apiFetch } from "../../lib/sync";
 
@@ -45,18 +45,6 @@ interface ExamResult {
     unit: number | null;
     difficultyScore: number;
   }>;
-}
-
-/**
- * Ay bazlı kilit mantığı: seviye tespit (0) hemen açık.
- * Diğer aylar kayıt tarihinden itibaren ay ay açılır (1. ay = 1 ay sonra, vb.).
- */
-function isMonthUnlocked(month: number): boolean {
-  if (month === 0) return true;
-  const enrolled = getEnrollmentDate();
-  const monthsSinceEnrollment =
-    (Date.now() - enrolled.getTime()) / (30 * 24 * 60 * 60 * 1000);
-  return month <= monthsSinceEnrollment;
 }
 
 interface MonthInfo {
@@ -278,6 +266,10 @@ export default function AylikDenemelerPage() {
           details: data.details,
         };
         saveExamRecord(record);
+        // Seviye tespiti (0. ay) bittiyse döngü anchor'ını ayarla
+        if (selectedMonth === 0) {
+          setCycleAnchor(new Date());
+        }
         // Pekiştirme görevlerini senkronize et (aylık deneme kaynaklı 3+ yanlış)
         syncReinforcementTasks();
       }

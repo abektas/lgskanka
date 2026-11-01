@@ -1,21 +1,20 @@
 /**
- * Çalışma döngüsü — kayıt tarihinden başlayan 4 haftalık ritim.
+ * Çalışma döngüsü — seviye tespit sınavının bittiği günden başlayan 4 haftalık ritim.
  *
  * Kural (kullanıcı tarafından belirlendi):
  * - Hafta içi (Pzt–Cum): Günlük Alıştırmalar
- * - Hafta sonu (Cmt–Paz): sınav günü — 1., 2. ve 3. hafta → Haftalık Test,
- *   4. hafta → Aylık Deneme
- * - Cumartesi ve pazar aynı teste girilebilir (esnek hafta sonu).
- *
- * Döngü öğrencinin sisteme kaydolduğu günden başlar. Kayıt tarihi
- * localStorage'da tutulur (`lgs_enrollment_date`).
+ * - Hafta sonu (Cmt): Haftalık Test (1., 2., 3. hafta) / Pazar: Telafi
+ * - 4. hafta sonu (Cmt+Paz): Aylık Deneme
+ * - Döngü seviye tespit sınavının bittiği günden başlar.
+ * - Anchor tarihi localStorage'da tutulur (`lgs_cycle_anchor`).
  */
 
 export type DayType = "gunluk" | "haftalik" | "aylik" | "dinlenme";
 
 export const ENROLLMENT_STORAGE_KEY = "lgs_enrollment_date";
+export const CYCLE_ANCHOR_KEY = "lgs_cycle_anchor";
 
-/** Kayıt tarihi değiştiğinde yayınlanan olay (UI'lar yeniden hesaplasın). */
+/** Döngü anchor tarihi değiştiğinde yayınlanan olay (UI'lar yeniden hesaplasın). */
 export const ENROLLMENT_CHANGED_EVENT = "lgs:enrollment-changed";
 
 import { loadExamHistory } from "./exam-history";
@@ -77,6 +76,46 @@ export function setEnrollmentDate(date: Date): void {
   }
   // Açık UI'ların yeniden hesaplaması için bildir
   window.dispatchEvent(new CustomEvent(ENROLLMENT_CHANGED_EVENT));
+}
+
+/** Döngü anchor tarihini okur; seviye tespiti bitiş tarihi (lgs_cycle_anchor). */
+export function getCycleAnchor(): Date | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem(CYCLE_ANCHOR_KEY);
+    if (raw) {
+      const parsed = new Date(raw);
+      if (!Number.isNaN(parsed.getTime())) return parsed;
+    }
+  } catch {
+    /* depolama kapalıysa null */
+  }
+  return null;
+}
+
+/** Döngü anchor tarihini ayarlar (seviye tespiti bitiş anı). */
+export function setCycleAnchor(date: Date): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(CYCLE_ANCHOR_KEY, date.toISOString());
+  } catch {
+    /* depolama kapalıysa yoksay */
+  }
+  window.dispatchEvent(new CustomEvent(ENROLLMENT_CHANGED_EVENT));
+}
+
+/** Seviye tespiti bitmiş mi? */
+export function isLevelTestDone(): boolean {
+  return getCycleAnchor() !== null;
+}
+
+/** Ay açılış kuralı: anchor tarihinden itibaren ay ay açılır (0 = hemen). */
+export function isMonthUnlocked(month: number, anchor?: Date): boolean {
+  if (month === 0) return true;
+  const base = anchor ?? getCycleAnchor() ?? getEnrollmentDate();
+  if (!base) return false;
+  const monthsDiff = (new Date().getFullYear() - base.getFullYear()) * 12 + (new Date().getMonth() - base.getMonth());
+  return monthsDiff >= month;
 }
 
 /** Verilen tarihin içinde bulunduğu haftanın pazartesisi (00:00). */

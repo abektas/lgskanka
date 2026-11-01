@@ -101,8 +101,8 @@ export default function HaftalikTestPage() {
 
   // Havuzu çek, kural tabanlı 45 soruluk testi kur (hafta içi yapamadıklarından)
   useEffect(() => {
-    // Kapalıysa veri çekmeyi atla
-    if (gateOpen !== null && !gateOpen.open) return;
+    // Kapalıysa veya henüz karar yoksa veri çekmeyi atla
+    if (!gateOpen || !gateOpen.open) return;
 
     let cancelled = false;
     Promise.all(
@@ -134,7 +134,7 @@ export default function HaftalikTestPage() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [gateOpen]);
 
   // Soru değişince süre sayacı sıfırlanır
   useEffect(() => {

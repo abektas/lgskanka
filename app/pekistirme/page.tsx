@@ -16,6 +16,13 @@ import {
   getCompletedTaskCount,
   getPendingTaskCount,
 } from "../../lib/reinforcement";
+import {
+  computeCycleState,
+  type CycleState,
+} from "../../lib/cycle";
+import { loadAnswerRecords } from "../../lib/error-reason";
+import { loadWeeklyTestHistory } from "../../lib/weekly-test-history";
+import { composeTelafiTest, TELAFI_QUOTA, type TestQuestion } from "../../lib/weekly-test";
 
 const SOURCE_LABELS: Record<string, string> = {
   gunluk: "Günlük Çalışma",
@@ -82,6 +89,53 @@ export default function PekistirmePage() {
   const [tasks, setTasks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeSubject, setActiveSubject] = useState<string | null>(null);
+
+  // Telafi (pazar) testi
+  const [telafiItems, setTelafiItems] = useState<{ question: TestQuestion; category: "telafi" | "genel" }[] | null>(null);
+  const [telafiLoading, setTelafiLoading] = useState(false);
+  const [cycle, setCycle] = useState<CycleState | null>(null);
+
+  // Pazar telafi testi verilerini çek
+  useEffect(() => {
+    const c = computeCycleState();
+    setCycle(c);
+  }, []);
+
+  useEffect(() => {
+    if (!cycle || cycle.dayType !== "telafi") return;
+    setTelafiLoading(true);
+    Promise.all(
+      subjects.map((s) =>
+        fetch(`/api/study?subject=${s.slug}&limit=${(TELAFI_QUOTA as Record<string, number>)[s.slug]}&sort=unit_difficulty`)
+          .then((r) => r.json())
+          .then((d) => (d.items || []) as TestQuestion[])
+      )
+    )
+      .then((batches) => {
+        const pool = batches.flat();
+        const history = loadWeeklyTestHistory();
+        const latestWeekly = history[0];
+        const weeklyWrongIds = new Set<string>();
+        if (latestWeekly?.wrongQuestionIds) {
+          for (const id of latestWeekly.wrongQuestionIds) {
+            weeklyWrongIds.add(id);
+          }
+        }
+        const dailyRecords = loadAnswerRecords().filter((r) => {
+          const daysDiff = ((Date.now() - new Date(r.createdAt).getTime()) / (24 * 60 * 60 * 1000));
+          return daysDiff <= 7 && !r.correct;
+        });
+        const composed = composeTelafiTest(
+          pool,
+          dailyRecords,
+          weeklyWrongIds,
+          new Date()
+        );
+        setTelafiItems(composed);
+        setTelafiLoading(false);
+      })
+      .catch(() => setTelafiLoading(false));
+  }, []);
 
   useEffect(() => {
     // Load existing tasks first (persisted), then sync for new weak units
@@ -172,6 +226,9 @@ export default function PekistirmePage() {
   const allTasks = getAllTasks();
   const activeSubjectInfo = subjects.find((s) => s.slug === activeSubject);
 
+  // Telafi day → show only telafi test within the page layout
+  const isTelafiDay = cycle?.dayType === "telafi";
+
   return (
     <div className="page">
       <header className="page-head">
@@ -189,6 +246,51 @@ export default function PekistirmePage() {
           Günlük Alıştırmaya Dön <Icon name="arrow" size={18} />
         </Link>
       </header>
+
+      {/* Pazar Telafi Testi */}
+      {cycle?.dayType === "telafi" && (
+        <section className="telafi-section" aria-labelledby="telafi-heading">
+          <header className="telafi-header">
+            <h2 id="telafi-heading">📅 Pazar Telafi Testi</h2>
+            <p className="muted-text">
+              Bu hafta günlük çalışmalardaki ve haftalık testteki yanlışlarını kapatmak için
+              24 soruluk telafi testi. Her ders: Türkçe 5, Matematik 5, Fen 5, İnkılap 3, Din 3, İngilizce 3.
+            </p>
+            {telafiLoading && <span className="telafi-loading">Sorular hazırlanıyor...</span>}
+          </header>
+
+          {telafiItems && telafiItems.length > 0 && (
+            <div className="telafi-grid">
+              {telafiItems.map((item, idx) => (
+                <article key={item.question.id} className="telafi-card">
+                  <div className="telafi-card-header">
+                    <span className="telafi-index">Soru {idx + 1}</span>
+                    <span className={`telafi-category ${item.category}`}>
+                      {item.category === "telafi" ? "↩️ Bu hafta yanlış yaptığın" : "🔁 Genel tekrar"}
+                    </span>
+                  </div>
+                  <div className="telafi-question">
+                    <img
+                      src={item.question.imagePath}
+                      alt={`Telafi soru ${idx + 1}`}
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="telafi-meta">
+                    <span>{item.question.subject}</span>
+                    {item.question.unitName && <span>· Ünite {item.question.unitName}</span>}
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+          {!telafiLoading && !telafiItems && (
+            <p className="muted-text" style={{ textAlign: "center", padding: 24 }}>
+              Bu hafta telafi edilecek yanlış yok — harika!
+            </p>
+          )}
+        </section>
+      )}
 
       <section className="pekiştirme-summary">
         <div className="summary-stats">
@@ -260,7 +362,7 @@ export default function PekistirmePage() {
             <div className="empty-panel">
               <p className="muted-text">Bu derste henüz pekiştirme görevi yok.</p>
               <p className="muted-text" style={{ marginTop: 4 }}>
-                Günlük/haftalık/aylık değerlendirmelerde 3+ yanlış yapıldığında görevler burada oluşur.
+                Günlük · haftalık · aylık değerlendirmelerde 3+ yanlış yapıldığında görevler burada oluşur.
               </p>
             </div>
           ) : (

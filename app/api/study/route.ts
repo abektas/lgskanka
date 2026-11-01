@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createHash, timingSafeEqual } from "node:crypto";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 
-const R2_PUBLIC_URL = "https://pub-ddee1949bfea484b8ea4ec1574e492c6.r2.dev";
+// Görseller /r2 proxy rotasından sunulur (yalnızca .webp).
+const R2_PUBLIC_URL = "https://lgskanka.alibey.workers.dev/r2";
 
 interface StudyQuestion {
   id: string;
@@ -25,14 +27,22 @@ interface StudyQuestion {
   analysisStatus: string | null;
 }
 
-async function fetchJson(url: string): Promise<any> {
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status}`);
-  return res.json();
+// Manifestolar sunucu tarafında R2 binding'den okunur; cevap anahtarı
+// içerdiğinden herkese açık URL'den asla çekilmez.
+async function fetchJson(key: string): Promise<any> {
+  const { env } = await getCloudflareContext();
+  const bucket = (
+    env as unknown as {
+      R2: { get(key: string): Promise<{ json(): Promise<unknown> } | null> };
+    }
+  ).R2;
+  const object = await bucket.get(key);
+  if (!object) throw new Error(`R2 object missing: ${key}`);
+  return object.json();
 }
 
 async function loadImageMap(): Promise<Map<string, string>> {
-  const raw = await fetchJson(`${R2_PUBLIC_URL}/study_manifests/image_map.json`);
+  const raw = await fetchJson("study_manifests/image_map.json");
   const result = new Map<string, string>();
   for (const [localPath, info] of Object.entries(raw as Record<string, any>)) {
     const name = localPath.split("/").pop();
@@ -47,7 +57,7 @@ async function loadImageMap(): Promise<Map<string, string>> {
 
 async function loadAllQuestions(): Promise<StudyQuestion[]> {
   const imageMap = await loadImageMap();
-  const data = await fetchJson(`${R2_PUBLIC_URL}/study_manifests/all_questions.json`);
+  const data = await fetchJson("study_manifests/all_questions.json");
   const questions: StudyQuestion[] = [];
 
   for (const q of data.questions || []) {

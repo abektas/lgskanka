@@ -18,6 +18,8 @@ export const ENROLLMENT_STORAGE_KEY = "lgs_enrollment_date";
 /** Kayıt tarihi değiştiğinde yayınlanan olay (UI'lar yeniden hesaplasın). */
 export const ENROLLMENT_CHANGED_EVENT = "lgs:enrollment-changed";
 
+import { loadExamHistory } from "./exam-history";
+
 /** Döngüde haftalık test olan haftalar (1-3), 4. hafta aylık deneme. */
 export const WEEKLY_TEST_WEEKS = [1, 2, 3] as const;
 export const MONTHLY_EXAM_WEEK = 4;
@@ -200,7 +202,55 @@ export function cycleSummary(state: CycleState, pageVariant?: "haftalik" | "ayli
     return `${weekText} (${cycleNumber}. döngü) · Hafta içi günlük çalışma. Hafta sonu haftalık test, sonraki hafta sonu aylık deneme var.`;
   }
   if (cycleWeek === MONTHLY_EXAM_WEEK) {
-    return `${weekText} (${cycleNumber}. döngü) · Hafta içi günlük çalışma. Hafta sonu aylık deneme var — önceki 3 haftalık testlerde tespit edilen eksikler buraya aktarıldı.`;
+      return `${weekText} (${cycleNumber}. döngü) · Hafta içi günlük çalışma. Hafta sonu aylık deneme var — önceki 3 haftalık testlerde tespit edilen eksikler buraya aktarıldı.`
+    }
+    return `${weekText} (${cycleNumber}. döngü) · Hafta içi günlük çalışma. Hafta sonu ${testName} var.`
   }
-  return `${weekText} (${cycleNumber}. döngü) · Hafta içi günlük çalışma. Hafta sonu ${testName} var.`;
-}
+
+  /**
+   * Seviye tespit (0. ay) sınavının bittiği an; yapılmadıysa null.
+   * Yerel sınav geçmişinden (lgs_exam_history) okur.
+   */
+  export function levelTestCompletedAt(): Date | null {
+    if (typeof window === "undefined") return null;
+    try {
+      const recs = loadExamHistory().filter((r) => r.month === 0);
+      if (recs.length === 0) return null;
+      const d = new Date(recs[recs.length - 1].date);
+      return Number.isNaN(d.getTime()) ? null : d;
+    } catch {
+      return null;
+    }
+  }
+
+  /**
+   * Haftalık test açılış kuralı (kullanıcı kuralı):
+   * Seviye tespit sınavının bittiği günden SONRAKİ ilk cumartesi açılır,
+   * öncesinde kapalıdır. 4. hafta sonları aylık denemedir, haftalık test verilmez.
+   */
+  export function isWeeklyTestOpen(now: Date = new Date()): boolean {
+    const doneAt = levelTestCompletedAt();
+    if (!doneAt) return false;
+    if (now.getDay() !== 6) return false;
+    const enrolled = getEnrollmentDate(now);
+    if (computeCycleState(now, enrolled).weekendTest !== "haftalik") return false;
+    const today = new Date(now); today.setHours(0, 0, 0, 0);
+    const doneDay = new Date(doneAt); doneDay.setHours(0, 0, 0, 0);
+    return today.getTime() > doneDay.getTime();
+  }
+
+  /** Haftalık testin açılacağı en yakın cumartesi (kilitli ekran için). */
+  export function upcomingWeeklyTestSaturday(now: Date = new Date()): Date | null {
+    const doneAt = levelTestCompletedAt();
+    if (!doneAt) return null;
+    const doneDay = new Date(doneAt); doneDay.setHours(0, 0, 0, 0);
+    const d = new Date(now); d.setHours(0, 0, 0, 0);
+    for (let i = 0; i < 60; i++) {
+      if (d.getDay() === 6 && d.getTime() > doneDay.getTime()) {
+        const enrolled = getEnrollmentDate(now);
+        if (computeCycleState(d, enrolled).weekendTest === "haftalik") return d;
+      }
+      d.setDate(d.getDate() + 1);
+    }
+    return null;
+  }

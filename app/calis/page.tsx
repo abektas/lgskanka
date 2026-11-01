@@ -11,6 +11,7 @@ import {
   computeCycleState,
   cycleSummary,
   ENROLLMENT_CHANGED_EVENT,
+  isWeeklyTestOpen,
   type CycleState,
 } from "../../lib/cycle";
 
@@ -73,6 +74,8 @@ function DailySummary({ questions, cycle }: DailySummaryProps) {
   const weakSubjects = Object.entries(bySubject)
     .filter(([, v]) => v.total > 0 && v.correct / v.total < 0.6)
     .map(([k]) => k);
+
+  const weeklyOpen = isWeeklyTestOpen();
 
   return (
     <div className="summary">
@@ -139,7 +142,10 @@ function DailySummary({ questions, cycle }: DailySummaryProps) {
             <a href={cycle?.weekendTest === "aylik" ? "/aylik-denemeler" : "/haftalik-test"}>
               {cycle?.weekendTest === "aylik" ? "aylık deneme" : "haftalık test"}
             </a>{" "}
-            ile ilerlemeni ölç (cumartesi veya pazar).
+            ile ilerlemeni ölç
+            {cycle?.weekendTest === "aylik"
+              ? " (cumartesi ve pazar)"
+              : " (cumartesi)"}.
           </li>
           <li><a href="/sonuclar">Sonuçlar ve İlerleme</a> sayfasından ünite ustalığını takip et.</li>
         </ol>
@@ -148,9 +154,10 @@ function DailySummary({ questions, cycle }: DailySummaryProps) {
       <div className="summary-actions">
         <a className="btn btn-primary" href="/calis">Yeni Günlük Çalışma Başlat</a>
         <a
-          className={"btn btn-soft " + (learner.streakDays >= 5 ? "" : "disabled")}
+          className={"btn btn-soft " + (weeklyOpen || cycle?.weekendTest === "aylik" ? "" : "disabled")}
           href={cycle?.weekendTest === "aylik" ? "/aylik-denemeler" : "/haftalik-test"}
-          style={learner.streakDays < 5 ? { pointerEvents: "none", opacity: 0.5 } : {}}
+          style={weeklyOpen || cycle?.weekendTest === "aylik" ? {} : { pointerEvents: "none", opacity: 0.5 }}
+          title={weeklyOpen || cycle?.weekendTest === "aylik" ? undefined : "Haftalık test cumartesi günleri açılır"}
         >
           {cycle?.weekendTest === "aylik" ? "Aylık Denemeye Geç" : "Haftalık Teste Geç"}
         </a>
@@ -193,6 +200,7 @@ export default function CalisPage() {
   const [errorReason, setErrorReason] = useState<string | null>(null);
   const [unitMastery, setUnitMastery] = useState<UnitMastery | null>(null);
   const [cycle, setCycle] = useState<CycleState | null>(null);
+  const weeklyOpen = isWeeklyTestOpen();
   const [completed, setCompleted] = useState(false);
   const questionStartRef = useRef<number>(Date.now());
   const [reportedIds, setReportedIds] = useState<Set<string>>(new Set());
@@ -281,7 +289,7 @@ export default function CalisPage() {
   useEffect(() => {
     if (!cycle) return;
     if (cycle.dayType === "haftalik") {
-      window.location.href = "/haftalik-test";
+      if (isWeeklyTestOpen()) window.location.href = "/haftalik-test";
     } else if (cycle.dayType === "aylik") {
       window.location.href = "/aylik-denemeler";
     }
@@ -429,7 +437,7 @@ export default function CalisPage() {
             </p>
           )}
         </div>
-        {dayType === "haftalik" && (
+        {dayType === "haftalik" && weeklyOpen && (
           <Link className="btn btn-primary" href="/haftalik-test">
             Haftalık teste git <Icon name="arrow" size={18} />
           </Link>

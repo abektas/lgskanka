@@ -24,6 +24,12 @@ import {
   type WeeklyTestRecord,
 } from "../../lib/weekly-test-history";
 import { syncReinforcementTasks } from "../../lib/reinforcement";
+import {
+  isWeeklyTestOpen,
+  levelTestCompletedAt,
+  upcomingWeeklyTestSaturday,
+  computeCycleState,
+} from "../../lib/cycle";
 
 const SUBJECT_SLUGS = Object.keys(SUBJECT_QUOTA);
 
@@ -43,6 +49,26 @@ export default function HaftalikTestPage() {
   const [pastRecords, setPastRecords] = useState<WeeklyTestRecord[]>([]);
   const questionStartRef = useRef<number>(Date.now());
   const [reportedIds, setReportedIds] = useState<Set<string>>(new Set());
+
+  // Haftalık test açılış kapısı — seviye tespit + cumartesi kontrolü
+  const [gateOpen, setGateOpen] = useState<{
+    open: boolean;
+    reason: "level" | "date" | "week4" | null;
+    nextSaturday: Date | null;
+  } | null>(null);
+
+  useEffect(() => {
+    const doneAt = levelTestCompletedAt();
+    const nextSat = upcomingWeeklyTestSaturday();
+    const open = isWeeklyTestOpen();
+    let reason: "level" | "date" | "week4" | null = null;
+    if (!open) {
+      if (!levelTestCompletedAt()) reason = "level";
+      else if (new Date().getDay() !== 6) reason = "date";
+      else if (computeCycleState(new Date()).weekendTest !== "haftalik") reason = "week4";
+    }
+    setGateOpen({ open, reason, nextSaturday: nextSat });
+  }, []);
 
   /** "Soru eksik veya bozuk" bildirimi — öğretmen paneline düşer. */
   const reportQuestion = useCallback(
@@ -75,6 +101,9 @@ export default function HaftalikTestPage() {
 
   // Havuzu çek, kural tabanlı 45 soruluk testi kur (hafta içi yapamadıklarından)
   useEffect(() => {
+    // Kapalıysa veri çekmeyi atla
+    if (gateOpen !== null && !gateOpen.open) return;
+
     let cancelled = false;
     Promise.all(
       SUBJECT_SLUGS.map((s) =>
@@ -223,6 +252,46 @@ export default function HaftalikTestPage() {
       setFinished(true);
     }
   };
+
+  if (gateOpen === null) {
+    return <div className="page"><div className="exam-loading">Hazırlanıyor...</div></div>;
+  }
+  if (!gateOpen.open) {
+    const nextSat = gateOpen.nextSaturday;
+    const nextStr = nextSat ? nextSat.toLocaleDateString("tr-TR", { weekday: "long", day: "numeric", month: "long" }) : "belirlenemedi";
+    return (
+      <div className="page">
+        <div className="exam-empty" style={{ textAlign: "center", padding: 40 }}>
+          {gateOpen.reason === "level" ? (
+            <>
+              <h2>Önce Seviye Tespit Sınavı'nı Tamamla</h2>
+              <p className="muted-text" style={{ margin: "12px 0 24px" }}>
+                Sonuçlar çalışma planını ve haftalık testleri şekillendirecek.
+              </p>
+              <Link className="btn btn-primary" href="/aylik-denemeler?month=0">
+                Seviye Tespit Sınavına Başla <Icon name="arrow" size={18} />
+              </Link>
+            </>
+          ) : gateOpen.reason === "week4" ? (
+            <>
+              <h2>Bu Hafta Aylık Deneme Haftası</h2>
+              <p className="muted-text" style={{ margin: "12px 0 24px" }}>
+                4. hafta aylık deneme haftasıdır. Haftalık test bir sonraki haftaya bırakılır.
+              </p>
+            </>
+          ) : (
+            <>
+              <h2>Haftalık Test {nextStr} Açılır</h2>
+              <p className="muted-text" style={{ margin: "12px 0 24px" }}>
+                Bugün günlük çalışmana devam edebilirsin.
+              </p>
+              <Link className="btn btn-soft" href="/calis">Günlük Çalışmaya Git</Link>
+            </>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   if (loadError) {
     return (

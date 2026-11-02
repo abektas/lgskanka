@@ -243,7 +243,22 @@ export default function CalisPage() {
   // 4. hafta aylık deneme.
   useEffect(() => {
     setCycle(computeCycleState());
-    setLevelTestDone(!!levelTestCompletedAt());
+    // Yerel kayıt varsa hemen kullan
+    const localDone = !!levelTestCompletedAt();
+    setLevelTestDone(localDone);
+
+    // Yerel kayıt yoksa sunucudan kontrol et (localStorage kaybı durumunda)
+    if (!localDone) {
+      apiFetch("/api/level-test-status")
+        .then((r) => r.json())
+        .then((d) => {
+          if (d.completed) {
+            setLevelTestDone(true);
+          }
+        })
+        .catch(() => {});
+    }
+
     const onChange = () => {
       setCycle(computeCycleState());
       setLevelTestDone(!!levelTestCompletedAt());

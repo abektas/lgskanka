@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { dbSelectOne, dbInsert } from "../../../../lib/db";
+import { dbSelectOne, dbInsert, getStudentCount } from "../../../../lib/db";
 import { hashPassword, signToken } from "../../../../lib/auth";
+import { rateLimit, getClientIp } from "../../../../lib/rate-limit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+
+// Ücretsiz katman koruması: en fazla 500 öğrenci kaydı
+const MAX_STUDENTS = 500;
 
 interface StudentRow {
   id: string;
@@ -24,6 +28,16 @@ function normalizeUsername(raw: string): string {
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limit: IP başına dakikada 5 kayıt denemesi
+    const ip = getClientIp(request);
+    const rl = rateLimit(`register:${ip}`, 5, 60_000);
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { error: "Çok fazla deneme yaptın. Bir dakika sonra tekrar dene." },
+        { status: 429 }
+      );
+    }
+
     const body = await request.json();
     const username = normalizeUsername(String(body.username ?? ""));
     const password = String(body.password ?? "");
@@ -45,6 +59,15 @@ export async function POST(request: NextRequest) {
     }
     if (!name) {
       return NextResponse.json({ error: "İsim gerekli." }, { status: 400 });
+    }
+
+    // Ücretsiz katman koruması — öğrenci sayısı sınırı
+    const studentCount = await getStudentCount();
+    if (studentCount >= MAX_STUDENTS) {
+      return NextResponse.json(
+        { error: `Kayıt kapasitesi dolu (${MAX_STUDENTS} öğrenci). Lütfen öğretmeninle iletişime geç.` },
+        { status: 403 }
+      );
     }
 
     // Kullanıcı adı benzersiz mi?

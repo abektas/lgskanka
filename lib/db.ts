@@ -109,3 +109,21 @@ export async function getStudentIdByUsername(username: string): Promise<string |
   const row = await dbSelectOne<{ id: string }>("students", `username=eq.${username}`, "id");
   return row?.id ?? null;
 }
+
+/** Tablodaki satır sayısını getirir (HEAD + Content-Range). */
+export async function dbCount(table: string, query = ""): Promise<number> {
+  const url = `${SUPABASE_URL}/rest/v1/${table}?select=id${query ? "&" + query : ""}`;
+  const res = await fetch(url, {
+    method: "HEAD",
+    headers: { ...headers(), Prefer: "count=exact" },
+    cache: "no-store",
+  });
+  const contentRange = res.headers.get("content-range") || "";
+  const match = contentRange.match(/\/(\d+)$/);
+  return match ? parseInt(match[1], 10) : 0;
+}
+
+/** Toplam öğrenci sayısını getirir. */
+export async function getStudentCount(): Promise<number> {
+  return dbCount("students");
+}

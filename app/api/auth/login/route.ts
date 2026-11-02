@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { dbSelectOne } from "../../../../lib/db";
 import { verifyPassword, signToken } from "../../../../lib/auth";
+import { rateLimit, getClientIp } from "../../../../lib/rate-limit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -17,6 +18,16 @@ interface StudentRow {
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limit: IP başına dakikada 10 giriş denemesi
+    const ip = getClientIp(request);
+    const rl = rateLimit(`login:${ip}`, 10, 60_000);
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { error: "Çok fazla deneme yaptın. Bir dakika sonra tekrar dene." },
+        { status: 429 }
+      );
+    }
+
     const body = await request.json();
     const username = String(body.username ?? "")
       .toLocaleLowerCase("tr-TR")

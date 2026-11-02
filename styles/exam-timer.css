@@ -88,3 +88,21 @@
     width: 100%;
   }
 }
+/* Mobil & tablet */
+@media (max-width: 620px) {
+  .exam-timer {
+    padding: 12px;
+  }
+  .timer-display {
+    font-size: 1.5rem;
+  }
+  .timer-controls {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .timer-controls .btn {
+    flex: 1;
+    min-width: 80px;
+    min-height: 44px;
+  }
+}

@@ -70,6 +70,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   colorScheme: "light",
+  viewportFit: "cover",
 };
 
 const structuredData = {

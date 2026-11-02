@@ -12,6 +12,7 @@ import {
   cycleSummary,
   ENROLLMENT_CHANGED_EVENT,
   isWeeklyTestOpen,
+  levelTestCompletedAt,
   type CycleState,
 } from "../../lib/cycle";
 
@@ -201,6 +202,7 @@ export default function CalisPage() {
   const [unitMastery, setUnitMastery] = useState<UnitMastery | null>(null);
   const [cycle, setCycle] = useState<CycleState | null>(null);
   const weeklyOpen = isWeeklyTestOpen();
+  const [levelTestDone, setLevelTestDone] = useState<boolean | null>(null);
   const [completed, setCompleted] = useState(false);
   const questionStartRef = useRef<number>(Date.now());
   const [reportedIds, setReportedIds] = useState<Set<string>>(new Set());
@@ -241,7 +243,11 @@ export default function CalisPage() {
   // 4. hafta aylık deneme.
   useEffect(() => {
     setCycle(computeCycleState());
-    const onChange = () => setCycle(computeCycleState());
+    setLevelTestDone(!!levelTestCompletedAt());
+    const onChange = () => {
+      setCycle(computeCycleState());
+      setLevelTestDone(!!levelTestCompletedAt());
+    };
     window.addEventListener(ENROLLMENT_CHANGED_EVENT, onChange);
     return () => window.removeEventListener(ENROLLMENT_CHANGED_EVENT, onChange);
   }, []);
@@ -252,6 +258,7 @@ export default function CalisPage() {
   // Sıralama: ünite artan, zorluk artan (kolaydan zora, 1. üniteden başlayarak)
   useEffect(() => {
     if (dayType !== "gunluk") return;
+    if (!levelTestDone) return;
     setLoading(true);
     const subjectLimits: Record<string, number> = {
       turkce: 5,
@@ -285,7 +292,7 @@ export default function CalisPage() {
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  }, [dayType]);
+  }, [dayType, levelTestDone]);
 
   // Pazar telafi günü → /pekistirme'ye yönlendir
   useEffect(() => {
@@ -457,7 +464,22 @@ export default function CalisPage() {
         )}
       </header>
 
-      {dayType === "dinlenme" && (
+      {/* Seviye tespit kapısı — sınav bitmeden günlük sorular açılmaz */}
+      {levelTestDone === false && (
+        <section className="card" style={{ textAlign: "center", padding: 48 }}>
+          <p style={{ fontSize: 42, margin: "0 0 12px" }} aria-hidden="true">🔒</p>
+          <h2>Önce Seviye Tespit Sınavı'nı Tamamla</h2>
+          <p className="muted-text" style={{ margin: "12px auto 24px", maxWidth: 480 }}>
+            Günlük çalışma planını hazırlayabilmemiz için 90 soruluk Seviye Tespit Sınavı'nı
+            bitirmen gerekiyor. Sınav sonucun, hangi konulardan başlayacağını belirleyecek.
+          </p>
+          <Link className="btn btn-primary" href="/aylik-denemeler?month=0">
+            Seviye Tespit Sınavına Başla <Icon name="arrow" size={18} />
+          </Link>
+        </section>
+      )}
+
+      {dayType === "dinlenme" && levelTestDone !== false && (
         <section className="card" style={{ textAlign: "center", padding: 40 }}>
           <h2>🎉 Bugün Dinlenme Günü</h2>
           <p style={{ marginTop: 12, color: "var(--metin-soluk)" }}>
@@ -466,13 +488,13 @@ export default function CalisPage() {
         </section>
       )}
 
-      {dayType === "gunluk" && loading && <div className="exam-loading">Günlük sorular yükleniyor...</div>}
+      {dayType === "gunluk" && levelTestDone !== false && loading && <div className="exam-loading">Günlük sorular yükleniyor...</div>}
 
-      {dayType === "gunluk" && !loading && !currentQuestion && (
+      {dayType === "gunluk" && levelTestDone !== false && !loading && !currentQuestion && (
         <div className="exam-empty">Bugün için soru bulunamadı.</div>
       )}
 
-      {dayType === "gunluk" && currentQuestion && (
+      {dayType === "gunluk" && levelTestDone !== false && currentQuestion && (
         <section className="exam-question" id="sorular">
           <div className="exam-question-header">
             <span className="pill is-gok">

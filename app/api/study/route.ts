@@ -42,82 +42,79 @@ async function fetchJson(key: string): Promise<any> {
   return object.json();
 }
 
-async function loadImageMap(): Promise<Map<string, string>> {
-  const raw = await fetchJson("study_manifests/image_map.json");
-  const result = new Map<string, string>();
-  for (const [localPath, info] of Object.entries(raw as Record<string, any>)) {
-    const name = localPath.split("/").pop();
-    const webpPath = info?.webp_path;
-    if (name && webpPath) {
-      const r2Key = webpPath.split("/webp/")[1] || "";
-      result.set(name, r2Key);
+// Per-subject önceden işlenmiş manifestolar — CPU limitini aşmamak için
+// her istekte tüm sorular yerine yalnızca ilgili ders dosyası yüklenir.
+const SUBJECT_FILES: Record<string, string> = {
+  turkce: "study_manifests/questions_turkce.json",
+  matematik: "study_manifests/questions_matematik.json",
+  fen: "study_manifests/questions_fen.json",
+  "inkilap-tarihi": "study_manifests/questions_inkilap-tarihi.json",
+  "din-kulturu": "study_manifests/questions_din-kulturu.json",
+  ingilizce: "study_manifests/questions_ingilizce.json",
+};
+
+// Promise tabanlı önbellek — eşzamanlı isteklerde tekrar yüklemeyi önler
+const subjectCache = new Map<string, Promise<StudyQuestion[]>>();
+
+async function loadSubjectQuestions(subject: string): Promise<StudyQuestion[]> {
+  const cached = subjectCache.get(subject);
+  if (cached) return cached;
+
+  const promise = (async () => {
+    const file = SUBJECT_FILES[subject];
+    if (!file) return [];
+
+    const data = await fetchJson(file);
+    const questions: StudyQuestion[] = [];
+
+    for (const q of data.questions || []) {
+      questions.push({
+        id: q.id || `STUDY-${subject.toUpperCase()}-${String(q.questionNumber || 0)}`,
+        subject: q.subject || subject,
+        sourceBook: q.sourceBook || "UNKNOWN",
+        questionNumber: q.questionNumber || 0,
+        page: q.page || 0,
+        imagePath: q.imagePath || null,
+        answer: q.answer || null,
+        unit: q.unit ?? null,
+        unitName: q.unitName ?? null,
+        section: q.section ?? null,
+        questionText: q.questionText ?? null,
+        topic: q.topic ?? null,
+        learningOutcomeCode: q.learningOutcomeCode ?? null,
+        learningOutcomeText: q.learningOutcomeText ?? null,
+        pedagogicalDifficulty: q.pedagogicalDifficulty ?? null,
+        difficultyConfidence: q.difficultyConfidence ?? null,
+        skill: q.skill ?? null,
+        questionType: q.questionType ?? null,
+        analysisStatus: q.analysisStatus ?? null,
+      });
     }
-  }
-  return result;
+    return questions;
+  })();
+
+  subjectCache.set(subject, promise);
+  return promise;
 }
 
 async function loadAllQuestions(): Promise<StudyQuestion[]> {
-  const imageMap = await loadImageMap();
-  const data = await fetchJson("study_manifests/all_questions.json");
-  const questions: StudyQuestion[] = [];
-
-  for (const q of data.questions || []) {
-    if (q.published === false) continue;
-    if (q.cancelledInSource) continue;
-
-    const originalFile = q.file || `q-${q.q || 0}.png`;
-    let qnum = q.q || q.questionNumber;
-    if (!qnum) {
-      const numMatch = originalFile.match(/(\d+)\.png$/i);
-      qnum = numMatch ? parseInt(numMatch[1], 10) : 1;
-    }
-    // Try exact match first, then basename match
-    let webpPath = imageMap.get(originalFile);
-    if (!webpPath) {
-      const basename = originalFile.split("/").pop();
-      webpPath = imageMap.get(basename);
-    }
-    const imagePath = webpPath ? `${R2_PUBLIC_URL}/${webpPath}` : null;
-
-    const mebiMatch = originalFile.match(/^mebi/i);
-    const bookMatch = originalFile.match(/^((?:cal|nuli|mu|tu)\d+)/i);
-    const sourceBook = mebiMatch ? "MEBI" : bookMatch ? bookMatch[1].toUpperCase() : "UNKNOWN";
-
-    questions.push({
-      id:
-        q.id ||
-        `STUDY-${(q._subject || "UNKNOWN").toUpperCase()}-${originalFile
-          .replace(/\.png$/i, "")
-          .toUpperCase()}`,
-      subject: q._subject || "UNKNOWN",
-      sourceBook,
-      questionNumber: qnum,
-      page: q.page || 0,
-      imagePath,
-      answer: q.answer || null,
-      unit: q.unit || null,
-      unitName: q.unitName || null,
-      section: q.section || null,
-      questionText: q.questionText || null,
-      topic: null,
-      learningOutcomeCode: null,
-      learningOutcomeText: null,
-      pedagogicalDifficulty: null,
-      difficultyConfidence: null,
-      skill: null,
-      questionType: null,
-      analysisStatus: null,
-    });
-  }
-  return questions;
+  const subjects = Object.keys(SUBJECT_FILES);
+  const batches = await Promise.all(subjects.map((s) => loadSubjectQuestions(s)));
+  return batches.flat();
 }
 
-let questionsCache: StudyQuestion[] | null = null;
+let allQuestionsPromise: Promise<StudyQuestion[]> | null = null;
 
 async function getQuestions(): Promise<StudyQuestion[]> {
-  if (questionsCache) return questionsCache;
-  questionsCache = await loadAllQuestions();
-  return questionsCache;
+  if (!allQuestionsPromise) {
+    allQuestionsPromise = loadAllQuestions();
+  }
+  return allQuestionsPromise;
+}
+
+// Yalnızca tek ders yükleyen hızlı yol — CPU tasarrufu
+async function getQuestionsForSubject(subject: string): Promise<StudyQuestion[]> {
+  return loadSubjectQuestions(subject);
 }
 
 export const runtime = "nodejs";
@@ -175,11 +172,11 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    let questions = await getQuestions();
+    // Ders belirtilmişse yalnızca o dersin dosyasını yükle (CPU tasarrufu)
+    let questions = subject
+      ? await getQuestionsForSubject(subject)
+      : await getQuestions();
 
-    if (subject) {
-      questions = questions.filter((q) => q.subject === subject);
-    }
     if (unit) {
       questions = questions.filter((q) => q.unit === parseInt(unit, 10));
     }

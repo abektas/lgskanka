@@ -1,5 +1,58 @@
 # SESSION HANDOFF — 2026-11-03
-**Son commit (push edilmiş):** `3b65bba` | **Canlı:** https://lgskanka.alibey.workers.dev (Version ID `15dd39da-1d7e-4a18-a878-c919b5e16532`)
+**Son commit (push edilmiş):** `3bf9b3a` | **Canlı:** https://lgskanka.alibey.workers.dev (Version ID `ee716cd4-5e54-4143-b286-10cfff5839b2`)---
+
+## 2026-11-03 — Haftalık test + rozet kalıcılığı (sunucuya taşıma) — TAMAMLANDI
+
+**Kullanıcı talebi:** "Haftalık test geçmişi tablosu ve rozet ilerlemesi sunucuda tutulmadığı için çıkışta siliniyor — onları da sunucuya taşı."
+
+**Mevcut durum:**
+- `badge_progress` tablosu şemada VAR (şema `supabase/schema.sql` L107-115) ama kod localStorage (`lgs_badge_progress`) kullanıyordu — sunucuya yazılmıyordu.
+- `weekly_test_history` tablosu YOK — eklenmeli.
+- `lgs_streak` yazılmıyordu — seri rozetleri (4 Gün, 7 Gün, Hedefe Sadık) asla kazanılmıyordu.
+
+**Çözüm (commit `3bf9b3a`, canlı Version `ee716cd4`):**
+
+1. **DDL (siz Supabase Dashboard > SQL Editor'de çalıştıracaksınız):**
+```sql
+create table if not exists weekly_test_history (
+  id uuid primary key default gen_random_uuid(),
+  student_id uuid not null references students(id) on delete cascade,
+  date timestamptz not null,
+  total int not null,
+  correct int not null,
+  wrong int not null,
+  blank int not null,
+  by_category jsonb not null default '{}',
+  weak_units jsonb not null default '[]',
+  question_ids jsonb not null default '[]',
+  wrong_question_ids jsonb not null default '[]',
+  created_at timestamptz not null default now()
+);
+create index if not exists idx_weekly_test_history_student
+  on weekly_test_history (student_id, date desc);
+alter table weekly_test_history enable row level security;
+```
+(`badge_progress` zaten şemada var; tekrar oluşturmaz.)
+
+2. **API: `/api/progress` (GET/POST type=badges|weekly_tests)** — `reinforcement-tasks` pattern, auth-scoped.
+
+3. **Sync helpers (`lib/sync.ts`):** `pushBadgeProgress`/`pullBadgeProgress`, `pushWeeklyTestHistory`/`pullWeeklyTestHistory` (fire-and-forget).
+
+4. **Hydration (`profile-provider.tsx` → `hydrateMirrors`):** Girişte sunucudan rozet/haftalık çekip `lgs_badge_progress` + `lgs_weekly_test_history` localStorage'a yazar.
+
+5. **Haftalık test bitiş:** `saveWeeklyTestRecord` → `pushWeeklyTestHistory` fire-and-forget.
+
+6. **Rozetler:**
+   - Seri kaynağı düzeltildi: `computeLearnerStats().streakDays` (sunucu kayıtlarından) → 4/7 Gün Seri rozetleri artık kazanılabiliyor.
+   - `data/content.ts` badge defaults `earned: false` (sunucu/kayıtlardan hesaplanır).
+   - `useBadgeProgress` mount'ta kazanan rozetleri sunucuya yaz (`pushBadgeProgress`).
+
+7. **Kalıcılık garanti:** Çıkışta yerel temizlense bile, yeniden girişte `hydrateMirrors` → sunucudan rozet/haftalık/deneme geçmişi/döngü anchor/kayıt tarihi geri yüklenir.
+
+**DDL çalıştırılmadan önce:** API'ler boş dizi döner (hata atmıyor, graceful fallback). Tablo oluşturulduktan sonra otomatik dolmaya başlar.
+
+**Test:** Canlı headless Chrome — çıkış/geri giriş akışı, rozet/haftalık endpoint 401/empty, continuation done=true ✓
+
 ---
 
 ## 2026-11-03 — "Çıkış yap" butonu (`3b65bba`)

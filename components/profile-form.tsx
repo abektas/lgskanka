@@ -32,7 +32,7 @@ const settingRows: { key: keyof Settings; title: string; detail: string }[] = [
 
 /** Profil & karakter formu: ad, cinsiyet, karakter seçimi ve gizlilik ayarları. */
 export function ProfileForm() {
-  const { ready, updateProfile, activeProfile } = useProfile();
+  const { ready, updateProfile, activeProfile, logout } = useProfile();
   const [draft, setDraft] = useState<Profile | null>(null);
   const [settings, setSettings] = useState<Settings>(defaultSettings);
   const [saved, setSaved] = useState(false);
@@ -158,6 +158,30 @@ export function ProfileForm() {
             />
           </div>
         ))}
+      </div>
+
+      <div className="settings-block">
+        <h3>Hesap</h3>
+        <div className="switch-row">
+          <span>
+            <b>Bu cihazdan çıkış yap</b>
+            <small className="muted-text">
+              Başka bir öğrenci olarak giriş yapmak için çıkış yap. İlerlemen sunucuda saklanır;
+              tekrar giriş yaptığında geri gelir.
+            </small>
+          </span>
+        </div>
+        <button
+          type="button"
+          className="btn btn-soft btn-block"
+          onClick={() => {
+            if (window.confirm("Bu cihazdan çıkış yapılsın mı? Başka bir öğrenci olarak giriş yapabilirsin.")) {
+              logout();
+            }
+          }}
+        >
+          Çıkış yap
+        </button>
       </div>
     </form>
   );

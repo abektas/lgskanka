@@ -2,7 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import type { AvatarGender } from "./avatar";
-import { ENROLLMENT_CHANGED_EVENT } from "../lib/cycle";
+import { ENROLLMENT_CHANGED_EVENT, setEnrollmentDate, setCycleAnchor, getCycleAnchor } from "../lib/cycle";
 import {
   getAuthToken,
   setAuthToken,
@@ -101,6 +101,13 @@ function toProfile(student: {
   };
 }
 
+/** Kayıt tarihini sunucudan geri yükle (yerel temizlense bile döngü doğru kalsın). */
+function restoreEnrollmentDate(registeredAt: unknown) {
+  if (!registeredAt) return;
+  const reg = new Date(String(registeredAt));
+  if (!Number.isNaN(reg.getTime())) setEnrollmentDate(reg);
+}
+
 /**
  * Sunucudan gelen kayıtlarla yerel aynaları tazele.
  * Cihaz değiştirdiğinde öğrenci kaldığı yerden devam eder.
@@ -145,6 +152,65 @@ async function hydrateMirrors(): Promise<void> {
         updatedAt: String(t.updated_at ?? new Date().toISOString()),
       }));
       window.localStorage.setItem("lgs_reinforcement_tasks", JSON.stringify(tasks));
+    }
+
+    // Sınav durumu (exam_results = ana kaynak): yerel boşsa sunucudan geri yükle.
+    // Çıkışta yerel temizlendiğinde veya cihaz değiştiğinde öğrenci kayıp yaşamaz.
+    try {
+      const statusRes = await apiFetch("/api/exams-status");
+      if (statusRes.ok) {
+        const status = await statusRes.json();
+        const results: Array<Record<string, unknown>> = Array.isArray(status?.results)
+          ? status.results
+          : [];
+        const completedMonths: number[] = Array.isArray(status?.completedMonths)
+          ? status.completedMonths
+          : [];
+
+        // Tamamlanan aylar (deneme dropdown'ındaki ✓ işaretleri)
+        let localDone: number[] = [];
+        try {
+          localDone = JSON.parse(window.localStorage.getItem("lgs_completed_exams") || "[]");
+        } catch {
+          localDone = [];
+        }
+        if ((!Array.isArray(localDone) || localDone.length === 0) && completedMonths.length > 0) {
+          window.localStorage.setItem("lgs_completed_exams", JSON.stringify(completedMonths));
+        }
+
+        // Deneme geçmişi (Sonuçlar sayfası) — yerel yoksa sunucudan kur
+        let localHistory: unknown[] = [];
+        try {
+          localHistory = JSON.parse(window.localStorage.getItem("lgs_exam_history") || "[]");
+        } catch {
+          localHistory = [];
+        }
+        if ((!Array.isArray(localHistory) || localHistory.length === 0) && results.length > 0) {
+          const mapped = results.map((r) => ({
+            date: String(r.completedAt ?? new Date().toISOString()),
+            month: Number(r.month) || 0,
+            monthName: String(r.monthName ?? ""),
+            total: Number(r.total) || 0,
+            correct: Number(r.correct) || 0,
+            wrong: Number(r.wrong) || 0,
+            empty: Number(r.empty) || 0,
+            percentage: Number(r.percentage) || 0,
+            level: String(r.level ?? ""),
+            bySubject: r.bySubject ?? {},
+            details: [],
+          }));
+          window.localStorage.setItem("lgs_exam_history", JSON.stringify(mapped.slice(-24)));
+        }
+
+        // Döngü anchor'u: seviye tespitinin (month 0) bitiş anından geri yükle
+        if (getCycleAnchor() === null) {
+          const m0 = results.find((r) => Number(r.month) === 0);
+          const done = m0 ? new Date(String(m0.completedAt)) : null;
+          if (done && !Number.isNaN(done.getTime())) setCycleAnchor(done);
+        }
+      }
+    } catch {
+      /* sınav durumu alınamazsa yerel ile devam */
     }
   } catch {
     /* ağ hatası: yerel ayna ile devam */
@@ -201,6 +267,7 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
         const data = await res.json();
         if (!cancelled && res.ok && data.student) {
           setActiveProfile(toProfile(data.student));
+          restoreEnrollmentDate(data.student.registeredAt);
           await migrateLegacyLocalData();
           await hydrateMirrors();
         } else if (!cancelled) {
@@ -228,6 +295,8 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
         registeredAt: String(student.registeredAt),
       })
     );
+    // Kayıt tarihini sunucudan geri yükle (yerel temizlense bile döngü doğru kalsın)
+    restoreEnrollmentDate(student.registeredAt);
     await migrateLegacyLocalData();
     await hydrateMirrors();
   }, []);
@@ -268,6 +337,27 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
 
   const logout = useCallback(() => {
     clearAuthToken();
+    // Öğrenciye özel yerel verileri temizle: paylaşılan cihazda sıradaki öğrenci
+    // öncekinin kayıtlarını görmesin. Sunucu ana kaynaktır; girişte geri yüklenir.
+    const STUDENT_SCOPED_KEYS = [
+      "lgs_answer_log",
+      "lgs_reinforcement_tasks",
+      "lgs_exam_history",
+      "lgs_weekly_test_history",
+      "lgs_completed_exams",
+      "lgs_cycle_anchor",
+      "lgs_enrollment_date",
+      "lgs_badge_progress",
+      "lgs_streak",
+      "lgs-ai-coach-tasks",
+      "lgs-ai-coach-game-session",
+      "lgs-ai-coach-pomodoro-v1",
+    ];
+    try {
+      for (const key of STUDENT_SCOPED_KEYS) window.localStorage.removeItem(key);
+    } catch {
+      /* depolama kapalıysa yok say */
+    }
     setActiveProfile(null);
   }, []);
 

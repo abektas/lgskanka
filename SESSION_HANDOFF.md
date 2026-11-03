@@ -1,5 +1,28 @@
 # SESSION HANDOFF — 2026-11-03
-**Son commit (push edilmiş):** `dd9857e` | **Canlı:** https://lgskanka.alibey.workers.dev (Version ID `0cde5d0d-af55-4647-8559-1e8e007313aa`)
+**Son commit (push edilmiş):** `819e57b` | **Canlı:** https://lgskanka.alibey.workers.dev (Version ID `a817126c-a0b3-4552-99b3-937c56b0a88d`)
+
+---
+
+## 2026-11-03 — Ana sayfa "Kaldığın yerden devam et" kartı düzeltmesi (in-app yorum)
+
+**Kullanıcı raporu:** Günlük çalışma tamamen bittiği halde kart 23/24 gösterip devama yönlendiriyordu; biten gün için "tamamlandı" uyarısı istendi.
+
+**Kök neden (3 kayıp yolu):**
+1. Yanlış cevapta hata nedeni (H1-H7) seçilmeden "Sonraki soru"a basılırsa kayıt HİÇ yazılmıyordu (`saveAnswerRecord` yalnızca `selectErrorReason` içindeydi) → sayaç 23/24.
+2. `hydrateAnswerLog` sayfa yenilenmesinde yerel kayıtların tamamını sunucuyla DEĞİŞTİRİYORDU — push'u ulaşmamış kayıtlar siliniyordu.
+3. Biten gün "tamamlandı" olarak işaretlenmiyordu; yarışan push'lar sayacı geriye düşürebiliyordu.
+
+**Çözüm (`819e57b`):**
+- `/calis` `nextQuestion`: hata nedeni atlanan yanlış cevap kaydı geçişte tamamlanır; bitişte `state.completed: true` push edilir.
+- `lib/error-reason.ts` `hydrateAnswerLog`: soru başına tek kayıt olacak şekilde BİRLEŞTİRİR, sunucuya ulaşmamış kayıtları yeniden gönderir.
+- `POST /api/study-session`: `solved` monoton (geriye gitmez), `state.completed` yapışkan.
+- `/api/continue` + `components/continue-card.tsx`: `done:true` ise kart 🎉 "Bu günlük çalışmanı tamamladın / Tebrik ederim! Bir sonraki çalışma yarın aktif olacak." gösterir, "Devam et" butonu gizli, bar %100.
+
+**Doğrulama:** tsc ✅ · taxonomy test 4/4 ✅ · build ✅ · yerel + canlı API senaryoları ✅ · headless Chrome DOM kontrolü ✅ (tamamlanmış gün: buton yok, bar %100; kısmi gün: 23/24 + buton mevcut — regresyon yok). Ekran görüntüsü: `~/.hermes/cache/scratch/kart-tamamlandi.png`.
+
+**Notlar:**
+- Test hesapları: `hersstest1`, `hersstest2` (şifre `test1234`) — öğretmen panelinden silinebilir.
+- `tests/source-ingestion/api-contract.test.mjs` içinde 1 ÖNCEDEN VAR olan hata: `/api/study/route.ts` regex beklentisi (`timingSafeEqual`) eski kodla uyumsuz — bu değişikliklerle ilgisiz, düzeltilmedi.
 
 ---
 

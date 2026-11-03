@@ -586,8 +586,15 @@ export default function AylikDenemelerPage() {
           <div className="stat"><b>{examResult.correct}</b><small>Doğru</small></div>
           <div className="stat"><b>{examResult.wrong}</b><small>Yanlış</small></div>
           <div className="stat"><b>{examResult.empty}</b><small>Boş</small></div>
-          <div className="stat lgs-score"><b>{score.overall.rawScore}</b><small>LGS Ham Puanı</small></div>
+          <div className="stat lgs-score"><b>{score.overall.rawScore}</b><small>Ham Puan (yaklaşık)</small></div>
         </div>
+        <p className="muted-text" style={{ marginTop: 8, fontSize: 12 }}>
+          Yaklaşık ham puan = Doğru − (Yanlış ÷ 3), katsayısız. Kesin LGS puanı için MEB'in ücretsiz{" "}
+          <a href="https://mebi.eba.gov.tr/" target="_blank" rel="noopener noreferrer">
+            MEBİ Bireysel Öğrenme Platformu
+          </a>
+          'na giriş yap (EBA şifresi) ve <b>LGS Hazırlık → LGS Puan Hesapla</b> aracını kullan.
+        </p>
         <div className="result-by-subject">
           <h3>Ders Bazında</h3>
           {Object.entries(examResult.bySubject).map(([subj, stats]) => (

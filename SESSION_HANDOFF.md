@@ -1,5 +1,18 @@
 # SESSION HANDOFF — 2026-11-03
-**Son commit (push edilmiş):** `1a8204a` | **Canlı:** https://lgskanka.alibey.workers.dev (Version ID `0ebcc80f-c01d-472d-bbe2-ca2eeff016be`)
+**Son commit (push edilmiş):** `3b65bba` | **Canlı:** https://lgskanka.alibey.workers.dev (Version ID `15dd39da-1d7e-4a18-a878-c919b5e16532`)
+---
+
+## 2026-11-03 — "Çıkış yap" butonu (`3b65bba`)
+
+**Kullanıcı raporu:** Tarayıcı geçmişi/çerezleri silinse bile aynı profil açılıyordu (localStorage `lgs_token` çerezlerden bağımsız) → yeni giriş yapılamıyordu.
+
+**Çözüm:**
+- `/profil` → "Öğrenci bilgileri" kartı → **"Hesap"** bölümüne **"Çıkış yap"** butonu (onay diyaloğu).
+- `logout()` artık öğrenciye özel yerel anahtarları temizliyor: `lgs_answer_log`, `lgs_reinforcement_tasks`, `lgs_exam_history`, `lgs_weekly_test_history`, `lgs_completed_exams`, `lgs_cycle_anchor`, `lgs_enrollment_date`, `lgs_badge_progress`, `lgs_streak`, `lgs-ai-coach-tasks`, `lgs-ai-coach-game-session`, `lgs-ai-coach-pomodoro-v1`. (Temizlenmezse sonraki öğrenci öncekinin verilerini görüyor + eski kayıtlar hydrateMerge ile yeni hesaba push'lanıyordu.)
+- Girişte geri yükleme (yerel temizlense/cihaz değişse de): `/api/exams-status` → tamamlanan aylar + deneme geçmişi; month 0 `completedAt` → `setCycleAnchor`; `student.registeredAt` → `setEnrollmentDate` (hem login() hem sayfa açılışı).
+- Bilinen kayıp: haftalık test geçmişi + rozet ilerlemesi sunucuda YOK — çıkışta silinir, geri gelmez (rozetler cevap kayıtlarından yeniden hesaplanır).
+
+**Doğrulama (canlı headless Chrome):** buton ✓ · çıkış sonrası tüm anahtarlar temiz + giriş formu ✓ · yeniden girişte anchor `2026-11-03T08:57:54Z`, `exam_history` 1 kayıt, `completed_months [0]`, enrollment = registeredAt ✓
 
 ---
 

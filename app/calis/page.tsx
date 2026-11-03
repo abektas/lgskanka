@@ -205,6 +205,7 @@ export default function CalisPage() {
   const [levelTestDone, setLevelTestDone] = useState<boolean | null>(null);
   const [completed, setCompleted] = useState(false);
   const questionStartRef = useRef<number>(Date.now());
+  const lastQmetaRef = useRef<StudyQuestion | null>(null);
   const [reportedIds, setReportedIds] = useState<Set<string>>(new Set());
 
   const currentQuestion = questions[currentIndex] ?? null;
@@ -348,14 +349,14 @@ export default function CalisPage() {
   }, [currentQuestion?.subject, currentQuestion?.unit, checkState, errorReason]);
 
   /** Bugünkü ilerlemeyi sunucuya yaz (kaldığın yerden devam et). */
-  const syncTodayProgress = useCallback((index?: number) => {
+  const syncTodayProgress = useCallback((index?: number, completed = false) => {
     const today = new Date().toISOString().slice(0, 10);
     const records = loadAnswerRecords().filter((r) => r.createdAt.slice(0, 10) === today);
     pushStudySession({
       solved: records.length,
       correct: records.filter((r) => r.correct).length,
       target: 24,
-      state: { lastIndex: index ?? currentIndex },
+      state: { lastIndex: index ?? currentIndex, completed },
       date: today,
     });
   }, [currentIndex]);
@@ -382,6 +383,7 @@ export default function CalisPage() {
         setCheckState(data.correct ? "correct" : "wrong");
         // Use question metadata from API response (includes unit/unitName/topic)
         const qmeta = data.question || q;
+        lastQmetaRef.current = qmeta;
         if (data.correct) {
           saveAnswerRecord({
             questionId: q.id,
@@ -430,6 +432,25 @@ export default function CalisPage() {
   };
 
   const nextQuestion = () => {
+    // Yanlış cevapta hata nedeni seçmeden geçildiyse kaydı burada tamamla —
+    // aksi halde soru cevap kaydına hiç yazılmaz ve günlük sayaç eksik kalır.
+    if (showResult && selectedAnswer && checkState === "wrong" && errorReason === null && currentQuestion) {
+      const qmeta = lastQmetaRef.current ?? currentQuestion;
+      saveAnswerRecord({
+        questionId: currentQuestion.id,
+        subject: qmeta.subject,
+        unit: qmeta.unit,
+        unitName: qmeta.unitName,
+        topic: qmeta.topic,
+        selectedAnswer,
+        correct: false,
+        errorReasonCode: null,
+        timeSpentSec: Math.max(0, Math.round((Date.now() - questionStartRef.current) / 1000)),
+        createdAt: new Date().toISOString(),
+      });
+      setErrorReason("SKIPPED");
+      syncTodayProgress(currentIndex);
+    }
     if (currentIndex < questions.length - 1) {
       setCurrentIndex(currentIndex + 1);
       setSelectedAnswer(null);
@@ -438,6 +459,7 @@ export default function CalisPage() {
       setErrorReason(null);
     } else {
       setCompleted(true);
+      syncTodayProgress(questions.length - 1, true);
     }
   };
 

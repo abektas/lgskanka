@@ -54,6 +54,9 @@ export async function GET(request: NextRequest) {
 
     // 4) Öneri üret
     let suggestion: { title: string; detail: string; href: string } | null = null;
+    const studyState = ((study?.state ?? {}) as Record<string, unknown>);
+    const dailyDone = !!study && (study.solved >= study.target || studyState.completed === true);
+    let doneNotice = false;
 
     if (exam) {
       const answered = Object.keys(exam.answers || {}).length;
@@ -69,18 +72,19 @@ export async function GET(request: NextRequest) {
           "Hoş geldin! 90 soruluk Seviye Tespit Sınavı ile başlayalım — sonuçların çalışma planını şekillendirecek.",
         href: "/aylik-denemeler?month=0",
       };
+    } else if (dailyDone) {
+      doneNotice = true;
+      suggestion = {
+        title: "Bu günlük çalışmanı tamamladın",
+        detail: "Tebrik ederim! Bir sonraki çalışma yarın aktif olacak.",
+        href: "/calis",
+      };
     } else if (study && study.solved > 0 && study.solved < study.target) {
       const kalan = study.target - study.solved;
       suggestion = {
         title: "Kaldığın yerden devam et",
         detail: `Bugün ${study.target} soruluk hedefin ${study.solved}'ini çözdün, ${kalan} soru kaldı.`,
         href: "/calis",
-      };
-    } else if (study && study.solved >= study.target) {
-      suggestion = {
-        title: "Bugünün hedefi tamam!",
-        detail: `${study.target} soruyu bitirdin (${study.correct} doğru). Pekiştirme sayfasına göz atabilirsin.`,
-        href: "/pekistirme",
       };
     } else {
       suggestion = {
@@ -91,9 +95,10 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json({
-      today: study ?? { solved: 0, correct: 0, target: 24, state: {} },
+      today: { ...(study ?? { solved: 0, correct: 0, target: 24, state: {} }), completed: dailyDone },
       exam,
       suggestion,
+      done: doneNotice,
     });
   } catch (e) {
     return NextResponse.json({ error: String(e).slice(0, 200) }, { status: 500 });

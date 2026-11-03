@@ -6,9 +6,10 @@ import { Icon } from "./icons";
 import { apiFetch } from "../lib/sync";
 
 interface ContinueData {
-  today: { solved: number; correct: number; target: number };
+  today: { solved: number; correct: number; target: number; completed?: boolean };
   exam: { month: number; answers: Record<string, string> } | null;
   suggestion: { title: string; detail: string; href: string };
+  done?: boolean;
 }
 
 /**
@@ -40,15 +41,18 @@ export function ContinueCard() {
   if (loading || !data) return null;
 
   const { today, suggestion } = data;
-  const pct = Math.min(100, Math.round((today.solved / Math.max(1, today.target)) * 100));
+  const done = data.done === true;
+  const pct = done ? 100 : Math.min(100, Math.round((today.solved / Math.max(1, today.target)) * 100));
 
   return (
     <section className="card continue-card" aria-labelledby="kaldigin-yerden">
       <div className="continue-icon" aria-hidden="true">
-        🚀
+        {done ? "🎉" : "🚀"}
       </div>
       <div className="continue-body">
-        <span className="eyebrow">Kaldığın yerden devam et</span>
+        <span className="eyebrow">
+          {done ? "Günlük çalışma tamamlandı" : "Kaldığın yerden devam et"}
+        </span>
         <h2 id="kaldigin-yerden">{suggestion.title}</h2>
         <p className="continue-detail">{suggestion.detail}</p>
 
@@ -63,12 +67,16 @@ export function ContinueCard() {
           <i style={{ width: `${pct}%` }} />
         </div>
         <small className="muted-text">
-          Bugün {today.solved}/{today.target} soru · {today.correct} doğru
+          {done
+            ? `Bugün ${today.solved} soru çözdün · ${today.correct} doğru`
+            : `Bugün ${today.solved}/${today.target} soru · ${today.correct} doğru`}
         </small>
 
-        <Link className="btn btn-primary" href={suggestion.href}>
-          Devam et <Icon name="arrow" size={18} />
-        </Link>
+        {!done && (
+          <Link className="btn btn-primary" href={suggestion.href}>
+            Devam et <Icon name="arrow" size={18} />
+          </Link>
+        )}
       </div>
     </section>
   );

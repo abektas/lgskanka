@@ -34,20 +34,51 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const date = typeof body.date === "string" && body.date ? body.date : today();
+    const target = Math.max(1, Number(body.target) || 24);
+    const solved = Math.max(0, Number(body.solved) || 0);
+    const correct = Math.max(0, Number(body.correct) || 0);
+    const incomingState =
+      body.state && typeof body.state === "object" ? (body.state as Record<string, unknown>) : {};
+
+    // Sayaçlar geriye gitmez: yarışan (ateşle-unut) push'larda eski değer yeniyi ezmesin.
+    const existing = await dbSelectOne<{
+      solved: number;
+      correct: number;
+      state: Record<string, unknown>;
+    }>(
+      "study_sessions",
+      `student_id=eq.${encodeURIComponent(auth.sub)}&session_date=eq.${date}`
+    );
+    const prevSolved = Number(existing?.solved) || 0;
+    const useIncoming = solved >= prevSolved;
+    const finalSolved = Math.max(prevSolved, solved);
+    const finalCorrect = useIncoming ? correct : Number(existing?.correct) || 0;
+    const prevState = (existing?.state ?? {}) as Record<string, unknown>;
+    // "Tamamlandı" bir kez true olunca geri alınmaz.
+    const completed =
+      prevState.completed === true || incomingState.completed === true || finalSolved >= target;
+
     await dbUpsert(
       "study_sessions",
       {
         student_id: auth.sub,
         session_date: date,
-        solved: Math.max(0, Number(body.solved) || 0),
-        correct: Math.max(0, Number(body.correct) || 0),
-        target: Math.max(1, Number(body.target) || 24),
-        state: body.state ?? {},
+        solved: finalSolved,
+        correct: finalCorrect,
+        target,
+        state: {
+          ...prevState,
+          ...incomingState,
+          lastIndex: useIncoming
+            ? incomingState.lastIndex ?? prevState.lastIndex
+            : prevState.lastIndex,
+          completed,
+        },
         updated_at: new Date().toISOString(),
       },
       "student_id,session_date"
     );
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, solved: finalSolved, completed });
   } catch (e) {
     return NextResponse.json({ error: String(e).slice(0, 200) }, { status: 500 });
   }

@@ -66,10 +66,35 @@ export function loadAnswerRecords(): AnswerRecord[] {
   }
 }
 
-/** Sunucudan gelen kayıtlarla yerel aynayı değiştir. */
+/** Sunucudan gelen kayıtlarla yerel aynayı birleştir. */
 export function hydrateAnswerLog(records: AnswerRecord[]): void {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(records.slice(-MAX_RECORDS)));
+    const raw = localStorage.getItem(STORAGE_KEY);
+    const local: AnswerRecord[] = raw ? JSON.parse(raw) : [];
+    // Soru başına tek kayıt — sunucudaki upsert (student_id,question_id) ile aynı.
+    const byQuestion = new Map<string, AnswerRecord>();
+    const put = (r: AnswerRecord) => {
+      if (!r || !r.questionId) return;
+      const prev = byQuestion.get(r.questionId);
+      if (!prev || String(r.createdAt) >= String(prev.createdAt)) byQuestion.set(r.questionId, r);
+    };
+    if (Array.isArray(local)) local.forEach(put);
+    records.forEach(put);
+
+    const serverKeys = new Set(records.map((r) => r.questionId));
+    const missing = [...byQuestion.values()].filter((r) => !serverKeys.has(r.questionId));
+
+    const merged = [...byQuestion.values()].sort((a, b) =>
+      String(a.createdAt).localeCompare(String(b.createdAt))
+    );
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(merged.slice(-MAX_RECORDS)));
+
+    // Sunucuya hiç ulaşmamış yerel kayıtları yeniden gönder (kendini onaran ayna).
+    if (missing.length > 0) {
+      import("./sync").then(({ pushAnswerRecord }) => {
+        for (const r of missing) pushAnswerRecord(r);
+      });
+    }
   } catch {
     /* yok say */
   }

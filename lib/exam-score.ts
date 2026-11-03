@@ -1,8 +1,10 @@
 /**
  * LGS resmi puanlama sistemi yardımcıları.
- * 2018+ LGS için ham puan: Doğru - (Yanlış / 4)
- * Yerleştirme puanı daha karmaşıktır (ders katsayıları, standart sapma vb.),
- * burada "yaklaşık ham puan" hesaplanır.
+ * MEB LGS kılavuzu ("Sınavın Değerlendirilmesi"): ham puan = Doğru − (Yanlış / 3)
+ * — "3 yanlış 1 doğruyu götürür". (÷4 kuralı ÖSYM/YKS içindir, LGS değil.)
+ * Yerleştirme puanı (MSP) daha karmaşıktır: test başına ortalama/standart sapma ile
+ * standart puan (ort 50, ss 10), MEB katsayıları ve TASP gerekir — burada yalnızca
+ * resmî ham puan (net) hesaplanır.
  */
 
 export interface ExamScoreInput {
@@ -13,7 +15,7 @@ export interface ExamScoreInput {
 }
 
 export interface ExamScoreResult {
-  rawScore: number;           // Ham puan: Doğru - Yanlış/4
+  rawScore: number;           // Ham puan (net): Doğru - Yanlış/3
   percentage: number;         // Yüzde başarı
   correct: number;
   wrong: number;
@@ -21,10 +23,10 @@ export interface ExamScoreResult {
   total: number;
 }
 
-/** LGS ham puanını hesaplar: Doğru - (Yanlış / 4) */
+/** LGS ham puanını hesaplar: Doğru - (Yanlış / 3) — MEB kılavuzu, 3 yanlış 1 doğruyu götürür */
 export function calculateRawScore(input: ExamScoreInput): ExamScoreResult {
   const { correct, wrong, empty, total } = input;
-  const rawScore = correct - wrong / 4;
+  const rawScore = correct - wrong / 3;
   const percentage = total > 0 ? Math.round((correct / total) * 100) : 0;
   return {
     rawScore: Math.max(0, Math.round(rawScore * 100) / 100), // 2 ondalık

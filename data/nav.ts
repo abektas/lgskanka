@@ -24,7 +24,13 @@ export const navItems: NavItem[] = [
 export const learner = {
   streakDays: 4,
   xp: 245,
-  level: 4,
+  get level() {
+    let l = 1;
+    for (const t of gameEconomy.tiers) {
+      if (this.xp >= t.xp) l++;
+    }
+    return Math.min(l, 4);
+  },
   levelXp: 145,
   levelTarget: 320,
   badgeCount: 6,

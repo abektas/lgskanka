@@ -70,6 +70,31 @@ export default function HaftalikTestPage() {
     setGateOpen({ open, reason, nextSaturday: nextSat });
   }, []);
 
+  // Bu hafta test zaten bitmişse (yerel kayıt) — soruları açma, sonucu göster
+  useEffect(() => {
+    if (!isWeeklyTestOpen()) return;
+    const history = loadWeeklyTestHistory();
+    if (history.length === 0) return;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    // Bu haftanın cumartesini bul
+    const day = today.getDay();
+    const thisSaturday = new Date(today);
+    thisSaturday.setDate(today.getDate() + (day === 6 ? 0 : (6 - day)));
+    thisSaturday.setHours(0, 0, 0, 0);
+    // Bu cumartesi tarihine eşit kayıt var mı?
+    const thisWeekRecord = history.find((r) => {
+      const recDate = new Date(r.date);
+      recDate.setHours(0, 0, 0, 0);
+      return recDate.getTime() === thisSaturday.getTime();
+    });
+    if (thisWeekRecord) {
+      setFinished(true);
+      setSavedRecord(thisWeekRecord);
+      setPastRecords(history.slice(-5).reverse());
+    }
+  }, []);
+
   /** "Soru eksik veya bozuk" bildirimi — öğretmen paneline düşer. */
   const reportQuestion = useCallback(
     async (q: { id: string; subject: string; questionNumber: number; imagePath: string }) => {
@@ -311,15 +336,37 @@ export default function HaftalikTestPage() {
   }
 
   if (finished) {
-    const correct = results.filter((r) => r.correct).length;
-    const wrong = results.length - correct;
-    const byCat = (cat: TestCategory) => {
-      const list = results.filter((r) => r.category === cat);
-      return { total: list.length, correct: list.filter((r) => r.correct).length };
-    };
+    // savedRecord'dan (geçmişten yüklendi) veya results'tan (bu oturum) istatistikleri al
+    let correct = 0;
+    let wrong = 0;
+    let blank = 0;
+    let total = 0;
+    let byCat = (cat: TestCategory) => ({ total: 0, correct: 0 });
+    let delta = 0;
+    let avg5 = 0;
+
+    if (results.length > 0) {
+      correct = results.filter((r) => r.correct).length;
+      wrong = results.length - correct;
+      total = items?.length ?? results.length;
+      byCat = (cat: TestCategory) => {
+        const list = results.filter((r) => r.category === cat);
+        return { total: list.length, correct: list.filter((r) => r.correct).length };
+      };
+    } else if (savedRecord) {
+      correct = savedRecord.correct;
+      wrong = savedRecord.wrong;
+      blank = savedRecord.blank;
+      total = savedRecord.total;
+      byCat = (cat: TestCategory) => {
+        const v = savedRecord.byCategory[cat];
+        return { total: v?.total ?? 0, correct: v?.correct ?? 0 };
+      };
+    }
+    delta = weeklyTestDelta();
+    avg5 = weeklyTestAverage(5);
     const weak = computeUnitMasteries().filter((m) => m.level === "zayıf" || m.level === "gelişiyor" || m.due);
-    const delta = weeklyTestDelta();
-    const avg5 = weeklyTestAverage(5);
+
     return (
       <div className="page">
         <header className="page-head">
@@ -327,7 +374,7 @@ export default function HaftalikTestPage() {
             <span className="eyebrow">Haftalık test</span>
             <h1>Test Sonucu</h1>
             <p>
-              {correct} doğru · {wrong} yanlış · {items.length - results.length} boş (toplam {items.length} soru)
+              {correct} doğru · {wrong} yanlış · {blank} boş (toplam {total} soru)
               {delta !== 0 && (
                 <span style={{ marginLeft: 12, color: delta > 0 ? "var(--mint)" : "var(--kirmizi)" }}>
                   {delta > 0 ? "▲" : "▼"} {delta > 0 ? "+" : ""}{delta} puan (bir önceki teste göre)

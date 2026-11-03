@@ -1,87 +1,107 @@
-# Session Handoff — 2026-10-28 (güncel)
+# SESSION HANDOFF — 2026-11-03
+**Son commit (push edilmiş):** `54ce75f` | **YEREL DEĞİŞİKLİKLER COMMIT/DEPLOY EDİLMEDİ** | **Canlı:** https://lgskanka.alibey.workers.dev
 
-## Active Tasks
-- Yok — 4 haftalık çalışma döngüsü + hafta sonu esnekliği TAMAMLANDI ve tarayıcıda doğrulandı.
-- Bilinen açık iş: aylık deneme sorularında `topic`/`unit` = null → aylık denemeden pekiştirme üretilemiyor (aşağıda Blockers).
+---
 
-## Yapılanlar (bu oturum)
+## ⚠️ ACİL — Yeni oturumda ilk yapılacak
 
-### 1. Çalışma döngüsü motoru (yeni)
-- `lib/cycle.ts` — kayıt tarihinden başlayan 4 haftalık ritim.
-  - Hafta içi (Pzt–Cum) → Günlük Alıştırmalar
-  - Hafta sonu (Cmt **veya** Paz) → sınav günü: 1-3. hafta Haftalık Test, 4. hafta Aylık Deneme
-  - `getEnrollmentDate()` / `setEnrollmentDate()` → localStorage `lgs_enrollment_date`
-  - `computeCycleState()` → `{dayType, cycleWeek, cycleNumber, isWeekend, weekendTest, ...}`
-  - `ENROLLMENT_CHANGED_EVENT` olayı: kayıt tarihi değişince açık UI'lar yeniden hesaplar
-- `scripts/test-cycle.ts` — tarih-bazlı test (30+ assertion). Çalıştır: `npx tsx scripts/test-cycle.ts`
+Kullanıcı "github ve Cloudflare'e push et" dedi ama istek işlenmedi. Aşağıdaki değişiklikler **sadece yerelde** duruyor:
 
-### 2. Kayıt → döngü bağlantısı
-- `components/profile-provider.tsx` — `Profile.registeredAt` eklendi.
-  - Profil kaydedildiğinde (= sisteme kayıt) `registeredAt` damgalanır ve döngü başlangıcı ona sabitlenir.
-  - Eski profiller (registeredAt yok) otomatik migrate edilir; mevcut döngü tarihi korunur.
-- `components/cycle-card.tsx` (yeni) — ana sayfadaki 4 adımlı döngü kartı + "Bugün" butonu.
-- `components/cycle-badge.tsx` (yeni) — haftalık test / aylık deneme sayfalarında döngü rozeti.
+```
+M app/aylik-denemeler/page.tsx
+M app/calis/page.tsx
+M app/haftalik-test/page.tsx
+M data/nav.ts
+?? app/api/exams-status/
+```
 
-### 3. Sayfa temizliği (planda yeri olmayanlar silindi)
-Silinen: `app/dersler`, `app/denetim`, `app/ilerleme`, `app/pilot-2022`, `app/pilot-2022-visual`,
-`app/pilot-2025-matematik`, `app/youtube`, `app/api/ai`, `app/api/questions`, `app/api/exams`,
-`app/api/pilot-2025-matematik`, `app/api/youtube/*`, `components/pilot-2025-math-flow.tsx`,
-`lib/five-week-mock.ts`, `public/pilot-2022-visual`, `public/pilot-2025-matematik`, `app/q-24.png`.
+Deploy sırası (pitfall #2/#4):
+1. `git add` + commit + `git push origin main`
+2. `npm run build` → `opennextjs-cloudflare build` → `wrangler deploy`
+3. Canlıda doğrula: @lgsdeneme1 ile seviye tespit seçildiğinde sorular yerine sonuç ekranı gelmeli
 
-Silme öncesi doğrulama: her bir API/sayfanın UI'dan **çağrılmadığı** grep ile teyit edildi.
-Kırık referanslar düzeltildi: `components/search-box.tsx`, `app/page.tsx`, `app/kaynaklar/page.tsx`,
-`data/content.ts`, `app/sitemap.ts`, `app/robots.ts`.
+---
 
-### 4. Diğer
-- Ana sayfadaki "5 Haftalık Deneme Programı" kartı → `CycleCard` ile değiştirildi (5 haftalık deneme planı yok).
-- `app/calis/page.tsx` — döngü bilgisi başlığa eklendi; hafta sonu otomatik yönlendirme (Cmt/Paz → ilgili sınav).
-- `app/globals.css` — `.cycle-steps`, `.cycle-step`, `.cycle-today`, `.cycle-badge` stilleri.
+## Bu Oturumda Yapılanlar (2026-11-03)
 
-## Doğrulama (gerçek çıktı)
-- `npm run lint` → exit 0 (tsc temiz)
-- `npm run build` → BUILD_DONE, 15 route: `/`, `/calis`, `/pekistirme`, `/aylik-denemeler`,
-  `/haftalik-test`, `/sonuclar`, `/profil`, `/kaynaklar`, `/oduller`, 4 API, robots, sitemap
-- Silinen rotalar → 404
-- `npx tsx scripts/test-cycle.ts` → TÜM TESTLER GEÇTİ
-- Tarayıcı (headless Chrome CDP, tarih dondurularak):
-  - Cmt 31.10 (1. hf) → `/haftalik-test/` ✓
-  - Paz 01.11 (1. hf) → `/haftalik-test/` ✓  ← hafta sonu esnekliği
-  - Cmt 21.11 (4. hf) → `/aylik-denemeler/` ✓
-  - Paz 22.11 (4. hf) → `/aylik-denemeler/` ✓
-  - Çar 28.10 → `/calis/` (dönüş yok) ✓
-  - Profil kaydı → `registeredAt` == `lgs_enrollment_date` ✓
+### 1. Karakter seviye kartı düzeltmesi
+- Sorun: her kullanıcıya sabit "4. Seviye" gösteriliyordu (`data/nav.ts`'de `level: 4` sabit).
+- Çözüm: `learner.level` → `gameEconomy.tiers`'ten XP'ye göre hesaplanan getter (maks 4).
 
-## Devreden kararlar (kalıcı)
-- **Çalışma döngüsü**: 4 hafta. 1-3. hafta Haftalık Test, 4. hafta Aylık Deneme.
-- **Hafta sonu esnek**: cumartesi ve pazar aynı teste girilebilir; öğrenci hangisini isterse o gün çözer.
-- **Döngü kayıt anında başlar**: `Profile.registeredAt` (profil kaydı = sisteme kayıt).
-- **5 haftalık deneme planı yok** — yalnız haftalık test + aylık deneme.
-- **Sonuç ekranı deseni** (haftalık test ve aylık denemede aynı): birincil buton → `/pekistirme`,
-  ikincil → `/sonuclar`, `syncReinforcementTasks()` sınav bitince otomatik çağrılır.
-- **AI tamamen iptal** — H1-H7 kural tabanlı. `app/api/ai` silindi.
-- Karışıklık yaratmayan sayfa kalmadı; menü 9 kalem, hepsi aktif kullanımda.
+### 2. "Biten deneme/çalışma hâlâ açık" hatası (kullanıcı raporu: @lgsdeneme1)
+- **Kural (kullanıcı talebi):** "Herhangi bir deneme veya çalışma bittikten sonra sorular kapansın, sadece sonuç ve istatistikler görünsün."
+- **Kök neden 1:** `/aylik-denemeler` tamamlanmayı sadece `localStorage["lgs_completed_exams"]`'ten okuyordu. Sunucu kaydı (Supabase `exam_results`) yok sayılıyordu → localStorage kaybında sınav "açık" görünüyordu (aynı sınıf hata @lgscep'te kapılar için çözülmüştü: `54ce75f`).
+- **Kök neden 2:** Biten ay dropdown'da "✓" alıyordu ama pasifleşmiyordu; seçilince sorular + "▶ Süreyi Başlat" geri geliyordu.
 
-## Dosyalar
-- `lib/cycle.ts` — döngü motoru (yeni)
-- `scripts/test-cycle.ts` — döngü testi (yeni)
-- `components/cycle-card.tsx` — ana sayfa döngü kartı (yeni)
-- `components/cycle-badge.tsx` — sınav sayfası döngü rozeti (yeni)
-- `components/profile-provider.tsx` — `registeredAt` + kayıt→döngü bağlantısı
-- `app/calis/page.tsx` — döngü başlığı + hafta sonu yönlendirmesi
-- `app/page.tsx` — `CycleCard` entegrasyonu
-- `app/globals.css` — döngü stilleri
+**Çözüm:**
+- **Yeni `GET /api/exams-status`** (`app/api/exams-status/route.ts`): girişli öğrencinin `exam_results` kayıtlarından tamamlanan aylar + özet sonuçlar (ay başı en yeni kayıt geçerli).
+- **`app/aylik-denemeler/page.tsx`**: mount'ta sunucu kaydı localStorage ile birleştirilir; tamamlanan ay seçilirse sorular yüklenmez, sonuç ekranı gösterilir (öncelik: oturum sonucu → `lgs_exam_history` → sunucu `results`); geç gelen sunucu verisi, kullanıcı başlamadıysa (timerStarted=false + cevap yok) oturumu kapatıp sonucu gösterir; submit sonrası sadece sonuç; dropdown "✓ Tamamlandı".
+- **`app/calis/page.tsx`**: `/api/study-session` cevabında `solved >= target` ise `completed=true`; `completed` iken soru bölümü + zoom overlay + "soru bulunamadı" gizli, sadece özet kart görünür.
+- **`app/haftalik-test/page.tsx`**: mount'ta `loadWeeklyTestHistory()`'den bu haftanın cumartesi tarihli kaydı aranır; varsa `finished=true` + `savedRecord` ile sadece sonuç görünümü. Sonuç hesabı `results` (taze) veya `savedRecord` (geçmiş) ikisinden de çalışır şekilde refactored.
 
-## Blockers
-- **Aylık deneme sorularında `topic`/`unit` = null** (1080 soru). Bu yüzden aylık deneme
-  sonrası `syncReinforcementTasks()` ünite bazlı pekiştirme üretemiyor.
-- **Classifier yazıldı ama çalıştırılmadı**: `scripts/source-ingestion/classify_exam_topics.py`
-  (yeni) — Evren `laya` modeli ile `/v1/systemone` endpoint'inden konu tahmini. Pilot
-  (12 soru, Türkçe Q01) çalıştı ve doğru dönüyordu (SÖZCÜKTE ANLAM), fakat 1080 soru
-  henüz sınıflandırılmadı. `EVREN_API_KEY` env'de var. `BATCH=8, max_workers=4` ile
-  çağrılabilir.
-- AI'sız kural tabanlı H1-H7 sınıflandırıcı ve Supabase kurulumu hâlâ sırada (QBANK işi).
+**Doğrulama:** `npm run build` ✅ · `npm run test:taxonomy` 4/4 ✅ · localhost:3000 sayfalar 200 ✅
 
-## Next Steps
-1. Aylık deneme sorularına `topic`/`unit` eşlemesi yap → aylık deneme de pekiştirme üretsin.
-2. Kullanıcı onayı: push/deploy yapılmadı (Product Owner yetkisi gerekli).
-3. QBANK tarafı: kural tabanlı H1-H7 sınıflandırıcı + Supabase kurulumu.
+---
+
+## Geçmiş Oturum Özeti (2026-11-02 → commit `54ce75f`)
+
+1. Haftalık Test Kapısı — `gateOpen` dependency eklendi
+2. Pekiştirme Sayfası JSX — `</article>` Turbopack regex fix
+3. Günlük Çalışma Kapısı — `levelTestDone` state + kilit ekranı
+4. Mobil & Tablet Uyumluluk — safe-area, iOS zoom engelleme, 44px dokunma hedefleri
+5. Cloudflare Error 1102 CPU Limit — per-subject manifestolar (346KB-1.5MB)
+6. Ücretsiz Katman Koruması — 500 öğrenci + rate limit
+7. Seviye Tespit Kapısı Sunucu Doğrulama — `/api/level-test-status` + Supabase fallback
+
+---
+
+## Teknik Mimari (kısa — detay eski commitlerde)
+
+```
+lgskanka.alibey.workers.dev
+├── /api/auth/register|login  → Supabase students + JWT + 500 sınırı + rate limit
+├── /api/level-test-status    → Seviye tespit durumu (Supabase fallback)
+├── /api/exams-status         → YENİ: tamamlanan aylar + özet sonuçlar
+├── /api/study                → Per-subject manifestolar (R2 binding)
+├── /api/exams-submit         → Sınav değerlendirme + exam_results kaydı
+└── /r2/[...key]              → R2 görsel proxy
+```
+
+### R2 / veri
+- 5,170 WebP görsel + 6 per-subject manifest (`questions_{subject}.json` ×6 AKTİF; `all_questions.json` KULLANMA)
+- Supabase tabloları: students, exam_results, exam_sessions, study_sessions, answer_records, question_reports
+
+---
+
+## Önemli Pitfall'lar (deploy için — hâlâ geçerli)
+
+| # | Pitfall | Çözüm |
+|---|---------|-------|
+| 1 | `wrangler r2` yerel `.wrangler/state`'e yazar | `--remote` flag ekle |
+| 2 | `next build` sonrası `opennextjs-cloudflare build` zorunlu | Yoksa JS chunk'ları kopyalanmaz |
+| 3 | Per-subject manifestolar CPU limit aşımını çözdü | `all_questions.json` KULLANMA |
+| 4 | Deploy sırası: `npm run build` → `opennextjs-cloudflare build` → `wrangler deploy` | Sıra önemli |
+| 5 | Turbopack JSX parser `</tag>` → regex | Closing tag'lere attribute ekleme |
+| 6 | Rate limit per-isolate in-memory | Restart'ta sıfırlanır |
+
+---
+
+## Bilinen Eksikler / Sonraki Adımlar
+
+| # | Görev | Öncelik |
+|---|-------|---------|
+| 1 | **Yukarıdaki yerel değişiklikleri push + deploy** | ACİL |
+| 2 | Haftalık test "bitmiş" kontrolü sadece localStorage'da (localStorage kaybında yeniden açılır — ileride sunucu fallback eklenebilir) | Düşük |
+| 3 | P3 kişiselleştirme UI kartı (`/sonuclar-ve-ilerleme`) | Orta |
+| 4 | Aylık deneme `topic`/`unit` null sorunu (1080 soru sınıflandırılmadı) | Orta |
+| 5 | `lgs_çalışma_soruları` PNG entegrasyonu | Düşük |
+
+---
+
+## Kullanıcı Tercihleri
+- Türkçe, kısa ve direkt yanıt
+- Non-developer, GUI öncelikli, onay al kodu yaz
+- Ücretsiz katman aşılmasın (500 öğrenci sınırı)
+- ~50 sınıf arkadaşı, ticari değil
+- AI tamamen iptal — H1-H7 kural tabanlı
+- §20 Karakter: avatar/profile var; 3D/aksesuar/oda YOK (sistem yükü)

@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { Icon } from "../../components/icons";
 import { CycleBadge } from "../../components/cycle-badge";
 import { subjects } from "../../data/content";
-import { saveExamRecord, examDelta, type ExamRecord } from "../../lib/exam-history";
+import { saveExamRecord, examDelta, type ExamRecord, loadExamHistory } from "../../lib/exam-history";
 import { calculateExamScore } from "../../lib/exam-score";
 import { getCycleAnchor, isMonthUnlocked, setCycleAnchor } from "../../lib/cycle";
 import { syncReinforcementTasks } from "../../lib/reinforcement";
@@ -72,6 +72,22 @@ export default function AylikDenemelerPage() {
   const [timerEnded, setTimerEnded] = useState(false);
   const [zoomOpen, setZoomOpen] = useState(false);
   const [completedMonths, setCompletedMonths] = useState<number[]>([]);
+  const [serverResults, setServerResults] = useState<Array<{
+    month: number;
+    monthName: string;
+    total: number;
+    correct: number;
+    wrong: number;
+    empty: number;
+    percentage: number;
+    level: string;
+    bySubject: Record<string, { correct: number; wrong: number; empty: number; total: number }>;
+    completedAt: string;
+  }>>([]);
+  const completedMonthsRef = useRef<number[]>([]);
+  completedMonthsRef.current = completedMonths;
+  const serverResultsRef = useRef<Array<typeof serverResults[0]>>([]);
+  serverResultsRef.current = serverResults;
   const [elapsedSec, setElapsedSec] = useState(0);
   const [subjectElapsed, setSubjectElapsed] = useState<Record<string, number>>({});
   const [pausedSubjects, setPausedSubjects] = useState<Record<string, boolean>>({});
@@ -134,6 +150,22 @@ export default function AylikDenemelerPage() {
             done = [];
           }
           setCompletedMonths(done);
+          // Sunucu tarafı tamamlanma kayıtlarını da getir (localStorage kaybına karşı)
+          apiFetch("/api/exams-status")
+            .then((r) => r.json())
+            .then((srv) => {
+              if (Array.isArray(srv.completedMonths) && srv.completedMonths.length > 0) {
+                const merged = [...new Set([...done, ...srv.completedMonths])];
+                try {
+                  localStorage.setItem("lgs_completed_exams", JSON.stringify(merged));
+                } catch {}
+                setCompletedMonths(merged);
+              }
+              if (Array.isArray(srv.results) && srv.results.length > 0) {
+                setServerResults(srv.results);
+              }
+            })
+            .catch(() => {});
           // İlk erişilebilir deneme: kayıt tarihine göre kademeli açılır
           // Seviye tespit (0) hemen aktif; diğerleri ay ay açılır
           // URL'de ?month= varsa o ayı seç (kaldığın yerden devam)
@@ -149,6 +181,43 @@ export default function AylikDenemelerPage() {
 
   useEffect(() => {
     if (selectedMonth === null) return;
+    // Biten deneme: sorular açılmaz, sadece sonuç gösterilir
+    if (completedMonthsRef.current.includes(selectedMonth)) {
+      setQuestions([]);
+      setLoading(false);
+      setSubmitted(true);
+      setShowResult(true);
+      setTimerStarted(false);
+      // Yerel/sunucu kaydından sonucu çöz
+      const localRec = loadExamHistory().filter((r) => r.month === selectedMonth).pop() ?? null;
+      if (localRec) {
+        setExamResult({
+          total: localRec.total,
+          correct: localRec.correct,
+          wrong: localRec.wrong,
+          empty: localRec.empty,
+          percentage: localRec.percentage,
+          level: localRec.level,
+          bySubject: localRec.bySubject,
+          details: localRec.details,
+        });
+      } else {
+        const srv = serverResultsRef.current.find((r) => r.month === selectedMonth);
+        if (srv) {
+          setExamResult({
+            total: srv.total,
+            correct: srv.correct,
+            wrong: srv.wrong,
+            empty: srv.empty,
+            percentage: srv.percentage,
+            level: srv.level,
+            bySubject: srv.bySubject,
+            details: [],
+          });
+        }
+      }
+      return;
+    }
     setLoading(true);
     setAnswers({});
     setSubmitted(false);
@@ -176,7 +245,7 @@ export default function AylikDenemelerPage() {
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  }, [selectedMonth]);
+  }, [selectedMonth, urlResume]);
 
   const [timerStarted, setTimerStarted] = useState(false);
 
@@ -199,6 +268,46 @@ export default function AylikDenemelerPage() {
     if (examActive && elapsedSec >= durationMinutes * 60) handleTimeEnd();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [elapsedSec, examActive]);
+
+  // Sunucu verisi geç geldiyse ve seçili ay tamamlanmışsa — aktif oturum yoksa sonucu göster
+  useEffect(() => {
+    if (selectedMonth === null || submitted) return;
+    if (!completedMonths.includes(selectedMonth)) return;
+    // Kullanıcı zaten başladıysa oturumu koru (sınav başlatmış ya da cevap vermiş)
+    if (timerStarted || Object.keys(answers).length > 0) return;
+    setQuestions([]);
+    setLoading(false);
+    setSubmitted(true);
+    setShowResult(true);
+    setTimerStarted(false);
+    const localRec = loadExamHistory().filter((r) => r.month === selectedMonth).pop() ?? null;
+    if (localRec) {
+      setExamResult({
+        total: localRec.total,
+        correct: localRec.correct,
+        wrong: localRec.wrong,
+        empty: localRec.empty,
+        percentage: localRec.percentage,
+        level: localRec.level,
+        bySubject: localRec.bySubject,
+        details: localRec.details,
+      });
+    } else {
+      const srv = serverResultsRef.current.find((r) => r.month === selectedMonth);
+      if (srv) {
+        setExamResult({
+          total: srv.total,
+          correct: srv.correct,
+          wrong: srv.wrong,
+          empty: srv.empty,
+          percentage: srv.percentage,
+          level: srv.level,
+          bySubject: srv.bySubject,
+          details: [],
+        });
+      }
+    }
+  }, [completedMonths, selectedMonth, submitted, timerStarted, answers]);
 
   const handleAnswer = useCallback((letter: string) => {
     if (submitted || timerEnded) return;
@@ -542,9 +651,14 @@ export default function AylikDenemelerPage() {
   );
 
   // Main render logic - ternary yerine if/else
+  const isCompleted = selectedMonth !== null && completedMonths.includes(selectedMonth);
   let mainContent: React.ReactNode;
   if (loading) {
     mainContent = renderLoading();
+  } else if (submitted && examResult) {
+    mainContent = null; // sonuç ekranı renderResultScreen() ile gösterilir
+  } else if (selectedMonth !== null && isCompleted) {
+    mainContent = null; // bitmiş deneme: sonuç ekranı zaten renderResultScreen()'de
   } else if (selectedMonth !== null && questions.length === 0) {
     mainContent = renderEmpty();
   } else if (selectedMonth !== null && questions.length > 0) {
@@ -587,7 +701,7 @@ export default function AylikDenemelerPage() {
                 return (
                   <option key={m.month} value={m.month} disabled={locked}>
                     {m.month === 0 ? "🎯 Seviye Tespit" : `📅 ${m.month}. Ay`} — {m.totalQuestions} soru, {m.durationMinutes} dk
-                    {done ? " ✓" : locked ? " 🔒" : ""}
+                    {done ? " ✓ Tamamlandı" : locked ? " 🔒" : ""}
                   </option>
                 );
               })}

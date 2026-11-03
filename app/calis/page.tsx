@@ -298,6 +298,12 @@ export default function CalisPage() {
           .then((r) => (r.ok ? r.json() : null))
           .then((d) => {
             const lastIndex = Number(d?.session?.state?.lastIndex) || 0;
+            const solved = Number(d?.session?.solved) || 0;
+            const target = Number(d?.session?.target) || 24;
+            // Bugünün hedefi zaten doluysa tamamlandı say
+            if (solved >= target && merged.length > 0) {
+              setCompleted(true);
+            }
             const resumeAt = lastIndex > 0 && lastIndex < merged.length ? lastIndex : 0;
             setCurrentIndex(resumeAt);
           })
@@ -505,11 +511,11 @@ export default function CalisPage() {
 
       {dayType === "gunluk" && levelTestDone !== false && loading && <div className="exam-loading">Günlük sorular yükleniyor...</div>}
 
-      {dayType === "gunluk" && levelTestDone !== false && !loading && !currentQuestion && (
+      {dayType === "gunluk" && levelTestDone !== false && !loading && !currentQuestion && !completed && (
         <div className="exam-empty">Bugün için soru bulunamadı.</div>
       )}
 
-      {dayType === "gunluk" && levelTestDone !== false && currentQuestion && (
+      {dayType === "gunluk" && levelTestDone !== false && currentQuestion && !completed && (
         <section className="exam-question" id="sorular">
           <div className="exam-question-header">
             <span className="pill is-gok">
@@ -588,7 +594,7 @@ export default function CalisPage() {
         </section>
       )}
 
-      {zoomOpen && currentQuestion && (
+      {zoomOpen && currentQuestion && !completed && (
         <div className="zoom-overlay" onClick={() => setZoomOpen(false)} role="button" aria-label="Görseli kapat">
           <img src={currentQuestion.imagePath} alt={`${currentQuestion.subject} soru ${currentQuestion.questionNumber} — büyütülmüş`} />
         </div>

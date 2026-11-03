@@ -115,6 +115,70 @@ export async function pullReinforcementTasks(): Promise<Array<Record<string, unk
   }
 }
 
+/** Rozet ilerlemesini sunucuya gönder (fire-and-forget). */
+export function pushBadgeProgress(badges: Record<string, { earned: boolean; earned_at: string | null; progress: number }>): void {
+  if (!getAuthToken() || Object.keys(badges).length === 0) return;
+  apiFetch("/api/progress", {
+    method: "POST",
+    body: JSON.stringify({ type: "badges", badges }),
+  }).catch(() => {});
+}
+
+/** Sunucudaki rozet ilerlemesini getir. */
+export async function pullBadgeProgress(): Promise<Record<string, { earned: boolean; earned_at: string | null; progress: number }>> {
+  if (!getAuthToken()) return {};
+  try {
+    const res = await apiFetch("/api/progress?type=badges");
+    if (!res.ok) return {};
+    const data = await res.json();
+    return data?.badges ?? {};
+  } catch {
+    return {};
+  }
+}
+
+/** Haftalık test geçmişini sunucuya gönder (fire-and-forget). */
+export function pushWeeklyTestHistory(tests: Array<{
+  date: string;
+  total: number;
+  correct: number;
+  wrong: number;
+  blank: number;
+  by_category: Record<string, { total: number; correct: number }>;
+  weak_units: unknown[];
+  question_ids: string[];
+  wrong_question_ids: string[];
+}>): void {
+  if (!getAuthToken() || tests.length === 0) return;
+  apiFetch("/api/progress", {
+    method: "POST",
+    body: JSON.stringify({ type: "weekly_tests", weekly_tests: tests }),
+  }).catch(() => {});
+}
+
+/** Sunucudaki haftalık test geçmişini getir. */
+export async function pullWeeklyTestHistory(): Promise<Array<{
+  date: string;
+  total: number;
+  correct: number;
+  wrong: number;
+  blank: number;
+  by_category: Record<string, { total: number; correct: number }>;
+  weak_units: unknown[];
+  question_ids: string[];
+  wrong_question_ids: string[];
+}>> {
+  if (!getAuthToken()) return [];
+  try {
+    const res = await apiFetch("/api/progress?type=weekly_tests");
+    if (!res.ok) return [];
+    const data = await res.json();
+    return data?.weekly_tests ?? [];
+  } catch {
+    return [];
+  }
+}
+
 /** Deneme oturumu kaydet (yarım kalmış sınav). */
 export function pushExamSession(month: number, answers: Record<string, string>, currentIndex: number): void {
   if (!getAuthToken()) return;

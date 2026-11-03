@@ -6,6 +6,7 @@
  */
 
 import type { TestCategory } from "./weekly-test";
+import { pushWeeklyTestHistory } from "../lib/sync";
 
 export const WEEKLY_TEST_HISTORY_KEY = "lgs_weekly_test_history";
 
@@ -55,10 +56,24 @@ export function saveWeeklyTestRecord(record: WeeklyTestRecord): WeeklyTestRecord
   history.push(record);
   const trimmed = history.slice(-52);
   try {
-    localStorage.setItem(WEEKLY_TEST_HISTORY_KEY, JSON.stringify(trimmed));
+    window.localStorage.setItem(WEEKLY_TEST_HISTORY_KEY, JSON.stringify(trimmed));
   } catch {
     // Depolama hatası sessizce atlanır
   }
+  // Sunucuya da yaz (fire-and-forget)
+  pushWeeklyTestHistory([
+    {
+      date: record.date,
+      total: record.total,
+      correct: record.correct,
+      wrong: record.wrong,
+      blank: record.blank,
+      by_category: record.byCategory,
+      weak_units: record.weakUnits,
+      question_ids: record.questionIds,
+      wrong_question_ids: record.wrongQuestionIds ?? [],
+    },
+  ]);
   return trimmed;
 }
 

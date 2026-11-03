@@ -212,12 +212,12 @@ export type Badge = {
 };
 
 export const badges: Badge[] = [
-  { icon: "🌱", name: "İlk Adım", detail: "İlk görevini tamamladın", earned: true },
-  { icon: "🔥", name: "4 Gün Seri", detail: "4 gün üst üste çalıştın", earned: true },
-  { icon: "🔍", name: "İlk Hata Analizi", detail: "İlk hatanı birlikte çözdük", earned: true },
-  { icon: "🧮", name: "İşlem Ustası", detail: "H4 hatan %10'un altına indi", earned: true },
-  { icon: "🎯", name: "Hedefe Sadık", detail: "1 hafta plana uydun", earned: true },
-  { icon: "📚", name: "Kitap Kurdu", detail: "50 soru çözdün", earned: true },
+  { icon: "🌱", name: "İlk Adım", detail: "İlk görevini tamamladın", earned: false },
+  { icon: "🔥", name: "4 Gün Seri", detail: "4 gün üst üste çalıştın", earned: false },
+  { icon: "🔍", name: "İlk Hata Analizi", detail: "İlk hatanı birlikte çözdük", earned: false },
+  { icon: "🧮", name: "İşlem Ustası", detail: "H4 hatan %10'un altına indi", earned: false },
+  { icon: "🎯", name: "Hedefe Sadık", detail: "1 hafta plana uydun", earned: false },
+  { icon: "📚", name: "Kitap Kurdu", detail: "50 soru çözdün", earned: false },
   { icon: "🚀", name: "Hızlı Düşünen", detail: "Testte ilk 10'a gir", earned: false },
   { icon: "🏆", name: "7 Gün Seri", detail: "7 gün üst üste çalış", earned: false },
 ];

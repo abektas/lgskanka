@@ -12,6 +12,8 @@ import {
   pushAnswerRecord,
   pullReinforcementTasks,
   pushReinforcementTasks,
+  pullBadgeProgress,
+  pullWeeklyTestHistory,
 } from "../lib/sync";
 import { hydrateAnswerLog, loadAnswerRecords } from "../lib/error-reason";
 
@@ -114,9 +116,11 @@ function restoreEnrollmentDate(registeredAt: unknown) {
  */
 async function hydrateMirrors(): Promise<void> {
   try {
-    const [serverRecords, serverTasks] = await Promise.all([
+    const [serverRecords, serverTasks, serverBadges, serverWeeklyTests] = await Promise.all([
       pullAnswerRecords(),
       pullReinforcementTasks(),
+      pullBadgeProgress(),
+      pullWeeklyTestHistory(),
     ]);
 
     // Cevap kayıtları: sunucu kaynak gerçek veri
@@ -152,6 +156,33 @@ async function hydrateMirrors(): Promise<void> {
         updatedAt: String(t.updated_at ?? new Date().toISOString()),
       }));
       window.localStorage.setItem("lgs_reinforcement_tasks", JSON.stringify(tasks));
+    }
+
+    // Rozet ilerlemesi: localStorage'a yaz (use-badge-progress okur) — sadece sunucuda earned=true olanları
+    if (serverBadges && Object.keys(serverBadges).length > 0) {
+      const earnedOnly: Record<string, { earned: boolean; earned_at: string | null; progress: number }> = {};
+      for (const [k, v] of Object.entries(serverBadges)) {
+        if (v.earned) earnedOnly[k] = { earned: true, earned_at: v.earned_at ?? null, progress: v.progress ?? 0 };
+      }
+      if (Object.keys(earnedOnly).length > 0) {
+        window.localStorage.setItem("lgs_badge_progress", JSON.stringify(earnedOnly));
+      }
+    }
+
+    // Haftalık test geçmişi: localStorage'a yaz (weekly-test-history.ts okur)
+    if (serverWeeklyTests && serverWeeklyTests.length > 0) {
+      const mappedTests = serverWeeklyTests.map((t: Record<string, unknown>) => ({
+        date: String(t.date ?? new Date().toISOString()),
+        total: Number(t.total) || 0,
+        correct: Number(t.correct) || 0,
+        wrong: Number(t.wrong) || 0,
+        blank: Number(t.blank) || 0,
+        byCategory: t.by_category ?? {},
+        weakUnits: t.weak_units ?? [],
+        questionIds: t.question_ids ?? [],
+        wrongQuestionIds: t.wrong_question_ids ?? [],
+      }));
+      window.localStorage.setItem("lgs_weekly_test_history", JSON.stringify(mappedTests.slice(-52)));
     }
 
     // Sınav durumu (exam_results = ana kaynak): yerel boşsa sunucudan geri yükle.

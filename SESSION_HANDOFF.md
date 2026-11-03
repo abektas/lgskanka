@@ -1,24 +1,15 @@
 # SESSION HANDOFF — 2026-11-03
-**Son commit (push edilmiş):** `54ce75f` | **YEREL DEĞİŞİKLİKLER COMMIT/DEPLOY EDİLMEDİ** | **Canlı:** https://lgskanka.alibey.workers.dev
+**Son commit (push edilmiş):** `dd9857e` | **Canlı:** https://lgskanka.alibey.workers.dev (Version ID `0cde5d0d-af55-4647-8559-1e8e007313aa`)
 
 ---
 
-## ⚠️ ACİL — Yeni oturumda ilk yapılacak
+## ✅ ACİL TAMAMLANDI (2026-11-03 ikinci oturum)
 
-Kullanıcı "github ve Cloudflare'e push et" dedi ama istek işlenmedi. Aşağıdaki değişiklikler **sadece yerelde** duruyor:
-
-```
-M app/aylik-denemeler/page.tsx
-M app/calis/page.tsx
-M app/haftalik-test/page.tsx
-M data/nav.ts
-?? app/api/exams-status/
-```
-
-Deploy sırası (pitfall #2/#4):
-1. `git add` + commit + `git push origin main`
-2. `npm run build` → `opennextjs-cloudflare build` → `wrangler deploy`
-3. Canlıda doğrula: @lgsdeneme1 ile seviye tespit seçildiğinde sorular yerine sonuç ekranı gelmeli
+Yerel değişiklikler commit + push + deploy edildi (`dd9857e`):
+1. ✅ `git add` + commit + `git push origin main` → `54ce75f..dd9857e`
+2. ✅ `npm run lint` ✅ · `npm run test:taxonomy` 4/4 ✅ · `npm run build` ✅ · `opennextjs-cloudflare build` ✅ · `wrangler deploy` ✅
+3. ✅ Canlı doğrulama: 4 sayfa 200, `GET /api/exams-status` 200 + `{completedMonths, results}` şekli, canlı chunk'ta `exams-status`/`Tamamlandı` stringleri (taze build kanıtı)
+4. ⚠️ KALAN: @lgsdeneme1 hesap girişi doğrulanamadı — şifre standart `1234` değil. Kullanıcı son kontrolü kendisi yapacak (veya şifreyi verirse / sıfırlama onaylarsa ajan tamamlar)
 
 ---
 
@@ -89,12 +80,13 @@ lgskanka.alibey.workers.dev
 ## Bilinen Eksikler / Sonraki Adımlar
 
 | # | Görev | Öncelik |
-|---|-------|---------|
-| 1 | **Yukarıdaki yerel değişiklikleri push + deploy** | ACİL |
-| 2 | Haftalık test "bitmiş" kontrolü sadece localStorage'da (localStorage kaybında yeniden açılır — ileride sunucu fallback eklenebilir) | Düşük |
-| 3 | P3 kişiselleştirme UI kartı (`/sonuclar-ve-ilerleme`) | Orta |
-| 4 | Aylık deneme `topic`/`unit` null sorunu (1080 soru sınıflandırılmadı) | Orta |
-| 5 | `lgs_çalışma_soruları` PNG entegrasyonu | Düşük |
+|---|-------|-------|
+| 1 | ~~Yerel değişiklikleri push + deploy~~ → TAMAM (`dd9857e`, 2026-11-03) | ✅ |
+| 2 | @lgsdeneme1 ile canlı sonuç ekranı son kontrolü (şifre gerekli) | Orta |
+| 3 | Haftalık test "bitmiş" kontrolü sadece localStorage'da (localStorage kaybında yeniden açılır — ileride sunucu fallback eklenebilir) | Düşük |
+| 4 | P3 kişiselleştirme UI kartı (`/sonuclar-ve-ilerleme`) | Orta |
+| 5 | Aylık deneme `topic`/`unit` null sorunu (1080 soru sınıflandırılmadı) | Orta |
+| 6 | `lgs_çalışma_soruları` PNG entegrasyonu | Düşük |
 
 ---
 

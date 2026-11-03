@@ -3404,7 +3404,7 @@ a.mini-card:hover {
 .runner-hud small { color: var(--metin-soluk); font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; }
 .runner-hud b { overflow: hidden; color: var(--mor-700); font-size: 14px; white-space: nowrap; text-overflow: ellipsis; }
 .runner-track { position: relative; height: 128px; overflow: hidden; border: 1px solid #d6e8fa; border-radius: 18px; background: linear-gradient(180deg, #dff2ff, #f3f8ff 72%, #e9f7df); }
-.runner-ground { position: absolute; right: 0; bottom: 16px; left: 0; height: 3px; background: #81bd73; }
+.runner-ground { position: absolute; right: 0; bottom: 16px; left: 0; height: 3px; background: repeating-linear-gradient(90deg, #81bd73 0 18px, #a8d49a 18px 36px); background-size: 36px 3px; }
 .runner-character, .runner-obstacle { position: absolute; z-index: 1; bottom: 17px; font-size: 36px; line-height: 1; }
 .runner-character { left: 18%; transform-origin: center bottom; }
 .runner-obstacle { right: 18%; font-size: 27px; }
@@ -3416,6 +3416,16 @@ a.mini-card:hover {
 .runner-track.is-jump .runner-obstacle { animation: runner-obstacle-pass .7s ease-in forwards; }
 .runner-track.is-hit .runner-character { animation: runner-hit .55s ease-in-out; }
 .runner-track.is-hit .runner-obstacle { animation: runner-obstacle-hit .55s ease-out; }
+/* Normal koşu: karakter zıplar, kaya soldan akar, zemin hız çizgileriyle kayar */
+.runner-track.is-run .runner-character { animation: runner-bob .38s ease-in-out infinite; }
+.runner-track.is-run .runner-obstacle { animation: runner-obstacle-scroll 2.1s linear infinite; }
+.runner-track.is-run .runner-cloud-one { animation: runner-cloud-drift 7s linear infinite; }
+.runner-track.is-run .runner-cloud-two { animation: runner-cloud-drift 9s linear infinite; }
+.runner-track.is-run .runner-ground { animation: runner-ground-scroll .5s linear infinite; }
+@keyframes runner-bob { 0%, 100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-7px) rotate(3deg); } }
+@keyframes runner-obstacle-scroll { 0% { transform: translateX(0); opacity: 1; } 75% { opacity: 1; } 100% { transform: translateX(-440px); opacity: 0; } }
+@keyframes runner-cloud-drift { from { transform: translateX(14px); } to { transform: translateX(-52px); } }
+@keyframes runner-ground-scroll { to { background-position: -36px 0; } }
 @keyframes runner-jump { 0%, 100% { transform: translateY(0) rotate(0); } 45% { transform: translateY(-43px) rotate(-8deg); } }
 @keyframes runner-obstacle-pass { to { transform: translateX(-160px); opacity: .35; } }
 @keyframes runner-hit { 35% { transform: translateX(9px) rotate(15deg); filter: grayscale(.5); } 100% { transform: translateX(0); } }

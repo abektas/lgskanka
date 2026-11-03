@@ -198,7 +198,7 @@ export function LgsRunner({
           <span aria-hidden="true">{status === "timeup" ? "⏱️" : lives <= 0 ? "💪" : "🏁"}</span>
           <h4>{status === "timeup" ? "Süre tamamlandı!" : lives <= 0 ? "Koşu sona erdi" : "Güzel bir turdu!"}</h4>
           <p>{answered} soruda {score / 10} doğru cevap · {score} puan</p>
-          <p>{status === "timeup" ? "{roundLimitRef.current} saniyelik turun bitti." : lives <= 0 ? "Canların bitti. Biraz dinlenip yeniden deneyebilirsin." : "Günlük oyun süren sona erdi."}</p>
+          <p>{status === "timeup" ? `${roundLimitRef.current} saniyelik turun bitti.` : lives <= 0 ? "Canların bitti. Biraz dinlenip yeniden deneyebilirsin." : "Günlük oyun süren sona erdi."}</p>
         </div>
       )}
       <p className="runner-disclaimer">Alıştırmalar uygulamanın örnek soru havuzundan gelir; resmi LGS sorusu değildir.</p>

@@ -114,6 +114,25 @@ create table if not exists badge_progress (
   primary key (student_id, badge_id)
 );
 
+-- 9) Haftalık test geçmişi (2026-11-03 eklendi — canlıda çalıştırıldı)
+create table if not exists weekly_test_history (
+  id uuid primary key default gen_random_uuid(),
+  student_id uuid not null references students(id) on delete cascade,
+  date timestamptz not null,
+  total int not null,
+  correct int not null,
+  wrong int not null,
+  blank int not null,
+  by_category jsonb not null default '{}',
+  weak_units jsonb not null default '[]',
+  question_ids jsonb not null default '[]',
+  wrong_question_ids jsonb not null default '[]',
+  created_at timestamptz not null default now(),
+  unique (student_id, date)
+);
+create index if not exists idx_weekly_test_history_student
+  on weekly_test_history (student_id, date desc);
+
 -- Güvenlik: tüm tablolarda satır düzeyi koruma.
 -- Uygulamanın sunucu API'leri secret key ile çalıştığı için RLS'i atlar;
 -- dışarıdan anon anahtarla hiçbir şeye erişilemez.
@@ -125,3 +144,4 @@ alter table study_sessions enable row level security;
 alter table reinforcement_tasks enable row level security;
 alter table game_progress enable row level security;
 alter table badge_progress enable row level security;
+alter table weekly_test_history enable row level security;

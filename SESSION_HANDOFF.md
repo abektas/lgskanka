@@ -49,7 +49,9 @@ alter table weekly_test_history enable row level security;
 
 7. **Kalıcılık garanti:** Çıkışta yerel temizlense bile, yeniden girişte `hydrateMirrors` → sunucudan rozet/haftalık/deneme geçmişi/döngü anchor/kayıt tarihi geri yüklenir.
 
-**DDL çalıştırılmadan önce:** API'ler boş dizi döner (hata atmıyor, graceful fallback). Tablo oluşturulduktan sonra otomatik dolmaya başlar.
+**DDL çalıştırıldı (2026-11-03):** Kullanıcı Supabase Dashboard → SQL Editor'da tabloları oluşturdu ✅. İlk denemede `ON CONFLICT (student_id, date)` hatası çıktı (42P10) — `unique (student_id, date)` kısıtı eklenerek düzeltildi ✅. `supabase/schema.sql` kanonik kopya güncel.
+
+**Canlı doğrulama (hersstest4):** rozet yaz/oku (2 rozet) ✅ · haftalık test yaz → aynı tarihli tekrar yaz (upsert güncelleme, 31/45) ✅ · token yok → 401 ✅ · yeniden giriş → kayıt duruyor ✅
 
 **Test:** Canlı headless Chrome — çıkış/geri giriş akışı, rozet/haftalık endpoint 401/empty, continuation done=true ✓
 

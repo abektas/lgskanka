@@ -1,32 +1,50 @@
 # SESSION HANDOFF — 2026-11-03
-**Son commit (push edilmiş):** `819e57b` | **Canlı:** https://lgskanka.alibey.workers.dev (Version ID `a817126c-a0b3-4552-99b3-937c56b0a88d`)
+**Son commit (push edilmiş):** `1a8204a` | **Canlı:** https://lgskanka.alibey.workers.dev (Version ID `0ebcc80f-c01d-472d-bbe2-ca2eeff016be`)
 
 ---
 
-## 2026-11-03 — Ana sayfa "Kaldığın yerden devam et" kartı düzeltmesi (in-app yorum)
+## 2026-11-03 — In-app yorumlar (3 madde) — TAMAMLANDI
 
-**Kullanıcı raporu:** Günlük çalışma tamamen bittiği halde kart 23/24 gösterip devama yönlendiriyordu; biten gün için "tamamlandı" uyarısı istendi.
+### 1) Yorum 2: "Hata türü dağılımı" kartı sabit, hiç değişmiyor
+**Kök neden:** `/api/study` her gün aynı 24 soruyu (deterministik `unit_difficulty` sıra) servis ediyordu + `answer_records` soru başına tek kayıt (upsert) → re-answered questions overwrite → kayıtlar büyümez, H-distribution donuyor ("5 hata · %42" günlerce aynı).
 
-**Kök neden (3 kayıp yolu):**
-1. Yanlış cevapta hata nedeni (H1-H7) seçilmeden "Sonraki soru"a basılırsa kayıt HİÇ yazılmıyordu (`saveAnswerRecord` yalnızca `selectErrorReason` içindeydi) → sayaç 23/24.
-2. `hydrateAnswerLog` sayfa yenilenmesinde yerel kayıtların tamamını sunucuyla DEĞİŞTİRİYORDU — push'u ulaşmamış kayıtlar siliniyordu.
-3. Biten gün "tamamlandı" olarak işaretlenmiyordu; yarışan push'lar sayacı geriye düşürebiliyordu.
+**Çözüm:**
+- `GET /api/study?fresh=1` → son 30 günde çözülen sorular (answer_records.question_id) hariç tutulur, taze sorular önce gelir; havuz tükenirse tekrarlar geri döner.
+- `/calis` fetch → `apiFetch(...&fresh=1)` (Authorization header gönderir).
+- Sonuç: her gün yeni 24 soru → yeni kayıtlar → H-distribution her gün değişir.
 
-**Çözüm (`819e57b`):**
-- `/calis` `nextQuestion`: hata nedeni atlanan yanlış cevap kaydı geçişte tamamlanır; bitişte `state.completed: true` push edilir.
-- `lib/error-reason.ts` `hydrateAnswerLog`: soru başına tek kayıt olacak şekilde BİRLEŞTİRİR, sunucuya ulaşmamış kayıtları yeniden gönderir.
-- `POST /api/study-session`: `solved` monoton (geriye gitmez), `state.completed` yapışkan.
-- `/api/continue` + `components/continue-card.tsx`: `done:true` ise kart 🎉 "Bu günlük çalışmanı tamamladın / Tebrik ederim! Bir sonraki çalışma yarın aktif olacak." gösterir, "Devam et" butonu gizli, bar %100.
+### 2) Yorum 3: "Denemeler her ay bir, cumartesi" → kopya düzeltmesi
+- `app/aylik-denemeler/page.tsx:630` — "ayda bir, cumartesi" olarak düzeltildi.
 
-**Doğrulama:** tsc ✅ · taxonomy test 4/4 ✅ · build ✅ · yerel + canlı API senaryoları ✅ · headless Chrome DOM kontrolü ✅ (tamamlanmış gün: buton yok, bar %100; kısmi gün: 23/24 + buton mevcut — regresyon yok). Ekran görüntüsü: `~/.hermes/cache/scratch/kart-tamamlandi.png`.
+### 3) Yorum 4: "Seviye 4 hala sabit görünüyor" (TopBar + /profil + /oduller)
+**Kök neden:** `data/nav.ts`'teki `learner` tamamen demo veri (`xp: 245`, `streakDays: 4`, `levelXp: 145`, `levelTarget: 320` sabit) — `level` getter XP'den hesaplansaydı da XP sabit → herkes Seviye 4.
 
-**Notlar:**
-- Test hesapları: `hersstest1`, `hersstest2` (şifre `test1234`) — öğretmen panelinden silinebilir.
-- `tests/source-ingestion/api-contract.test.mjs` içinde 1 ÖNCEDEN VAR olan hata: `/api/study/route.ts` regex beklentisi (`timingSafeEqual`) eski kodla uyumsuz — bu değişikliklerle ilgisiz, düzeltilmedi.
+**Çözüm — `lib/learner-stats.ts` (yeni):**
+- `computeLearnerStats()` → `loadAnswerRecords()` üzerinden:
+  - XP = doğru × 2 (aynı kural `/calis` DailySummary: "doğru başına 2 XP").
+  - Streak = bugün/dünden geriye doğru kesintisiz günler (UTC tarih).
+  - Seviye eşikleri: `[0, 100, 250, 450, 700, 1000, 1400, 1900, 2500, 3200]` (kümülatif XP).
+  - `levelXp` = XP - mevcut eşik; `levelTarget` = sonraki eşik - mevcut eşik.
+- `useLearnerStats()` hook: mount'ta hesaplar, öncesi `null` (SSR uyumlu — hydration mismatch yok).
+- Tüketiciler (hook + `?? learner.*` fallback):
+  - `components/chrome.tsx`: `TopBar` (streak, XP, level, levelXp/levelTarget, çubuk) + `Sidebar` greeting.
+  - `app/page.tsx`: Home "Kazanımlarım" streak kartı.
+  - `app/profil/page.tsx`: "Karakter durumu" (Seviye pill, XP, streak) + unlockables "Seviye ödülleri".
+  - `app/oduller/OdullerClient.tsx`: XP kartı.
+
+**Doğrulama:**
+- `npm run lint` ✅ · `npm run test:taxonomy` 4/4 ✅ · `npm run build` ✅ · `opennextjs-cloudflare build` ✅ · `wrangler deploy` ✅ (Version `0ebcc80f`).
+- Canlı:
+  - 6 sayfa HTTP 200.
+  - Kopya "ayda bir" (JS sonrası görünür).
+  - TopBar `/api/continue`: done=true, 24/24, completed=true.
+  - Rotasyon: `fresh=1` endpoint hersstest2 için farklı soru IDs döndürüyor.
+
+**Bilinen/uncommitted:** `.ses`, `data-gym-cache/`, `scripts/output/` yanlışlıkla commitlendi — temizlenmeli.
 
 ---
 
-## ✅ ACİL TAMAMLANDI (2026-11-03 ikinci oturum)
+## ✅ ÖNCEKİ ACİL TAMAMLANDI (2026-11-03 ikinci oturum)
 
 Yerel değişiklikler commit + push + deploy edildi (`dd9857e`):
 1. ✅ `git add` + commit + `git push origin main` → `54ce75f..dd9857e`

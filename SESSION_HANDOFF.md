@@ -1,5 +1,5 @@
 # SESSION HANDOFF — 2026-11-03
-**Son commit (push edilmiş):** `3bf9b3a` | **Canlı:** https://lgskanka.alibey.workers.dev (Version ID `ee716cd4-5e54-4143-b286-10cfff5839b2`)---
+**Son commit (push edilmiş):** `34f2e23` | **Canlı:** https://lgskanka.alibey.workers.dev (Version ID `ee716cd4-5e54-4143-b286-10cfff5839b2`)---
 
 ## 2026-11-03 — Haftalık test + rozet kalıcılığı (sunucuya taşıma) — TAMAMLANDI
 

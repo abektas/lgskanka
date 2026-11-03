@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Icon } from "./icons";
 import { MemoryGame } from "./memory-game";
 import { Mini2048 } from "./mini-2048";
-import { LgsRunner } from "./lgs-runner";
+import { KelimeAvi } from "./kelime-avi";
 import { SpeedGame } from "./speed-game";
 import { useGameRights } from "./use-game-rights";
 import { games, memoryPairs } from "../data/content";
@@ -14,7 +14,7 @@ import { learner } from "../data/nav";
 const rules: Record<string, string> = {
   "Hafıza Kartları": "Terimler ile anlamlarını eşleştir. Yanlış eşleşmede kart geri kapanır, süre işler.",
   "Matematik 2048": "Düşen taşları sağa-sola kaydır; ↓ bir kare indirir, boşluk hızlı bırakır, C tutar. Eşit gruplar ×2/×4/×8 birleşip zincir oluşturur.",
-  "LGS Runner": "Doğru cevabı seçtikçe karakter zıplar; yanlışta bir kalp gider. 3 kalp, 90 saniye.",
+  "Kelime Avı": "Karışık harfleri sıralayarak konu kelimesini bul. Yanlış tahminde bir canın gider; pas geçmek ücretsiz. 3 can, 90 saniye.",
   "Hız Oyunu": "30 saniyede mümkün olduğunca çok doğru cevap ver. Hız kadar doğruluk da puanlanır.",
 };
 
@@ -48,9 +48,9 @@ function renderGameComponent(
           onExit={() => setOpenGame(null)}
         />
       );
-    case "LGS Runner":
+    case "Kelime Avı":
       return (
-        <LgsRunner
+        <KelimeAvi
           key={roundKey}
           rightsLeft={rights}
           remainingSeconds={remainingSeconds}
@@ -199,9 +199,9 @@ export function GameCenter() {
                       onExit={() => setOpenGame(null)}
                     />
                   );
-                case "LGS Runner":
+                case "Kelime Avı":
                   return (
-                    <LgsRunner
+                    <KelimeAvi
                       key={roundKey}
                       rightsLeft={rights}
                       remainingSeconds={remainingSeconds}

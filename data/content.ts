@@ -232,7 +232,7 @@ export type Game = {
 export const games: Game[] = [
   { icon: "🧠", name: "Hafıza Kartları", detail: "Kavramları eşleştir", minutes: 5 },
   { icon: "🔢", name: "Matematik 2048", detail: "Sayıları birleştir", minutes: 5 },
-  { icon: "🏃", name: "LGS Runner", detail: "Doğru cevapla zıpla", minutes: 5 },
+  { icon: "🔤", name: "Kelime Avı", detail: "Karışık harfleri düzenle, konu kelimesini bul", minutes: 3 },
   { icon: "⚡", name: "Hız Oyunu", detail: "30 saniyede kaç soru?", minutes: 3 },
 ];
 

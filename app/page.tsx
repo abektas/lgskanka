@@ -16,6 +16,7 @@ import {
   weeklyProgress,
 } from "../data/content";
 import { learner } from "../data/nav";
+import { useLearnerStats } from "../lib/learner-stats";
 
 /** Hata türlerinin paylarından pasta grafiği üretir. */
 function donutBackground() {
@@ -32,6 +33,7 @@ function donutBackground() {
 
 export default function HomePage() {
   const topErrors = [...errorTypes].sort((a, b) => b.share - a.share).slice(0, 4);
+  const stats = useLearnerStats();
 
   return (
     <div className="page">
@@ -246,7 +248,7 @@ export default function HomePage() {
               🔥
             </span>
             <span>
-              {learner.streakDays} günlük çalışma serisi
+              {(stats?.streakDays ?? learner.streakDays)} günlük çalışma serisi
               <small>Yarın devam et, rozeti koru</small>
             </span>
           </div>

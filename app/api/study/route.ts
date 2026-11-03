@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createHash, timingSafeEqual } from "node:crypto";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { getStudentIdByUsername, getLevelTestResult } from "../../../lib/db";
+import { getStudentIdByUsername, getLevelTestResult, dbSelect } from "../../../lib/db";
+import { authFromRequest } from "../../../lib/auth";
 
 // Görseller /r2 proxy rotasından sunulur (yalnızca .webp).
 const R2_PUBLIC_URL = "https://lgskanka.alibey.workers.dev/r2";
@@ -128,6 +129,7 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get("limit") || "0", 10);
     const wrongMode = searchParams.get("wrong_mode");
     const sort = searchParams.get("sort") || "unit_difficulty";
+    const fresh = searchParams.get("fresh") === "1"; // günlük çalışma: son 30 günde çözülenler dışlanır
     const profileId = searchParams.get("profileId"); // Kişiselleştirme için öğrenci kullanıcı adı
 
     // Kişiselleştirilmiş ders kotalarını hesapla
@@ -190,6 +192,31 @@ export async function GET(request: NextRequest) {
         const diffB = b.pedagogicalDifficulty ?? 999;
         return diffA - diffB;
       });
+    }
+
+    if (limit > 0 && fresh) {
+      // Günlük çalışma rotasyonu: son 30 günde çözülen sorular dışlanır ki
+      // her gün yeni sorular gelsin (havuz tükenirse çözülenler geri döner).
+      const auth = await authFromRequest(request);
+      if (auth) {
+        try {
+          const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+          const rows = await dbSelect<{ question_id: string }>(
+            "answer_records",
+            `student_id=eq.${encodeURIComponent(auth.sub)}&created_at=gte.${since}&limit=2000`,
+            "question_id"
+          );
+          const answered = new Set(rows.map((r) => r.question_id));
+          if (answered.size > 0) {
+            questions = [
+              ...questions.filter((q) => !answered.has(q.id)),
+              ...questions.filter((q) => answered.has(q.id)),
+            ];
+          }
+        } catch {
+          // Sunucu kaydı okunamazsa rotasyonsuz devam et.
+        }
+      }
     }
 
     if (limit > 0) {

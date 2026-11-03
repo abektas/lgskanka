@@ -286,7 +286,7 @@ export default function CalisPage() {
     };
     Promise.all(
       subjects.map((s) =>
-        fetch(`/api/study?subject=${s.slug}&limit=${subjectLimits[s.slug]}&sort=unit_difficulty`)
+        apiFetch(`/api/study?subject=${s.slug}&limit=${subjectLimits[s.slug]}&sort=unit_difficulty&fresh=1`)
           .then((r) => r.json())
           .then((d) => (d.items || []) as StudyQuestion[])
       )

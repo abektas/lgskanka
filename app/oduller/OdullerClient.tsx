@@ -6,9 +6,15 @@ import { GameCenter } from "../../components/game-center";
 import { badges } from "../../data/content";
 import { learner, xpRules } from "../../data/nav";
 import { useBadgeProgress } from "../../components/use-badge-progress";
+import { useLearnerStats } from "../../lib/learner-stats";
 
 export function OdullerClient() {
-  const nextLevelXp = learner.levelTarget - learner.levelXp;
+  const stats = useLearnerStats();
+  const xp = stats?.xp ?? learner.xp;
+  const level = stats?.level ?? learner.level;
+  const levelXp = stats?.levelXp ?? learner.levelXp;
+  const levelTarget = stats?.levelTarget ?? learner.levelTarget;
+  const nextLevelXp = levelTarget - levelXp;
   const badgeList = useBadgeProgress();
   const earned = badgeList.filter((badge) => badge.earned).length;
 
@@ -34,19 +40,19 @@ export function OdullerClient() {
           <span className="reward-emoji" aria-hidden="true">
             ⭐
           </span>
-          <b>{learner.xp} XP</b>
+          <b>{xp} XP</b>
           <small>
-            Bir sonraki seviye için {nextLevelXp} XP kaldı (Seviye {learner.level + 1})
+            Bir sonraki seviye için {nextLevelXp} XP kaldı (Seviye {level + 1})
           </small>
           <div
             className="bar"
             role="progressbar"
             aria-valuemin={0}
-            aria-valuemax={learner.levelTarget}
-            aria-valuenow={learner.levelXp}
+            aria-valuemax={levelTarget}
+            aria-valuenow={levelXp}
             aria-label="Seviye ilerlemesi"
           >
-            <i style={{ width: `${Math.round((learner.levelXp / learner.levelTarget) * 100)}%` }} />
+            <i style={{ width: `${Math.round((levelXp / Math.max(1, levelTarget)) * 100)}%` }} />
           </div>
         </article>
 

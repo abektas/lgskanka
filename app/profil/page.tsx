@@ -8,8 +8,10 @@ import { ProfileSelector } from "../../components/profile-selector";
 import { useProfile } from "../../components/profile-provider";
 import { badges } from "../../data/content";
 import { learner, gameEconomy } from "../../data/nav";
+import { useLearnerStats } from "../../lib/learner-stats";
 
-const unlockables = [
+function buildUnlockables(level: number, xp: number) {
+  return [
   {
     icon: "🪑",
     title: "Çalışma odası eşyaları",
@@ -31,14 +33,20 @@ const unlockables = [
   {
     icon: "⭐",
     title: "Seviye ödülleri",
-    detail: `Seviye ${learner.level} · ${gameEconomy.tiers.find((t) => t.xp <= learner.xp)?.label ?? "Henüz yok"}`,
-    earned: learner.level > 1,
+    detail: `Seviye ${level} · ${gameEconomy.tiers.find((t) => t.xp <= xp)?.label ?? "Henüz yok"}`,
+    earned: level > 1,
   },
-];
+  ];
+}
 
 export default function ProfilPage() {
   const { profiles, activeProfile, switchProfile } = useProfile();
   const earned = badges.filter((badge) => badge.earned);
+  const stats = useLearnerStats();
+  const level = stats?.level ?? learner.level;
+  const xp = stats?.xp ?? learner.xp;
+  const streakDays = stats?.streakDays ?? learner.streakDays;
+  const unlockables = buildUnlockables(level, xp);
 
   return (
     <div className="page">
@@ -96,13 +104,13 @@ export default function ProfilPage() {
           <section className="card" aria-labelledby="karakter-durumu">
             <div className="section-head">
               <h2 id="karakter-durumu">Karakter durumu</h2>
-              <span className="pill is-xp">Seviye {learner.level}</span>
+              <span className="pill is-xp">Seviye {level}</span>
             </div>
             <div className="character-summary">
               <CharacterAvatar size={104} />
               <ul className="mini-stats">
                 <li>
-                  <b>{learner.xp} XP</b>
+                  <b>{xp} XP</b>
                   <small>Toplam puan</small>
                 </li>
                 <li>
@@ -114,7 +122,7 @@ export default function ProfilPage() {
                   <small>Çalışma odası</small>
                 </li>
                 <li>
-                  <b>{learner.streakDays} gün</b>
+                  <b>{streakDays} gün</b>
                   <small>Çalışma serisi</small>
                 </li>
               </ul>

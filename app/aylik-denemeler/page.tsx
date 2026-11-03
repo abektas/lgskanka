@@ -627,7 +627,7 @@ export default function AylikDenemelerPage() {
       <div className="card">
         <h2>Aylık Deneme Takvimi</h2>
         <p>
-          Denemeler <b>her ay bir, cumartesi</b> yapılır. Her deneme sonrası yanlış
+          Denemeler <b>ayda bir, cumartesi</b> yapılır. Her deneme sonrası yanlış
           yaptığın konular otomatik olarak <b>/pekistirme</b> sayfasına aktarılır;
           detaylı analiz için <b>/sonuclar</b> sayfasına geç.
         </p>

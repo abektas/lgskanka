@@ -7,6 +7,7 @@ import { Icon } from "./icons";
 import { SearchBox } from "./search-box";
 import { useProfile } from "./profile-provider";
 import { learner, navItems } from "../data/nav";
+import { useLearnerStats } from "../lib/learner-stats";
 
 function isActive(pathname: string, href: string) {
   return href === "/" ? pathname === "/" : pathname.startsWith(href);
@@ -14,6 +15,7 @@ function isActive(pathname: string, href: string) {
 
 export function Sidebar() {
   const pathname = usePathname();
+  const stats = useLearnerStats();
 
   return (
     <aside className="side" aria-label="Ana menü">
@@ -52,7 +54,7 @@ export function Sidebar() {
         </span>
         <b>Bugün harika gidiyorsun!</b>
         <small>
-          {learner.streakDays} günlük serin var. Hedefine bir adım daha yaklaştın.
+          {(stats?.streakDays ?? learner.streakDays)} günlük serin var. Hedefine bir adım daha yaklaştın.
         </small>
       </div>
 
@@ -89,7 +91,13 @@ export function MobileNav() {
 
 export function TopBar({ query }: { query?: string }) {
   const { activeProfile, ready } = useProfile();
-  const percent = Math.round((learner.levelXp / learner.levelTarget) * 100);
+  const stats = useLearnerStats();
+  const streakDays = stats?.streakDays ?? learner.streakDays;
+  const xp = stats?.xp ?? learner.xp;
+  const level = stats?.level ?? learner.level;
+  const levelXp = stats?.levelXp ?? learner.levelXp;
+  const levelTarget = stats?.levelTarget ?? learner.levelTarget;
+  const percent = Math.round((levelXp / Math.max(1, levelTarget)) * 100);
 
   return (
     <div className="topbar">
@@ -97,25 +105,25 @@ export function TopBar({ query }: { query?: string }) {
 
       <div className="topbar-stats">
         <span className="pill is-flame">
-          <span aria-hidden="true">🔥</span> {learner.streakDays} gün seri
+          <span aria-hidden="true">🔥</span> {streakDays} gün seri
         </span>
         <span className="pill is-xp">
-          <span aria-hidden="true">⭐</span> {learner.xp} XP
+          <span aria-hidden="true">⭐</span> {xp} XP
         </span>
 
         <div className="level">
           <div className="level-text">
-            <b>Seviye {learner.level}</b>
+            <b>Seviye {level}</b>
             <span className="level-xp">
-              {learner.levelXp} / {learner.levelTarget} XP
+              {levelXp} / {levelTarget} XP
             </span>
           </div>
           <div
             className="bar"
             role="progressbar"
             aria-valuemin={0}
-            aria-valuemax={learner.levelTarget}
-            aria-valuenow={learner.levelXp}
+            aria-valuemax={levelTarget}
+            aria-valuenow={levelXp}
             aria-label="Seviye ilerlemesi"
           >
             <i style={{ width: `${percent}%` }} />

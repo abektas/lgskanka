@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Icon } from "../../components/icons";
+import { ScoreCounts } from "../../components/score-counts";
 import { CycleBadge } from "../../components/cycle-badge";
 import { errorTypes } from "../../data/content";
 import { ERROR_REASON_OPTIONS, loadAnswerRecords, saveAnswerRecord } from "../../lib/error-reason";
@@ -351,6 +352,7 @@ export default function HaftalikTestPage() {
       correct = results.filter((r) => r.correct).length;
       wrong = results.length - correct;
       total = items?.length ?? results.length;
+      blank = total - results.length;
       byCat = (cat: TestCategory) => {
         const list = results.filter((r) => r.category === cat);
         return { total: list.length, correct: list.filter((r) => r.correct).length };
@@ -376,7 +378,7 @@ export default function HaftalikTestPage() {
             <span className="eyebrow">Haftalık test</span>
             <h1>Test Sonucu</h1>
             <p>
-              {correct} doğru · {wrong} yanlış · {blank} boş (toplam {total} soru)
+              <ScoreCounts correct={correct} wrong={wrong} blank={blank} total={total} />
               {delta !== 0 && (
                 <span style={{ marginLeft: 12, color: delta > 0 ? "var(--mint)" : "var(--kirmizi)" }}>
                   {delta > 0 ? "▲" : "▼"} {delta > 0 ? "+" : ""}{delta} puan (bir önceki teste göre)
@@ -408,7 +410,7 @@ export default function HaftalikTestPage() {
                       <i style={{ width: `${c.total ? (c.correct / c.total) * 100 : 0}%` }} />
                     </span>
                     <em>
-                      {c.correct}/{c.total}
+                      <ScoreCounts correct={c.correct} wrong={c.total - c.correct} blank={null} total={c.total} />
                     </em>
                   </div>
                 );
@@ -452,7 +454,9 @@ export default function HaftalikTestPage() {
                     <span className="bar" aria-hidden="true">
                       <i style={{ width: `${pct}%` }} />
                     </span>
-                    <em>{pct}% · {r.correct}/{r.total}</em>
+                    <em>
+                      {pct}% · <ScoreCounts correct={r.correct} wrong={r.wrong} blank={r.blank} total={r.total} />
+                    </em>
                   </div>
                 );
               })}

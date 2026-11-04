@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Icon } from "../../components/icons";
+import { ScoreCounts } from "../../components/score-counts";
 import { subjects, errorTypes } from "../../data/content";
 import { ERROR_REASON_OPTIONS, saveAnswerRecord, loadAnswerRecords } from "../../lib/error-reason";
 import { pushStudySession, apiFetch } from "../../lib/sync";
@@ -20,7 +21,7 @@ const ERROR_REASON_OPTIONS_LOCAL = [
   { id: "yonetim", label: "Yöntemi bilmiyordum", code: "H2" },
   { id: "islem", label: "İşlem hatası yaptım", code: "H4" },
   { id: "eksik", label: "Konuda eksiğim var", code: "H1" },
-  { id: "bilmiyorum", label: "Konuyu bilmiyorum", code: null },
+  { id: "bilmiyorum", label: "Konuyu bilmiyorum", code: "H1" },
 ];
 import { computeUnitMasteries, type UnitMastery } from "../../lib/mastery";
 
@@ -31,30 +32,50 @@ interface DailySummaryProps {
 
 function DailySummary({ questions, cycle }: DailySummaryProps) {
   const today = new Date().toDateString();
-  const latestByQuestion = new Map<string, ReturnType<typeof loadAnswerRecords>[number]>();
-  for (const record of loadAnswerRecords()) {
-    if ((record.source ?? "gunluk") === "gunluk" && new Date(record.createdAt).toDateString() === today) {
-      latestByQuestion.set(record.questionId, record);
-    }
-  }
+  const [savedRecords, setSavedRecords] = useState<ReturnType<typeof loadAnswerRecords>>([]);
+  useEffect(() => {
+    const refreshRecords = () => {
+      const latestByQuestion = new Map<string, ReturnType<typeof loadAnswerRecords>[number]>();
+      for (const record of loadAnswerRecords()) {
+        if ((record.source ?? "gunluk") === "gunluk" && new Date(record.createdAt).toDateString() === today) {
+          latestByQuestion.set(record.questionId, record);
+        }
+      }
+      setSavedRecords([...latestByQuestion.values()]);
+    };
+    refreshRecords();
+    window.addEventListener("lgs-answer-records-changed", refreshRecords);
+    return () => window.removeEventListener("lgs-answer-records-changed", refreshRecords);
+  }, [today]);
+
+  const latestByQuestion = new Map(savedRecords.map((record) => [record.questionId, record]));
   const records = questions.flatMap((question) => {
     const record = latestByQuestion.get(question.id);
     return record ? [{ ...record, question }] : [];
   });
 
-  const total = records.length;
+  const answered = records.length;
   const correct = records.filter((r) => r.correct).length;
-  const wrong = total - correct;
-  const correctPct = total ? Math.round((correct / total) * 100) : 0;
+  const wrong = answered - correct;
+  const total = questions.length;
+  const blank = total - answered;
+  const correctPct = answered ? Math.round((correct / answered) * 100) : 0;
 
   // Ders bazında
-  const bySubject: Record<string, { total: number; correct: number }> = {};
+  const bySubject: Record<string, { total: number; answered: number; correct: number; wrong: number }> = {};
+  for (const question of questions) {
+    const subject = question.subject;
+    if (!bySubject[subject]) bySubject[subject] = { total: 0, answered: 0, correct: 0, wrong: 0 };
+    bySubject[subject].total++;
+  }
   for (const r of records) {
     const subject = r.question.subject || r.subject;
-    if (!bySubject[subject]) bySubject[subject] = { total: 0, correct: 0 };
-    bySubject[subject].total++;
+    if (!bySubject[subject]) bySubject[subject] = { total: 0, answered: 0, correct: 0, wrong: 0 };
+    bySubject[subject].answered++;
     if (r.correct) bySubject[subject].correct++;
+    else bySubject[subject].wrong++;
   }
+  for (const stats of Object.values(bySubject)) stats.total = Math.max(stats.total, stats.answered);
 
   // H türü bazında
   const byH: Record<string, number> = {};
@@ -79,7 +100,7 @@ function DailySummary({ questions, cycle }: DailySummaryProps) {
 
   // Zayıf dersler (doğruluk < 60%)
   const weakSubjects = Object.entries(bySubject)
-    .filter(([, v]) => v.total > 0 && v.correct / v.total < 0.6)
+    .filter(([, v]) => v.answered > 0 && v.correct / v.answered < 0.6)
     .map(([k]) => k);
 
   const weeklyOpen = isWeeklyTestOpen();
@@ -89,9 +110,8 @@ function DailySummary({ questions, cycle }: DailySummaryProps) {
       <div className="summary-grid">
         <div className="summary-card">
           <h3>Genel Sonuç</h3>
-          <div className="big-number">{correct}/{questions.length}</div>
+          <ScoreCounts correct={correct} wrong={wrong} blank={blank} total={total} />
           <div className="big-percent">%{correctPct}</div>
-          <small className="muted-text">Kaydedilen yanıt: {total}/{questions.length}</small>
           <div className="summary-meta">
             <span>⏱ {mm} dk {ss} sn</span>
             <span>⭐ +{xpEarned} XP</span>
@@ -100,12 +120,13 @@ function DailySummary({ questions, cycle }: DailySummaryProps) {
         <div className="summary-card">
           <h3>Ders Bazında</h3>
           <div className="subject-breakdown">
-            {total === 0 ? (
-              <p className="muted-text">Henüz yanıt kaydı bulunmuyor.</p>
-            ) : Object.entries(bySubject).map(([subj, v]) => (
+            {Object.entries(bySubject).map(([subj, v]) => (
               <div key={subj} className="subject-row">
                 <span>{subj}</span>
-                <span>{v.correct}/{v.total} (%{v.total ? Math.round((v.correct / v.total) * 100) : 0})</span>
+                <span>
+                  <ScoreCounts correct={v.correct} wrong={v.wrong} blank={Math.max(0, v.total - v.answered)} total={v.total} />
+                  <small>%{v.answered ? Math.round((v.correct / v.answered) * 100) : 0}</small>
+                </span>
               </div>
             ))}
           </div>
@@ -124,7 +145,7 @@ function DailySummary({ questions, cycle }: DailySummaryProps) {
             </div>
           ) : (
             <p className="muted-text">
-              {total === 0 ? "Henüz yanıt kaydı bulunmuyor." : "Hiç hata yok — mükemmel!"}
+              {answered === 0 ? "Henüz yanıt kaydı bulunmuyor." : "Hiç hata yok — mükemmel!"}
             </p>
           )}
         </div>

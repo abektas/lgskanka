@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Icon } from "./icons";
+import { ScoreCounts } from "./score-counts";
 import { apiFetch } from "../lib/sync";
 
 interface ContinueData {
@@ -42,6 +43,9 @@ export function ContinueCard() {
 
   const { today, suggestion } = data;
   const done = data.done === true;
+  const total = Math.max(0, today.target);
+  const answered = Math.min(total, Math.max(0, today.solved));
+  const correct = Math.min(answered, Math.max(0, today.correct));
   const pct = done ? 100 : Math.min(100, Math.round((today.solved / Math.max(1, today.target)) * 100));
 
   return (
@@ -66,11 +70,10 @@ export function ContinueCard() {
         >
           <i style={{ width: `${pct}%` }} />
         </div>
-        <small className="muted-text">
-          {done
-            ? `Bugün ${today.solved} soru çözdün · ${today.correct} doğru`
-            : `Bugün ${today.solved}/${today.target} soru · ${today.correct} doğru`}
-        </small>
+        <div className="muted-text">
+          <small>Bugün</small>
+          <ScoreCounts correct={correct} wrong={answered - correct} blank={total - answered} total={total} />
+        </div>
 
         {!done && (
           <Link className="btn btn-primary" href={suggestion.href}>

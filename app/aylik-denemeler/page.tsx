@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback, useMemo, useRef } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Icon } from "../../components/icons";
+import { ScoreCounts } from "../../components/score-counts";
 import { CycleBadge } from "../../components/cycle-badge";
 import { subjects } from "../../data/content";
 import { saveExamRecord, examDelta, type ExamRecord, loadExamHistory } from "../../lib/exam-history";
@@ -586,10 +587,11 @@ export default function AylikDenemelerPage() {
           <div className="stat"><b>{examResult.correct}</b><small>Doğru</small></div>
           <div className="stat"><b>{examResult.wrong}</b><small>Yanlış</small></div>
           <div className="stat"><b>{examResult.empty}</b><small>Boş</small></div>
-          <div className="stat lgs-score"><b>{score.overall.rawScore}</b><small>Ham Puan (yaklaşık)</small></div>
+          <div className="stat"><b>{examResult.total}</b><small>Toplam</small></div>
+          <div className="stat lgs-score"><b>{score.overall.rawScore}</b><small>Net (yaklaşık)</small></div>
         </div>
         <p className="muted-text" style={{ marginTop: 8, fontSize: 12 }}>
-          Yaklaşık ham puan = Doğru − (Yanlış ÷ 3), katsayısız. Kesin LGS puanı için MEB'in ücretsiz{" "}
+          Yaklaşık net = Doğru − (Yanlış ÷ 3). Kesin LGS puanı için MEB'in ücretsiz{" "}
           <a href="https://mebi.eba.gov.tr/" target="_blank" rel="noopener noreferrer">
             MEBİ Bireysel Öğrenme Platformu
           </a>
@@ -600,7 +602,10 @@ export default function AylikDenemelerPage() {
           {Object.entries(examResult.bySubject).map(([subj, stats]) => (
             <div key={subj} className="subject-stat">
               <span>{getSubjectName(subj)}</span>
-              <span>{stats.correct}/{stats.total} ( %{Math.round((stats.correct / stats.total) * 100)} )</span>
+              <span>
+                <ScoreCounts correct={stats.correct} wrong={stats.wrong} blank={stats.empty} total={stats.total} />
+                <small>%{Math.round((stats.correct / stats.total) * 100)}</small>
+              </span>
             </div>
           ))}
         </div>

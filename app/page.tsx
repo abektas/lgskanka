@@ -5,15 +5,13 @@ import { Icon } from "../components/icons";
 import { GameRightsCard } from "../components/dashboard-widgets";
 import { CycleCard } from "../components/cycle-card";
 import { Greeting } from "../components/greeting";
-import { HeroArt } from "../components/hero-art";
-import { StudyTimer } from "../components/study-timer";
-import { TaskList } from "../components/task-list";
 import { ContinueCard } from "../components/continue-card";
+import { ScoreCounts } from "../components/score-counts";
 import { subjects } from "../data/content";
 import { errorTypes } from "../data/content";
 import { gameEconomy } from "../data/nav";
 import { useLearnerStats } from "../lib/learner-stats";
-import { computeErrorBreakdown } from "../lib/results-analytics";
+import { computeErrorBreakdown, computeSubjectAccuracy } from "../lib/results-analytics";
 import { loadAnswerRecords } from "../lib/error-reason";
 
 /** Hata türlerinin paylarından pasta grafiği üretir (gerçek veriden). */
@@ -38,11 +36,9 @@ export default function HomePage() {
     .sort((a, b) => b.count - a.count)
     .slice(0, 4);
   const weeklyProgress = stats?.weeklyProgress ?? [];
-  const solvedThisWeek = stats?.solvedThisWeek ?? 0;
-  const weeklyGoal = 45;
-  const totalSolved = stats?.totalSolved ?? 0;
   const badgeCount = stats?.badgeCount ?? 0;
   const streakDays = stats?.streakDays ?? 0;
+  const subjectAccuracy = new Map(computeSubjectAccuracy(records).map((item) => [item.subject, item]));
 
   return (
     <div className="page">
@@ -110,21 +106,8 @@ export default function HomePage() {
         </p>
       </section>
 
-      <section className="grid-2" aria-labelledby="bugunun-gorevleri">
+      <section className="grid-2" aria-label="Derslerim ve çalışma döngüsü">
         <div className="stack">
-          <article className="card hero">
-            <HeroArt />
-            <div className="hero-tasks">
-              <div className="section-head">
-                <h2 id="bugunun-gorevleri">Bugünün görevleri</h2>
-                <Link className="text-link" href="/calis">
-                  Tümünü gör <Icon name="arrow" size={14} />
-                </Link>
-              </div>
-              <TaskList />
-            </div>
-          </article>
-
           <section aria-labelledby="derslerim">
             <div className="section-head">
               <h2 id="derslerim">Derslerim</h2>
@@ -139,20 +122,32 @@ export default function HomePage() {
                     {subject.name}
                   </div>
                   <div className="subject-score">
-                    <b>%{subject.score}</b>
-                    <span className={`delta${subject.delta < 0 ? " is-down" : ""}`}>
-                      {subject.delta > 0 ? `+${subject.delta}` : subject.delta} puan
-                    </span>
+                    {subjectAccuracy.has(subject.slug) ? (
+                      <>
+                        <b>%{subjectAccuracy.get(subject.slug)!.accuracy}</b>
+                        <ScoreCounts
+                          correct={subjectAccuracy.get(subject.slug)!.correct}
+                          wrong={subjectAccuracy.get(subject.slug)!.total - subjectAccuracy.get(subject.slug)!.correct}
+                          blank={null}
+                          total={subjectAccuracy.get(subject.slug)!.total}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <b>—</b>
+                        <span className="muted-text">Henüz yanıt yok</span>
+                      </>
+                    )}
                   </div>
                   <div
                     className={`bar tone-${subject.tone}`}
                     role="progressbar"
                     aria-valuemin={0}
                     aria-valuemax={100}
-                    aria-valuenow={subject.score}
+                    aria-valuenow={subjectAccuracy.get(subject.slug)?.accuracy ?? 0}
                     aria-label={`${subject.name} başarısı`}
                   >
-                    <i style={{ width: `${subject.score}%` }} />
+                    <i style={{ width: `${subjectAccuracy.get(subject.slug)?.accuracy ?? 0}%` }} />
                   </div>
                 </article>
               ))}
@@ -161,7 +156,6 @@ export default function HomePage() {
         </div>
 
         <div className="stack">
-          <StudyTimer />
           <CycleCard />
         </div>
       </section>
@@ -228,33 +222,6 @@ export default function HomePage() {
         </article>
       </section>
 
-      <section className="card mission-bar" aria-labelledby="haftalik-hedef">
-        <span className="mission-emoji" aria-hidden="true">
-          🎯
-        </span>
-        <div>
-          <b id="haftalik-hedef">
-            Haftalık hedef: {solvedThisWeek} / {weeklyGoal} soru
-          </b>
-          <small>
-            {weeklyGoal - solvedThisWeek} soru kaldı · günde ortalama 4 soru yeterli
-          </small>
-          <div
-            className="bar"
-            style={{ marginTop: 10 }}
-            role="progressbar"
-            aria-valuemin={0}
-            aria-valuemax={weeklyGoal}
-            aria-valuenow={solvedThisWeek}
-            aria-label="Haftalık hedef ilerlemesi"
-          >
-            <i style={{ width: `${Math.round((solvedThisWeek / weeklyGoal) * 100)}%` }} />
-          </div>
-        </div>
-        <Link className="btn btn-soft" href="/calis">
-          Devam et
-        </Link>
-      </section>
 
       <section aria-label="Kazanımlarım">
         <div className="mini-grid">

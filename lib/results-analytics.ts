@@ -10,17 +10,12 @@ import { loadAnswerRecords, type AnswerRecord } from "./error-reason";
 import { computeUnitMasteries, subjectName, type UnitMastery } from "./mastery";
 import { loadWeeklyTestHistory, type WeeklyTestRecord } from "./weekly-test-history";
 import { loadExamHistory, type ExamRecord } from "./exam-history";
+import { errorTypes } from "../data/content";
 
-/** H kodu → görünen ad. */
-export const H_LABELS: Record<string, string> = {
-  H1: "Kavramsal eksiklik",
-  H2: "Yöntem / strateji hatası",
-  H3: "Soruyu anlamama",
-  H4: "İşlem hatası",
-  H5: "Gereksiz bilgi",
-  H6: "Bilgileri ilişkilendirme",
-  H7: "Dikkat / acele",
-};
+/** Canonical H1–H7 display names, kept aligned with the shared taxonomy. */
+export const H_LABELS: Record<string, string> = Object.fromEntries(
+  errorTypes.map(({ code, name }) => [code, name])
+);
 
 /** Genel özet metrikleri. */
 export interface OverallStats {

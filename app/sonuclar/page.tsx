@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Icon } from "../../components/icons";
+import { ScoreCounts } from "../../components/score-counts";
 import { errorTypes } from "../../data/content";
 import { MasteryPanel } from "../../components/mastery-widgets";
 import { loadAnswerRecords } from "../../lib/error-reason";
@@ -33,19 +34,24 @@ export default function SonuclarPage() {
   const [taskCount, setTaskCount] = useState(0);
 
   useEffect(() => {
-    const records = loadAnswerRecords();
-    const exams = loadExamHistory();
-    const weekly = loadWeeklyTestHistory();
-    setStats(computeOverallStats(records));
-    setBreakdown(computeErrorBreakdown(records));
-    setSubjectAcc(computeSubjectAccuracy(records));
-    setWeak(computeWeakTopics(records, exams, weekly));
-    setResults(computeUnifiedResults(exams, weekly));
-    const masteries = computeUnitMasteries(records);
-    setBands(computeMasteryBands(masteries));
-    setDueCount(masteries.filter((m) => m.due).length);
-    setTaskCount(getAllTasks().length);
-    setReady(true);
+    const refresh = () => {
+      const records = loadAnswerRecords();
+      const exams = loadExamHistory();
+      const weekly = loadWeeklyTestHistory();
+      setStats(computeOverallStats(records));
+      setBreakdown(computeErrorBreakdown(records));
+      setSubjectAcc(computeSubjectAccuracy(records));
+      setWeak(computeWeakTopics(records, exams, weekly));
+      setResults(computeUnifiedResults(exams, weekly));
+      const masteries = computeUnitMasteries(records);
+      setBands(computeMasteryBands(masteries));
+      setDueCount(masteries.filter((m) => m.due).length);
+      setTaskCount(getAllTasks().length);
+      setReady(true);
+    };
+    refresh();
+    window.addEventListener("lgs-answer-records-changed", refresh);
+    return () => window.removeEventListener("lgs-answer-records-changed", refresh);
   }, []);
 
   if (!ready || !stats) {
@@ -101,9 +107,12 @@ export default function SonuclarPage() {
             <div>
               <small>Genel başarı</small>
               <b>%{stats.accuracy}</b>
-              <span className="muted-text">
-                {stats.totalCorrect}/{stats.totalAnswered} doğru
-              </span>
+              <ScoreCounts
+                correct={stats.totalCorrect}
+                wrong={stats.totalWrong}
+                blank={null}
+                total={stats.totalAnswered}
+              />
             </div>
             <div>
               <small>Toplam soru</small>
@@ -112,9 +121,10 @@ export default function SonuclarPage() {
             </div>
             <div>
               <small>Analiz edilen hata</small>
-              <b>
-                {stats.classified}/{stats.wrong}
-              </b>
+              <b>{stats.classified} sınıflandırıldı</b>
+              <span className="muted-text">
+                Sınıflandırılmadı: {Math.max(0, stats.wrong - stats.classified)} · Toplam yanlış: {stats.wrong}
+              </span>
               <span className="delta">%{classifiedPct}&apos;i sınıflandırıldı</span>
             </div>
             <div>
@@ -153,7 +163,7 @@ export default function SonuclarPage() {
                       <i style={{ width: `${r.percentage}%` }} />
                     </span>
                     <em>
-                      %{r.percentage} · {r.correct}/{r.total}
+                      %{r.percentage} · <ScoreCounts correct={r.correct} wrong={r.wrong} blank={r.empty} total={r.total} />
                     </em>
                   </div>
                 ))}
@@ -293,7 +303,7 @@ export default function SonuclarPage() {
                       <i style={{ width: `${s.accuracy}%` }} />
                     </span>
                     <em>
-                      %{s.accuracy} · {s.correct}/{s.total}
+                      %{s.accuracy} · <ScoreCounts correct={s.correct} wrong={s.total - s.correct} blank={null} total={s.total} />
                     </em>
                   </div>
                 ))}

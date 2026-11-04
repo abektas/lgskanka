@@ -5,6 +5,13 @@ import fs from 'node:fs';
 const route = fs.readFileSync(new URL('../../app/api/study/route.ts', import.meta.url), 'utf8');
 const answerRecords = fs.readFileSync(new URL('../../app/api/answer-records/route.ts', import.meta.url), 'utf8');
 const dailyPage = fs.readFileSync(new URL('../../app/calis/page.tsx', import.meta.url), 'utf8');
+const homePage = fs.readFileSync(new URL('../../app/page.tsx', import.meta.url), 'utf8');
+const continueCard = fs.readFileSync(new URL('../../components/continue-card.tsx', import.meta.url), 'utf8');
+const scoreCounts = fs.readFileSync(new URL('../../components/score-counts.tsx', import.meta.url), 'utf8');
+const monthlyExamPage = fs.readFileSync(new URL('../../app/aylik-denemeler/page.tsx', import.meta.url), 'utf8');
+const weeklyPage = fs.readFileSync(new URL('../../app/haftalik-test/page.tsx', import.meta.url), 'utf8');
+const resultsPage = fs.readFileSync(new URL('../../app/sonuclar/page.tsx', import.meta.url), 'utf8');
+const resultsAnalytics = fs.readFileSync(new URL('../../lib/results-analytics.ts', import.meta.url), 'utf8');
 const manifestBuilder = fs.readFileSync(new URL('../../scripts/build_subject_manifests.py', import.meta.url), 'utf8');
 const learnerStats = fs.readFileSync(new URL('../../lib/learner-stats.ts', import.meta.url), 'utf8');
 const badgeProgress = fs.readFileSync(new URL('../../components/use-badge-progress.ts', import.meta.url), 'utf8');
@@ -30,9 +37,43 @@ test('public forgot-password route cannot reset accounts', () => {
 
 test('daily summary only counts saved answers from today and waits for grading before advancing', () => {
   assert.match(dailyPage, /new Date\(record\.createdAt\)\.toDateString\(\) === today/);
+  assert.match(dailyPage, /window\.addEventListener\("lgs-answer-records-changed", refreshRecords\)/);
   assert.match(dailyPage, /const subject = r\.question\.subject \|\| r\.subject/);
+  assert.match(dailyPage, /questions\.flatMap\(\(question\)/);
   assert.match(dailyPage, /disabled=\{checkState === "pending" \|\| checkState === null\}/);
   assert.match(dailyPage, /apiFetch\("\/api\/study"/);
+});
+
+test('homepage subject cards use real answer records and stale optional cards are absent', () => {
+  assert.match(homePage, /computeSubjectAccuracy\(records\)/);
+  assert.doesNotMatch(homePage, /subject\.score|subject\.delta/);
+  assert.doesNotMatch(homePage, /<StudyTimer\s*\/>|<TaskList\s*\/>|<HeroArt\s*\/>/);
+  assert.doesNotMatch(homePage, /mission-bar|weeklyGoal|bugunun-gorevleri/);
+});
+
+test('monthly exam result calls the score Net, not Ham Puan', () => {
+  assert.match(monthlyExamPage, /Net \(yaklaşık\)/);
+  assert.match(monthlyExamPage, /Yaklaşık net = Doğru/);
+  assert.doesNotMatch(monthlyExamPage, /Ham Puan/);
+});
+
+test('error distribution uses the canonical H labels and refreshes after answer hydration', () => {
+  assert.match(resultsAnalytics, /errorTypes\.map\(\(\{ code, name \}\) => \[code, name\]\)/);
+  assert.doesNotMatch(resultsAnalytics, /H1: "Kavramsal eksiklik"/);
+  assert.match(resultsPage, /window\.addEventListener\("lgs-answer-records-changed", refresh\)/);
+});
+
+test('daily "Konuyu bilmiyorum" self-assessment is classified as H1', () => {
+  assert.match(dailyPage, /label: "Konuyu bilmiyorum", code: "H1"/);
+});
+
+test('student score summaries use labeled correct, wrong, blank, and total counts', () => {
+  for (const page of [homePage, continueCard, dailyPage, monthlyExamPage, weeklyPage, resultsPage]) {
+    assert.match(page, /ScoreCounts/);
+  }
+  for (const label of ['Doğru:', 'Yanlış:', 'Boş:', 'Toplam:']) assert.ok(scoreCounts.includes(label));
+  assert.match(dailyPage, /const total = questions\.length/);
+  assert.match(dailyPage, /const blank = total - answered/);
 });
 
 test('answer-record uploads use canonical question metadata and server-verified correctness', () => {

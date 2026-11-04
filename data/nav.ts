@@ -54,8 +54,8 @@ export const gameEconomy = {
   dailyMinuteLimit: 10,
   /** XP eşiği → günlük oyun süresi. Eşiğin altındaki öğrenciye oyun açılmaz. */
   tiers: [
-    { xp: 20, minutes: 2, label: "20 XP → 2 dakika" },
-    { xp: 50, minutes: 5, label: "50 XP → 5 dakika" },
+    { xp: 20, minutes: 5, label: "20 XP → 5 dakika" },
+    { xp: 50, minutes: 8, label: "50 XP → 8 dakika" },
     { xp: 100, minutes: 10, label: "100 XP → 10 dakika" },
   ],
   /** Plan §18'deki seviye kilidi notu. */

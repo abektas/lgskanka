@@ -160,7 +160,7 @@ export function ProfileForm() {
         ))}
       </div>
 
-      <div className="settings-block">
+      <div className="settings-block profile-account">
         <h3>Hesap</h3>
         <div className="switch-row">
           <span>

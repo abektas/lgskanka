@@ -5,6 +5,9 @@ import fs from 'node:fs';
 const route = fs.readFileSync(new URL('../../app/api/study/route.ts', import.meta.url), 'utf8');
 const answerRecords = fs.readFileSync(new URL('../../app/api/answer-records/route.ts', import.meta.url), 'utf8');
 const dailyPage = fs.readFileSync(new URL('../../app/calis/page.tsx', import.meta.url), 'utf8');
+const gameEconomySource = fs.readFileSync(new URL('../../data/nav.ts', import.meta.url), 'utf8');
+const chrome = fs.readFileSync(new URL('../../components/chrome.tsx', import.meta.url), 'utf8');
+const profileForm = fs.readFileSync(new URL('../../components/profile-form.tsx', import.meta.url), 'utf8');
 const homePage = fs.readFileSync(new URL('../../app/page.tsx', import.meta.url), 'utf8');
 const continueCard = fs.readFileSync(new URL('../../components/continue-card.tsx', import.meta.url), 'utf8');
 const scoreCounts = fs.readFileSync(new URL('../../components/score-counts.tsx', import.meta.url), 'utf8');
@@ -74,6 +77,18 @@ test('student score summaries use labeled correct, wrong, blank, and total count
   for (const label of ['Doğru:', 'Yanlış:', 'Boş:', 'Toplam:']) assert.ok(scoreCounts.includes(label));
   assert.match(dailyPage, /const total = questions\.length/);
   assert.match(dailyPage, /const blank = total - answered/);
+});
+
+test('game playtime starts at five minutes and increases within the ten-minute daily cap', () => {
+  assert.match(gameEconomySource, /\{ xp: 20, minutes: 5, label: "20 XP → 5 dakika" \}/);
+  assert.match(gameEconomySource, /\{ xp: 50, minutes: 8, label: "50 XP → 8 dakika" \}/);
+  assert.match(gameEconomySource, /\{ xp: 100, minutes: 10, label: "100 XP → 10 dakika" \}/);
+});
+
+test('desktop logout action is placed after the sidebar content; mobile profile fallback remains', () => {
+  assert.ok(chrome.indexOf('className="side-foot"') < chrome.indexOf('className="side-logout"'));
+  assert.match(chrome, /if \(window\.confirm\([\s\S]*?logout\(\)/);
+  assert.match(profileForm, /className="settings-block profile-account"/);
 });
 
 test('answer-record uploads use canonical question metadata and server-verified correctness', () => {

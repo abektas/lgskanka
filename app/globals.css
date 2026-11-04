@@ -259,7 +259,6 @@ svg {
 }
 
 .side-card {
-  margin-top: auto;
   background: rgba(255, 255, 255, 0.14);
   border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: var(--r-lg);
@@ -287,6 +286,33 @@ svg {
   font-size: 11px;
   color: #cfc7ff;
   padding: 0 8px;
+}
+
+.side-logout {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-top: auto;
+  padding: 11px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+
+.side-logout:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+@media (min-width: 901px) {
+  .profile-account {
+    display: none;
+  }
 }
 
 /* ============================================================== üst bar */

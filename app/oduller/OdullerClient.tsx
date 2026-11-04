@@ -71,7 +71,7 @@ export function OdullerClient() {
             🎮
           </span>
           <b>{gameEconomy.dailySessionLimit} oyun hakkı · {gameEconomy.dailyMinuteLimit} dakika</b>
-          <small>XP eşine göre açılanır (20 XP → 2 dk, 50 XP → 5 dk). Oyun öğrenmenin
+          <small>XP eşiğine göre günlük süre artar (20 XP → 5 dk, 50 XP → 8 dk, 100 XP → 10 dk). Oyun öğrenmenin
             yerine geçmez.</small>
         </article>
       </div>
@@ -100,13 +100,13 @@ export function OdullerClient() {
           <h2>Oyun ekonomisi</h2>
           <ul className="step-list">
             <li>
-              <b>20 XP → 2 dakika</b> oyun süresi
+              <b>20 XP → 5 dakika</b> oyun süresi
             </li>
             <li>
-              <b>50 XP → 5 dakika</b> oyun süresi
+              <b>50 XP → 8 dakika</b> oyun süresi
             </li>
             <li>
-              <b>100 XP → bir sonraki seviyede yeni oyun</b> açılır
+              <b>100 XP → 10 dakika</b> oyun süresi
             </li>
             <li>
               <b>Günlük sınır:</b> en fazla 2 oturum / 10 dakika

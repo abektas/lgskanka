@@ -16,6 +16,7 @@ function isActive(pathname: string, href: string) {
 export function Sidebar() {
   const pathname = usePathname();
   const stats = useLearnerStats();
+  const { logout } = useProfile();
 
   return (
     <aside className="side" aria-label="Ana menü">
@@ -61,6 +62,18 @@ export function Sidebar() {
       <p className="side-foot">
         Öğrenme verisi (hata türü, konu, mastery) tarayıcıda saklanır; ham görüntü/ses tutulmaz.
       </p>
+
+      <button
+        type="button"
+        className="side-logout"
+        onClick={() => {
+          if (window.confirm("Bu cihazdan çıkış yapılsın mı? Başka bir öğrenci olarak giriş yapabilirsin.")) {
+            logout();
+          }
+        }}
+      >
+        Çıkış yap
+      </button>
     </aside>
   );
 }

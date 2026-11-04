@@ -4,16 +4,16 @@ import Link from "next/link";
 import { Icon } from "../../components/icons";
 import { GameCenter } from "../../components/game-center";
 import { badges } from "../../data/content";
-import { learner, xpRules } from "../../data/nav";
+import { gameEconomy, xpRules } from "../../data/nav";
 import { useBadgeProgress } from "../../components/use-badge-progress";
 import { useLearnerStats } from "../../lib/learner-stats";
 
 export function OdullerClient() {
   const stats = useLearnerStats();
-  const xp = stats?.xp ?? learner.xp;
-  const level = stats?.level ?? learner.level;
-  const levelXp = stats?.levelXp ?? learner.levelXp;
-  const levelTarget = stats?.levelTarget ?? learner.levelTarget;
+  const xp = stats?.xp ?? 0;
+  const level = stats?.level ?? 1;
+  const levelXp = stats?.levelXp ?? 0;
+  const levelTarget = stats?.levelTarget ?? 0;
   const nextLevelXp = levelTarget - levelXp;
   const badgeList = useBadgeProgress();
   const earned = badgeList.filter((badge) => badge.earned).length;
@@ -70,17 +70,9 @@ export function OdullerClient() {
           <span className="reward-emoji" aria-hidden="true">
             🎮
           </span>
-          <b>2 oyun hakkı · 10 dakika</b>
+          <b>{gameEconomy.dailySessionLimit} oyun hakkı · {gameEconomy.dailyMinuteLimit} dakika</b>
           <small>XP eşine göre açılanır (20 XP → 2 dk, 50 XP → 5 dk). Oyun öğrenmenin
             yerine geçmez.</small>
-        </article>
-
-        <article className="reward-card">
-          <span className="reward-emoji" aria-hidden="true">
-            🪑
-          </span>
-          <b>Çalışma odası · {learner.roomItems} eşya</b>
-          <small>Hata analizi ve mini test başarıları odana yeni eşya ekler.</small>
         </article>
       </div>
 

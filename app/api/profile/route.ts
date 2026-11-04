@@ -1,5 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { dbSelectOne, dbUpsert, dbDelete } from "../../../lib/db";
+import { authFromRequest } from "../../../lib/auth";
+
+async function authorizeOwnProfile(request: NextRequest, profileId: string) {
+  const auth = await authFromRequest(request);
+  if (!auth) return NextResponse.json({ error: "Giriş yapılmamış." }, { status: 401 });
+  if (auth.sub !== profileId) return NextResponse.json({ error: "Yetki yok." }, { status: 403 });
+  return null;
+}
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -8,6 +16,8 @@ export async function GET(request: NextRequest) {
   if (!profileId) {
     return NextResponse.json({ error: "profileId required" }, { status: 400 });
   }
+  const denied = await authorizeOwnProfile(request, profileId);
+  if (denied) return denied;
 
   try {
     const row = await dbSelectOne("profiles", `id=eq.${encodeURIComponent(profileId)}`);
@@ -37,6 +47,8 @@ export async function POST(request: NextRequest) {
   if (!profileId || typeof profileId !== "string") {
     return NextResponse.json({ error: "profileId required" }, { status: 400 });
   }
+  const denied = await authorizeOwnProfile(request, profileId);
+  if (denied) return denied;
 
   try {
     const rows = await dbUpsert(
@@ -64,6 +76,8 @@ export async function DELETE(request: NextRequest) {
   if (!profileId) {
     return NextResponse.json({ error: "profileId required" }, { status: 400 });
   }
+  const denied = await authorizeOwnProfile(request, profileId);
+  if (denied) return denied;
 
   try {
     await dbDelete("profiles", `id=eq.${encodeURIComponent(profileId)}`);

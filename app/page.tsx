@@ -9,31 +9,40 @@ import { HeroArt } from "../components/hero-art";
 import { StudyTimer } from "../components/study-timer";
 import { TaskList } from "../components/task-list";
 import { ContinueCard } from "../components/continue-card";
-import {
-  errorSummary,
-  errorTypes,
-  subjects,
-  weeklyProgress,
-} from "../data/content";
-import { learner } from "../data/nav";
+import { subjects } from "../data/content";
+import { errorTypes } from "../data/content";
+import { gameEconomy } from "../data/nav";
 import { useLearnerStats } from "../lib/learner-stats";
+import { computeErrorBreakdown } from "../lib/results-analytics";
+import { loadAnswerRecords } from "../lib/error-reason";
 
-/** Hata türlerinin paylarından pasta grafiği üretir. */
-function donutBackground() {
-  const total = errorTypes.reduce((sum, item) => sum + item.share, 0);
+/** Hata türlerinin paylarından pasta grafiği üretir (gerçek veriden). */
+function donutBackground(breakdown: Array<{ code: string; count: number; share: number }>) {
+  const total = breakdown.reduce((sum, item) => sum + item.count, 0);
   let acc = 0;
-  const stops = errorTypes.map((item) => {
+  const stops = breakdown.map((item) => {
     const from = (acc / total) * 100;
-    acc += item.share;
+    acc += item.count;
     const to = (acc / total) * 100;
-    return `${item.color} ${from.toFixed(2)}% ${to.toFixed(2)}%`;
+    const meta = errorTypes.find((e) => e.code === item.code);
+    return `${meta?.color ?? "#888"} ${from.toFixed(2)}% ${to.toFixed(2)}%`;
   });
   return `conic-gradient(${stops.join(", ")})`;
 }
 
 export default function HomePage() {
-  const topErrors = [...errorTypes].sort((a, b) => b.share - a.share).slice(0, 4);
   const stats = useLearnerStats();
+  const records = loadAnswerRecords();
+  const topErrors = (stats?.errorBreakdown ?? [])
+    .slice()
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 4);
+  const weeklyProgress = stats?.weeklyProgress ?? [];
+  const solvedThisWeek = stats?.solvedThisWeek ?? 0;
+  const weeklyGoal = 45;
+  const totalSolved = stats?.totalSolved ?? 0;
+  const badgeCount = stats?.badgeCount ?? 0;
+  const streakDays = stats?.streakDays ?? 0;
 
   return (
     <div className="page">
@@ -124,9 +133,9 @@ export default function HomePage() {
               {subjects.map((subject) => (
                 <article className="subject-card" key={subject.slug}>
                   <div className="subject-top">
-                    <span className={`subject-ico tone-bg-${subject.tone}`} aria-hidden="true">
+                    <div className={`subject-ico tone-bg-${subject.tone}`} aria-hidden="true">
                       {subject.icon}
-                    </span>
+                    </div>
                     {subject.name}
                   </div>
                   <div className="subject-score">
@@ -153,7 +162,6 @@ export default function HomePage() {
 
         <div className="stack">
           <StudyTimer />
-
           <CycleCard />
         </div>
       </section>
@@ -177,9 +185,9 @@ export default function HomePage() {
               ))}
             </div>
             <div className="chart-legend">
-              <span>1. Hafta %{weeklyProgress[0].value}</span>
+              <span>1. Hafta %{weeklyProgress[0]?.value ?? 0}</span>
               <span>
-                Bu hafta %{weeklyProgress[weeklyProgress.length - 1].value}{" "}
+                Bu hafta %{weeklyProgress[weeklyProgress.length - 1]?.value ?? 0}{" "}
                 <strong>(en yüksek)</strong>
               </span>
             </div>
@@ -194,20 +202,27 @@ export default function HomePage() {
             </Link>
           </div>
           <div className="donut-wrap">
-            <div className="donut" style={{ background: donutBackground() }} aria-hidden="true">
+            <div className="donut" style={{ background: donutBackground(stats?.errorBreakdown ?? []) }} aria-hidden="true">
               <div className="donut-center">
-                {errorSummary.total}
-                <small>toplam hata</small>
+                {stats?.totalSolved ?? 0}
+                <small>toplam çözülen</small>
               </div>
             </div>
             <ul className="error-list">
-              {topErrors.map((error) => (
-                <li key={error.code}>
-                  <span className="error-dot" style={{ background: error.color }} aria-hidden="true" />
-                  {error.code} · {error.name}
-                  <b>%{error.share}</b>
-                </li>
-              ))}
+              {(stats?.errorBreakdown ?? [])
+                .slice()
+                .sort((a, b) => b.count - a.count)
+                .slice(0, 4)
+                .map((error) => {
+                  const meta = errorTypes.find((e) => e.code === error.code);
+                  return (
+                    <li key={error.code}>
+                      <span className="error-dot" style={{ background: meta?.color ?? "#888" }} aria-hidden="true" />
+                      {error.code} · {meta?.name ?? error.code}
+                      <b>%{error.share}</b>
+                    </li>
+                  );
+                })}
             </ul>
           </div>
         </article>
@@ -219,21 +234,21 @@ export default function HomePage() {
         </span>
         <div>
           <b id="haftalik-hedef">
-            Haftalık hedef: {learner.solvedThisWeek} / {learner.weeklyGoal} soru
+            Haftalık hedef: {solvedThisWeek} / {weeklyGoal} soru
           </b>
           <small>
-            {learner.weeklyGoal - learner.solvedThisWeek} soru kaldı · günde ortalama 4 soru yeterli
+            {weeklyGoal - solvedThisWeek} soru kaldı · günde ortalama 4 soru yeterli
           </small>
           <div
             className="bar"
             style={{ marginTop: 10 }}
             role="progressbar"
             aria-valuemin={0}
-            aria-valuemax={learner.weeklyGoal}
-            aria-valuenow={learner.solvedThisWeek}
+            aria-valuemax={weeklyGoal}
+            aria-valuenow={solvedThisWeek}
             aria-label="Haftalık hedef ilerlemesi"
           >
-            <i style={{ width: `${Math.round((learner.solvedThisWeek / learner.weeklyGoal) * 100)}%` }} />
+            <i style={{ width: `${Math.round((solvedThisWeek / weeklyGoal) * 100)}%` }} />
           </div>
         </div>
         <Link className="btn btn-soft" href="/calis">
@@ -248,7 +263,7 @@ export default function HomePage() {
               🔥
             </span>
             <span>
-              {(stats?.streakDays ?? learner.streakDays)} günlük çalışma serisi
+              {streakDays} günlük çalışma serisi
               <small>Yarın devam et, rozeti koru</small>
             </span>
           </div>
@@ -257,21 +272,12 @@ export default function HomePage() {
               🏆
             </span>
             <span>
-              {learner.badgeCount} rozet kazandın
+              {badgeCount} rozet kazandın
               <small>2 rozet için çok yakınsın</small>
             </span>
           </div>
           <Link className="mini-card" href="/oduller" style={{ padding: 0 }}>
             <GameRightsCard />
-          </Link>
-          <Link className="mini-card" href="/profil">
-            <span className="mini-emoji" aria-hidden="true">
-              🪑
-            </span>
-            <span>
-              Çalışma odası · {learner.roomItems} eşya
-              <small>Yeni eşyalar aç</small>
-            </span>
           </Link>
         </div>
       </section>

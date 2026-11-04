@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { dbSelect, dbUpsert } from "../../../lib/db";
 import { authFromRequest } from "../../../lib/auth";
+import { getQuestions } from "../study/route";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -48,20 +49,37 @@ export async function POST(request: NextRequest) {
     if (records.length === 0) {
       return NextResponse.json({ error: "records[] gerekli." }, { status: 400 });
     }
-    const rows = records.slice(0, 200).map((r) => ({
-      student_id: auth.sub,
-      question_id: r.questionId,
-      subject: r.subject,
-      unit: r.unit ?? null,
-      unit_name: r.unitName ?? null,
-      topic: r.topic ?? null,
-      selected_answer: r.selectedAnswer ?? "",
-      correct: !!r.correct,
-      error_reason_code: r.errorReasonCode ?? null,
-      time_spent_sec: Math.max(0, Number(r.timeSpentSec) || 0),
-      source: r.source || "gunluk",
-      created_at: r.createdAt || new Date().toISOString(),
-    }));
+    const questions = await getQuestions();
+    const questionsById = new Map(questions.map((question) => [question.id, question]));
+    const rows = records.slice(0, 200).flatMap((r) => {
+      if (!r || typeof r.questionId !== "string" || typeof r.selectedAnswer !== "string") return [];
+      const question = questionsById.get(r.questionId);
+      if (!question?.answer || !/^[A-D]$/.test(r.selectedAnswer)) return [];
+      const correct = r.selectedAnswer === question.answer;
+      const errorReasonCode = !correct && ["H1", "H2", "H3", "H4", "H5", "H6", "H7"].includes(String(r.errorReasonCode))
+        ? r.errorReasonCode
+        : null;
+      const source = ["gunluk", "haftalik", "pekistirme"].includes(String(r.source))
+        ? r.source
+        : "gunluk";
+      return [{
+        student_id: auth.sub,
+        question_id: question.id,
+        subject: question.subject,
+        unit: question.unit,
+        unit_name: question.unitName,
+        topic: question.topic,
+        selected_answer: r.selectedAnswer,
+        correct,
+        error_reason_code: errorReasonCode,
+        time_spent_sec: Math.min(3600, Math.max(0, Number(r.timeSpentSec) || 0)),
+        source,
+        created_at: r.createdAt || new Date().toISOString(),
+      }];
+    });
+    if (rows.length === 0) {
+      return NextResponse.json({ error: "Geçerli cevap kaydı bulunamadı." }, { status: 400 });
+    }
 
     await dbUpsert("answer_records", rows, "student_id,question_id,source");
     return NextResponse.json({ success: true, count: rows.length });

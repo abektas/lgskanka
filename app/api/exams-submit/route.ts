@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getExamManifest } from "../../../lib/exam-manifests";
-import { dbInsert, dbDelete } from "../../../lib/db";
+import { dbInsert, dbDelete, dbSelect } from "../../../lib/db";
 import { authFromRequest } from "../../../lib/auth";
 
 export const runtime = "nodejs";
@@ -13,6 +13,9 @@ interface SubmitBody {
 }
 
 export async function POST(request: NextRequest) {
+  const auth = await authFromRequest(request);
+  if (!auth) return NextResponse.json({ error: "Giriş yapılmamış." }, { status: 401 });
+
   try {
     const body: SubmitBody = await request.json();
     const { month, answers } = body;
@@ -24,6 +27,33 @@ export async function POST(request: NextRequest) {
     const manifest = getExamManifest(month);
     if (!manifest) {
       return NextResponse.json({ error: "Sınav bulunamadı" }, { status: 404 });
+    }
+
+    const previousResults = await dbSelect(
+      "exam_results",
+      `student_id=eq.${encodeURIComponent(auth.sub)}&month=eq.${month}&order=completed_at.desc&limit=1`
+    );
+    if (previousResults.length > 0) {
+      const previous = previousResults[0] as Record<string, unknown>;
+      const savedDetails = Array.isArray(previous.details) ? previous.details : [];
+      const publicDetails = savedDetails.map((detail: Record<string, unknown>) => {
+        const { correct: _answerKey, ...safeDetail } = detail;
+        return safeDetail;
+      });
+      return NextResponse.json({
+        month: manifest.month,
+        monthName: manifest.monthName,
+        totalQuestions: manifest.totalQuestions,
+        durationMinutes: manifest.durationMinutes,
+        correct: Number(previous.correct) || 0,
+        wrong: Number(previous.wrong) || 0,
+        empty: Number(previous.empty) || 0,
+        percentage: Number(previous.percentage) || 0,
+        level: previous.level,
+        bySubject: previous.by_subject,
+        details: publicDetails,
+        completedAt: previous.completed_at,
+      });
     }
 
     let correct = 0;
@@ -83,31 +113,33 @@ export async function POST(request: NextRequest) {
     else if (percentage >= 55) level = "Orta";
     else if (percentage >= 40) level = "Temel";
 
-    // Sonucu sunucuya kaydet (giriş yapılmışsa) ve yarım kalan oturumu temizle
-    const auth = await authFromRequest(request);
-    if (auth) {
-      try {
-        await dbInsert("exam_results", {
-          student_id: auth.sub,
-          month: manifest.month,
-          month_name: manifest.monthName,
-          correct,
-          wrong,
-          empty,
-          percentage,
-          level,
-          by_subject: bySubject,
-          details,
-          completed_at: new Date().toISOString(),
-        });
-        await dbDelete(
-          "exam_sessions",
-          `student_id=eq.${encodeURIComponent(auth.sub)}&month=eq.${month}`
-        );
-      } catch {
-        // Kayıt hatası değerlendirmeyi engellemez
-      }
+    // Sonucu sunucuya kaydet ve yarım kalan oturumu temizle
+    try {
+      await dbInsert("exam_results", {
+        student_id: auth.sub,
+        month: manifest.month,
+        month_name: manifest.monthName,
+        correct,
+        wrong,
+        empty,
+        percentage,
+        level,
+        by_subject: bySubject,
+        details,
+        completed_at: new Date().toISOString(),
+      });
+      await dbDelete(
+        "exam_sessions",
+        `student_id=eq.${encodeURIComponent(auth.sub)}&month=eq.${month}`
+      );
+    } catch {
+      // Kayıt hatası değerlendirmeyi engellemez
     }
+
+    const publicDetails = details.map((detail) => {
+      const { correct: _answerKey, ...safeDetail } = detail;
+      return safeDetail;
+    });
 
     return NextResponse.json({
       month: manifest.month,
@@ -120,7 +152,7 @@ export async function POST(request: NextRequest) {
       percentage,
       level,
       bySubject,
-      details,
+      details: publicDetails,
       completedAt: new Date().toISOString(),
     });
   } catch {

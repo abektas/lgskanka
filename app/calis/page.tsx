@@ -4,7 +4,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Icon } from "../../components/icons";
 import { subjects, errorTypes } from "../../data/content";
-import { learner } from "../../data/nav";
 import { ERROR_REASON_OPTIONS, saveAnswerRecord, loadAnswerRecords } from "../../lib/error-reason";
 import { pushStudySession, apiFetch } from "../../lib/sync";
 import {
@@ -31,23 +30,30 @@ interface DailySummaryProps {
 }
 
 function DailySummary({ questions, cycle }: DailySummaryProps) {
-  const records = questions.map((q) => {
-    const rec = JSON.parse(localStorage.getItem("lgs_answer_log") || "[]")
-      .find((r: any) => r.questionId === q.id);
-    return { question: q, ...rec };
-  }).filter((r: any) => r);
+  const today = new Date().toDateString();
+  const latestByQuestion = new Map<string, ReturnType<typeof loadAnswerRecords>[number]>();
+  for (const record of loadAnswerRecords()) {
+    if ((record.source ?? "gunluk") === "gunluk" && new Date(record.createdAt).toDateString() === today) {
+      latestByQuestion.set(record.questionId, record);
+    }
+  }
+  const records = questions.flatMap((question) => {
+    const record = latestByQuestion.get(question.id);
+    return record ? [{ ...record, question }] : [];
+  });
 
   const total = records.length;
-  const correct = records.filter((r: any) => r.correct).length;
+  const correct = records.filter((r) => r.correct).length;
   const wrong = total - correct;
   const correctPct = total ? Math.round((correct / total) * 100) : 0;
 
   // Ders bazında
   const bySubject: Record<string, { total: number; correct: number }> = {};
   for (const r of records) {
-    if (!bySubject[r.subject]) bySubject[r.subject] = { total: 0, correct: 0 };
-    bySubject[r.subject].total++;
-    if (r.correct) bySubject[r.subject].correct++;
+    const subject = r.question.subject || r.subject;
+    if (!bySubject[subject]) bySubject[subject] = { total: 0, correct: 0 };
+    bySubject[subject].total++;
+    if (r.correct) bySubject[subject].correct++;
   }
 
   // H türü bazında
@@ -83,8 +89,9 @@ function DailySummary({ questions, cycle }: DailySummaryProps) {
       <div className="summary-grid">
         <div className="summary-card">
           <h3>Genel Sonuç</h3>
-          <div className="big-number">{correct}/{total}</div>
+          <div className="big-number">{correct}/{questions.length}</div>
           <div className="big-percent">%{correctPct}</div>
+          <small className="muted-text">Kaydedilen yanıt: {total}/{questions.length}</small>
           <div className="summary-meta">
             <span>⏱ {mm} dk {ss} sn</span>
             <span>⭐ +{xpEarned} XP</span>
@@ -93,7 +100,9 @@ function DailySummary({ questions, cycle }: DailySummaryProps) {
         <div className="summary-card">
           <h3>Ders Bazında</h3>
           <div className="subject-breakdown">
-            {Object.entries(bySubject).map(([subj, v]) => (
+            {total === 0 ? (
+              <p className="muted-text">Henüz yanıt kaydı bulunmuyor.</p>
+            ) : Object.entries(bySubject).map(([subj, v]) => (
               <div key={subj} className="subject-row">
                 <span>{subj}</span>
                 <span>{v.correct}/{v.total} (%{v.total ? Math.round((v.correct / v.total) * 100) : 0})</span>
@@ -114,7 +123,9 @@ function DailySummary({ questions, cycle }: DailySummaryProps) {
               ))}
             </div>
           ) : (
-            <p className="muted-text">Hiç hata yok — mükemmel!</p>
+            <p className="muted-text">
+              {total === 0 ? "Henüz yanıt kaydı bulunmuyor." : "Hiç hata yok — mükemmel!"}
+            </p>
           )}
         </div>
       </div>
@@ -198,6 +209,7 @@ export default function CalisPage() {
   const [showResult, setShowResult] = useState(false);
   const [zoomOpen, setZoomOpen] = useState(false);
   const [checkState, setCheckState] = useState<"pending" | "correct" | "wrong" | null>(null);
+  const [answerError, setAnswerError] = useState<string | null>(null);
   const [errorReason, setErrorReason] = useState<string | null>(null);
   const [unitMastery, setUnitMastery] = useState<UnitMastery | null>(null);
   const [cycle, setCycle] = useState<CycleState | null>(null);
@@ -361,63 +373,64 @@ export default function CalisPage() {
     });
   }, [currentIndex]);
 
-  const handleAnswer = (letter: string) => {
+  const handleAnswer = async (letter: string) => {
     if (showResult) return;
     setSelectedAnswer(letter);
     setShowResult(true);
     setCheckState("pending");
+    setAnswerError(null);
     setErrorReason(null);
     const q = currentQuestion;
     const startedAt = questionStartRef.current;
-    fetch("/api/study", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: q.id, answer: letter }),
-    })
-      .then((r) => r.json())
-      .then((data) => {
-        if (typeof data.correct !== "boolean") {
-          setCheckState(null);
-          return;
-        }
-        setCheckState(data.correct ? "correct" : "wrong");
-        // Use question metadata from API response (includes unit/unitName/topic)
-        const qmeta = data.question || q;
-        lastQmetaRef.current = qmeta;
-        if (data.correct) {
-          saveAnswerRecord({
-            questionId: q.id,
-            subject: qmeta.subject,
-            unit: qmeta.unit,
-            unitName: qmeta.unitName,
-            topic: qmeta.topic,
-            selectedAnswer: letter,
-            correct: true,
-            errorReasonCode: null,
-            timeSpentSec: Math.max(0, Math.round((Date.now() - startedAt) / 1000)),
-            createdAt: new Date().toISOString(),
-          });
-          syncTodayProgress();
-        }
-      })
-      .catch(() => setCheckState(null));
+    try {
+      const res = await apiFetch("/api/study", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: q.id, answer: letter }),
+      });
+      const data = await res.json();
+      if (typeof data.correct !== "boolean") {
+        setAnswerError("Cevap kontrol edilemedi. Lütfen aynı soruyu yeniden yanıtla.");
+        setShowResult(false);
+        setSelectedAnswer(null);
+        setCheckState(null);
+        return;
+      }
+      setCheckState(data.correct ? "correct" : "wrong");
+      // Use question metadata from API response (includes unit/unitName/topic)
+      const qmeta = data.question || q;
+      lastQmetaRef.current = qmeta;
+      if (data.correct) {
+        saveAnswerRecord({
+          questionId: q.id,
+          source: "gunluk",
+          subject: qmeta.subject,
+          unit: qmeta.unit,
+          unitName: qmeta.unitName,
+          topic: qmeta.topic,
+          selectedAnswer: letter,
+          correct: true,
+          errorReasonCode: null,
+          timeSpentSec: Math.max(0, Math.round((Date.now() - startedAt) / 1000)),
+          createdAt: new Date().toISOString(),
+        });
+        syncTodayProgress();
+      }
+    } catch {
+      setAnswerError("Cevap kontrol edilemedi. Lütfen aynı soruyu yeniden yanıtla.");
+      setShowResult(false);
+      setSelectedAnswer(null);
+      setCheckState(null);
+    }
   };
 
-  const selectErrorReason = async (code: string | null) => {
-    setErrorReason(code ?? "SKIPPED");
+  const selectErrorReason = (code: string | null) => {
     const q = currentQuestion;
-    if (!q || !selectedAnswer) return;
-    // Fetch question metadata from API to get unit/unitName/topic
-    let qmeta = q;
-    try {
-      const res = await fetch(`/api/study?id=${q.id}`);
-      const data = await res.json();
-      if (data.items?.[0]) {
-        qmeta = data.items[0];
-      }
-    } catch {}
+    if (!q || !selectedAnswer || checkState !== "wrong") return;
+    const qmeta = lastQmetaRef.current ?? q;
     saveAnswerRecord({
       questionId: q.id,
+      source: "gunluk",
       subject: qmeta.subject,
       unit: qmeta.unit,
       unitName: qmeta.unitName,
@@ -429,6 +442,7 @@ export default function CalisPage() {
       createdAt: new Date().toISOString(),
     });
     syncTodayProgress();
+    setErrorReason(code ?? "SKIPPED");
   };
 
   const nextQuestion = () => {
@@ -438,6 +452,7 @@ export default function CalisPage() {
       const qmeta = lastQmetaRef.current ?? currentQuestion;
       saveAnswerRecord({
         questionId: currentQuestion.id,
+        source: "gunluk",
         subject: qmeta.subject,
         unit: qmeta.unit,
         unitName: qmeta.unitName,
@@ -580,13 +595,20 @@ export default function CalisPage() {
               </button>
             ))}
           </div>
+          {answerError && (
+            <p className="muted-text" role="alert">{answerError}</p>
+          )}
           {showResult && (
             <div className="exam-result">
-              <p>
-                Cevabın: <b>{selectedAnswer}</b>
-                {checkState === "correct" && <span className="correct"> ✓ Doğru</span>}
-                {checkState === "wrong" && <span className="wrong"> ✗ Yanlış</span>}
-              </p>
+              {checkState === "pending" ? (
+                <p className="muted-text" aria-live="polite">Cevabın kontrol ediliyor…</p>
+              ) : (
+                <p>
+                  Cevabın: <b>{selectedAnswer}</b>
+                  {checkState === "correct" && <span className="correct"> ✓ Doğru</span>}
+                  {checkState === "wrong" && <span className="wrong"> ✗ Yanlış</span>}
+                </p>
+              )}
               {checkState === "wrong" && errorReason === null && (
                 <div className="error-reason">
                   <p className="muted-text">Yanlışını anlamamıza yardım et — sana en yakın olanı seç:</p>
@@ -609,8 +631,13 @@ export default function CalisPage() {
             </div>
           )}
           {showResult && (
-            <button className="btn btn-soft" onClick={nextQuestion}>
-              Sonraki soru <Icon name="arrow" size={16} />
+            <button
+              className="btn btn-soft"
+              onClick={nextQuestion}
+              disabled={checkState === "pending" || checkState === null}
+            >
+              {checkState === "pending" ? "Cevap kontrol ediliyor…" : "Sonraki soru"}{" "}
+              {checkState !== "pending" && <Icon name="arrow" size={16} />}
             </button>
           )}
         </section>

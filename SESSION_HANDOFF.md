@@ -1,5 +1,29 @@
-# SESSION HANDOFF — 2026-11-03
-**Son commit (push edilmiş):** `34f2e23` | **Canlı:** https://lgskanka.alibey.workers.dev (Version ID `ee716cd4-5e54-4143-b286-10cfff5839b2`)---
+# SESSION HANDOFF — 2026-11-04
+**Canlı:** https://lgskanka.alibey.workers.dev (Version ID `83977869-bc00-454f-b2a3-c6743d7625e3`) | **Git commit/push:** yapılmadı
+
+
+## 2026-11-04 — Güvenlik ve çalışma sonuçları düzeltmeleri (canlıya dağıtıldı: `83977869-bc00-454f-b2a3-c6743d7625e3`)
+
+Kullanıcı tüm düzeltmelerin sırayla yapılmasını onayladı. Bu oturumda çalışma alanına uygulananlar:
+- `/api/study` cevap anahtarını hiçbir GET modunda döndürmüyor; POST kimlik doğrulamalı ve kullanıcı/IP başına 120/dk rate limitli. Günlük, haftalık ve pekiştirme istemcileri `apiFetch` kullanıyor.
+- `/api/exams-submit` kimlik doğrulamalı, öğrenci kimliğini token'dan alıyor, aynı ay/deneme tekrarında kayıtlı sonucu döndürüyor ve public details'tan answer key çıkarıyor.
+- `/api/answer-records` doğruluğu kanonik soru anahtarından hesaplıyor; hata kodu, kaynak ve soru metadata'sını sınırlandırıyor. Kayıtlar akış kaynağına (`gunluk`/`haftalik`/`pekistirme`) göre ayrılıyor.
+- `/api/profile` sahiplik kontrolü GET/POST/DELETE'e eklendi. Güvensiz kullanıcı adıyla parola sıfırlama kapatıldı (410); UI öğretmene yönlendiriyor.
+- Günlük sonuç özeti yalnızca bugünkü kayıtlı günlük cevapları sayıyor; sonuç beklenirken ilerleme kapalı, kayıt sayısı ayrıca gösteriliyor.
+- Rozet ve istatistikler dizi/nesne localStorage biçimlerini destekliyor ve cevap/hidratasyon olaylarında yeniden hesaplanıyor.
+- Manifest üretimi yalnızca `VERIFIED` + `published=true` girdileri kabul ediyor; boş/uygunsuz manifest yayınlamayı reddediyor.
+- `lgs-coach-app` skill'deki eski cevap anahtarı ve parola kurtarma talimatları güncellendi.
+
+**Doğrulama:** `npm run lint` ✅; `npm run build` ✅ (Next middleware→proxy deprecation uyarısı); `npm run cf:build` ✅; `npx wrangler deploy --dry-run` ✅; Python source-ingestion 109/109 ✅; API sözleşme 15/15 ✅; taxonomy 4/4 ✅.
+Canlı smoke (browser UA): `/calis/` 200; `/api/study` toplam 5034 soru (dersler: Türkçe 1486, Matematik 1338, Fen 905, İnkılap 438, Din 434, İngilizce 433), cevap anahtarı alanı 0; kimliksiz study/answer-records/exams-submit POST 401; forgot POST 410; yeni görsel 200. Wrangler deploy sonucu version `83977869-bc00-454f-b2a3-c6743d7625e3`.
+
+**Supabase:** Bu deploy için yeni DDL çalıştırılmadı. Kanonik `supabase/schema.sql` içinde `answer_records.source` alanı ve `(student_id, question_id, source)` unique kısıtı zaten tanımlı. Canlı öğrenci hesabıyla yazma testi yapılmadı; eğer bu şema canlı Supabase'e henüz uygulanmadıysa bu kısıtların uygulanması gerekir.
+
+**Kaynak ve görsel staging:** Doğru resmî PDF `scripts/source-ingestion/data/questions/archive/MEB-LGS-2022/01-2022_sayisal_bolum_a_kitapcigi_ve_cevap_anahtari.pdf` içindeydi; SHA-256 kayıtlı `8a1c6526...` ile eşleşti. Kullanıcının `kaynak dosyalar/Lgs_soruları/Lgs_2022` klasöründeki matematik/fen PDF'leri ayrı dosyalar. Doğrulanmış arşiv PDF'iyle görsel staging yeniden üretildi; eksik Matematik Q10/Q11/Q12/Q14, ana staging'deki değişmemiş kayıtlar olarak geri eklendi. `repair_structural_gate.py` R10 dışındaki kayıtları koruyor; test, repaired kayıt kümesini kaynak kayıt kümesiyle karşılaştıracak şekilde düzeltildi. İki görsel soru `NEEDS_REVIEW`, `published=false`; hiçbiri VERIFIED yapılmadı.
+
+**Yayın/diğer:** Canlı dağıtım tamamlandı; Git commit/push yapılmadı. `AGENTS.md` değiştirilmedi (önceki araç onay engeli nedeniyle tekrar denenmemeli). `.ses`, `data-gym-cache/`, `scripts/output/` untracked öğelerine dokunma; kullanıcı verisi olabilir. Güvenli self-service parola kurtarma ayrıca tasarlanmalı.
+
+---
 
 ## 2026-11-03 — Haftalık test + rozet kalıcılığı (sunucuya taşıma) — TAMAMLANDI
 

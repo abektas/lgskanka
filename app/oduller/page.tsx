@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Icon } from "../../components/icons";
 import { GameCenter } from "../../components/game-center";
 import { badges } from "../../data/content";
-import { learner, xpRules } from "../../data/nav";
+import { gameEconomy, xpRules } from "../../data/nav";
 import { OdullerClient } from "./OdullerClient";
 
 export const metadata: Metadata = {

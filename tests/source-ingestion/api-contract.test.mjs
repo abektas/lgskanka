@@ -3,15 +3,77 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 
 const route = fs.readFileSync(new URL('../../app/api/study/route.ts', import.meta.url), 'utf8');
+const answerRecords = fs.readFileSync(new URL('../../app/api/answer-records/route.ts', import.meta.url), 'utf8');
+const dailyPage = fs.readFileSync(new URL('../../app/calis/page.tsx', import.meta.url), 'utf8');
+const manifestBuilder = fs.readFileSync(new URL('../../scripts/build_subject_manifests.py', import.meta.url), 'utf8');
+const learnerStats = fs.readFileSync(new URL('../../lib/learner-stats.ts', import.meta.url), 'utf8');
+const badgeProgress = fs.readFileSync(new URL('../../components/use-badge-progress.ts', import.meta.url), 'utf8');
 
 test('POST grades against the private server-side answer and returns only correctness', () => {
-  assert.match(route, /timingSafeEqual\(submitted, expected\)/);
-  assert.match(route, /correct: timingSafeEqual\(submitted, expected\)/);
+  assert.match(route, /const correct = timingSafeEqual\(submitted, expected\)/);
+  assert.match(route, /if \(!auth\) return NextResponse\.json\(\{ error: "Giriş yapılmamış\." \}, \{ status: 401 \}\)/);
+  assert.match(route, /rateLimit\(`study-answer:/);
+  assert.match(route, /correct,/);
   assert.doesNotMatch(route, /NextResponse\.json\(\{[^}]*answer:\s*question\.answer/);
 });
 
-test('GET strips answer field before sending to client', () => {
-  assert.match(route, /const \{ answer, \.\.\.rest \} = q;/);
+test('GET strips answer keys in every mode, including legacy wrong_mode parameter', () => {
+  assert.match(route, /const \{ answer: _answerKey, \.\.\.rest \} = q;/);
+  assert.doesNotMatch(route, /if \(wrongMode\s*===/);
+});
+
+test('public forgot-password route cannot reset accounts', () => {
+  const forgot = fs.readFileSync(new URL('../../app/api/auth/forgot/route.ts', import.meta.url), 'utf8');
+  assert.match(forgot, /status:\s*410/);
+  assert.doesNotMatch(forgot, /dbUpdate|hashPassword/);
+});
+
+test('daily summary only counts saved answers from today and waits for grading before advancing', () => {
+  assert.match(dailyPage, /new Date\(record\.createdAt\)\.toDateString\(\) === today/);
+  assert.match(dailyPage, /const subject = r\.question\.subject \|\| r\.subject/);
+  assert.match(dailyPage, /disabled=\{checkState === "pending" \|\| checkState === null\}/);
+  assert.match(dailyPage, /apiFetch\("\/api\/study"/);
+});
+
+test('answer-record uploads use canonical question metadata and server-verified correctness', () => {
+  assert.match(answerRecords, /const correct = r\.selectedAnswer === question\.answer/);
+  assert.match(answerRecords, /correct,/);
+  assert.doesNotMatch(answerRecords, /correct:\s*!!r\.correct/);
+  assert.match(answerRecords, /const source = \["gunluk", "haftalik", "pekistirme"\]/);
+  assert.match(dailyPage, /source: "gunluk"/);
+  assert.match(answerRecords, /subject:\s*question\.subject/);
+});
+
+test('badge progress accepts both hydrated map and local array formats and refreshes after answers', () => {
+  assert.match(learnerStats, /Object\.values\(stored\)/);
+  assert.match(learnerStats, /lgs-badge-progress-changed/);
+  assert.match(badgeProgress, /Object\.entries\(stored\)/);
+  assert.match(badgeProgress, /lgs-answer-records-changed/);
+});
+
+test('exam submission response omits canonical correct answers from details', () => {
+  const exams = fs.readFileSync(new URL('../../app/api/exams-submit/route.ts', import.meta.url), 'utf8');
+  assert.match(exams, /details:\s*publicDetails/);
+  assert.match(exams, /const \{ correct: _answerKey, \.\.\.safeDetail \} = detail;/);
+  assert.match(exams, /student_id=eq\.\$\{encodeURIComponent\(auth\.sub\)\}&month=eq\.\$\{month\}/);
+  assert.match(exams, /if \(previousResults\.length > 0\)/);
+});
+
+test('exam submission requires an authenticated student before grading', () => {
+  const exams = fs.readFileSync(new URL('../../app/api/exams-submit/route.ts', import.meta.url), 'utf8');
+  assert.match(exams, /const auth = await authFromRequest\(request\)/);
+  assert.match(exams, /if \(!auth\) return NextResponse\.json\(\{ error: "Giriş yapılmamış\." \}, \{ status: 401 \}\)/);
+});
+
+test('legacy manifest builder refuses unverified or unpublished questions', () => {
+  assert.match(manifestBuilder, /q\.get\("status"\) != "VERIFIED"/);
+  assert.match(manifestBuilder, /q\.get\("published"\) is not True/);
+  assert.match(manifestBuilder, /Refusing to build empty manifests/);
+});
+
+test('legacy profile API authorizes ownership for every operation', () => {
+  const profile = fs.readFileSync(new URL('../../app/api/profile/route.ts', import.meta.url), 'utf8');
+  assert.equal((profile.match(/authorizeOwnProfile\(request, profileId\)/g) ?? []).length, 3);
 });
 // TASK-QBANK-005 (R9): görsel-dominant satırların yayın sözleşmesi. Bu testler
 // `validQuestion` mantığını bağımsız olarak yeniden yazar ve karşılaştırır; yalnız

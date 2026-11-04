@@ -134,6 +134,7 @@ async function hydrateMirrors(): Promise<void> {
       correct: !!r.correct,
       errorReasonCode: (r.error_reason_code as string | null) ?? null,
       timeSpentSec: Number(r.time_spent_sec) || 0,
+      source: String(r.source ?? "gunluk"),
       createdAt: String(r.created_at ?? new Date().toISOString()),
     }));
     hydrateAnswerLog(mapped);
@@ -166,6 +167,8 @@ async function hydrateMirrors(): Promise<void> {
       }
       if (Object.keys(earnedOnly).length > 0) {
         window.localStorage.setItem("lgs_badge_progress", JSON.stringify(earnedOnly));
+        window.dispatchEvent(new Event("lgs-badge-progress-changed"));
+        window.dispatchEvent(new Event("lgs-answer-records-changed"));
       }
     }
 

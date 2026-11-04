@@ -7,28 +7,22 @@ import { ProfileForm } from "../../components/profile-form";
 import { ProfileSelector } from "../../components/profile-selector";
 import { useProfile } from "../../components/profile-provider";
 import { badges } from "../../data/content";
-import { learner, gameEconomy } from "../../data/nav";
+import { gameEconomy } from "../../data/nav";
 import { useLearnerStats } from "../../lib/learner-stats";
 
-function buildUnlockables(level: number, xp: number) {
+function buildUnlockables(level: number, xp: number, badgeCount: number) {
   return [
-  {
-    icon: "🪑",
-    title: "Çalışma odası eşyaları",
-    detail: `${learner.roomItems} / ${gameEconomy.tiers.length + 2} eşya açık`,
-    earned: learner.roomItems > 0,
-  },
   {
     icon: "🏆",
     title: "Rozetler",
-    detail: `${badges.filter((b) => b.earned).length} / ${badges.length} rozet kazanıldı`,
-    earned: badges.filter((b) => b.earned).length > 0,
+    detail: `${badgeCount} / ${badges.length} rozet kazanıldı`,
+    earned: badgeCount > 0,
   },
   {
     icon: "🎮",
     title: "Oyun hakları",
-    detail: `Günlük ${learner.gameRights} hak · ${gameEconomy.dailyMinuteLimit} dk limit`,
-    earned: learner.gameRights > 0,
+    detail: `Günlük ${gameEconomy.dailySessionLimit} hak · ${gameEconomy.dailyMinuteLimit} dk limit`,
+    earned: true,
   },
   {
     icon: "⭐",
@@ -41,12 +35,12 @@ function buildUnlockables(level: number, xp: number) {
 
 export default function ProfilPage() {
   const { profiles, activeProfile, switchProfile } = useProfile();
-  const earned = badges.filter((badge) => badge.earned);
   const stats = useLearnerStats();
-  const level = stats?.level ?? learner.level;
-  const xp = stats?.xp ?? learner.xp;
-  const streakDays = stats?.streakDays ?? learner.streakDays;
-  const unlockables = buildUnlockables(level, xp);
+  const level = stats?.level ?? 1;
+  const xp = stats?.xp ?? 0;
+  const streakDays = stats?.streakDays ?? 0;
+  const badgeCount = stats?.badgeCount ?? 0;
+  const unlockables = buildUnlockables(level, xp, badgeCount);
 
   return (
     <div className="page">
@@ -109,23 +103,19 @@ export default function ProfilPage() {
             <div className="character-summary">
               <CharacterAvatar size={104} />
               <ul className="mini-stats">
-                <li>
-                  <b>{xp} XP</b>
-                  <small>Toplam puan</small>
-                </li>
-                <li>
-                  <b>{earned.length} rozet</b>
-                  <small>Kazanılan</small>
-                </li>
-                <li>
-                  <b>{learner.roomItems} eşya</b>
-                  <small>Çalışma odası</small>
-                </li>
-                <li>
-                  <b>{streakDays} gün</b>
-                  <small>Çalışma serisi</small>
-                </li>
-              </ul>
+                              <li>
+                                <b>{xp} XP</b>
+                                <small>Toplam puan</small>
+                              </li>
+                              <li>
+                                <b>{badgeCount} rozet</b>
+                                <small>Kazanılan</small>
+                              </li>
+                              <li>
+                                <b>{streakDays} gün</b>
+                                <small>Çalışma serisi</small>
+                              </li>
+                            </ul>
             </div>
             <p className="muted-text" style={{ marginTop: 14, fontSize: 12.5 }}>
               Karakterin seçtiğin görünümle ana sayfada ve üst menüde görünür.
@@ -151,8 +141,7 @@ export default function ProfilPage() {
               ))}
             </div>
             <p className="muted-text" style={{ marginTop: 12, fontSize: 12.5 }}>
-              Ödüller: çalışma odası eşyaları (hata analizi + mini test başarıları), rozetler (seri, mastery,
-              hata çözümü), oyun hakları (XP eşine göre), seviye ödülleri.
+              Ödüller: rozetler (seri, mastery, hata çözümü), oyun hakları (XP eşine göre), seviye ödülleri.
             </p>
           </section>
 

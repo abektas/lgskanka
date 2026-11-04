@@ -236,15 +236,6 @@ export const games: Game[] = [
   { icon: "⚡", name: "Hız Oyunu", detail: "30 saniyede kaç soru?", minutes: 3 },
 ];
 
-/** 5 haftalık deneme programı — haftalık deneme sınavı planı. */
-export const examPlan = [
-  { week: "1. Hafta", subject: "Sözel Bölüm", date: "6 Ekim", status: "done" as const },
-  { week: "2. Hafta", subject: "Sayısal Bölüm", date: "13 Ekim", status: "done" as const },
-  { week: "3. Hafta", subject: "Genel Deneme", date: "20 Ekim", status: "active" as const },
-  { week: "4. Hafta", subject: "Sözel Bölüm", date: "27 Ekim", status: "upcoming" as const },
-  { week: "5. Hafta", subject: "Genel Deneme", date: "3 Kasım", status: "upcoming" as const },
-];
-
 /**
  * Sınav sonuç ekranı için örnek görünüm verisi.
  * Gerçek öğrenci sonucu değildir; resmi puan/yüzdelik hesaplaması olarak kullanılmamalıdır.

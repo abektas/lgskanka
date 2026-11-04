@@ -15,7 +15,7 @@ const GIRL_VARIANTS = ["Uzun kahverengi", "Düz siyah", "Topuz kızıl"];
  */
 export function LoginScreen() {
   const { login, register } = useProfile();
-  const [mode, setMode] = useState<"login" | "register" | "forgot">("login");
+  const [mode, setMode] = useState<"login" | "register">("login");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -37,20 +37,6 @@ export function LoginScreen() {
         await login(username.trim(), password);
         // Giriş başarılı → sayfa yeniden yüklensin ki tüm veriler tazelensin
         window.location.reload();
-      } else if (mode === "forgot") {
-        // Şifreyi standart 1234'e sıfırla
-        const res = await fetch("/api/auth/forgot", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username: username.trim() }),
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Şifre sıfırlanamadı.");
-        setPassword("1234");
-        setMode("login");
-        setNotice(
-          `Şifren "1234" olarak sıfırlandı. Şimdi "Giriş yap"a basıp girebilirsin.`
-        );
       } else {
         await register({
           username: username.trim(),
@@ -127,21 +113,19 @@ export function LoginScreen() {
             />
           </label>
 
-          {mode !== "forgot" && (
-            <label className="form-field">
-              <span>Şifre</span>
-              <input
-                className="input"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="En az 4 karakter"
-                autoComplete={mode === "login" ? "current-password" : "new-password"}
-                required
-                minLength={4}
-              />
-            </label>
-          )}
+          <label className="form-field">
+            <span>Şifre</span>
+            <input
+              className="input"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="En az 4 karakter"
+              autoComplete={mode === "login" ? "current-password" : "new-password"}
+              required
+              minLength={4}
+            />
+          </label>
 
           {mode === "login" && (
             <button
@@ -158,20 +142,12 @@ export function LoginScreen() {
                 textAlign: "left",
               }}
               onClick={() => {
-                setMode("forgot");
                 setError(null);
-                setNotice(null);
+                setNotice("Hesap güvenliği için şifreni buradan sıfırlayamıyoruz. Öğretmeninden şifre sıfırlama konusunda yardım iste.");
               }}
             >
               Şifremi unuttum
             </button>
-          )}
-
-          {mode === "forgot" && (
-            <p className="muted-text" style={{ fontSize: 13, margin: 0 }}>
-              Kullanıcı adını yaz ve sıfırla — şifren standart <b>1234</b> olur,
-              hemen giriş yapabilirsin.
-            </p>
           )}
 
           {mode === "register" && (
@@ -244,33 +220,13 @@ export function LoginScreen() {
           )}
 
           <button className="btn btn-primary" type="submit" disabled={busy}>
-            {busy
-              ? "Bekle…"
-              : mode === "login"
-                ? "Giriş yap"
-                : mode === "forgot"
-                  ? "Şifremi 1234 yap"
-                  : "Kayıt ol ve başla"}
+            {busy ? "Bekle…" : mode === "login" ? "Giriş yap" : "Kayıt ol ve başla"}
           </button>
 
-          {mode === "forgot" && (
-            <button
-              type="button"
-              className="btn btn-soft"
-              onClick={() => {
-                setMode("login");
-                setError(null);
-                setNotice(null);
-              }}
-            >
-              Vazgeç
-            </button>
-          )}
         </form>
 
         <p className="selector-footnote">
-          Şifreni unutursan &quot;Şifremi unuttum&quot; ile şifreni 1234 yapabilirsin.
-          Kullanıcı adın sana özeldir — aynı isimde başkaları olsa bile karışmaz.
+          Şifreni unuttuysan öğretmeninden yardım iste. Kullanıcı adın sana özeldir — aynı isimde başkaları olsa bile karışmaz.
         </p>
       </div>
     </div>

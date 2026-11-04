@@ -6,7 +6,7 @@ import { Avatar } from "./avatar";
 import { Icon } from "./icons";
 import { SearchBox } from "./search-box";
 import { useProfile } from "./profile-provider";
-import { learner, navItems } from "../data/nav";
+import { navItems } from "../data/nav";
 import { useLearnerStats } from "../lib/learner-stats";
 
 function isActive(pathname: string, href: string) {
@@ -54,7 +54,7 @@ export function Sidebar() {
         </span>
         <b>Bugün harika gidiyorsun!</b>
         <small>
-          {(stats?.streakDays ?? learner.streakDays)} günlük serin var. Hedefine bir adım daha yaklaştın.
+          {stats?.streakDays ?? 0} günlük serin var. Hedefine bir adım daha yaklaştın.
         </small>
       </div>
 
@@ -92,11 +92,11 @@ export function MobileNav() {
 export function TopBar({ query }: { query?: string }) {
   const { activeProfile, ready } = useProfile();
   const stats = useLearnerStats();
-  const streakDays = stats?.streakDays ?? learner.streakDays;
-  const xp = stats?.xp ?? learner.xp;
-  const level = stats?.level ?? learner.level;
-  const levelXp = stats?.levelXp ?? learner.levelXp;
-  const levelTarget = stats?.levelTarget ?? learner.levelTarget;
+  const streakDays = stats?.streakDays ?? 0;
+  const xp = stats?.xp ?? 0;
+  const level = stats?.level ?? 1;
+  const levelXp = stats?.levelXp ?? 0;
+  const levelTarget = stats?.levelTarget ?? 0;
   const percent = Math.round((levelXp / Math.max(1, levelTarget)) * 100);
 
   return (

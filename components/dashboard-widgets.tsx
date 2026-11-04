@@ -1,7 +1,8 @@
 "use client";
 
 import { useGameRights } from "./use-game-rights";
-import { learner } from "../data/nav";
+import { useLearnerStats } from "../lib/learner-stats";
+import { gameEconomy } from "../data/nav";
 
 /**
  * Ana sayfadaki "oyun hakkı" kartı — gerçek XP→süre ekonomisini kullanır.
@@ -10,9 +11,10 @@ import { learner } from "../data/nav";
  * artık `useGameRights` ile bugünün gerçek durumunu okur.
  */
 export function GameRightsCard() {
+  const stats = useLearnerStats();
   const { ready, rights, minutesAllowance, blockedReason } = useGameRights(
-    learner.xp,
-    learner.gameRights,
+    stats?.xp ?? 0,
+    gameEconomy.dailySessionLimit,
   );
 
   const label = !ready

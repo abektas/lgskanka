@@ -3,26 +3,35 @@
 import { useEffect, useState } from "react";
 import { badges, type Badge } from "../data/content";
 import { loadAnswerRecords } from "../lib/error-reason";
-import { computeUnitMasteries } from "../lib/mastery";
 import { computeLearnerStats } from "../lib/learner-stats";
 import { pushBadgeProgress } from "../lib/sync";
 
 const BADGE_STORAGE_KEY = "lgs_badge_progress";
 
+function readStoredBadges(): Badge[] {
+  try {
+    const stored: unknown = JSON.parse(localStorage.getItem(BADGE_STORAGE_KEY) || "[]");
+    const values = Array.isArray(stored)
+      ? stored
+      : stored && typeof stored === "object"
+        ? Object.entries(stored).map(([name, value]) => ({ name, ...(value as object) }))
+        : [];
+    return badges.map((base) => {
+      const saved = values.find((value) => value && typeof value === "object" && value.name === base.name);
+      return saved ? { ...base, ...saved } as Badge : { ...base, earned: false };
+    });
+  } catch {
+    return badges.map((badge) => ({ ...badge, earned: false }));
+  }
+}
+
 /** Rozet açma kriterlerini kontrol eder ve earned durumunu günceller. */
 export function useBadgeProgress() {
-  const [badgeList, setBadgeList] = useState<Badge[]>(() => {
-    // Initialize from localStorage (hydrated from server in profile-provider)
-    try {
-      const stored = JSON.parse(localStorage.getItem(BADGE_STORAGE_KEY) || "[]");
-      if (stored.length === badges.length) return stored as Badge[];
-    } catch {}
-    return badges.map((b) => ({ ...b, earned: false }));
-  });
+  const [badgeList, setBadgeList] = useState<Badge[]>(readStoredBadges);
 
   useEffect(() => {
+    const update = () => {
     const records = loadAnswerRecords();
-    const masteries = computeUnitMasteries(records);
     const totalSolved = records.length;
 
     // H4 oranı
@@ -36,12 +45,10 @@ export function useBadgeProgress() {
     // Günlük seri: computeLearnerStats() ile aynı kural (sunucu kayıtlarından)
     const currentStreak = computeLearnerStats().streakDays;
 
-    // Sunucudan zaten kazanılmış rozetler (localStorage'a hydrate edilmiş) + yeni kazanım
-    const serverEarned = new Set<string>();
-    try {
-      const stored = JSON.parse(localStorage.getItem(BADGE_STORAGE_KEY) || "[]");
-      for (const b of stored) if (b.earned) serverEarned.add(b.name);
-    } catch {}
+    // Sunucudan zaten kazanılmış rozetler + yeni kazanım
+    const serverEarned = new Set(
+      readStoredBadges().filter((badge) => badge.earned).map((badge) => badge.name)
+    );
 
     // Use imported badges as base, not state (avoids infinite loop)
     const updated = badges.map((badge) => {
@@ -81,6 +88,7 @@ export function useBadgeProgress() {
 
     setBadgeList(updated);
     localStorage.setItem(BADGE_STORAGE_KEY, JSON.stringify(updated));
+    window.dispatchEvent(new Event("lgs-badge-progress-changed"));
 
     // Kazanılmış rozetleri sunucuya yaz (fire-and-forget)
     const toPush: Record<string, { earned: boolean; earned_at: string | null; progress: number }> = {};
@@ -88,16 +96,22 @@ export function useBadgeProgress() {
       if (b.earned) toPush[b.name] = { earned: true, earned_at: new Date().toISOString(), progress: 100 };
     }
     if (Object.keys(toPush).length > 0) pushBadgeProgress(toPush);
-  }, []); // Run once on mount
+    };
+    update();
+    window.addEventListener("lgs-answer-records-changed", update);
+    return () => window.removeEventListener("lgs-answer-records-changed", update);
+  }, []);
 
   return badgeList;
 }
 
 /** Manuel rozet vermek için (test/debug). */
 export function unlockBadge(badgeName: string) {
+  const updated = readStoredBadges().map((badge) =>
+    badge.name === badgeName ? { ...badge, earned: true } : badge
+  );
   try {
-    const stored = JSON.parse(localStorage.getItem(BADGE_STORAGE_KEY) || "[]");
-    const updated = stored.map((b: Badge) => b.name === badgeName ? { ...b, earned: true } : b);
     localStorage.setItem(BADGE_STORAGE_KEY, JSON.stringify(updated));
+    window.dispatchEvent(new Event("lgs-badge-progress-changed"));
   } catch {}
 }

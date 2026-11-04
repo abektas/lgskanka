@@ -3,6 +3,7 @@ import { createHash, timingSafeEqual } from "node:crypto";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { getStudentIdByUsername, getLevelTestResult, dbSelect } from "../../../lib/db";
 import { authFromRequest } from "../../../lib/auth";
+import { rateLimit, getClientIp } from "../../../lib/rate-limit";
 
 // Görseller /r2 proxy rotasından sunulur (yalnızca .webp).
 const R2_PUBLIC_URL = "https://lgskanka.alibey.workers.dev/r2";
@@ -106,7 +107,7 @@ async function loadAllQuestions(): Promise<StudyQuestion[]> {
 
 let allQuestionsPromise: Promise<StudyQuestion[]> | null = null;
 
-async function getQuestions(): Promise<StudyQuestion[]> {
+export async function getQuestions(): Promise<StudyQuestion[]> {
   if (!allQuestionsPromise) {
     allQuestionsPromise = loadAllQuestions();
   }
@@ -127,7 +128,6 @@ export async function GET(request: NextRequest) {
     const subject = searchParams.get("subject");
     const unit = searchParams.get("unit");
     const limit = parseInt(searchParams.get("limit") || "0", 10);
-    const wrongMode = searchParams.get("wrong_mode");
     const sort = searchParams.get("sort") || "unit_difficulty";
     const fresh = searchParams.get("fresh") === "1"; // günlük çalışma: son 30 günde çözülenler dışlanır
     const profileId = searchParams.get("profileId"); // Kişiselleştirme için öğrenci kullanıcı adı
@@ -224,10 +224,7 @@ export async function GET(request: NextRequest) {
     }
 
     const publicQuestions = questions.map((q) => {
-      if (wrongMode === "true") {
-        return q;
-      }
-      const { answer, ...rest } = q;
+      const { answer: _answerKey, ...rest } = q;
       return rest;
     });
 
@@ -244,6 +241,13 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  const auth = await authFromRequest(request);
+  if (!auth) return NextResponse.json({ error: "Giriş yapılmamış." }, { status: 401 });
+  const limit = rateLimit(`study-answer:${auth.sub}:${getClientIp(request)}`, 120, 60_000);
+  if (!limit.allowed) {
+    return NextResponse.json({ error: "Çok sık cevap kontrolü yapıldı. Bir dakika sonra tekrar dene." }, { status: 429 });
+  }
+
   let body: unknown;
   try {
     body = await request.json();

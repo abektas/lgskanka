@@ -9,7 +9,8 @@ import { KelimeAvi } from "./kelime-avi";
 import { SpeedGame } from "./speed-game";
 import { useGameRights } from "./use-game-rights";
 import { games, memoryPairs } from "../data/content";
-import { learner } from "../data/nav";
+import { gameEconomy } from "../data/nav";
+import { useLearnerStats } from "../lib/learner-stats";
 
 const rules: Record<string, string> = {
   "Hafıza Kartları": "Terimler ile anlamlarını eşleştir. Yanlış eşleşmede kart geri kapanır, süre işler.",
@@ -86,8 +87,9 @@ export function GameCenter() {
   const [openGame, setOpenGame] = useState<string | null>(null);
   const [roundKey, setRoundKey] = useState(0);
 
+  const stats = useLearnerStats();
   const { ready, rights, minutesAllowance, remainingSeconds, blockedReason, startRound, recordRound } =
-    useGameRights(learner.xp, learner.gameRights);
+    useGameRights(stats?.xp ?? 0, gameEconomy.dailySessionLimit);
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {

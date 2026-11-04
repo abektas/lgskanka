@@ -88,7 +88,8 @@ class R10StructuralGateTest(unittest.TestCase):
         """R10'un ikinci yarısı: onarılmış gerçek artefaktın tamamı geçer."""
         failing = {rid for rid, r in self.repaired_records.items() if validate_record(r)}
         self.assertEqual(failing, set())
-        self.assertEqual(len(self.repaired_records), self.original["candidate_count"])
+        self.assertEqual(len(self.repaired_records), len(self.original_records))
+        self.assertEqual(set(self.repaired_records), set(self.original_records))
 
     def test_repair_changes_only_the_broken_records(self):
         # TASK-QBANK-011: `extraction.retrieved_at` is a volatile run
@@ -284,7 +285,7 @@ class UnpublishedDataCannotReachProductionTest(unittest.TestCase):
         """Görsel temsil eklenmesi cevap anahtarı sızıntısı yaratmamalı."""
         route = (ROOT / "app/api/study/route.ts").read_text(encoding="utf-8")
         # Cevap anahtarı client'a gönderilmemeli
-        self.assertIn("const { answer, ...rest } = q;", route)
+        self.assertIn("const { answer: _answerKey, ...rest } = q;", route)
         # timingSafeEqual ile güvenli karşılaştırma
         self.assertIn("timingSafeEqual(submitted, expected)", route)
         # asset_path client'a sızmamalı

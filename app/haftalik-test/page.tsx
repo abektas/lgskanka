@@ -175,7 +175,7 @@ export default function HaftalikTestPage() {
     setErrorReason(null);
     const q = current.question;
     const startedAt = questionStartRef.current;
-    fetch("/api/study", {
+    apiFetch("/api/study", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id: q.id, answer: letter }),
@@ -194,6 +194,7 @@ export default function HaftalikTestPage() {
         if (data.correct) {
           saveAnswerRecord({
             questionId: q.id,
+            source: "haftalik",
             subject: q.subject,
             unit: q.unit,
             unitName: q.unitName,
@@ -216,6 +217,7 @@ export default function HaftalikTestPage() {
     if (!q || !selected) return;
     saveAnswerRecord({
       questionId: q.id,
+      source: "haftalik",
       subject: q.subject,
       unit: q.unit,
       unitName: q.unitName,

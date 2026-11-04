@@ -20,27 +20,6 @@ export const navItems: NavItem[] = [
   { href: "/profil", label: "Profil", icon: "user", mobile: true },
 ];
 
-/** Öğrencinin anlık durumu (demo veri: sonraki adımda API'den gelecek). */
-export const learner = {
-  streakDays: 4,
-  xp: 245,
-  get level() {
-    let l = 1;
-    for (const t of gameEconomy.tiers) {
-      if (this.xp >= t.xp) l++;
-    }
-    return Math.min(l, 4);
-  },
-  levelXp: 145,
-  levelTarget: 320,
-  badgeCount: 6,
-  gameRights: 2,
-  roomItems: 3,
-  solvedThisWeek: 32,
-  weeklyGoal: 45,
-  totalSolved: 286,
-};
-
 /** Haftalık test dağılımı — plan §12. */
 export const weeklyTestPlan = [
   { subject: "Matematik", count: 10 },

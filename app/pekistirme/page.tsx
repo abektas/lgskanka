@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Icon } from "../../components/icons";
 import { subjects } from "../../data/content";
 import { saveAnswerRecord } from "../../lib/error-reason";
-import { pushReinforcementTasks } from "../../lib/sync";
+import { pushReinforcementTasks, apiFetch } from "../../lib/sync";
 import {
   syncReinforcementTasks,
   loadReinforcementTasks,
@@ -177,7 +177,7 @@ export default function PekistirmePage() {
   };
 
   const handleAnswer = (taskId: string, questionId: string, answer: string) => {
-    fetch("/api/study", {
+    apiFetch("/api/study", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id: questionId, answer }),
@@ -189,6 +189,7 @@ export default function PekistirmePage() {
           const qmeta = data.question || {};
           saveAnswerRecord({
             questionId,
+            source: "pekistirme",
             subject: qmeta.subject || "",
             unit: qmeta.unit ?? null,
             unitName: qmeta.unitName ?? null,

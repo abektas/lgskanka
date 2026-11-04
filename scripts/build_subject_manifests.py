@@ -30,8 +30,12 @@ questions = all_data.get("questions", [])
 print(f"Total questions: {len(questions)}")
 
 by_subject = {}
+excluded_unverified = 0
 for q in questions:
-    if q.get("published") == False or q.get("cancelledInSource"):
+    if q.get("cancelledInSource"):
+        continue
+    if q.get("status") != "VERIFIED" or q.get("published") is not True:
+        excluded_unverified += 1
         continue
     
     subject = q.get("_subject") or "unknown"
@@ -65,6 +69,10 @@ for q in questions:
     }
     
     by_subject.setdefault(subject, []).append(processed)
+
+print(f"Excluded as not VERIFIED and published: {excluded_unverified}")
+if not any(by_subject.values()):
+    raise SystemExit("Refusing to build empty manifests: no VERIFIED and published questions were found.")
 
 os.makedirs(f"{BASE}/scripts/output", exist_ok=True)
 

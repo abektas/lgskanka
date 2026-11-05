@@ -1,6 +1,30 @@
-# SESSION HANDOFF — 2026-11-04
-**Canlı:** https://lgskanka.alibey.workers.dev (Version ID `83977869-bc00-454f-b2a3-c6743d7625e3`) | **Git commit/push:** yapılmadı
+# SESSION HANDOFF — 2026-11-05
+**Canlı:** https://lgskanka.alibey.workers.dev (Version ID `01e91491-5a2e-4c13-aa42-47b2811baeb9`) | **Son push:** `e8cd94e` (main)
 
+## 2026-11-05 — Günlük özet + pekiştirme düzeltmeleri (in-app yorumlar)
+
+- **Günlük özet "0 doğru / 0 yanlış / 24 boş" kök nedeni:** sayfa yenilenince `/api/study?fresh=1` çözülen soruları eler; özet eski cevap kayıtlarını yeniden çekilen FARKLI soru kimlikleriyle eşleştirince 0 kayıt bulup tüm planı "Boş" sayıyordu. Düzeltme (`app/calis/page.tsx`): özet bugünkü `gunluk` cevap kayıtlarını soru başına tekilleştirerek sayar, `total = Math.max(questions.length, answered)`, `lgs-answer-records-changed` olayında (hidratasyon dahil) yenilenir.
+- **Pekiştirme "henüz pekiştirme oluşmadı" kök nedeni:** `lib/reinforcement.ts` `detectWeakUnits` eşiği `subject|unit|topic` bazında uyguluyordu ve `topic: null` kayıtları tamamen atlıyordu. Düzeltme: eşik ünite bazında ("bir ünitede 3+ yanlış"), topic yalnızca görüntüleme etiketi (en sık yanlışlanan konu); ünite bilgisi olmayan kayıtlar uydurulmadan atlanır; `pekistirme` kayıtları tetikleyici sayılmaz.
+- **Doğrulama:** API sözleşme 23/23, taxonomy 4/4, `npm run lint`, `npm run build`, `npm run cf:build` geçti. Commit/push `e8cd94e` (remote eşleşti); deploy Version ID `01e91491-5a2e-4c13-aa42-47b2811baeb9`. Canlı `/calis/`, `/pekistirme/`, `/sonuclar/` HTTP 200; canlı JS chunk'ında yeni kod (`0eqka9d47djg7.js`) doğrulandı.
+- Commit'e alınmayanlar (bilinçli): `AGENTS.md` (araç yazımı marker değişikliği), `update-check/wrangler-latest.json` (makine önbelleği), `.ses/`, `data-gym-cache/`, `scripts/output/` (kullanıcı verisi/çöp).
+
+## 2026-11-04 — UI düzeltmeleri (in-app yorumlar)
+
+- Günlük sonuç kartı aynı günkü `gunluk` cevap kayıtlarını mevcut soru havuzunun ID'leriyle eşleştirmeden hesaplıyor ve `lgs-answer-records-changed` olayında yenileniyor; bu düzeltme canlıda.
+- Yorumlar için yapılan değişiklikler deploy edildi: aylık deneme sonucu etiketi `Net (yaklaşık)` oldu; ana sayfa Derslerim kartları `computeSubjectAccuracy()` ile gerçek cevap kayıtlarından hesaplanıyor, veri yoksa "Henüz yanıt yok" gösteriyor; Pomodoro kartı, güncel döngüyle uyumsuz 45 soruluk hedef barı ve "Bugünün görevleri" demo kartı kaldırıldı.
+- Comment 7 denetimi ve düzeltmesi: hata sayıları gerçek, sınıflandırılmış yanlış cevap kayıtlarından türetiliyor; H1–H7 görünen adları canonical `errorTypes` kaynağından üretiliyor ve sonuç sayfası hidratasyon/yeni cevap olaylarında yenileniyor. Deploy edildi.
+- **Canlı hesapta görülenler:** hitap adı `ali` olan (kullanıcı tarafından `lgsdeneme` hesabıyla aynı olduğu doğrulandı) hesapta `/sonuclar/` 25 cevap kaydı, 9 doğru, 16 yanlış, 10/16 sınıflandırılmış; H1=6, H2=3, H3=1. Günlük özet 24 soru ve 9 doğru. `/sonuclar` tüm kaynak kayıtlarını; günlük özet bugünkü `gunluk` kayıtlarını soru başına tekilleştirerek sayar. 25. kaydın tam kaynağı UI'dan/aktif browser kontrolüyle henüz doğrulanamadı.
+- **Sınıflandırma kök nedeni/düzeltme:** `app/calis/page.tsx` içindeki "Konuyu bilmiyorum" seçeneği `code: null` idi; seçim yapılmış olmasına rağmen sınıflandırılmıyordu. H1 olarak düzeltildi ve deploy edildi. Daha önce kaydedilmiş `null` kayıtlar neden seçiminin kimliğini taşımadığından otomatik geriye dönük sınıflandırılamaz.
+- **Sayı gösterimi:** Ana sayfa ders kartları, devam kartı, günlük özet, haftalık/aylık deneme ve sonuç ekranları `Doğru / Yanlış / Boş / Toplam` etiketlerini kullanıyor; günlük toplam mevcut soru havuzuyla sınırlı tutuluyor. Geçmiş kayıtlarda boş adedi bilinmiyorsa `—` gösteriliyor.
+- **Doğrulama:** API sözleşme 20/20, taxonomy 4/4, `npm run lint`, `npm run build`, `npm run cf:build` geçti. Canlı `/`, `/calis/`, `/aylik-denemeler/`, `/haftalik-test/`, `/sonuclar/` HTTP 200; canlı JS'de dört etiket doğrulandı. Deploy Version ID `e5d3138a-8cbb-4129-9d37-2f3e4afc725e`; commit/push `626be60`.
+
+## 2026-11-04 — Oyun süresi ve çıkış yeri (in-app yorumlar)
+
+- Oyun hakkı eşiği 20 XP'de 5 dakika, 50 XP'de 8 dakika, 100 XP'de 10 dakika oldu; günlük üst sınır 10 dakika / 2 oturum olarak korundu. Ödüller sayfasındaki açıklamalar güncellendi.
+- Masaüstünde çıkış düğmesi sol menünün altına taşındı; dar ekranlarda profil sayfasında kaldı çünkü sol menü gizleniyor.
+- Doğrulama: lint, API sözleşme 22/22, taxonomy 4/4, Next.js build, Cloudflare build başarılı. Canlı `/oduller/` ve `/profil/` 200; yüklenen JS/CSS'de güncel oyun süresi ve çıkış kontrolleri bulundu. Commit/push `0f7a9a9`; Version ID `0c662175-46cd-4d4a-989c-8e369eeb08ed`.
+
+---
 
 ## 2026-11-04 — Güvenlik ve çalışma sonuçları düzeltmeleri (canlıya dağıtıldı: `83977869-bc00-454f-b2a3-c6743d7625e3`)
 

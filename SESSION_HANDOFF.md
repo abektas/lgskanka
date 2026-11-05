@@ -1,5 +1,10 @@
 # SESSION HANDOFF — 2026-11-05
-**Canlı:** https://lgskanka.alibey.workers.dev (Version ID `b6549692-9b2b-45b5-b490-aa7fc8a83deb`) | **Son push:** `e3cd7d8` (main)
+**Canlı:** https://lgskanka.alibey.workers.dev (Version ID `50225fb5-c248-4ab2-8b52-d998b97bdbbd`) | **Son push:** `39c0022` (main)
+
+## 2026-11-05 — Günlük sonuç adımları butonları (in-app yorum)
+
+- `/calis/` sonuç kartındaki yönlendirme bağlantıları küçük butonlara dönüştürüldü: "Pekiştirme çalışması yap", hafta sonu "Haftalık test/Aylık deneme", "Sonuçlar ve İlerleme". Sadece `.next-steps` içindeki bağlantı görünümü değişti; hedef URL'ler ve çevreleyen metin korundu.
+- Doğrulama: API sözleşme 25/25, taxonomy 4/4, TypeScript, Next.js ve Cloudflare build geçti; `/calis/` yerel HTTP 200. Commit/push `39c0022` (remote eşleşti); deploy Version ID `50225fb5-c248-4ab2-8b52-d998b97bdbbd`. Canlı `/calis/` HTTP 200; JS chunk `0uvbf02f-rozc.js` içinde metin/class, CSS `0ii24pesxbe9p.css` içinde buton kuralı doğrulandı.
 
 ## 2026-11-05 — Pekiştirme görev soruları açılabilir yapıldı (in-app yorum)
 

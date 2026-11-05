@@ -66,14 +66,18 @@ test('weak-unit detection groups wrong answers per unit and only feeds from asse
   assert.match(reinforcement, /if \(data\.count >= 3\)/);
 });
 
-test('pekiştirme task rows open the real question image and are answerable', () => {
+test('pekiştirme subject selection opens the first unanswered question in a study-style flow', () => {
+  assert.doesNotMatch(pekistirmePage, /className="pekiştirme-summary"/);
+  assert.match(pekistirmePage, /onClick=\{\(\) => handleSelectSubject\(subject\.slug\)\}/);
+  assert.match(pekistirmePage, /firstUnanswered/);
+  assert.match(pekistirmePage, /className="exam-question-header"/);
   assert.match(pekistirmePage, /onAnswer=\{\(letter\) => handleAnswer\(task\.id, qid, letter\)\}/);
   assert.match(pekistirmePage, /className="exam-answers"/);
   assert.match(pekistirmePage, /className="zoom-overlay"/);
   assert.match(pekistirmePage, /exam-report-btn/);
+  assert.match(pekistirmePage, /className="btn btn-soft"[\s\S]*?Sonraki soru/);
   assert.match(pekistirmePage, /loadTaskQuestions\(task\)/);
   assert.match(pekistirmePage, /updateTaskStatus\(taskId, "tamamlandi"\)/);
-  assert.doesNotMatch(pekistirmePage, /<QuestionMini key=\{qid\} qid=\{qid\} idx=\{idx\} task=\{task\} \/>/);
 });
 
 test('homepage subject cards use real answer records and stale optional cards are absent', () => {

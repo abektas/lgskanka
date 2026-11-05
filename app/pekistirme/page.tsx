@@ -65,14 +65,14 @@ function statusPill(status: string) {
   );
 }
 
-function QuestionMini({ qid, idx, task, question, open, onToggle, onAnswer, onReport, reported, onZoom }: {
+function QuestionMini({ qid, idx, task, question, open, onAnswer, onNext, onReport, reported, onZoom }: {
   qid: string;
   idx: number;
   task: any;
   question: any;
   open: boolean;
-  onToggle: () => void;
   onAnswer: (letter: string) => void;
+  onNext: () => void;
   onReport: () => void;
   reported: boolean;
   onZoom: (src: string) => void;
@@ -83,82 +83,66 @@ function QuestionMini({ qid, idx, task, question, open, onToggle, onAnswer, onRe
   if (isCorrect === true) statusClass = "correct";
   else if (isCorrect === false) statusClass = "wrong";
   let statusText = "Bekliyor";
-  if (answer) {
-    statusText = isCorrect ? "✓ Doğru" : "✗ Yanlış";
-  }
-  return (
-    <div>
-      <div
-        className="question-mini"
-        role="button"
-        tabIndex={0}
-        aria-expanded={open}
-        onClick={onToggle}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            onToggle();
-          }
-        }}
-        style={{ cursor: "pointer" }}
-      >
-        <span className="q-index">Soru {idx + 1}</span>
-        <span className={"q-status " + statusClass}>
-          {statusText}
-        </span>
-        <span className="muted-text" style={{ marginLeft: "auto", fontSize: 12 }}>
-          {open ? "▲ Gizle" : "▼ Soruyu aç"}
-        </span>
-      </div>
+  if (answer) statusText = isCorrect ? "✓ Doğru" : "✗ Yanlış";
 
-      {open && (
-        <div className="task-question-card" style={{ marginTop: 12 }}>
-          {question ? (
-            <>
-              <div className="exam-question-image">
-                <img
-                  src={question.imagePath}
-                  alt={`${question.subject} pekiştirme soru ${idx + 1}`}
-                  loading="lazy"
-                  onClick={() => onZoom(question.imagePath)}
-                />
-              </div>
-              <p className="exam-image-hint">Görseli büyütmek için tıkla</p>
-              <div className="exam-report-row">
-                <button
-                  type="button"
-                  className={"exam-report-btn " + (reported ? "is-done" : "")}
-                  onClick={onReport}
-                  disabled={reported}
-                >
-                  {reported ? "✓ Öğretmene bildirildi" : "⚠ Soru eksik veya bozuk"}
-                </button>
-              </div>
-              {answer ? (
-                <p style={{ fontWeight: 700 }}>
-                  Cevabın: <b>{answer}</b>
-                  {isCorrect ? <span className="correct"> ✓ Doğru</span> : <span className="wrong"> ✗ Yanlış</span>}
-                </p>
-              ) : (
-                <div className="exam-answers">
-                  {["A", "B", "C", "D"].map((letter) => (
-                    <button
-                      key={letter}
-                      className="exam-answer-btn"
-                      onClick={() => onAnswer(letter)}
-                    >
-                      {letter}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </>
+  if (!open) return null;
+
+  return (
+    <section className="exam-question task-question-card">
+      {question ? (
+        <>
+          <div className="exam-question-header">
+            <span className="pill is-gok">Soru {idx + 1} / {task.questionIds.length}</span>
+            <span className={"q-status " + statusClass}>{statusText}</span>
+          </div>
+          <div className="exam-question-image">
+            <img
+              src={question.imagePath}
+              alt={`${question.subject} pekiştirme soru ${idx + 1}`}
+              loading="eager"
+              onClick={() => onZoom(question.imagePath)}
+            />
+          </div>
+          <p className="exam-image-hint">Görseli büyütmek için tıkla</p>
+          <div className="exam-report-row">
+            <button
+              type="button"
+              className={"exam-report-btn " + (reported ? "is-done" : "")}
+              onClick={onReport}
+              disabled={reported}
+            >
+              {reported ? "✓ Öğretmene bildirildi" : "⚠ Soru eksik veya bozuk"}
+            </button>
+          </div>
+          {answer ? (
+            <div className="exam-result">
+              <p style={{ fontWeight: 700 }}>
+                Cevabın: <b>{answer}</b>
+                {isCorrect ? <span className="correct"> ✓ Doğru</span> : <span className="wrong"> ✗ Yanlış</span>}
+              </p>
+              <button type="button" className="btn btn-soft" onClick={onNext}>
+                {idx === task.questionIds.length - 1 ? "Görevi tamamla" : "Sonraki soru"}
+                <Icon name="arrow" size={16} />
+              </button>
+            </div>
           ) : (
-            <p className="muted-text">Soru yükleniyor…</p>
+            <div className="exam-answers">
+              {["A", "B", "C", "D"].map((letter) => (
+                <button
+                  key={letter}
+                  className="exam-answer-btn"
+                  onClick={() => onAnswer(letter)}
+                >
+                  {letter}
+                </button>
+              ))}
+            </div>
           )}
-        </div>
+        </>
+      ) : (
+        <p className="muted-text">Soru yükleniyor…</p>
       )}
-    </div>
+    </section>
   );
 }
 
@@ -304,6 +288,31 @@ export default function PekistirmePage() {
       .catch(() => {});
   };
 
+  const handleSelectSubject = (subjectSlug: string) => {
+    setActiveSubject(subjectSlug);
+    const subjectTasks = getTasksBySubject(subjectSlug);
+    const task = subjectTasks.find((item: any) => item.status !== "tamamlandi") ?? subjectTasks[0];
+    if (!task) {
+      setOpenQid(null);
+      return;
+    }
+    if (task.status === "tamamlandi" && task.questionIds.length > 0) {
+      loadTaskQuestions(task);
+      setOpenQid(task.questionIds.find((qid: string) => !task.answers?.[qid]) ?? task.questionIds[0]);
+      return;
+    }
+    handleStartTask(task);
+  };
+
+  const handleNextQuestion = (task: any, currentQid: string) => {
+    const currentIndex = task.questionIds.indexOf(currentQid);
+    const nextUnanswered = task.questionIds
+      .slice(currentIndex + 1)
+      .find((qid: string) => !task.answers?.[qid]);
+    const anyUnanswered = task.questionIds.find((qid: string) => !task.answers?.[qid]);
+    setOpenQid(nextUnanswered ?? anyUnanswered ?? null);
+  };
+
   const handleAnswer = (taskId: string, questionId: string, answer: string) => {
     apiFetch("/api/study", {
       method: "POST",
@@ -440,23 +449,6 @@ export default function PekistirmePage() {
         </section>
       )}
 
-      <section className="pekiştirme-summary">
-        <div className="summary-stats">
-          <div className="stat-card">
-            <div className="stat-number">{pendingCount}</div>
-            <div className="stat-label">Bekleyen Görev</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-number">{completedCount}</div>
-            <div className="stat-label">Tamamlanan</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-number">{allTasks.length}</div>
-            <div className="stat-label">Toplam Görev</div>
-          </div>
-        </div>
-      </section>
-
       {allTasks.length === 0 && (
         <section className="card empty-state">
           <h2>🎉 Henüz pekiştirme görevi yok!</h2>
@@ -477,9 +469,7 @@ export default function PekistirmePage() {
             <button
               key={subject.slug}
               className={"subject-tab " + (activeSubject === subject.slug ? "active" : "")}
-              onClick={() =>
-                setActiveSubject(activeSubject === subject.slug ? null : subject.slug)
-              }
+              onClick={() => handleSelectSubject(subject.slug)}
               style={{ "--subject-tone": "var(--" + subject.tone + ")" } as React.CSSProperties}
             >
               <span className="subject-tab-icon">{subject.icon}</span>
@@ -566,15 +556,8 @@ export default function PekistirmePage() {
                         task={task}
                         question={questionBank[qid]}
                         open={openQid === qid}
-                        onToggle={() => {
-                          if (openQid === qid) {
-                            setOpenQid(null);
-                          } else {
-                            loadTaskQuestions(task);
-                            setOpenQid(qid);
-                          }
-                        }}
                         onAnswer={(letter) => handleAnswer(task.id, qid, letter)}
+                        onNext={() => handleNextQuestion(task, qid)}
                         onReport={() => reportQuestion(questionBank[qid])}
                         reported={reportedIds.has(qid)}
                         onZoom={(src) => setZoomSrc(src)}

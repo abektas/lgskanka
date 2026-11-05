@@ -1,5 +1,10 @@
 # SESSION HANDOFF — 2026-11-05
-**Canlı:** https://lgskanka.alibey.workers.dev (Version ID `50225fb5-c248-4ab2-8b52-d998b97bdbbd`) | **Son push:** `39c0022` (main)
+**Canlı:** https://lgskanka.alibey.workers.dev (Version ID `551be78e-e1a3-4006-8b92-1203a1f81e35`) | **Son push:** `eba4dd0` (main)
+
+## 2026-11-05 — Pekiştirme görev görünümü (in-app yorumlar 6–7)
+
+- `/pekistirme/` içindeki üç sayımlı özet kartı kaldırıldı. Ders düğmesi seçilince o dersteki ilk açık görev ve ilk cevaplanmamış soru açılır; soru görünümü çalışma sayfasındaki büyük soru/görsel/şık akışını kullanır, cevap sonrası “Sonraki soru” ile ilerler.
+- Doğrulama: API sözleşme 25/25, taxonomy 4/4, `npm run lint`, `npm run build`, `npm run cf:build` başarılı; yerel ve canlı `/pekistirme/` HTTP 200. Canlı JS içinde “Sonraki soru” ve “Görevi tamamla” bulundu, kaldırılan `pekiştirme-summary` bulunmadı. Commit/push `eba4dd0`; deploy Version ID `551be78e-e1a3-4006-8b92-1203a1f81e35`.
 
 ## 2026-11-05 — Günlük sonuç adımları butonları (in-app yorum)
 

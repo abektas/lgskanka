@@ -19,6 +19,7 @@ const manifestBuilder = fs.readFileSync(new URL('../../scripts/build_subject_man
 const learnerStats = fs.readFileSync(new URL('../../lib/learner-stats.ts', import.meta.url), 'utf8');
 const badgeProgress = fs.readFileSync(new URL('../../components/use-badge-progress.ts', import.meta.url), 'utf8');
 const reinforcement = fs.readFileSync(new URL('../../lib/reinforcement.ts', import.meta.url), 'utf8');
+const pekistirmePage = fs.readFileSync(new URL('../../app/pekistirme/page.tsx', import.meta.url), 'utf8');
 
 test('POST grades against the private server-side answer and returns only correctness', () => {
   assert.match(route, /const correct = timingSafeEqual\(submitted, expected\)/);
@@ -56,6 +57,16 @@ test('weak-unit detection groups wrong answers per unit and only feeds from asse
   assert.match(reinforcement, /record\.source \?\? "gunluk"\) === "pekistirme"\) continue/);
   assert.doesNotMatch(reinforcement, /!record\.correct && record\.topic/);
   assert.match(reinforcement, /if \(data\.count >= 3\)/);
+});
+
+test('pekiştirme task rows open the real question image and are answerable', () => {
+  assert.match(pekistirmePage, /onAnswer=\{\(letter\) => handleAnswer\(task\.id, qid, letter\)\}/);
+  assert.match(pekistirmePage, /className="exam-answers"/);
+  assert.match(pekistirmePage, /className="zoom-overlay"/);
+  assert.match(pekistirmePage, /exam-report-btn/);
+  assert.match(pekistirmePage, /loadTaskQuestions\(task\)/);
+  assert.match(pekistirmePage, /updateTaskStatus\(taskId, "tamamlandi"\)/);
+  assert.doesNotMatch(pekistirmePage, /<QuestionMini key=\{qid\} qid=\{qid\} idx=\{idx\} task=\{task\} \/>/);
 });
 
 test('homepage subject cards use real answer records and stale optional cards are absent', () => {

@@ -65,7 +65,18 @@ function statusPill(status: string) {
   );
 }
 
-function QuestionMini({ qid, idx, task }: { qid: string; idx: number; task: any }) {
+function QuestionMini({ qid, idx, task, question, open, onToggle, onAnswer, onReport, reported, onZoom }: {
+  qid: string;
+  idx: number;
+  task: any;
+  question: any;
+  open: boolean;
+  onToggle: () => void;
+  onAnswer: (letter: string) => void;
+  onReport: () => void;
+  reported: boolean;
+  onZoom: (src: string) => void;
+}) {
   const answer = task.answers?.[qid];
   const isCorrect = task.correctness?.[qid];
   let statusClass = "pending";
@@ -76,11 +87,77 @@ function QuestionMini({ qid, idx, task }: { qid: string; idx: number; task: any 
     statusText = isCorrect ? "✓ Doğru" : "✗ Yanlış";
   }
   return (
-    <div className="question-mini">
-      <span className="q-index">Soru {idx + 1}</span>
-      <span className={"q-status " + statusClass}>
-        {statusText}
-      </span>
+    <div>
+      <div
+        className="question-mini"
+        role="button"
+        tabIndex={0}
+        aria-expanded={open}
+        onClick={onToggle}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            onToggle();
+          }
+        }}
+        style={{ cursor: "pointer" }}
+      >
+        <span className="q-index">Soru {idx + 1}</span>
+        <span className={"q-status " + statusClass}>
+          {statusText}
+        </span>
+        <span className="muted-text" style={{ marginLeft: "auto", fontSize: 12 }}>
+          {open ? "▲ Gizle" : "▼ Soruyu aç"}
+        </span>
+      </div>
+
+      {open && (
+        <div className="task-question-card" style={{ marginTop: 12 }}>
+          {question ? (
+            <>
+              <div className="exam-question-image">
+                <img
+                  src={question.imagePath}
+                  alt={`${question.subject} pekiştirme soru ${idx + 1}`}
+                  loading="lazy"
+                  onClick={() => onZoom(question.imagePath)}
+                />
+              </div>
+              <p className="exam-image-hint">Görseli büyütmek için tıkla</p>
+              <div className="exam-report-row">
+                <button
+                  type="button"
+                  className={"exam-report-btn " + (reported ? "is-done" : "")}
+                  onClick={onReport}
+                  disabled={reported}
+                >
+                  {reported ? "✓ Öğretmene bildirildi" : "⚠ Soru eksik veya bozuk"}
+                </button>
+              </div>
+              {answer ? (
+                <p style={{ fontWeight: 700 }}>
+                  Cevabın: <b>{answer}</b>
+                  {isCorrect ? <span className="correct"> ✓ Doğru</span> : <span className="wrong"> ✗ Yanlış</span>}
+                </p>
+              ) : (
+                <div className="exam-answers">
+                  {["A", "B", "C", "D"].map((letter) => (
+                    <button
+                      key={letter}
+                      className="exam-answer-btn"
+                      onClick={() => onAnswer(letter)}
+                    >
+                      {letter}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </>
+          ) : (
+            <p className="muted-text">Soru yükleniyor…</p>
+          )}
+        </div>
+      )}
     </div>
   );
 }
@@ -94,6 +171,11 @@ export default function PekistirmePage() {
   const [telafiItems, setTelafiItems] = useState<{ question: TestQuestion; category: "telafi" | "genel" }[] | null>(null);
   const [telafiLoading, setTelafiLoading] = useState(false);
   const [cycle, setCycle] = useState<CycleState | null>(null);
+  // Görev soruları: qid → herkese açık soru (görsel vb.)
+  const [questionBank, setQuestionBank] = useState<Record<string, any>>({});
+  const [openQid, setOpenQid] = useState<string | null>(null);
+  const [reportedIds, setReportedIds] = useState<Set<string>>(new Set());
+  const [zoomSrc, setZoomSrc] = useState<string | null>(null);
 
   // Pazar telafi testi verilerini çek
   useEffect(() => {
@@ -147,20 +229,60 @@ export default function PekistirmePage() {
     setLoading(false);
   }, []);
 
+  /** Görevin atanmış sorularının görsellerini getir (eski görevler dahil). */
+  const loadTaskQuestions = (task: any) => {
+    const missing = (task.questionIds || []).filter((qid: string) => !questionBank[qid]);
+    if (missing.length === 0) return;
+    const unitParam = task.unit === null || task.unit === undefined ? "" : "&unit=" + task.unit;
+    apiFetch("/api/study?subject=" + task.subject + unitParam + "&limit=50&sort=unit_difficulty")
+      .then((r) => r.json())
+      .then((data: any) => {
+        const wanted = new Set<string>(task.questionIds || []);
+        const items: any[] = data.items || [];
+        setQuestionBank((prev) => {
+          const next = { ...prev };
+          for (const q of items) if (wanted.has(q.id)) next[q.id] = q;
+          return next;
+        });
+      })
+      .catch(() => {});
+  };
+
+  /** "Soru eksik veya bozuk" bildirimi — öğretmen paneline düşer. */
+  const reportQuestion = (q: any) => {
+    if (!q || reportedIds.has(q.id)) return;
+    setReportedIds((prev) => new Set(prev).add(q.id));
+    apiFetch("/api/question-reports", {
+      method: "POST",
+      body: JSON.stringify({
+        source: "pekistirme",
+        monthName: q.sourceBook,
+        questionId: q.id,
+        questionNumber: q.questionNumber,
+        subject: q.subject,
+        imagePath: q.imagePath,
+      }),
+    }).catch(() => {
+      setReportedIds((prev) => {
+        const next = new Set(prev);
+        next.delete(q.id);
+        return next;
+      });
+    });
+  };
+
   const handleStartTask = (task: any) => {
     if (task.questionIds.length > 0) {
       updateTaskStatus(task.id, "devam-ediyor");
+      loadTaskQuestions(task);
+      const firstUnanswered =
+        task.questionIds.find((qid: string) => !task.answers?.[qid]) ?? task.questionIds[0];
+      setOpenQid(firstUnanswered);
       setTasks(syncReinforcementTasks());
       pushReinforcementTasks(getAllTasks());
       return;
     }
-    fetch(
-      "/api/study?subject=" +
-        task.subject +
-        "&unit=" +
-        task.unit +
-        "&limit=50&sort=unit_difficulty"
-    )
+    apiFetch("/api/study?subject=" + task.subject + "&unit=" + task.unit + "&limit=50&sort=unit_difficulty")
       .then((r) => r.json())
       .then((data: any) => {
         const items = data.items || [];
@@ -169,6 +291,12 @@ export default function PekistirmePage() {
         if (selected.length > 0) {
           assignQuestionsToTask(task.id, selected);
           updateTaskStatus(task.id, "devam-ediyor");
+          setQuestionBank((prev) => {
+            const next = { ...prev };
+            for (const q of unitItems) if (selected.includes(q.id)) next[q.id] = q;
+            return next;
+          });
+          setOpenQid(selected[0]);
           setTasks(syncReinforcementTasks());
           pushReinforcementTasks(getAllTasks());
         }
@@ -207,12 +335,31 @@ export default function PekistirmePage() {
             { [questionId]: answer },
             { [questionId]: data.correct }
           );
+          // 5 sorunun tamamı cevaplandıysa görev tamamlanır.
+          const updated = loadReinforcementTasks().find((t) => t.id === taskId);
+          if (
+            updated &&
+            updated.questionIds.length > 0 &&
+            updated.questionIds.every((qid: string) => updated.answers?.[qid])
+          ) {
+            updateTaskStatus(taskId, "tamamlandi");
+          }
           setTasks(syncReinforcementTasks());
           pushReinforcementTasks(getAllTasks());
         }
       })
       .catch(() => {});
   };
+
+  // Büyütülmüş görsel açıkken ESC ile kapat
+  useEffect(() => {
+    if (!zoomSrc) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setZoomSrc(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [zoomSrc]);
 
   if (loading) {
     return (
@@ -412,7 +559,26 @@ export default function PekistirmePage() {
                 {task.status !== "bekliyor" && task.questionIds.length > 0 && (
                   <div className="task-questions">
                     {task.questionIds.map((qid: string, idx: number) => (
-                      <QuestionMini key={qid} qid={qid} idx={idx} task={task} />
+                      <QuestionMini
+                        key={qid}
+                        qid={qid}
+                        idx={idx}
+                        task={task}
+                        question={questionBank[qid]}
+                        open={openQid === qid}
+                        onToggle={() => {
+                          if (openQid === qid) {
+                            setOpenQid(null);
+                          } else {
+                            loadTaskQuestions(task);
+                            setOpenQid(qid);
+                          }
+                        }}
+                        onAnswer={(letter) => handleAnswer(task.id, qid, letter)}
+                        onReport={() => reportQuestion(questionBank[qid])}
+                        reported={reportedIds.has(qid)}
+                        onZoom={(src) => setZoomSrc(src)}
+                      />
                     ))}
                   </div>
                 )}
@@ -425,6 +591,11 @@ export default function PekistirmePage() {
           <p className="muted-text">
             Yukarıdan bir ders seçerek pekiştirme görevlerini görüntüleyin.
           </p>
+        </div>
+      )}
+      {zoomSrc && (
+        <div className="zoom-overlay" onClick={() => setZoomSrc(null)} role="button" aria-label="Görseli kapat">
+          <img src={zoomSrc} alt="Pekiştirme sorusu — büyütülmüş" />
         </div>
       )}
     </div>

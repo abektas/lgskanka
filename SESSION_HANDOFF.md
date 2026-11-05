@@ -1,5 +1,11 @@
 # SESSION HANDOFF — 2026-11-05
-**Canlı:** https://lgskanka.alibey.workers.dev (Version ID `01e91491-5a2e-4c13-aa42-47b2811baeb9`) | **Son push:** `e8cd94e` (main)
+**Canlı:** https://lgskanka.alibey.workers.dev (Version ID `b6549692-9b2b-45b5-b490-aa7fc8a83deb`) | **Son push:** `e3cd7d8` (main)
+
+## 2026-11-05 — Pekiştirme görev soruları açılabilir yapıldı (in-app yorum)
+
+- Kullanıcı: "soru 1 bekliyor diyor soru 2 bekliyor diyor ama bu sorular nerede, üstlerine basınca bir şey çıkmıyor". Kök neden: `QuestionMini` ölü bir satırdı (yalnız "Soru N · Bekliyor" etiketi) — soru görseli, cevap şıkları ve tıklama hedefi hiç yoktu; `handleAnswer` hiçbir butona bağlı değildi.
+- Düzeltme (`app/pekistirme/page.tsx`): soru satırına tıklayınca gerçek soru açılıyor — `.exam-question-image` görseli, büyütme overlay (ESC ile kapanır), "⚠ Soru eksik veya bozuk" bildirim butonu, A/B/C/D şıkları (`handleAnswer`'a bağlı). "Başla/Çözmeye Devam Et" ilk cevaplanmamış soruyu açar; 5 soru bitince görev `tamamlandi` olur. Görev görselleri `/api/study` havuzundan kimlikle eşleştirilerek yüklenir (eski görevler dahil).
+- Doğrulama: API sözleşme 24/24, taxonomy 4/4, lint, Next + Cloudflare build geçti. Commit/push `e3cd7d8`; deploy Version ID `b6549692-9b2b-45b5-b490-aa7fc8a83deb`. Canlı `/pekistirme/`, `/calis/`, `/sonuclar/` HTTP 200; canlı JS chunk'ında yeni kod (`1dqtwpclh_r_l.js`) doğrulandı.
 
 ## 2026-11-05 — Günlük özet + pekiştirme düzeltmeleri (in-app yorumlar)
 

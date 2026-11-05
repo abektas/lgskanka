@@ -18,6 +18,7 @@ const resultsAnalytics = fs.readFileSync(new URL('../../lib/results-analytics.ts
 const manifestBuilder = fs.readFileSync(new URL('../../scripts/build_subject_manifests.py', import.meta.url), 'utf8');
 const learnerStats = fs.readFileSync(new URL('../../lib/learner-stats.ts', import.meta.url), 'utf8');
 const badgeProgress = fs.readFileSync(new URL('../../components/use-badge-progress.ts', import.meta.url), 'utf8');
+const reinforcement = fs.readFileSync(new URL('../../lib/reinforcement.ts', import.meta.url), 'utf8');
 
 test('POST grades against the private server-side answer and returns only correctness', () => {
   assert.match(route, /const correct = timingSafeEqual\(submitted, expected\)/);
@@ -38,13 +39,23 @@ test('public forgot-password route cannot reset accounts', () => {
   assert.doesNotMatch(forgot, /dbUpdate|hashPassword/);
 });
 
-test('daily summary only counts saved answers from today and waits for grading before advancing', () => {
-  assert.match(dailyPage, /new Date\(record\.createdAt\)\.toDateString\(\) === today/);
+test('daily summary counts todays gunluk records after a fresh-question reload and waits for grading before advancing', () => {
   assert.match(dailyPage, /window\.addEventListener\("lgs-answer-records-changed", refreshRecords\)/);
-  assert.match(dailyPage, /const subject = r\.question\.subject \|\| r\.subject/);
-  assert.match(dailyPage, /questions\.flatMap\(\(question\)/);
+  assert.match(dailyPage, /latestByQuestion\.set\(record\.questionId, record\)/);
+  assert.match(dailyPage, /const total = Math\.max\(questions\.length, answered\)/);
+  assert.match(dailyPage, /for \(const r of sessionRecords\)/);
+  assert.doesNotMatch(dailyPage, /questions\.flatMap\(\(question\)/);
+  assert.doesNotMatch(dailyPage, /questionIds\.has\(record\.questionId\)/);
+  assert.match(dailyPage, /if \(solved >= target && merged\.length > 0\) \{\s*setCompleted\(true\)/);
   assert.match(dailyPage, /disabled=\{checkState === "pending" \|\| checkState === null\}/);
   assert.match(dailyPage, /apiFetch\("\/api\/study"/);
+});
+
+test('weak-unit detection groups wrong answers per unit and only feeds from assessments', () => {
+  assert.match(reinforcement, /record\.unit === null && !record\.unitName\) continue/);
+  assert.match(reinforcement, /record\.source \?\? "gunluk"\) === "pekistirme"\) continue/);
+  assert.doesNotMatch(reinforcement, /!record\.correct && record\.topic/);
+  assert.match(reinforcement, /if \(data\.count >= 3\)/);
 });
 
 test('homepage subject cards use real answer records and stale optional cards are absent', () => {
@@ -75,7 +86,7 @@ test('student score summaries use labeled correct, wrong, blank, and total count
     assert.match(page, /ScoreCounts/);
   }
   for (const label of ['Doğru:', 'Yanlış:', 'Boş:', 'Toplam:']) assert.ok(scoreCounts.includes(label));
-  assert.match(dailyPage, /const total = questions\.length/);
+  assert.match(dailyPage, /const total = Math\.max\(questions\.length, answered\)/);
   assert.match(dailyPage, /const blank = total - answered/);
 });
 

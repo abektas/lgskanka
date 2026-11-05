@@ -31,33 +31,33 @@ interface DailySummaryProps {
 }
 
 function DailySummary({ questions, cycle }: DailySummaryProps) {
-  const today = new Date().toDateString();
   const [savedRecords, setSavedRecords] = useState<ReturnType<typeof loadAnswerRecords>>([]);
   useEffect(() => {
-    const refreshRecords = () => {
-      const latestByQuestion = new Map<string, ReturnType<typeof loadAnswerRecords>[number]>();
-      for (const record of loadAnswerRecords()) {
-        if ((record.source ?? "gunluk") === "gunluk" && new Date(record.createdAt).toDateString() === today) {
-          latestByQuestion.set(record.questionId, record);
-        }
-      }
-      setSavedRecords([...latestByQuestion.values()]);
-    };
+    const refreshRecords = () => setSavedRecords(loadAnswerRecords());
     refreshRecords();
     window.addEventListener("lgs-answer-records-changed", refreshRecords);
     return () => window.removeEventListener("lgs-answer-records-changed", refreshRecords);
-  }, [today]);
+  }, []);
 
-  const latestByQuestion = new Map(savedRecords.map((record) => [record.questionId, record]));
-  const records = questions.flatMap((question) => {
-    const record = latestByQuestion.get(question.id);
-    return record ? [{ ...record, question }] : [];
-  });
+  // Tamamlanan oturumun gerçek cevapları: bugünkü "gunluk" kayıtları.
+  // Sayfa yenilenince /api/study?fresh=1 çözülen soruları eler ve FARKLI soru
+  // kimlikleri döndürür; kayıtlar yeniden çekilen soru kümesiyle kesiştirilmez.
+  const today = new Date().toDateString();
+  const latestByQuestion = new Map<string, ReturnType<typeof loadAnswerRecords>[number]>();
+  for (const record of savedRecords) {
+    if ((record.source ?? "gunluk") !== "gunluk") continue;
+    if (new Date(record.createdAt).toDateString() !== today) continue;
+    const prev = latestByQuestion.get(record.questionId);
+    if (!prev || String(record.createdAt) >= String(prev.createdAt)) {
+      latestByQuestion.set(record.questionId, record);
+    }
+  }
+  const sessionRecords = [...latestByQuestion.values()];
 
-  const answered = records.length;
-  const correct = records.filter((r) => r.correct).length;
+  const answered = sessionRecords.length;
+  const correct = sessionRecords.filter((r) => r.correct).length;
   const wrong = answered - correct;
-  const total = questions.length;
+  const total = Math.max(questions.length, answered);
   const blank = total - answered;
   const correctPct = answered ? Math.round((correct / answered) * 100) : 0;
 
@@ -68,8 +68,8 @@ function DailySummary({ questions, cycle }: DailySummaryProps) {
     if (!bySubject[subject]) bySubject[subject] = { total: 0, answered: 0, correct: 0, wrong: 0 };
     bySubject[subject].total++;
   }
-  for (const r of records) {
-    const subject = r.question.subject || r.subject;
+  for (const r of sessionRecords) {
+    const subject = r.subject;
     if (!bySubject[subject]) bySubject[subject] = { total: 0, answered: 0, correct: 0, wrong: 0 };
     bySubject[subject].answered++;
     if (r.correct) bySubject[subject].correct++;
@@ -79,7 +79,7 @@ function DailySummary({ questions, cycle }: DailySummaryProps) {
 
   // H türü bazında
   const byH: Record<string, number> = {};
-  for (const r of records) {
+  for (const r of sessionRecords) {
     if (r.errorReasonCode) {
       byH[r.errorReasonCode] = (byH[r.errorReasonCode] || 0) + 1;
     }
@@ -91,7 +91,7 @@ function DailySummary({ questions, cycle }: DailySummaryProps) {
   );
 
   // Toplam süre
-  const totalTime = records.reduce((sum: number, r: any) => sum + (r.timeSpentSec || 0), 0);
+  const totalTime = sessionRecords.reduce((sum: number, r: any) => sum + (r.timeSpentSec || 0), 0);
   const mm = Math.floor(totalTime / 60);
   const ss = totalTime % 60;
 

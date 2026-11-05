@@ -41,9 +41,9 @@ export interface ReinforcementTask {
   updatedAt: string;
 }
 
-/** Konu/ünite anahtarı oluşturur. */
-function unitKey(q: { subject: string; unit: number | null; topic: string | null }): string {
-  return `${q.subject}|${q.unit ?? "x"}|${q.topic ?? "-"}`.toLowerCase();
+/** Ünite anahtarı oluşturur — eşik ünite başına sayılır, konu başlığı başına değil. */
+function unitKey(q: { subject: string; unit: number | null; unitName: string | null }): string {
+  return `${q.subject}|${q.unit ?? q.unitName ?? "-"}`.toLowerCase();
 }
 
 /** Assessment kaynağına göre kayıtları filtreler (şimdilik hepsini döndürür, ileride API'den gelecek). */
@@ -61,22 +61,53 @@ export function detectWeakUnits(): Map<string, { count: number; subject: string;
   // Tüm değerlendirme kaynaklarından kayıtları topla
   const allRecords = loadAnswerRecords();
   
-  // Yanlış cevapları grupla
-  const wrongByUnit = new Map<string, { count: number; subject: string; unit: number | null; unitName: string | null; topic: string; source: AssessmentSource }>();
+  // Yanlış cevapları ÜNİTE başına grupla: kural "bir ünitede 3+ yanlış"tır.
+  const wrongByUnit = new Map<string, { count: number; subject: string; unit: number | null; unitName: string | null; topic: string; source: AssessmentSource; topicCounts: Map<string, number> }>();
   
   for (const record of allRecords) {
-    if (!record.correct && record.topic) {
-      const key = unitKey(record);
-      const existing = wrongByUnit.get(key) || { count: 0, subject: record.subject, unit: record.unit, unitName: record.unitName, topic: record.topic, source: "gunluk" as AssessmentSource };
-      existing.count++;
-      wrongByUnit.set(key, existing);
+    if (record.correct) continue;
+    // Pekiştirme görevleri kendi sonuçlarını doğurmaz; tetikleyiciler
+    // günlük/haftalık/aylık değerlendirmelerdir.
+    if ((record.source ?? "gunluk") === "pekistirme") continue;
+    // Ünite bilgisi olmadan kayıt bir üniteye bağlanamaz — uydurulmaz, atlanır.
+    if (record.unit === null && !record.unitName) continue;
+    const key = unitKey(record);
+    const existing = wrongByUnit.get(key) || {
+      count: 0,
+      subject: record.subject,
+      unit: record.unit,
+      unitName: record.unitName,
+      topic: record.topic ?? record.unitName ?? "Ünite tekrarı",
+      source: "gunluk" as AssessmentSource,
+      topicCounts: new Map<string, number>(),
+    };
+    existing.count++;
+    if (record.topic) {
+      existing.topicCounts.set(record.topic, (existing.topicCounts.get(record.topic) ?? 0) + 1);
     }
+    wrongByUnit.set(key, existing);
   }
   
   // 3+ yanlış olanları filtrele
   for (const [key, data] of wrongByUnit.entries()) {
     if (data.count >= 3) {
-      weakUnits.set(key, data);
+      // Görüntüleme etiketi: ünitede en sık yanlışlanan konu başlığı.
+      let topic = data.topic;
+      let best = -1;
+      for (const [label, count] of data.topicCounts.entries()) {
+        if (count > best) {
+          best = count;
+          topic = label;
+        }
+      }
+      weakUnits.set(key, {
+        count: data.count,
+        subject: data.subject,
+        unit: data.unit,
+        unitName: data.unitName,
+        topic,
+        source: data.source,
+      });
     }
   }
   

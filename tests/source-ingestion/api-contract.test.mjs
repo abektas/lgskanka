@@ -52,6 +52,13 @@ test('daily summary counts todays gunluk records after a fresh-question reload a
   assert.match(dailyPage, /apiFetch\("\/api\/study"/);
 });
 
+test('daily next-step links are styled as clear, clickable buttons', () => {
+  assert.match(dailyPage, /className="btn btn-soft btn-sm next-step-link" href="\/pekistirme">Pekiştirme çalışması yap/);
+  assert.match(dailyPage, /className="btn btn-soft btn-sm next-step-link" href=\{cycle\?\.weekendTest/);
+  assert.match(dailyPage, /className="btn btn-soft btn-sm next-step-link" href="\/sonuclar">Sonuçlar ve İlerleme/);
+  assert.match(dailyPage, /className="next-steps"/);
+});
+
 test('weak-unit detection groups wrong answers per unit and only feeds from assessments', () => {
   assert.match(reinforcement, /record\.unit === null && !record\.unitName\) continue/);
   assert.match(reinforcement, /record\.source \?\? "gunluk"\) === "pekistirme"\) continue/);

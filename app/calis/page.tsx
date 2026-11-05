@@ -169,10 +169,10 @@ function DailySummary({ questions, cycle }: DailySummaryProps) {
         <h4>📋 Sıradaki Adımlar</h4>
         <ol>
           <li>Yanlış yaptığın soruların H türünü not et — hangi alanda eksiklik var?</li>
-          <li>Zayıf derslerde <a href="/pekistirme">pekiştirme çalışma</a> yap (ders filtresinden seç).</li>
+          <li>Zayıf derslerde <a className="btn btn-soft btn-sm next-step-link" href="/pekistirme">Pekiştirme çalışması yap</a> (ders filtresinden seç).</li>
           <li>
             Hafta sonu{" "}
-            <a href={cycle?.weekendTest === "aylik" ? "/aylik-denemeler" : "/haftalik-test"}>
+            <a className="btn btn-soft btn-sm next-step-link" href={cycle?.weekendTest === "aylik" ? "/aylik-denemeler" : "/haftalik-test"}>
               {cycle?.weekendTest === "aylik" ? "aylık deneme" : "haftalık test"}
             </a>{" "}
             ile ilerlemeni ölç
@@ -180,7 +180,7 @@ function DailySummary({ questions, cycle }: DailySummaryProps) {
               ? " (cumartesi ve pazar)"
               : " (cumartesi)"}.
           </li>
-          <li><a href="/sonuclar">Sonuçlar ve İlerleme</a> sayfasından ünite ustalığını takip et.</li>
+          <li><a className="btn btn-soft btn-sm next-step-link" href="/sonuclar">Sonuçlar ve İlerleme</a> sayfasından ünite ustalığını takip et.</li>
         </ol>
       </div>
 

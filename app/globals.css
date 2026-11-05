@@ -3853,6 +3853,13 @@ a.mini-card:hover {
   text-decoration: underline;
 }
 
+.next-steps a.next-step-link {
+  color: var(--mor-700);
+  text-decoration: none;
+  vertical-align: middle;
+  margin: 2px 4px;
+}
+
 .summary-actions {
   display: flex;
   gap: 10px;

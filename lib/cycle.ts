@@ -289,6 +289,100 @@ export function cycleSummary(state: CycleState, pageVariant?: "haftalik" | "ayli
     return today.getTime() > doneDay.getTime();
   }
 
+  /**
+   * Yerel gün anahtarı (YYYY-MM-DD). `toISOString` kullanılmaz — saat dilimi
+   * kayması hafta anahtarını bir gün kaydırabilir.
+   */
+  export function dayKey(date: Date): string {
+    const d = new Date(date);
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${d.getFullYear()}-${month}-${day}`;
+  }
+
+  /** Bir tarihin haftasının cumartesi anahtarı (YYYY-MM-DD). */
+  export function weekKey(date: Date): string {
+    return dayKey(saturdayOfWeek(date));
+  }
+
+  /** Haftalık test arşivindeki bir hafta. */
+  export interface WeeklyTestWeek {
+    /** Haftanın cumartesisi — YYYY-MM-DD, kayıt anahtarı */
+    weekKey: string;
+    /** Haftanın cumartesisi (00:00) */
+    saturday: Date;
+    cycleWeek: number;
+    cycleNumber: number;
+    /** Bu hafta sonu aylık deneme haftası → haftalık test verilmez */
+    monthly: boolean;
+    /** Cumartesi geldi/geçti → açılabilir (geçmiş haftalar kapanmaz) */
+    open: boolean;
+    /** Bugünün haftası */
+    current: boolean;
+  }
+
+  /**
+   * Seviye tespitinin bitiminden bugüne kadarki haftalık test haftaları.
+   *
+   * Kural (kullanıcı): haftalık test cumartesi/pazar açılır, fakat öğrenci hasta
+   * ya da müsait olmadığı için çözemediyse **önceki haftaların testleri kapanmaz**;
+   * sonradan açıp çözebilir. Bu yüzden cumartesisi geçmiş her hafta açıktır.
+   * Gelecek hafta da listeye eklenir (kilitli olarak), böylece "ne zaman açılır"
+   * bilgisi gösterilebilir.
+   */
+  export function weeklyTestWeeks(now: Date = new Date(), enrollment?: Date): WeeklyTestWeek[] {
+    const enrolled = enrollment ?? getEnrollmentDate(now);
+    const doneAt = levelTestCompletedAt();
+    const base = doneAt ?? enrolled;
+    const baseDay = new Date(base);
+    baseDay.setHours(0, 0, 0, 0);
+
+    const today = new Date(now);
+    today.setHours(0, 0, 0, 0);
+    const thisSaturday = saturdayOfWeek(today);
+
+    // İlk haftalık test: seviye tespiti bittikten SONRAKİ cumartesi.
+    let sat = saturdayOfWeek(baseDay);
+    if (sat.getTime() <= baseDay.getTime()) sat.setDate(sat.getDate() + 7);
+
+    const limit = new Date(thisSaturday);
+    limit.setDate(limit.getDate() + 7); // gelecek hafta da görünsün
+
+    const weeks: WeeklyTestWeek[] = [];
+    for (let i = 0; sat.getTime() <= limit.getTime() && i < 80; i++) {
+      const state = computeCycleState(sat, enrolled);
+      weeks.push({
+        weekKey: dayKey(sat),
+        saturday: new Date(sat),
+        cycleWeek: state.cycleWeek,
+        cycleNumber: state.cycleNumber,
+        monthly: state.weekendTest === "aylik",
+        open: sat.getTime() <= today.getTime(),
+        current: sat.getTime() === thisSaturday.getTime(),
+      });
+      sat.setDate(sat.getDate() + 7);
+    }
+    return weeks;
+  }
+
+  /** Açılabilir haftalık test haftaları (aylık haftalar hariç). */
+  export function openWeeklyTestWeeks(now: Date = new Date(), enrollment?: Date): WeeklyTestWeek[] {
+    return weeklyTestWeeks(now, enrollment).filter((w) => w.open && !w.monthly);
+  }
+
+  /**
+   * Çözülmemiş açık hafta var mı? `completedWeekKeys` kayıtlı hafta anahtarları.
+   * /calis yönlendirmesi bunu kullanır: kaçırılan test sonradan hatırlatılır.
+   */
+  export function hasUnfinishedWeeklyTest(
+    completedWeekKeys: string[],
+    now: Date = new Date(),
+    enrollment?: Date
+  ): boolean {
+    const done = new Set(completedWeekKeys);
+    return openWeeklyTestWeeks(now, enrollment).some((w) => !done.has(w.weekKey));
+  }
+
   /** Haftalık testin açılacağı en yakın cumartesi (kilitli ekran için). */
   export function upcomingWeeklyTestSaturday(now: Date = new Date()): Date | null {
     const doneAt = levelTestCompletedAt();

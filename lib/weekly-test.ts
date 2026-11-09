@@ -126,16 +126,17 @@ export function composeWeeklyTest(
           return a.question.id.localeCompare(b.question.id);
         });
 
-    const items: TestItem[] = [];
+    const picked: TestItem[] = [];
     for (const cat of ["zayif", "yeni", "karma"] as const) {
       for (const c of byCategory(cat)) {
-        if (items.length >= quota) break;
+        if (picked.length >= quota) break;
         if (items.some((p) => p.question.id === c.question.id)) continue;
-        items.push(c);
+        if (picked.some((p) => p.question.id === c.question.id)) continue;
+        picked.push(c);
       }
-      if (items.length >= quota) break;
+      if (picked.length >= quota) break;
     }
-    items.push(...items);
+    items.push(...picked);
   }
   return items;
 }

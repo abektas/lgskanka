@@ -266,12 +266,20 @@ export default function PekistirmePage() {
       pushReinforcementTasks(getAllTasks());
       return;
     }
-    apiFetch("/api/study?subject=" + task.subject + "&unit=" + task.unit + "&limit=50&sort=unit_difficulty")
+    const unitParam = task.unit === null || task.unit === undefined ? "" : "&unit=" + task.unit;
+    apiFetch("/api/study?subject=" + task.subject + unitParam + "&limit=50&sort=unit_difficulty")
       .then((r) => r.json())
       .then((data: any) => {
-        const items = data.items || [];
-        const unitItems = items.filter((q: any) => q.unit === task.unit);
-        const selected = unitItems.slice(0, 5).map((q: any) => q.id);
+        const items: any[] = data.items || [];
+        const unitItems =
+          task.unit === null || task.unit === undefined
+            ? items
+            : items.filter((q: any) => q.unit === task.unit);
+        // Daha önce sunulmuş sorular tekrar atanmaz; havuz tükenirse geri döner.
+        const served = new Set<string>(task.servedQuestionIds ?? []);
+        const fresh = unitItems.filter((q: any) => !served.has(q.id));
+        const pool = fresh.length >= 5 ? fresh : unitItems;
+        const selected = pool.slice(0, 5).map((q: any) => q.id);
         if (selected.length > 0) {
           assignQuestionsToTask(task.id, selected);
           updateTaskStatus(task.id, "devam-ediyor");

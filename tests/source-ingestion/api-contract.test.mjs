@@ -20,6 +20,10 @@ const learnerStats = fs.readFileSync(new URL('../../lib/learner-stats.ts', impor
 const badgeProgress = fs.readFileSync(new URL('../../components/use-badge-progress.ts', import.meta.url), 'utf8');
 const reinforcement = fs.readFileSync(new URL('../../lib/reinforcement.ts', import.meta.url), 'utf8');
 const pekistirmePage = fs.readFileSync(new URL('../../app/pekistirme/page.tsx', import.meta.url), 'utf8');
+const dailyPlan = fs.readFileSync(new URL('../../lib/daily-plan.ts', import.meta.url), 'utf8');
+const cycle = fs.readFileSync(new URL('../../lib/cycle.ts', import.meta.url), 'utf8');
+const weeklySets = fs.readFileSync(new URL('../../lib/weekly-test-sets.ts', import.meta.url), 'utf8');
+const weeklyLib = fs.readFileSync(new URL('../../lib/weekly-test.ts', import.meta.url), 'utf8');
 
 test('POST grades against the private server-side answer and returns only correctness', () => {
   assert.match(route, /const correct = timingSafeEqual\(submitted, expected\)/);
@@ -61,9 +65,32 @@ test('daily next-step links are styled as clear, clickable buttons', () => {
 
 test('weak-unit detection groups wrong answers per unit and only feeds from assessments', () => {
   assert.match(reinforcement, /record\.unit === null && !record\.unitName\) continue/);
-  assert.match(reinforcement, /record\.source \?\? "gunluk"\) === "pekistirme"\) continue/);
+  assert.match(reinforcement, /return \(record\.source \?\? "gunluk"\) !== "pekistirme"/);
   assert.doesNotMatch(reinforcement, /!record\.correct && record\.topic/);
-  assert.match(reinforcement, /if \(data\.count >= 3\)/);
+  assert.match(reinforcement, /if \(data\.count < 3\) continue/);
+});
+
+test('daily 24-question plan is composed from recent results and weak subjects open tasks', () => {
+  // Geniş havuz + sonuçlara göre seçim
+  assert.match(dailyPage, /limit=\$\{subjectLimits\[s\.slug\] \+ 10\}/);
+  assert.match(dailyPage, /composeDailyPlan<StudyQuestion>\(/);
+  assert.match(dailyPage, /weakUnitsForPlanning\(loadAnswerRecords\(\), 3\)/);
+  assert.match(dailyPlan, /export function composeDailyPlan/);
+  // Günlük 5 soruda yanlışlar farklı ünitelere dağılsa da ders görevi açılır
+  assert.match(reinforcement, /export function computeWeakUnits/);
+  assert.match(reinforcement, /WEAK_SUBJECT_ACCURACY = 0\.6/);
+  assert.match(reinforcement, /WEAK_SUBJECT_MIN_WRONG = 2/);
+  // Biten görev yeni yanlışta tazelenir
+  assert.match(reinforcement, /latestWrong\.at > previousUpdatedAt/);
+  assert.match(reinforcement, /task\.status = "bekliyor"/);
+  // Ders düzeyi görev unit=null olsa da soru atayabilir
+  assert.match(pekistirmePage, /task\.unit === null \|\| task\.unit === undefined\s*\n?\s*\? items/);
+  assert.match(pekistirmePage, /servedQuestionIds/);
+});
+
+test('daily weak-subject alert points tomorrow work at Günlük Çalışma and keeps the remediation link', () => {
+  assert.match(dailyPage, /Yarın <a href="\/calis">Günlük Çalışma<\/a> sayfasında bu eksikliklerin üzerine odaklanarak yeni sorular hazırlanacak\./);
+  assert.match(dailyPage, /Ayrıca <a href="\/pekistirme">Pekiştirme Soruları<\/a> sayfasından ilgili dersi ve konuyu seçip tek başına çalışabilirsin\./);
 });
 
 test('pekiştirme subject selection opens the first unanswered question in a study-style flow', () => {
@@ -215,6 +242,35 @@ test('declared representation must be one of the known modes', () => {
   assert.equal(validQuestion(row({ representation: "AUDIO", stem: "g", options: { A: "1", B: "2", C: "3", D: "4" } })), false);
   assert.equal(validQuestion(row({ representation: "HYBRID", stem: "g", options: { A: "1", B: "2", C: "3", D: "4" } })), false, 'HYBRID görsel kanıt ister');
   assert.equal(validQuestion(row({ representation: "HYBRID", stem: "g", options: { A: "1", B: "2", C: "3", D: "4" }, visual: VISUAL })), true);
+});
+
+test('weekly tests never expire: past weeks stay open, current week waits for Saturday', () => {
+  // Açılma kuralı: cumartesisi gelmiş her hafta açık (geçmiş haftalar kapanmaz).
+  assert.match(cycle, /open: sat\.getTime\(\) <= today\.getTime\(\)/);
+  assert.match(cycle, /export function weeklyTestWeeks/);
+  assert.match(cycle, /export function openWeeklyTestWeeks/);
+  // Aylık deneme haftası haftalık listeye girmez.
+  assert.match(cycle, /weeklyTestWeeks\(now, enrollment\)\.filter\(\(w\) => w\.open && !w\.monthly\)/);
+  // Kayıt/seviye tespiti tarihinden önce hafta üretilmez.
+  assert.match(cycle, /const base = doneAt \?\? enrolled/);
+  // Haftalık test sayfası hafta seçiciyi ve kaçırılan haftayı kullanır.
+  assert.match(weeklyPage, /renderWeekPicker/);
+  assert.match(weeklyPage, /find\(\(w\) => !done\.includes\(w\.weekKey\)\)/);
+  assert.match(weeklyPage, /Çözemediğin haftalar kapanmaz/);
+  // Sorular hafta anahtarıyla dondurulur → sonradan açınca aynı sorular gelir.
+  assert.match(weeklySets, /export function saveWeeklyTestSet/);
+  assert.match(weeklyPage, /saveWeeklyTestSet\(weekKey, composed\)/);
+  // Kompozisyon gerçekten 45 soru üretir (regresyon: iç dizi kendine ekleniyordu).
+  assert.match(weeklyLib, /items\.push\(\.\.\.picked\)/);
+  assert.doesNotMatch(weeklyLib, /items\.push\(\.\.\.items\)/);
+});
+
+test('monthly exams stay open after their window passes', () => {
+  // Yalnızca alt sınır: monthsDiff >= month. Üst sınır yok → geçmiş ay kapanmaz.
+  assert.match(cycle, /return monthsDiff >= month/);
+  assert.doesNotMatch(cycle, /monthsDiff === month/);
+  assert.match(monthlyExamPage, /const locked = !isMonthUnlocked\(m\.month\)/);
+  assert.match(monthlyExamPage, /Geçmiş ayların denemeleri kapanmaz/);
 });
 
 test('structured rows keep their original contract (regression control)', () => {

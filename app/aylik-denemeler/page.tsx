@@ -719,6 +719,10 @@ export default function AylikDenemelerPage() {
               })}
             </select>
           </label>
+          <p className="muted-text" style={{ marginTop: 8, fontSize: 13 }}>
+            Geçmiş ayların denemeleri kapanmaz. Çözemediğin bir ayı dilediğin zaman
+            seçip açabilirsin.
+          </p>
         </div>
 
         {selectedMonth !== null && !loading && questions.length > 0 && (

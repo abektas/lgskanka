@@ -4923,3 +4923,21 @@ p, li, td, th, a, span, div {
     font-size: 14px;
   }
 }
+
+/* Haftalık test arşivi — hafta seçici */
+.week-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.week-list .btn {
+  font-size: 13px;
+  min-height: 36px;
+}
+
+.week-list .btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

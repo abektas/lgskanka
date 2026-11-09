@@ -18,19 +18,17 @@ import {
 } from "../../lib/weekly-test";
 import {
   loadWeeklyTestHistory,
-  saveWeeklyTestRecord,
   recentWeeklyTests,
   weeklyTestAverage,
   weeklyTestDelta,
+  weeklyTestRecordForWeek,
+  completedWeeklyTestWeekKeys,
+  saveWeeklyTestRecord,
   type WeeklyTestRecord,
 } from "../../lib/weekly-test-history";
+import { getWeeklyTestSet, saveWeeklyTestSet } from "../../lib/weekly-test-sets";
 import { syncReinforcementTasks } from "../../lib/reinforcement";
-import {
-  isWeeklyTestOpen,
-  levelTestCompletedAt,
-  upcomingWeeklyTestSaturday,
-  computeCycleState,
-} from "../../lib/cycle";
+import { levelTestCompletedAt, weeklyTestWeeks, type WeeklyTestWeek } from "../../lib/cycle";
 
 const SUBJECT_SLUGS = Object.keys(SUBJECT_QUOTA);
 
@@ -51,50 +49,93 @@ export default function HaftalikTestPage() {
   const questionStartRef = useRef<number>(Date.now());
   const [reportedIds, setReportedIds] = useState<Set<string>>(new Set());
 
-  // Haftalık test açılış kapısı — seviye tespit + cumartesi kontrolü
-  const [gateOpen, setGateOpen] = useState<{
-    open: boolean;
-    reason: "level" | "date" | "week4" | null;
-    nextSaturday: Date | null;
-  } | null>(null);
+  // Haftalık test haftaları — bugünün haftası + çözülmemiş geçmiş haftalar açık.
+  const [weeks, setWeeks] = useState<WeeklyTestWeek[] | null>(null);
+  const [activeWeek, setActiveWeek] = useState<WeeklyTestWeek | null>(null);
+  const [completedWeeks, setCompletedWeeks] = useState<string[]>([]);
+  const [levelDone, setLevelDone] = useState<boolean | null>(null);
 
   useEffect(() => {
-    const doneAt = levelTestCompletedAt();
-    const nextSat = upcomingWeeklyTestSaturday();
-    const open = isWeeklyTestOpen();
-    let reason: "level" | "date" | "week4" | null = null;
-    if (!open) {
-      if (!levelTestCompletedAt()) reason = "level";
-      else if (new Date().getDay() !== 6) reason = "date";
-      else if (computeCycleState(new Date()).weekendTest !== "haftalik") reason = "week4";
-    }
-    setGateOpen({ open, reason, nextSaturday: nextSat });
+    const list = weeklyTestWeeks();
+    const done = completedWeeklyTestWeekKeys();
+    const openList = list.filter((w) => w.open && !w.monthly);
+    // Önce çözülmemiş en yeni hafta açılır; yoksa son açık haftanın sonucu gösterilir.
+    const missed = [...openList].reverse().find((w) => !done.includes(w.weekKey));
+    setLevelDone(levelTestCompletedAt() !== null);
+    setWeeks(list);
+    setCompletedWeeks(done);
+    setActiveWeek(missed ?? openList[openList.length - 1] ?? null);
   }, []);
 
-  // Bu hafta test zaten bitmişse (yerel kayıt) — soruları açma, sonucu göster
+  // Seçili haftanın soruları: kayıtlı set varsa aynı sorular, yoksa o hafta için kurulur.
   useEffect(() => {
-    if (!isWeeklyTestOpen()) return;
-    const history = loadWeeklyTestHistory();
-    if (history.length === 0) return;
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    // Bu haftanın cumartesini bul
-    const day = today.getDay();
-    const thisSaturday = new Date(today);
-    thisSaturday.setDate(today.getDate() + (day === 6 ? 0 : (6 - day)));
-    thisSaturday.setHours(0, 0, 0, 0);
-    // Bu cumartesi tarihine eşit kayıt var mı?
-    const thisWeekRecord = history.find((r) => {
-      const recDate = new Date(r.date);
-      recDate.setHours(0, 0, 0, 0);
-      return recDate.getTime() === thisSaturday.getTime();
-    });
-    if (thisWeekRecord) {
+    if (!activeWeek) return;
+    const weekKey = activeWeek.weekKey;
+    const record = weeklyTestRecordForWeek(weekKey);
+    const stored = getWeeklyTestSet(weekKey);
+
+    setIdx(0);
+    setSelected(null);
+    setCheckState(null);
+    setErrorReason(null);
+    setResults([]);
+    setReportedIds(new Set());
+    setLoadError(false);
+
+    if (record) {
+      setItems(stored?.items ?? null);
+      setSavedRecord(record);
+      setPastRecords(recentWeeklyTests(5));
       setFinished(true);
-      setSavedRecord(thisWeekRecord);
-      setPastRecords(history.slice(-5).reverse());
+      return;
     }
-  }, []);
+
+    setSavedRecord(null);
+    setFinished(false);
+    if (stored) {
+      setItems(stored.items);
+      return;
+    }
+
+    let cancelled = false;
+    Promise.all(
+      SUBJECT_SLUGS.map((s) =>
+        fetch(`/api/study?subject=${s}&limit=100`)
+          .then((r) => r.json())
+          .then((d) =>
+            ((d.items || []) as Array<Record<string, unknown>>).map((q) => ({
+              id: String(q.id),
+              subject: String(q.subject),
+              unit: (q.unit as number | null) ?? null,
+              unitName: (q.unitName as string | null) ?? null,
+              topic: (q.topic as string | null) ?? null,
+              questionNumber: Number(q.questionNumber) || 0,
+              imagePath: String(q.imagePath),
+            }))
+          )
+      )
+    )
+      .then((batches) => {
+        if (cancelled) return;
+        const pool = batches.flat();
+        // "Son 7 gün" penceresi o haftanın cumartesisine göre hesaplanır; böylece
+        // sonradan açılan geçmiş hafta o haftanın yanlışlarına göre kurulur.
+        const composed = composeWeeklyTest(
+          pool,
+          computeUnitMasteries(),
+          loadAnswerRecords(),
+          activeWeek.saturday
+        );
+        saveWeeklyTestSet(weekKey, composed);
+        setItems(composed);
+      })
+      .catch(() => {
+        if (!cancelled) setLoadError(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [activeWeek]);
 
   /** "Soru eksik veya bozuk" bildirimi — öğretmen paneline düşer. */
   const reportQuestion = useCallback(
@@ -124,43 +165,6 @@ export default function HaftalikTestPage() {
     },
     [reportedIds]
   );
-
-  // Havuzu çek, kural tabanlı 45 soruluk testi kur (hafta içi yapamadıklarından)
-  useEffect(() => {
-    // Kapalıysa veya henüz karar yoksa veri çekmeyi atla
-    if (!gateOpen || !gateOpen.open) return;
-
-    let cancelled = false;
-    Promise.all(
-      SUBJECT_SLUGS.map((s) =>
-        fetch(`/api/study?subject=${s}&limit=100`)
-          .then((r) => r.json())
-          .then((d) =>
-            ((d.items || []) as Array<Record<string, unknown>>).map((q) => ({
-              id: String(q.id),
-              subject: String(q.subject),
-              unit: (q.unit as number | null) ?? null,
-              unitName: (q.unitName as string | null) ?? null,
-              topic: (q.topic as string | null) ?? null,
-              questionNumber: Number(q.questionNumber) || 0,
-              imagePath: String(q.imagePath),
-            }))
-          )
-      )
-    )
-      .then((batches) => {
-        if (cancelled) return;
-        const pool = batches.flat();
-        const composed = composeWeeklyTest(pool, computeUnitMasteries(), loadAnswerRecords());
-        setItems(composed);
-      })
-      .catch(() => {
-        if (!cancelled) setLoadError(true);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [gateOpen]);
 
   // Soru değişince süre sayacı sıfırlanır
   useEffect(() => {
@@ -264,6 +268,7 @@ export default function HaftalikTestPage() {
         }));
       const record: WeeklyTestRecord = {
         date: new Date().toISOString(),
+        weekKey: activeWeek?.weekKey,
         total: items.length,
         correct,
         wrong,
@@ -274,6 +279,11 @@ export default function HaftalikTestPage() {
         wrongQuestionIds: results.filter((r) => !r.correct).map((r) => r.id),
       };
       const updatedHistory = saveWeeklyTestRecord(record);
+      if (record.weekKey) {
+        setCompletedWeeks((prev) =>
+          prev.includes(record.weekKey!) ? prev : [...prev, record.weekKey!]
+        );
+      }
       setSavedRecord(record);
       setPastRecords(updatedHistory.slice(-5).reverse());
       // Pekiştirme görevlerini güncelle (haftalık kaynaklı 3+ yanlış)
@@ -282,31 +292,82 @@ export default function HaftalikTestPage() {
     }
   };
 
-  if (gateOpen === null) {
+  const selectedKey = activeWeek?.weekKey ?? null;
+
+  /** Hafta seçici — kaçırılan haftalık testler buradan açılıp çözülür. */
+  const renderWeekPicker = () => {
+    if (!weeks) return null;
+    const visible = weeks.filter((w) => !w.monthly).slice(-8);
+    if (visible.length === 0) return null;
+    return (
+      <section className="card" aria-label="Haftalık testler">
+        <div className="section-head">
+          <h2>Haftalık testler</h2>
+          <span className="pill is-mint">{completedWeeks.length} tamamlandı</span>
+        </div>
+        <div className="week-list">
+          {visible.map((w) => {
+            const done = completedWeeks.includes(w.weekKey);
+            const label = w.saturday.toLocaleDateString("tr-TR", { day: "numeric", month: "long" });
+            const status = done ? "✓ Çözüldü" : w.open ? "Çözülmedi" : "Kilitli";
+            return (
+              <button
+                key={w.weekKey}
+                type="button"
+                className={`btn ${w.weekKey === selectedKey ? "btn-primary" : "btn-soft"} btn-sm`}
+                onClick={() => setActiveWeek(w)}
+                disabled={!w.open}
+              >
+                {label} · {w.cycleWeek}. hafta · {status}
+              </button>
+            );
+          })}
+        </div>
+        <p className="muted-text" style={{ marginTop: 12 }}>
+          Haftalık test cumartesi–pazar açılır. Çözemediğin haftalar kapanmaz; istediğin
+          zaman buradan açıp çözebilirsin.
+        </p>
+      </section>
+    );
+  };
+
+  if (weeks === null || levelDone === null) {
     return <div className="page"><div className="exam-loading">Hazırlanıyor...</div></div>;
   }
-  if (!gateOpen.open) {
-    const nextSat = gateOpen.nextSaturday;
-    const nextStr = nextSat ? nextSat.toLocaleDateString("tr-TR", { weekday: "long", day: "numeric", month: "long" }) : "belirlenemedi";
+  if (!levelDone) {
     return (
       <div className="page">
         <div className="exam-empty" style={{ textAlign: "center", padding: 40 }}>
-          {gateOpen.reason === "level" ? (
-            <>
-              <h2>Önce Seviye Tespit Sınavı'nı Tamamla</h2>
-              <p className="muted-text" style={{ margin: "12px 0 24px" }}>
-                Sonuçlar çalışma planını ve haftalık testleri şekillendirecek.
-              </p>
-              <Link className="btn btn-primary" href="/aylik-denemeler?month=0">
-                Seviye Tespit Sınavına Başla <Icon name="arrow" size={18} />
-              </Link>
-            </>
-          ) : gateOpen.reason === "week4" ? (
+          <h2>Önce Seviye Tespit Sınavı'nı Tamamla</h2>
+          <p className="muted-text" style={{ margin: "12px 0 24px" }}>
+            Sonuçlar çalışma planını ve haftalık testleri şekillendirecek.
+          </p>
+          <Link className="btn btn-primary" href="/aylik-denemeler?month=0">
+            Seviye Tespit Sınavına Başla <Icon name="arrow" size={18} />
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (!activeWeek) {
+    const nextWeek = weeks.find((w) => !w.open);
+    const nextStr = nextWeek
+      ? nextWeek.saturday.toLocaleDateString("tr-TR", { weekday: "long", day: "numeric", month: "long" })
+      : "belirlenemedi";
+    return (
+      <div className="page">
+        {renderWeekPicker()}
+        <div className="exam-empty" style={{ textAlign: "center", padding: 40 }}>
+          {nextWeek?.monthly ? (
             <>
               <h2>Bu Hafta Aylık Deneme Haftası</h2>
               <p className="muted-text" style={{ margin: "12px 0 24px" }}>
                 4. hafta aylık deneme haftasıdır. Haftalık test bir sonraki haftaya bırakılır.
               </p>
+              <Link className="btn btn-primary" href="/aylik-denemeler">
+                Aylık denemeye git <Icon name="arrow" size={18} />
+              </Link>
             </>
           ) : (
             <>
@@ -390,6 +451,8 @@ export default function HaftalikTestPage() {
             Pekiştirme sorularına geç <Icon name="arrow" size={18} />
           </Link>
         </header>
+
+        {renderWeekPicker()}
 
         <section className="summary-actions" aria-label="Sonraki adımlar">
           <Link className="btn btn-soft" href="/calis">Zayıf konulara çalış</Link>
@@ -497,6 +560,8 @@ export default function HaftalikTestPage() {
       </header>
 
       <CycleBadge variant="haftalik" />
+
+      {renderWeekPicker()}
 
       <section className="exam-question" id="sorular">
         <div className="exam-question-image">

@@ -11,10 +11,12 @@ import {
   computeCycleState,
   cycleSummary,
   ENROLLMENT_CHANGED_EVENT,
+  hasUnfinishedWeeklyTest,
   isWeeklyTestOpen,
   levelTestCompletedAt,
   type CycleState,
 } from "../../lib/cycle";
+import { completedWeeklyTestWeekKeys } from "../../lib/weekly-test-history";
 
 const ERROR_REASON_OPTIONS_LOCAL = [
   { id: "anlamadim", label: "Soruyu anlamadım", code: "H3" },
@@ -24,6 +26,8 @@ const ERROR_REASON_OPTIONS_LOCAL = [
   { id: "bilmiyorum", label: "Konuyu bilmiyorum", code: "H1" },
 ];
 import { computeUnitMasteries, type UnitMastery } from "../../lib/mastery";
+import { composeDailyPlan } from "../../lib/daily-plan";
+import { weakUnitsForPlanning } from "../../lib/reinforcement";
 
 interface DailySummaryProps {
   questions: StudyQuestion[];
@@ -104,6 +108,8 @@ function DailySummary({ questions, cycle }: DailySummaryProps) {
     .map(([k]) => k);
 
   const weeklyOpen = isWeeklyTestOpen();
+  // Kaçırılan (çözülmemiş) açık hafta varsa test bağlantısı yine açık kalır.
+  const weeklyAvailable = weeklyOpen || hasUnfinishedWeeklyTest(completedWeeklyTestWeekKeys());
 
   return (
     <div className="summary">
@@ -159,7 +165,7 @@ function DailySummary({ questions, cycle }: DailySummaryProps) {
             {weakSubjects.map((s) => <li key={s}>{s}</li>)}
           </ul>
           <p className="muted-text">
-            Yarın <a href="/pekistirme">Pekiştirme Soruları</a> sayfasında bu eksikliklerin üzerine odaklanarak yeni sorular hazırlanacak.
+            Yarın <a href="/calis">Günlük Çalışma</a> sayfasında bu eksikliklerin üzerine odaklanarak yeni sorular hazırlanacak.
             Ayrıca <a href="/pekistirme">Pekiştirme Soruları</a> sayfasından ilgili dersi ve konuyu seçip tek başına çalışabilirsin.
           </p>
         </div>
@@ -187,10 +193,10 @@ function DailySummary({ questions, cycle }: DailySummaryProps) {
       <div className="summary-actions">
         <a className="btn btn-primary" href="/calis">Yeni Günlük Çalışma Başlat</a>
         <a
-          className={"btn btn-soft " + (weeklyOpen || cycle?.weekendTest === "aylik" ? "" : "disabled")}
+          className={"btn btn-soft " + (weeklyAvailable || cycle?.weekendTest === "aylik" ? "" : "disabled")}
           href={cycle?.weekendTest === "aylik" ? "/aylik-denemeler" : "/haftalik-test"}
-          style={weeklyOpen || cycle?.weekendTest === "aylik" ? {} : { pointerEvents: "none", opacity: 0.5 }}
-          title={weeklyOpen || cycle?.weekendTest === "aylik" ? undefined : "Haftalık test cumartesi günleri açılır"}
+          style={weeklyAvailable || cycle?.weekendTest === "aylik" ? {} : { pointerEvents: "none", opacity: 0.5 }}
+          title={weeklyAvailable || cycle?.weekendTest === "aylik" ? undefined : "Haftalık test cumartesi günleri açılır"}
         >
           {cycle?.weekendTest === "aylik" ? "Aylık Denemeye Geç" : "Haftalık Teste Geç"}
         </a>
@@ -319,13 +325,23 @@ export default function CalisPage() {
     };
     Promise.all(
       subjects.map((s) =>
-        apiFetch(`/api/study?subject=${s.slug}&limit=${subjectLimits[s.slug]}&sort=unit_difficulty&fresh=1`)
+        apiFetch(`/api/study?subject=${s.slug}&limit=${subjectLimits[s.slug] + 10}&sort=unit_difficulty&fresh=1`)
           .then((r) => r.json())
           .then((d) => (d.items || []) as StudyQuestion[])
       )
     )
       .then((batches) => {
-        const merged = batches.flat();
+        // Geniş havuzdan 24 soruyu seç: son günlerde yanlış yapılan üniteler öne alınır,
+        // böylece bir günün sonucu ertesi günün soru seçimini belirler.
+        const pools: Record<string, StudyQuestion[]> = {};
+        subjects.forEach((s, i) => {
+          pools[s.slug] = batches[i] ?? [];
+        });
+        const merged = composeDailyPlan<StudyQuestion>(
+          pools,
+          subjectLimits,
+          weakUnitsForPlanning(loadAnswerRecords(), 3)
+        );
         setQuestions(merged);
         // Kaldığın yerden devam: sunucudaki son soru indeksini geri yükle
         apiFetch("/api/study-session")

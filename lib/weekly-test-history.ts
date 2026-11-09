@@ -7,6 +7,7 @@
 
 import type { TestCategory } from "./weekly-test";
 import { pushWeeklyTestHistory } from "../lib/sync";
+import { weekKey as isoWeekKey } from "./cycle";
 
 export const WEEKLY_TEST_HISTORY_KEY = "lgs_weekly_test_history";
 
@@ -14,6 +15,11 @@ export const WEEKLY_TEST_HISTORY_KEY = "lgs_weekly_test_history";
 export interface WeeklyTestRecord {
   /** ISO tarih (testin bittiği an) */
   date: string;
+  /**
+   * Testin ait olduğu haftanın cumartesisi (YYYY-MM-DD). Eski kayıtlarda yok —
+   * okunurken `date`ten türetilir.
+   */
+  weekKey?: string;
   /** Toplam soru sayısı */
   total: number;
   /** Doğru sayısı */
@@ -50,10 +56,35 @@ export function loadWeeklyTestHistory(): WeeklyTestRecord[] {
   }
 }
 
+/** Kaydın ait olduğu hafta anahtarı; eski kayıtlarda tarihten türetilir. */
+export function recordWeekKey(record: WeeklyTestRecord): string {
+  if (record.weekKey) return record.weekKey;
+  return isoWeekKey(new Date(record.date));
+}
+
+/** Bir haftanın test kaydı (yoksa null). Aynı hafta iki kez çözülürse en yenisi. */
+export function weeklyTestRecordForWeek(weekKey: string): WeeklyTestRecord | null {
+  let found: WeeklyTestRecord | null = null;
+  for (const record of loadWeeklyTestHistory()) {
+    if (recordWeekKey(record) !== weekKey) continue;
+    if (!found || record.date > found.date) found = record;
+  }
+  return found;
+}
+
+/** Çözülmüş haftaların anahtarları. */
+export function completedWeeklyTestWeekKeys(): string[] {
+  return [...new Set(loadWeeklyTestHistory().map(recordWeekKey))];
+}
+
 /** Yeni bir test kaydını sona ekler (en fazla 52 kayıt = 1 yıl tutulur). */
 export function saveWeeklyTestRecord(record: WeeklyTestRecord): WeeklyTestRecord[] {
   const history = loadWeeklyTestHistory();
-  history.push(record);
+  const withWeek: WeeklyTestRecord = {
+    ...record,
+    weekKey: record.weekKey ?? recordWeekKey(record),
+  };
+  history.push(withWeek);
   const trimmed = history.slice(-52);
   try {
     window.localStorage.setItem(WEEKLY_TEST_HISTORY_KEY, JSON.stringify(trimmed));

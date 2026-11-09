@@ -1,6 +1,17 @@
 # SESSION HANDOFF — 2026-11-05
 **Canlı:** https://lgskanka.alibey.workers.dev (Version ID `6dca6d32-8c8d-4ab9-989b-ffe3d92caec9`) | **Son push:** `1689387` (main)
 
+## 2026-11-09 — Haftalık test arşivi + aylık denemeler kapanmıyor + sonuç odaklı günlük plan
+
+- **Haftalık test artık arşiv:** cumartesisi gelmiş her hafta açık kalır, geçmiş haftalar kapanmaz (hasta/müsait olmayan öğrenci sonradan çözer); gelecek hafta kilitli. `lib/cycle.ts` → `weeklyTestWeeks()`, `openWeeklyTestWeeks()`, `hasUnfinishedWeeklyTest()`, `dayKey()`, `weekKey()` (yerel gün, `toISOString` değil). Kayıt/seviye tespiti tarihinden önceki haftalar üretilmez; 4. hafta (aylık deneme) haftalık listeye girmez.
+- **Haftanın soruları dondurulur:** yeni `lib/weekly-test-sets.ts` (`lgs_weekly_test_sets`, hafta anahtarı = cumartesi `YYYY-MM-DD`). Önceden her açılışta havuzdan yeniden seçildiği için "önceki haftanın testi" diye bir şey yoktu. Kompozisyon `activeWeek.saturday` referansıyla kurulur (o haftanın yanlışları).
+- **`/haftalik-test/` UI:** hafta seçici eklendi (tarih · hafta no · ✓ Çözüldü / Çözülmedi / Kilitli), çözülmemiş en yeni hafta otomatik açılır, sonuç ekranında da seçici var. `/calis/` "Haftalık Teste Geç" butonu kaçırılmış hafta varsa açık kalır.
+- **Aylık denemeler:** kilit yalnızca alt sınır (`monthsDiff >= month`) — süresi geçen ay kapanmıyor; ekrana not eklendi.
+- **Kritik hata bulundu ve düzeltildi:** `lib/weekly-test.ts::composeWeeklyTest` soruları iç diziye ekliyordu (`items.push(...items)`), dış dizi hiç dolmuyordu → fonksiyon her zaman **0 soru** döndürüyordu. Ölçüm: `composed: 0` → düzeltme sonrası `composed: 45` (Tr/Mat/Fen 10, İnk/Din/Eng 5).
+- **Sonuç odaklı günlük plan (önceki tur):** `lib/daily-plan.ts::composeDailyPlan` + `/calis` geniş havuz (`limit+10`) → son 3 günün yanlış üniteleri öne alınır, ders kotası korunur; `weakUnitsForPlanning(records, 3, excludeToday=true)` ile bugünün kayıtları planı kaydırmaz.
+- **Pekiştirme (önceki tur):** `computeWeakUnits` iki kural — ünite 3+ yanlış VEYA son değerlendirme gününde ders <%60 ve ≥2 yanlış; `tamamlandi` görev sonraki yanlışta yeniden açılır, `servedQuestionIds` ile aynı soru tekrar atanmaz.
+- **Doğrulama:** `npx tsx scripts/test-weekly-archive.ts` 11/11, `scripts/test-reinforcement.ts` 7/7, API sözleşme 29/29, taxonomy 4/4, `tsc`, `npm run build`, `npm run cf:build` geçti; yerel `/haftalik-test/`, `/aylik-denemeler/`, `/calis/` HTTP 200.
+
 ## 2026-11-09 — Seviye Tespit bozuk soru görselleri (4 adet)
 
 - Kullanıcı `public/exams/00_seviye_tespit/` altındaki dört bozuk soru görselini (turkce Q08, turkce Q11, inkilap-tarihi Q04, inkilap-tarihi Q10) kaynak PDF'lerden kendisi kırpıp aynı adla değiştirdi. Kaynak yerleri: 2016 Sözel s.5 (Tr 8, sol sütun), s.7 (Tr 11, sol sütun), s.11 (İnk 4, sol sütun); 2017 Sözel s.14 (İnk 10, sağ sütun).

@@ -241,6 +241,26 @@ export default function HaftalikTestPage() {
 
   const next = () => {
     if (!items) return;
+    // "Geç" butonu yok: öğrenci neden seçmeden ilerlerse yanlış cevap kayıt
+    // olarak kaybolmasın (günlük çalışmadaki aynı tuzak).
+    if (checkState === "wrong" && errorReason === null) {
+      const q = current?.question;
+      if (q && selected) {
+        saveAnswerRecord({
+          questionId: q.id,
+          source: "haftalik",
+          subject: q.subject,
+          unit: q.unit,
+          unitName: q.unitName,
+          topic: q.topic,
+          selectedAnswer: selected,
+          correct: false,
+          errorReasonCode: null,
+          timeSpentSec: Math.max(0, Math.round((Date.now() - questionStartRef.current) / 1000)),
+          createdAt: new Date().toISOString(),
+        });
+      }
+    }
     if (idx < items.length - 1) {
       setIdx(idx + 1);
       setSelected(null);
@@ -620,9 +640,6 @@ export default function HaftalikTestPage() {
                       {opt.label}
                     </button>
                   ))}
-                  <button className="btn btn-soft" onClick={() => selectErrorReason(null)}>
-                    Geç
-                  </button>
                 </div>
               </div>
             )}

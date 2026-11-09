@@ -148,6 +148,11 @@ test('weekly test shows the same self-assessment options as daily work', () => {
   }
   // Yüzeye özel kopya üretilmesin
   assert.doesNotMatch(dailyPage, /ERROR_REASON_OPTIONS_LOCAL/);
+  // "Geç" butonu kaldırıldı (öğrenci bir neden seçmeli)
+  assert.doesNotMatch(weeklyPage, />\s*Geç\s*</);
+  assert.doesNotMatch(weeklyPage, /selectErrorReason\(null\)/);
+  // Ama neden seçmeden ilerlerse yanlış cevap kayıt olarak kaybolmasın
+  assert.match(weeklyPage, /if \(checkState === "wrong" && errorReason === null\)/);
 });
 
 test('student score summaries use labeled correct, wrong, blank, and total counts', () => {

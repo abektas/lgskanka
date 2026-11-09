@@ -1,5 +1,11 @@
 # SESSION HANDOFF — 2026-11-05
-**Canlı:** https://lgskanka.alibey.workers.dev (Version ID `551be78e-e1a3-4006-8b92-1203a1f81e35`) | **Son push:** `eba4dd0` (main)
+**Canlı:** https://lgskanka.alibey.workers.dev (Version ID `6dca6d32-8c8d-4ab9-989b-ffe3d92caec9`) | **Son push:** `1689387` (main)
+
+## 2026-11-09 — Seviye Tespit bozuk soru görselleri (4 adet)
+
+- Kullanıcı `public/exams/00_seviye_tespit/` altındaki dört bozuk soru görselini (turkce Q08, turkce Q11, inkilap-tarihi Q04, inkilap-tarihi Q10) kaynak PDF'lerden kendisi kırpıp aynı adla değiştirdi. Kaynak yerleri: 2016 Sözel s.5 (Tr 8, sol sütun), s.7 (Tr 11, sol sütun), s.11 (İnk 4, sol sütun); 2017 Sözel s.14 (İnk 10, sağ sütun).
+- `public/exams/` `.gitignore` içinde olduğundan bu PNG'ler Git'e girmez; görselleri deploy paketi taşır. `npm run build` + `npm run cf:build` + `wrangler deploy` çalıştırıldı; yükleme çıktısı dört PNG'yi "new or modified static asset" olarak listeledi.
+- Deploy Version ID `6dca6d32-8c8d-4ab9-989b-ffe3d92caec9`. Cevap anahtarları değişmedi (Tr Q08 → B, Tr Q11 → B, İnk Q04 → B, İnk Q10 → D).
 
 ## 2026-11-05 — Pekiştirme görev görünümü (in-app yorumlar 6–7)
 

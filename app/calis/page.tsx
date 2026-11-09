@@ -5,7 +5,12 @@ import Link from "next/link";
 import { Icon } from "../../components/icons";
 import { ScoreCounts } from "../../components/score-counts";
 import { subjects, errorTypes } from "../../data/content";
-import { ERROR_REASON_OPTIONS, saveAnswerRecord, loadAnswerRecords } from "../../lib/error-reason";
+import {
+  ERROR_REASON_OPTIONS,
+  STUDY_ERROR_REASON_OPTIONS,
+  saveAnswerRecord,
+  loadAnswerRecords,
+} from "../../lib/error-reason";
 import { pushStudySession, apiFetch } from "../../lib/sync";
 import {
   computeCycleState,
@@ -18,13 +23,6 @@ import {
 } from "../../lib/cycle";
 import { completedWeeklyTestWeekKeys } from "../../lib/weekly-test-history";
 
-const ERROR_REASON_OPTIONS_LOCAL = [
-  { id: "anlamadim", label: "Soruyu anlamadım", code: "H3" },
-  { id: "yonetim", label: "Yöntemi bilmiyordum", code: "H2" },
-  { id: "islem", label: "İşlem hatası yaptım", code: "H4" },
-  { id: "eksik", label: "Konuda eksiğim var", code: "H1" },
-  { id: "bilmiyorum", label: "Konuyu bilmiyorum", code: "H1" },
-];
 import { computeUnitMasteries, type UnitMastery } from "../../lib/mastery";
 import { composeDailyPlan } from "../../lib/daily-plan";
 import { weakUnitsForPlanning } from "../../lib/reinforcement";
@@ -650,7 +648,7 @@ export default function CalisPage() {
                 <div className="error-reason">
                   <p className="muted-text">Yanlışını anlamamıza yardım et — sana en yakın olanı seç:</p>
                   <div className="error-reason-options">
-                    {ERROR_REASON_OPTIONS_LOCAL.map((opt) => (
+                    {STUDY_ERROR_REASON_OPTIONS.map((opt) => (
                       <button key={opt.id} className="btn btn-soft" onClick={() => selectErrorReason(opt.code)}>
                         {opt.label}
                       </button>

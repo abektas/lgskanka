@@ -6,7 +6,11 @@ import { Icon } from "../../components/icons";
 import { ScoreCounts } from "../../components/score-counts";
 import { CycleBadge } from "../../components/cycle-badge";
 import { errorTypes } from "../../data/content";
-import { ERROR_REASON_OPTIONS, loadAnswerRecords, saveAnswerRecord } from "../../lib/error-reason";
+import {
+  STUDY_ERROR_REASON_OPTIONS,
+  loadAnswerRecords,
+  saveAnswerRecord,
+} from "../../lib/error-reason";
 import { apiFetch } from "../../lib/sync";
 import { computeUnitMasteries, formatDueLabel, subjectName } from "../../lib/mastery";
 import {
@@ -611,7 +615,7 @@ export default function HaftalikTestPage() {
               <div className="error-reason">
                 <p className="muted-text">Yanlışını anlamamıza yardım et — sana en yakın olanı seç:</p>
                 <div className="error-reason-options">
-                  {ERROR_REASON_OPTIONS.map((opt) => (
+                  {STUDY_ERROR_REASON_OPTIONS.map((opt) => (
                     <button key={opt.id} className="btn btn-soft" onClick={() => selectErrorReason(opt.code)}>
                       {opt.label}
                     </button>

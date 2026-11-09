@@ -9,7 +9,8 @@
 export type ErrorReasonOption = {
   id: string;
   label: string;
-  code: "H2" | "H3" | "H4" | "H7";
+  /** H1–H7 taksonomisi (kanonik kaynak: `data/content.ts` errorTypes). */
+  code: "H1" | "H2" | "H3" | "H4" | "H5" | "H6" | "H7";
 };
 
 /** Plan §7: yanlış cevapta öğrenciye sunulan seçenekler. */
@@ -18,6 +19,22 @@ export const ERROR_REASON_OPTIONS: ErrorReasonOption[] = [
   { id: "yonetim", label: "Yöntemi bilmiyordum", code: "H2" },
   { id: "islem", label: "İşlem hatası yaptım", code: "H4" },
   { id: "dikkat", label: "Dikkatim dağıldı", code: "H7" },
+];
+
+/**
+ * Çalışma/haftalık test yüzeylerinde gösterilen öz-değerlendirme seçenekleri.
+ *
+ * Öğrenci günlük çalışmada hangi seçenekleri görüyorsa haftalık testte de AYNI
+ * seçenekleri görmeli: haftalık testte "Konuda eksiğim var" / "Konuyu bilmiyorum"
+ * yoktu, bu yüzden H1 (konu eksiği) sınıflandırması orada hiç oluşmuyordu.
+ * Bu liste tek kaynaktır; yüzeye özel kopya üretmeyin.
+ */
+export const STUDY_ERROR_REASON_OPTIONS: ErrorReasonOption[] = [
+  { id: "anlamadim", label: "Soruyu anlamadım", code: "H3" },
+  { id: "yonetim", label: "Yöntemi bilmiyordum", code: "H2" },
+  { id: "islem", label: "İşlem hatası yaptım", code: "H4" },
+  { id: "eksik", label: "Konuda eksiğim var", code: "H1" },
+  { id: "bilmiyorum", label: "Konuyu bilmiyorum", code: "H1" },
 ];
 
 /** Plan §41: cevap kaydı. Supabase gelene kadar tarayıcıda saklanır. */

@@ -24,6 +24,7 @@ const dailyPlan = fs.readFileSync(new URL('../../lib/daily-plan.ts', import.meta
 const cycle = fs.readFileSync(new URL('../../lib/cycle.ts', import.meta.url), 'utf8');
 const weeklySets = fs.readFileSync(new URL('../../lib/weekly-test-sets.ts', import.meta.url), 'utf8');
 const weeklyLib = fs.readFileSync(new URL('../../lib/weekly-test.ts', import.meta.url), 'utf8');
+const errorReasonLib = fs.readFileSync(new URL('../../lib/error-reason.ts', import.meta.url), 'utf8');
 
 test('POST grades against the private server-side answer and returns only correctness', () => {
   assert.match(route, /const correct = timingSafeEqual\(submitted, expected\)/);
@@ -127,7 +128,26 @@ test('error distribution uses the canonical H labels and refreshes after answer 
 });
 
 test('daily "Konuyu bilmiyorum" self-assessment is classified as H1', () => {
-  assert.match(dailyPage, /label: "Konuyu bilmiyorum", code: "H1"/);
+  // Tek kaynak: lib/error-reason.ts STUDY_ERROR_REASON_OPTIONS
+  assert.match(errorReasonLib, /label: "Konuyu bilmiyorum", code: "H1"/);
+});
+
+test('weekly test shows the same self-assessment options as daily work', () => {
+  // Öğrenci günlük çalışmada ne görüyorsa haftalık testte de aynısını görmeli.
+  assert.match(dailyPage, /STUDY_ERROR_REASON_OPTIONS\.map/);
+  assert.match(weeklyPage, /STUDY_ERROR_REASON_OPTIONS\.map/);
+  assert.doesNotMatch(weeklyPage, /(?<!STUDY_)ERROR_REASON_OPTIONS\.map/);
+  for (const label of [
+    'Soruyu anlamadım',
+    'Yöntemi bilmiyordum',
+    'İşlem hatası yaptım',
+    'Konuda eksiğim var',
+    'Konuyu bilmiyorum',
+  ]) {
+    assert.ok(errorReasonLib.includes(label), label);
+  }
+  // Yüzeye özel kopya üretilmesin
+  assert.doesNotMatch(dailyPage, /ERROR_REASON_OPTIONS_LOCAL/);
 });
 
 test('student score summaries use labeled correct, wrong, blank, and total counts', () => {

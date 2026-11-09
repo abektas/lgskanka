@@ -1,5 +1,12 @@
 # SESSION HANDOFF — 2026-11-05
-**Canlı:** https://lgskanka.alibey.workers.dev (Version ID `bb689c9a-4efe-4c78-8453-1b0a268ee969`) | **Son push:** `e151d76` (main)
+**Canlı:** https://lgskanka.alibey.workers.dev (Version ID `e57f5371-4296-4158-b363-8e5e03bbaba2`) | **Son push:** `089d9c1` (main)
+
+## 2026-11-09 — Haftalık testte hata türleri günlük çalışmayla aynı (in-app yorum 1)
+
+- Kök neden: hata türleri iki ayrı kaynaktan geliyordu. `/calis/` yerel `ERROR_REASON_OPTIONS_LOCAL` (Soruyu anlamadım H3, Yöntemi bilmiyordum H2, İşlem hatası yaptım H4, Konuda eksiğim var H1, Konuyu bilmiyorum H1); `/haftalik-test/` paylaşılan `ERROR_REASON_OPTIONS` (H3, H2, H4, **Dikkatim dağıldı H7**). Haftalık testte H1 (konu eksiği) hiç oluşmuyordu.
+- Düzeltme: `lib/error-reason.ts` içine `STUDY_ERROR_REASON_OPTIONS` eklendi ve **tek kaynak** yapıldı; `/calis/` yerel kopyası silindi, `/haftalik-test/` yeni sabiti kullanıyor. `ErrorReasonOption.code` tipi `H1`–`H7` olarak genişletildi (eski `H2|H3|H4|H7` birleşimi H1 yazmaya izin vermiyordu). `ERROR_REASON_OPTIONS` sabiti başka yerlerde kullanıldığı için değiştirilmedi.
+- Doğrulama: API sözleşme **30/30** (yeni: "weekly test shows the same self-assessment options as daily work"), taxonomy 4/4, `tsc`, `npm run build`, `npm run cf:build` geçti.
+- Yayın: commit/push `089d9c1` (remote eşleşti), deploy Version ID `e57f5371-4296-4158-b363-8e5e03bbaba2`. Canlı `/calis/`, `/haftalik-test/` HTTP 200; canlı weekly JS chunk'ında "Konuda eksiğim var" ve "Konuyu bilmiyorum" var, "Dikkatim dağıldı" yok.
 
 ## 2026-11-09 — Haftalık test arşivi + aylık denemeler kapanmıyor + sonuç odaklı günlük plan
 

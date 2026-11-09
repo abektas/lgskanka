@@ -1,5 +1,12 @@
 # SESSION HANDOFF — 2026-11-05
-**Canlı:** https://lgskanka.alibey.workers.dev (Version ID `e57f5371-4296-4158-b363-8e5e03bbaba2`) | **Son push:** `089d9c1` (main)
+**Canlı:** https://lgskanka.alibey.workers.dev (Version ID `7a7ea833-f2df-4350-b98f-565cf0d8b701`) | **Son push:** `050bd02` (main)
+
+## 2026-11-09 — Haftalık testte "Geç" butonu kaldırıldı (in-app yorum 1)
+
+- Öğrenci yanlış cevapta 6. seçenek olan "Geç" butonunu görüyordu; kaldırıldı. Artık 5 hata türünden biri seçiliyor (`STUDY_ERROR_REASON_OPTIONS`).
+- Yan etki koruması: "Geç" tek `errorReasonCode: null` yazma yoluydu. Buton kalkınca neden seçmeden "Sonraki soru"ya basan öğrencinin yanlış cevabı hiç kaydedilmiyordu. `next()` artık `checkState === "wrong" && errorReason === null` durumunda kaydı `errorReasonCode: null` ile yazıyor (günlük çalışmadaki aynı düzeltme).
+- Doğrulama: API sözleşme 30/30, `tsc`, `npm run build`, `npm run cf:build` geçti.
+- Yayın: commit/push `050bd02` (remote eşleşti), deploy Version ID `7a7ea833-f2df-4350-b98f-565cf0d8b701`. Canlı `/haftalik-test/` HTTP 200; canlı JS'te "Konuyu bilmiyorum" var, `"Geç"` yok.
 
 ## 2026-11-09 — Haftalık testte hata türleri günlük çalışmayla aynı (in-app yorum 1)
 

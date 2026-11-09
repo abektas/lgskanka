@@ -1,5 +1,5 @@
 # SESSION HANDOFF — 2026-11-05
-**Canlı:** https://lgskanka.alibey.workers.dev (Version ID `6dca6d32-8c8d-4ab9-989b-ffe3d92caec9`) | **Son push:** `1689387` (main)
+**Canlı:** https://lgskanka.alibey.workers.dev (Version ID `bb689c9a-4efe-4c78-8453-1b0a268ee969`) | **Son push:** `e151d76` (main)
 
 ## 2026-11-09 — Haftalık test arşivi + aylık denemeler kapanmıyor + sonuç odaklı günlük plan
 
@@ -11,6 +11,7 @@
 - **Sonuç odaklı günlük plan (önceki tur):** `lib/daily-plan.ts::composeDailyPlan` + `/calis` geniş havuz (`limit+10`) → son 3 günün yanlış üniteleri öne alınır, ders kotası korunur; `weakUnitsForPlanning(records, 3, excludeToday=true)` ile bugünün kayıtları planı kaydırmaz.
 - **Pekiştirme (önceki tur):** `computeWeakUnits` iki kural — ünite 3+ yanlış VEYA son değerlendirme gününde ders <%60 ve ≥2 yanlış; `tamamlandi` görev sonraki yanlışta yeniden açılır, `servedQuestionIds` ile aynı soru tekrar atanmaz.
 - **Doğrulama:** `npx tsx scripts/test-weekly-archive.ts` 11/11, `scripts/test-reinforcement.ts` 7/7, API sözleşme 29/29, taxonomy 4/4, `tsc`, `npm run build`, `npm run cf:build` geçti; yerel `/haftalik-test/`, `/aylik-denemeler/`, `/calis/` HTTP 200.
+- **Yayın:** commit/push `e151d76` (remote eşleşti), deploy Version ID `bb689c9a-4efe-4c78-8453-1b0a268ee969`. Canlı `/`, `/calis/`, `/haftalik-test/`, `/aylik-denemeler/`, `/pekistirme/`, `/sonuclar/` HTTP 200. Canlı JS doğrulaması: `0ro3xlr0c9mav.js` içinde "Çözemediğin haftalar kapanmaz", `0zy_dos6vmw-c.js` içinde "Geçmiş ayların denemeleri kapanmaz", `0m_8ccel1xodm.js` içinde `+10}&sort=unit_difficulty` (geniş havuz) ve `servedQuestionIds` bulundu.
 
 ## 2026-11-09 — Seviye Tespit bozuk soru görselleri (4 adet)
 
